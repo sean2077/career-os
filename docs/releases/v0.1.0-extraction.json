@@ -11,7 +11,7 @@
     "public_snapshot_sha256": "fb6baa1b7930f7d2a616cf7739390a42ec3d550ec4d51649c29c31215c9bb8a1"
   },
   "result_snapshot": {
-    "public_snapshot_sha256": "3843700e78ac4210feedfd2d703a8233b717e6f5e1da6ce17123f9df2d2165a0"
+    "public_snapshot_sha256": "3af28a6dbfc74d08eb82737fafe8c6106658497aba23ba9c32e26fbe8e177bc5"
   },
   "self_exclusion": "docs/releases/v0.1.0-extraction.json",
   "allowed_roots": [
@@ -833,36 +833,36 @@
       "path": "docs/releases/v0.1.0-rc.1.md",
       "source_sha256": "79f50f5a800869fad81dd076a2fb43b91708107fba7d8b9c444837025b698935",
       "target_sha256": "79f50f5a800869fad81dd076a2fb43b91708107fba7d8b9c444837025b698935",
-      "result_sha256": "79f50f5a800869fad81dd076a2fb43b91708107fba7d8b9c444837025b698935",
-      "disposition": "exact-copy"
+      "result_sha256": null,
+      "disposition": "delete"
     },
     {
       "path": "docs/releases/v0.1.0-rc.2.md",
       "source_sha256": "22a2c583eeb6d3ec0cd8970311f04764163563b17a1df16abd3b6ecf784e9cd7",
       "target_sha256": "22a2c583eeb6d3ec0cd8970311f04764163563b17a1df16abd3b6ecf784e9cd7",
-      "result_sha256": "22a2c583eeb6d3ec0cd8970311f04764163563b17a1df16abd3b6ecf784e9cd7",
-      "disposition": "exact-copy"
+      "result_sha256": null,
+      "disposition": "delete"
     },
     {
       "path": "docs/releases/v0.1.0-rc.3.md",
       "source_sha256": "4a856c4b61be40a1b28d8b3ad08be1fa04815d0746a27f80ac9f872bebf5a37d",
       "target_sha256": "4a856c4b61be40a1b28d8b3ad08be1fa04815d0746a27f80ac9f872bebf5a37d",
-      "result_sha256": "4a856c4b61be40a1b28d8b3ad08be1fa04815d0746a27f80ac9f872bebf5a37d",
-      "disposition": "exact-copy"
+      "result_sha256": null,
+      "disposition": "delete"
     },
     {
       "path": "docs/releases/v0.1.0-rc.4.md",
       "source_sha256": "dcacbc6019c8d9eb70f8625cb5afeb71de4e70b157320ccb5aad0368abcbbcde",
       "target_sha256": "dcacbc6019c8d9eb70f8625cb5afeb71de4e70b157320ccb5aad0368abcbbcde",
-      "result_sha256": "dcacbc6019c8d9eb70f8625cb5afeb71de4e70b157320ccb5aad0368abcbbcde",
-      "disposition": "exact-copy"
+      "result_sha256": null,
+      "disposition": "delete"
     },
     {
       "path": "docs/releases/v0.1.0-rc.5.md",
       "source_sha256": "c3b2b861980e66325634ca106bb241b3e0b32e55fd1fff1a59422881ac039612",
       "target_sha256": "c3b2b861980e66325634ca106bb241b3e0b32e55fd1fff1a59422881ac039612",
-      "result_sha256": "c3b2b861980e66325634ca106bb241b3e0b32e55fd1fff1a59422881ac039612",
-      "disposition": "exact-copy"
+      "result_sha256": null,
+      "disposition": "delete"
     },
     {
       "path": "docs/releases/v0.1.0.md",

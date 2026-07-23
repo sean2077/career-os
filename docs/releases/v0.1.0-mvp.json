@@ -17,12 +17,22 @@
     },
     {
       "path": "AGENTS.md",
-      "result_sha256": "f8ba9e6a769637a90abb644b5d7cb357978cd19e912cb9b77f8e0d1859be8528",
+      "result_sha256": "180a8f0f089a22ef49ea2feda777634e33add5327f7aa13c6adef98869bcb561",
       "reason": "release-evidence"
     },
     {
       "path": "CHANGELOG.md",
-      "result_sha256": "446cd33ed0656533b45d711dd959e1ee9835a3bbd2b67ad9b3462892ac5a4534",
+      "result_sha256": "2f7a2a55db951e91b22e60ede23774bacf0394229c64c85c202d34c0468cccd9",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/private-downstream.md",
+      "result_sha256": "45f92bd1cfb202cad9f95191bc21a2755e30ae13e084656993c65cc7f0efde23",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "docs/releases/README.md",
+      "result_sha256": "8e938401ebe8bfabcf0711e5f34b73514fd373cd54b0d043f49d44a4f3f39ec7",
       "reason": "release-evidence"
     },
     {
@@ -37,22 +47,22 @@
     },
     {
       "path": "system/privacy/public-fixture-policy.json",
-      "result_sha256": "49dcd3967d1eb15f5ef601e156a5c3a3361a186e77697965663c7eae891553d2",
+      "result_sha256": "1e4111b0527c6c4bfa35a3e0b672c4752d4c238867bf725decf8cfaac850dbad",
       "reason": "mvp-security-hardening"
     },
     {
       "path": "system/tests/test_downstream.py",
-      "result_sha256": "28b4d3e6dbe29ff159256f0ec936693bcb24167469c58ff13a1ba4da1ddac319",
+      "result_sha256": "5c8e55459badf51d0d08e483d1c0eecff8ccc04daf1a7c56d8094938173dc5b7",
       "reason": "downstream-adaptation"
     },
     {
       "path": "system/tests/test_extraction_manifest.py",
-      "result_sha256": "9b2e73b985258426adafff1c524bb65aa1a737bfac0349d61aaf547435fc821e",
+      "result_sha256": "424b1aded0c81e9716eddfa60846622976aba5b3e4593f2da5e4c39090551c02",
       "reason": "release-evidence"
     },
     {
       "path": "system/tests/test_public_privacy.py",
-      "result_sha256": "a44e61c55246539c812f2d0d0ab8eff8c4a525af11e25cb2a7666bdb86161334",
+      "result_sha256": "552f6fc352b29dbcd46d87f569b2e16dd79085e09ac9fbe8d03aaef89d92d98e",
       "reason": "mvp-security-hardening"
     },
     {

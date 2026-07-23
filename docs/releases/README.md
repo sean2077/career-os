@@ -18,8 +18,3 @@ release.
 ## Release evidence
 
 - [v0.1.0](v0.1.0.md): clean-install MVP, Home-led public extraction, seven-authority golden journey, handwritten TeX resumes, bilingual Workbenches, and stable privacy/release gates.
-- [v0.1.0-rc.5](v0.1.0-rc.5.md): private sibling downstreams, complete installation boundaries, and typed same-company comparison.
-- [v0.1.0-rc.4](v0.1.0-rc.4.md): application-policy Claim gates remain fail-closed for preview exports.
-- [v0.1.0-rc.3](v0.1.0-rc.3.md): clean-room import, closed resume bundles, and verified Skill selection gates.
-- [v0.1.0-rc.2](v0.1.0-rc.2.md): schema-2 semantic migration, native Canvas guides, and first public prerelease.
-- [v0.1.0-rc.1](v0.1.0-rc.1.md): initial local release candidate and verification evidence.
