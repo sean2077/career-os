@@ -161,6 +161,56 @@ def test_local_source_sync_does_not_require_public_upstream(tmp_path: Path) -> N
     assert rolled_back.rolled_back_at is not None
 
 
+def test_local_source_sync_supports_unrelated_git_histories(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    source = tmp_path / "career-os"
+    target = tmp_path / "career-home"
+    _write_source(source)
+    _write_source(target)
+    _git(target, "commit", "--amend", "-m", "chore: create independent home root")
+
+    config = target / "career-os.toml"
+    config.write_text(
+        config.read_text(encoding="utf-8").replace(
+            'development_topology = "standalone-framework"',
+            'development_topology = "split-downstream"',
+        ),
+        encoding="utf-8",
+        newline="\n",
+    )
+    private = target / "career/private.md"
+    private.parent.mkdir()
+    private.write_text("private\n", encoding="utf-8")
+    _git(target, "add", "career-os.toml", "career/private.md")
+    _git(target, "commit", "-m", "chore: initialize independent private downstream")
+    _git(target, "switch", "-c", "sync/test")
+    monkeypatch.setattr(
+        downstream, "_require_downstream_safety", lambda _root, **_kwargs: None
+    )
+
+    source_commit = _update_source(source)
+    plan, plan_path = create_downstream_sync_plan(
+        resolve_paths(target),
+        source_kind="local",
+        source_root=source,
+        commit=source_commit,
+        tag=None,
+    )
+    merge_base = subprocess.run(
+        ["git", "-C", str(target), "merge-base", "HEAD", source_commit],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert merge_base.returncode == 1
+
+    apply_downstream_sync_plan(plan_path, resolve_paths(target))
+
+    assert target.joinpath("system/new.txt").read_text(encoding="utf-8") == "new\n"
+    assert private.read_text(encoding="utf-8") == "private\n"
+
+
 def test_sync_adapts_standalone_source_config_to_downstream_installation(
     repositories: tuple[Path, Path],
 ) -> None:

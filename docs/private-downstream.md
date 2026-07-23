@@ -141,34 +141,41 @@ public project.
 
 ## Update from an exact reviewed release
 
-Do not pull an unreviewed moving branch into private data. Fetch tags, inspect one
-exact annotated release, and merge it on an isolated sync branch:
+Do not pull an unreviewed moving branch into private data. Use the deterministic
+downstream workflow with one exact annotated release on an isolated sync branch:
 
 ```text
 git status --short
 git fetch upstream --tags
 git cat-file -t vX.Y.Z
 git switch -c sync/vX.Y.Z
-git merge --no-edit vX.Y.Z
+uv run career-os downstream plan --source upstream --tag vX.Y.Z
+# Review the emitted JSON and binary patch, then:
+uv run career-os downstream apply --plan <emitted-plan.json>
 uv sync --locked
 uv run career-os skills verify
 uv run career-os check --fast
 uv run career-os check
 uv run career-os check --host
+uv run career-os downstream validate --plan <emitted-plan.json> --output career/.provenance/downstream-sync-vX.Y.Z.json
+git add -- <reviewed-system-paths> career/.provenance/downstream-sync-vX.Y.Z.json
+git commit -m "chore(framework): sync Career OS vX.Y.Z"
 git switch main
 git merge --ff-only sync/vX.Y.Z
 ```
 
-This command sequence is the optional remote-based update path and therefore
-requires a configured fetch-only `upstream`. Without that remote, use
+This tree-and-patch workflow does not require common Git ancestry between the
+public source and private Home. It is therefore also the supported cutover path
+for an existing independent Home history. The upstream form requires a
+configured fetch-only `upstream`. Without that remote, use
 `career-os downstream plan --source local --source-root <reviewed-career-os-checkout>`
 with an exact commit or annotated tag from a separate reviewed local checkout.
 
 `git cat-file -t` must report `tag`. Review that release's notes and system diff
-before the merge. Resolve system-owned conflicts deliberately; never accept a
-change that overwrites or deletes user-owned `career/` data. Push the updated
-`main` only to a confirmed private `origin` and only when the user explicitly
-requests it.
+before apply. The command rejects protected user/local paths, dirty managed
+paths, stale HEAD or branch state, and a changed or tampered plan. Push the
+updated `main` only to a confirmed private `origin` and only when the user
+explicitly requests it.
 
 ## Deterministic safety checks
 

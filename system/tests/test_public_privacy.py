@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 import subprocess
+import tomllib
 from pathlib import Path
 
 import pytest
@@ -223,6 +224,12 @@ def test_public_privacy_policy_fails_closed_on_invalid_entries(tmp_path: Path) -
 
 
 def test_repository_snapshot_matches_public_fixture_policy() -> None:
+    config = tomllib.loads(
+        REPOSITORY_ROOT.joinpath("career-os.toml").read_text(encoding="utf-8")
+    )
+    if config["development_topology"] != "standalone-framework":
+        pytest.skip("repository snapshot privacy audit applies only to the public topology")
+
     report = audit_public_repository(REPOSITORY_ROOT)
 
     assert report.ok, report.as_dict()

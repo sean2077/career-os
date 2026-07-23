@@ -4,6 +4,12 @@ All notable changes to Career OS are documented here.
 
 ## [Unreleased]
 
+### Fixed
+
+- Made public-only snapshot tests topology-aware and documented the
+  ancestry-independent downstream plan/apply flow for existing private Career
+  Home histories.
+
 ## [v0.1.0] — 2026-07-24
 
 ### Added

@@ -3,7 +3,10 @@ from __future__ import annotations
 import hashlib
 import json
 import subprocess
+import tomllib
 from pathlib import Path
+
+import pytest
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 MANIFEST_PATH = "docs/releases/v0.1.0-extraction.json"
@@ -11,6 +14,12 @@ SUPPLEMENT_PATH = "docs/releases/v0.1.0-mvp.json"
 
 
 def test_public_extraction_manifest_is_complete_and_hash_bound() -> None:
+    config = tomllib.loads(
+        REPOSITORY_ROOT.joinpath("career-os.toml").read_text(encoding="utf-8")
+    )
+    if config["development_topology"] != "standalone-framework":
+        pytest.skip("public extraction manifest applies only to the public topology")
+
     manifest = json.loads(
         REPOSITORY_ROOT.joinpath(MANIFEST_PATH).read_text(encoding="utf-8")
     )

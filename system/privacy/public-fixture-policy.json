@@ -32,7 +32,8 @@
       "c5ea8a161752f7055d93d3e87aed22f0541a3459d09d51cdba04b87007927e9c"
     ],
     "system/tests/test_public_privacy.py": [
-      "a44e61c55246539c812f2d0d0ab8eff8c4a525af11e25cb2a7666bdb86161334"
+      "a44e61c55246539c812f2d0d0ab8eff8c4a525af11e25cb2a7666bdb86161334",
+      "552f6fc352b29dbcd46d87f569b2e16dd79085e09ac9fbe8d03aaef89d92d98e"
     ],
     "system/tests/test_resume.py": [
       "9503c3ebde780a75c0c97782403438069f8ebac3886581cea80d3e68a38f5bfe"
