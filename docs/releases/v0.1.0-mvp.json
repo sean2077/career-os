@@ -22,7 +22,7 @@
     },
     {
       "path": "CHANGELOG.md",
-      "result_sha256": "2f7a2a55db951e91b22e60ede23774bacf0394229c64c85c202d34c0468cccd9",
+      "result_sha256": "6a1de861020a52bb7ecd3f37e2fdabf22c127dafcad739379d580afb56c176b1",
       "reason": "release-evidence"
     },
     {
@@ -71,6 +71,11 @@
       "reason": "mvp-security-hardening"
     },
     {
+      "path": "system/tests/test_semantic_review.py",
+      "result_sha256": "110249a58585212289198d83e1be9f259ef86e1b6a7a799d63de5c77f6ff074b",
+      "reason": "downstream-adaptation"
+    },
+    {
       "path": "system/tools/career_os/checks.py",
       "result_sha256": "afdb33a7392fd9ec74be48adb58a1fd2be207ff0b84dc2d0ef966cc51b8676f7",
       "reason": "mvp-security-hardening"
@@ -94,6 +99,11 @@
       "path": "system/tools/career_os/public_privacy.py",
       "result_sha256": "8b03901ad328656a6de09d025b2150623fbb08fdda61d5711f504339da1c34e3",
       "reason": "mvp-security-hardening"
+    },
+    {
+      "path": "system/tools/career_os/semantic_review.py",
+      "result_sha256": "d8bc8fd60af336ed7ed36ce4924a4f6b922425432fc007413636439b04ded604",
+      "reason": "downstream-adaptation"
     }
   ]
 }

@@ -984,10 +984,6 @@ def verify_semantic_review_supersession(
 
     control = load_semantic_file_review(review_path)
     completion = load_semantic_review_completion(completion_path)
-    if completion.development_topology != paths.development_topology:
-        raise ValueError(
-            "superseded completion development topology differs from career-os.toml"
-        )
     if completion.review_path != supersession.review_path:
         raise ValueError("supersession review_path differs from completion")
     if completion.review_sha256 != supersession.review_sha256:
@@ -1066,23 +1062,6 @@ def verify_semantic_review_supersession(
         raise ValueError("correction manifest does not bind the supersession bytes")
     if provenance_outputs[0].target_sha256 != supersession_sha256:
         raise ValueError("correction provenance does not bind the supersession bytes")
-
-    _verify_recorded_commit_ancestor(
-        paths.project_root.resolve(),
-        completion.personal_target_commit,
-        "personal",
-    )
-    framework_root = (
-        (public_root or paths.project_root)
-        if completion.development_topology == "integrated-workbench"
-        else public_root
-    )
-    if framework_root is not None:
-        _verify_recorded_commit_ancestor(
-            framework_root.resolve(),
-            completion.framework_target_commit,
-            "framework",
-        )
 
     evidence_paths = [
         completion_path,

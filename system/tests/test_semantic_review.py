@@ -6,6 +6,7 @@ from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
 
+import career_os.semantic_review as semantic_review_module
 import pytest
 from career_os.checks import _check_semantic_review_controls
 from career_os.config import DevelopmentTopology, ProjectPaths
@@ -1361,3 +1362,172 @@ def test_check_validates_supersession_and_amendment_cumulatively(
         "migration.semantic-review-completion",
         "migration.semantic-review-amendment",
     }
+
+
+def test_superseded_completion_survives_topology_and_history_rewrite(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    project = tmp_path / "project"
+    provenance = project / "career/.provenance"
+    provenance.mkdir(parents=True)
+    review_path = provenance / "semantic-file-review.json"
+    completion_path = provenance / "semantic-review-completion.json"
+    inventory_path = provenance / "inventory.json"
+    supersession_path = provenance / "semantic-review-supersession.json"
+    manifest_path = provenance / "correction-manifest.json"
+    migration_path = provenance / "correction-provenance.json"
+    for path in (
+        review_path,
+        completion_path,
+        inventory_path,
+        supersession_path,
+        manifest_path,
+        migration_path,
+    ):
+        path.write_text("{}\n", encoding="utf-8")
+
+    paths = ProjectPaths(
+        project_root=project,
+        data_root=project / "career",
+        runtime_root=project / "runtime",
+        build_root=project / "build",
+        local_state_root=project / ".career-os",
+        vault_root=project,
+        mode="standalone",
+        development_topology="split-downstream",
+    )
+    source_repository = "legacy://synthetic-resume"
+    source_commit = "a" * 40
+    review_sha256 = sha256_file(review_path)
+    completion_sha256 = sha256_file(completion_path)
+    inventory_sha256 = sha256_file(inventory_path)
+    supersession_sha256 = sha256_file(supersession_path)
+    supersession = SimpleNamespace(
+        review_path=".provenance/semantic-file-review.json",
+        review_sha256=review_sha256,
+        completion_path=".provenance/semantic-review-completion.json",
+        completion_sha256=completion_sha256,
+        correction_manifest_id="correction-id",
+        supersedes_manifest_id="prior-id",
+        correction_manifest_path=".provenance/correction-manifest.json",
+        correction_provenance_path=".provenance/correction-provenance.json",
+    )
+    review = SimpleNamespace(
+        inventory_path=".provenance/inventory.json",
+        inventory_sha256=inventory_sha256,
+        source_repository=source_repository,
+        source_commit=source_commit,
+        expected_source_assets=0,
+        entries=[],
+        residual_gaps=[],
+    )
+    completion = SimpleNamespace(
+        development_topology="integrated-workbench",
+        status="local-candidate-complete",
+        source_repository=source_repository,
+        source_commit=source_commit,
+        inventory_path=".provenance/inventory.json",
+        inventory_sha256=inventory_sha256,
+        review_path=".provenance/semantic-file-review.json",
+        review_sha256=review_sha256,
+        framework_target_commit="b" * 40,
+        personal_target_commit="b" * 40,
+        validation_runs=[],
+        review_rounds=[],
+        downstream_sync=None,
+    )
+    inventory = SimpleNamespace(
+        source_repository=source_repository,
+        source_commit=source_commit,
+        entries=[],
+    )
+    manifest = SimpleNamespace(
+        id="correction-id",
+        provenance_path=".provenance/correction-provenance.json",
+        supersedes_manifest_ids=["prior-id"],
+        source_repository=source_repository,
+        source_commit=source_commit,
+        entries=[
+            SimpleNamespace(
+                outputs=[
+                    SimpleNamespace(
+                        target_path=".provenance/semantic-review-supersession.json",
+                        prepared_sha256=supersession_sha256,
+                    )
+                ]
+            )
+        ],
+    )
+    migration = SimpleNamespace(
+        manifest_id="correction-id",
+        supersedes_manifest_ids=["prior-id"],
+        source_repository=source_repository,
+        source_commit=source_commit,
+        entries=[
+            SimpleNamespace(
+                outputs=[
+                    SimpleNamespace(
+                        target_path=".provenance/semantic-review-supersession.json",
+                        target_sha256=supersession_sha256,
+                    )
+                ]
+            )
+        ],
+    )
+
+    monkeypatch.setattr(
+        semantic_review_module,
+        "load_semantic_review_supersession",
+        lambda _path: supersession,
+    )
+    monkeypatch.setattr(
+        semantic_review_module,
+        "load_semantic_file_review",
+        lambda _path: review,
+    )
+    monkeypatch.setattr(
+        semantic_review_module,
+        "load_semantic_review_completion",
+        lambda _path: completion,
+    )
+    monkeypatch.setattr(
+        semantic_review_module,
+        "load_migration_inventory",
+        lambda _path: inventory,
+    )
+    monkeypatch.setattr(
+        semantic_review_module,
+        "load_import_manifest",
+        lambda _path: manifest,
+    )
+    monkeypatch.setattr(
+        semantic_review_module,
+        "load_migration_provenance",
+        lambda _path: migration,
+    )
+    monkeypatch.setattr(
+        semantic_review_module,
+        "LegacyImportManifestV2",
+        SimpleNamespace,
+    )
+    monkeypatch.setattr(
+        semantic_review_module,
+        "MigrationProvenanceMapV2",
+        SimpleNamespace,
+    )
+    monkeypatch.setattr(
+        semantic_review_module,
+        "_verify_recorded_commit_ancestor",
+        lambda *_args: pytest.fail(
+            "superseded historical completion must not depend on current Git ancestry"
+        ),
+    )
+
+    assert (
+        semantic_review_module.verify_semantic_review_supersession(
+            paths,
+            supersession_path=supersession_path,
+        )
+        is supersession
+    )

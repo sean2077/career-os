@@ -9,6 +9,9 @@ All notable changes to Career OS are documented here.
 - Made public-only snapshot tests topology-aware and documented the
   ancestry-independent downstream plan/apply flow for existing private Career
   Home histories.
+- Kept superseded migration completions verifiable after an intentional
+  downstream topology or Git-history rewrite without mutating historical
+  hash-bound evidence.
 - Removed obsolete `v0.1.0-rc.*` release notes now that the clean-install-only
   stable MVP is the sole published release line.
 
