@@ -1,0 +1,134 @@
+{
+  "$defs": {
+    "FontAsset": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9._-]+$",
+          "title": "Name",
+          "type": "string"
+        },
+        "role": {
+          "enum": [
+            "body-regular",
+            "body-bold",
+            "display-regular",
+            "display-bold"
+          ],
+          "title": "Role",
+          "type": "string"
+        },
+        "url": {
+          "format": "uri",
+          "maxLength": 2083,
+          "minLength": 1,
+          "title": "Url",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "size": {
+          "exclusiveMinimum": 0,
+          "title": "Size",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "name",
+        "role",
+        "url",
+        "sha256",
+        "size"
+      ],
+      "title": "FontAsset",
+      "type": "object"
+    },
+    "FontPackage": {
+      "additionalProperties": false,
+      "properties": {
+        "family": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9 ._-]*$",
+          "title": "Family",
+          "type": "string"
+        },
+        "version": {
+          "pattern": "^[0-9]+(?:\\.[0-9]+)*$",
+          "title": "Version",
+          "type": "string"
+        },
+        "source": {
+          "format": "uri",
+          "maxLength": 2083,
+          "minLength": 1,
+          "title": "Source",
+          "type": "string"
+        },
+        "license": {
+          "const": "OFL-1.1",
+          "title": "License",
+          "type": "string"
+        },
+        "license_path": {
+          "title": "License Path",
+          "type": "string"
+        },
+        "assets": {
+          "items": {
+            "$ref": "#/$defs/FontAsset"
+          },
+          "title": "Assets",
+          "type": "array"
+        }
+      },
+      "required": [
+        "family",
+        "version",
+        "source",
+        "license",
+        "license_path",
+        "assets"
+      ],
+      "title": "FontPackage",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 2,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "bundle": {
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "title": "Bundle",
+      "type": "string"
+    },
+    "revision": {
+      "minimum": 1,
+      "title": "Revision",
+      "type": "integer"
+    },
+    "packages": {
+      "items": {
+        "$ref": "#/$defs/FontPackage"
+      },
+      "title": "Packages",
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema_version",
+    "bundle",
+    "revision",
+    "packages"
+  ],
+  "title": "Career OS System Font Manifest",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://career-os.dev/schemas/font-manifest.schema.json"
+}

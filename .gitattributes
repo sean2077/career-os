@@ -1,0 +1,30 @@
+.agents/tools/*.sh text eol=lf
+.agents/tools/hooks/*.sh text eol=lf
+.agents/tools/*.py text eol=lf
+.agents/tools/hooks/*.py text eol=lf
+.agents/relink-skills.sh text eol=lf
+.agents/*.py text eol=lf
+*.py text eol=lf
+*.md text eol=lf
+*.toml text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.json text eol=lf
+*.txt text eol=lf
+*.tex text eol=lf
+*.cls text eol=lf
+*.sty text eol=lf
+*.base text eol=lf
+*.canvas text eol=lf
+LICENSE text eol=lf
+NOTICE text eol=lf
+CLAUDE.md symlink
+
+# Locked external Skill snapshots retain upstream bytes exactly.
+.agents/skills/agent-scaffold/** -text
+.agents/skills/conventional-commit/** -text
+.agents/skills/defuddle/** -text
+.agents/skills/json-canvas/** -text
+.agents/skills/obsidian-bases/** -text
+.agents/skills/obsidian-cli/** -text
+.agents/skills/obsidian-markdown/** -text

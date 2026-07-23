@@ -1,0 +1,129 @@
+filters:
+  and:
+  - file.ext == "md"
+  - schema_version == 2
+  - kind == "opportunity.company"
+formulas:
+  watch_rank: if(watch_state == "current", 0, if(watch_state == "target", 1, if(watch_state == "watch", 2, if(watch_state == "avoid", 3, 4))))
+  risk_rank: if(risk == "critical", 0, if(risk == "high", 1, if(risk == "medium", 2, if(risk == "low", 3, 4))))
+  effective_review_state: if(review_status != "reviewed" || reviewed_at.isEmpty(), "pending", if(last_researched_at > reviewed_at || assessment_status == "stale" || assessment_status == "blocked" || refresh_due < today(), "needs-review", "reviewed"))
+  metadata_issues: if(id.isEmpty(), "Missing id ", "") + if(last_researched_at.isEmpty(), "Missing research date ", "") + if(refresh_due.isEmpty(), "Missing refresh date ", "") + if(review_status == "reviewed" && reviewed_at.isEmpty(), "Missing review date", "")
+  related_engagements: file.backlinks.filter(value.properties.kind == "opportunity.engagement").map(value.asLink(value.basename))
+properties:
+  file.name:
+    displayName: 公司
+  watch_state:
+    displayName: 组合状态
+  company_lifecycle:
+    displayName: 生命周期
+  research_level:
+    displayName: 研究深度
+  assessment_status:
+    displayName: 评估状态
+  strength:
+    displayName: 实力
+  business_outlook:
+    displayName: 业务前景
+  employer_quality:
+    displayName: 雇主质量
+  career_alignment:
+    displayName: 职业匹配
+  risk:
+    displayName: 风险
+  confidence:
+    displayName: 置信度
+  trend:
+    displayName: 趋势
+  review_status:
+    displayName: 人工审核
+  reviewed_at:
+    displayName: 审核日期
+  formula.effective_review_state:
+    displayName: 有效审核态
+  formula.metadata_issues:
+    displayName: 元数据问题
+  formula.related_engagements:
+    displayName: 关联招聘互动
+  last_researched_at:
+    displayName: 研究日期
+  refresh_due:
+    displayName: 刷新日期
+  next_action:
+    displayName: 下一动作
+views:
+- type: table
+  name: 总表
+  groupBy:
+    property: watch_state
+    direction: ASC
+  order:
+  - file.name
+  - company_lifecycle
+  - research_level
+  - assessment_status
+  - formula.effective_review_state
+  - strength
+  - business_outlook
+  - employer_quality
+  - career_alignment
+  - risk
+  - confidence
+  - trend
+  - last_researched_at
+  - refresh_due
+  - next_action
+  - formula.related_engagements
+  sort:
+  - property: formula.watch_rank
+    direction: ASC
+  - property: formula.risk_rank
+    direction: ASC
+  - property: refresh_due
+    direction: ASC
+- type: table
+  name: 比较
+  order:
+  - file.name
+  - watch_state
+  - company_lifecycle
+  - strength
+  - business_outlook
+  - employer_quality
+  - career_alignment
+  - risk
+  - confidence
+  - trend
+  - research_level
+  - assessment_status
+  - formula.effective_review_state
+  sort:
+  - property: formula.watch_rank
+    direction: ASC
+  - property: formula.risk_rank
+    direction: ASC
+  - property: file.name
+    direction: ASC
+- type: table
+  name: 审核
+  filters:
+    or:
+    - formula.effective_review_state != "reviewed"
+    - '!formula.metadata_issues.isEmpty()'
+  order:
+  - file.name
+  - watch_state
+  - assessment_status
+  - formula.effective_review_state
+  - review_status
+  - reviewed_at
+  - last_researched_at
+  - refresh_due
+  - risk
+  - confidence
+  - formula.metadata_issues
+  - next_action
+  sort:
+  - property: formula.effective_review_state
+    direction: ASC
+  - property: refresh_due
+    direction: ASC

@@ -1,0 +1,296 @@
+{
+  "$defs": {
+    "MigrationProvenanceEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "source_path": {
+          "title": "Source Path",
+          "type": "string"
+        },
+        "source_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Source Sha256",
+          "type": "string"
+        },
+        "asset_type": {
+          "enum": [
+            "record",
+            "attachment",
+            "resume",
+            "view",
+            "skill",
+            "tool",
+            "documentation",
+            "other"
+          ],
+          "title": "Asset Type",
+          "type": "string"
+        },
+        "disposition": {
+          "enum": [
+            "migrate-exact",
+            "migrate-transform",
+            "replace-by-public",
+            "retain-archive-only",
+            "upstream-gap",
+            "retire"
+          ],
+          "title": "Disposition",
+          "type": "string"
+        },
+        "outputs": {
+          "items": {
+            "$ref": "#/$defs/MigrationProvenanceOutput"
+          },
+          "title": "Outputs",
+          "type": "array"
+        },
+        "replacement": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Replacement"
+        },
+        "transformation_note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Transformation Note"
+        },
+        "verification": {
+          "const": "hash-checked-at-apply",
+          "default": "hash-checked-at-apply",
+          "title": "Verification",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_path",
+        "source_sha256",
+        "asset_type",
+        "disposition"
+      ],
+      "title": "MigrationProvenanceEntry",
+      "type": "object"
+    },
+    "MigrationProvenanceMap": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "manifest_id": {
+          "format": "uuid4",
+          "title": "Manifest Id",
+          "type": "string"
+        },
+        "plan_id": {
+          "format": "uuid",
+          "title": "Plan Id",
+          "type": "string"
+        },
+        "source_repository": {
+          "title": "Source Repository",
+          "type": "string"
+        },
+        "source_commit": {
+          "pattern": "^[a-f0-9]{40}$",
+          "title": "Source Commit",
+          "type": "string"
+        },
+        "entries": {
+          "items": {
+            "$ref": "#/$defs/MigrationProvenanceEntry"
+          },
+          "title": "Entries",
+          "type": "array"
+        }
+      },
+      "required": [
+        "manifest_id",
+        "plan_id",
+        "source_repository",
+        "source_commit",
+        "entries"
+      ],
+      "title": "MigrationProvenanceMap",
+      "type": "object"
+    },
+    "MigrationProvenanceMapV2": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": 2,
+          "default": 2,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "manifest_id": {
+          "format": "uuid4",
+          "title": "Manifest Id",
+          "type": "string"
+        },
+        "supersedes_manifest_ids": {
+          "items": {
+            "format": "uuid4",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Supersedes Manifest Ids",
+          "type": "array",
+          "uniqueItems": true
+        },
+        "plan_id": {
+          "format": "uuid",
+          "title": "Plan Id",
+          "type": "string"
+        },
+        "source_repository": {
+          "title": "Source Repository",
+          "type": "string"
+        },
+        "source_commit": {
+          "pattern": "^[a-f0-9]{40}$",
+          "title": "Source Commit",
+          "type": "string"
+        },
+        "entries": {
+          "items": {
+            "$ref": "#/$defs/MigrationProvenanceEntry"
+          },
+          "title": "Entries",
+          "type": "array"
+        },
+        "retired_targets": {
+          "items": {
+            "$ref": "#/$defs/MigrationProvenanceRetiredTarget"
+          },
+          "title": "Retired Targets",
+          "type": "array"
+        }
+      },
+      "required": [
+        "manifest_id",
+        "supersedes_manifest_ids",
+        "plan_id",
+        "source_repository",
+        "source_commit",
+        "entries",
+        "retired_targets"
+      ],
+      "title": "MigrationProvenanceMapV2",
+      "type": "object"
+    },
+    "MigrationProvenanceOutput": {
+      "additionalProperties": false,
+      "properties": {
+        "target_path": {
+          "title": "Target Path",
+          "type": "string"
+        },
+        "target_id": {
+          "anyOf": [
+            {
+              "format": "uuid4",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Id"
+        },
+        "target_kind": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z][a-z0-9.-]*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Kind"
+        },
+        "target_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Target Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "target_path",
+        "target_sha256"
+      ],
+      "title": "MigrationProvenanceOutput",
+      "type": "object"
+    },
+    "MigrationProvenanceRetiredTarget": {
+      "additionalProperties": false,
+      "properties": {
+        "target_path": {
+          "title": "Target Path",
+          "type": "string"
+        },
+        "expected_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Expected Sha256",
+          "type": "string"
+        },
+        "reason": {
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        },
+        "verification": {
+          "const": "hash-checked-at-apply",
+          "default": "hash-checked-at-apply",
+          "title": "Verification",
+          "type": "string"
+        }
+      },
+      "required": [
+        "target_path",
+        "expected_sha256",
+        "reason"
+      ],
+      "title": "MigrationProvenanceRetiredTarget",
+      "type": "object"
+    }
+  },
+  "discriminator": {
+    "mapping": {
+      "1": "#/$defs/MigrationProvenanceMap",
+      "2": "#/$defs/MigrationProvenanceMapV2"
+    },
+    "propertyName": "schema_version"
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/MigrationProvenanceMap"
+    },
+    {
+      "$ref": "#/$defs/MigrationProvenanceMapV2"
+    }
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://career-os.dev/schemas/migration-provenance.schema.json",
+  "title": "Career OS Migration Provenance Map"
+}

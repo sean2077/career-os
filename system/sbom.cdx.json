@@ -1,0 +1,865 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:f253d97f-4832-52e4-8264-7fd9a8a03485",
+  "version": 1,
+  "metadata": {
+    "component": {
+      "type": "application",
+      "bom-ref": "career-os@0.1.0",
+      "name": "career-os",
+      "version": "0.1.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "career-os:interface",
+          "value": "cli-and-file-schemas"
+        },
+        {
+          "name": "career-os:data-ownership",
+          "value": "user-owned"
+        }
+      ]
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/annotated-doc@0.0.4",
+      "name": "annotated-doc",
+      "version": "0.0.4",
+      "purl": "pkg:pypi/annotated-doc@0.0.4",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/annotated-types@0.7.0",
+      "name": "annotated-types",
+      "version": "0.7.0",
+      "purl": "pkg:pypi/annotated-types@0.7.0",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/colorama@0.4.6",
+      "name": "colorama",
+      "version": "0.4.6",
+      "purl": "pkg:pypi/colorama@0.4.6",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/flatbuffers@25.12.19",
+      "name": "flatbuffers",
+      "version": "25.12.19",
+      "purl": "pkg:pypi/flatbuffers@25.12.19",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/markdown-it-py@4.2.0",
+      "name": "markdown-it-py",
+      "version": "4.2.0",
+      "purl": "pkg:pypi/markdown-it-py@4.2.0",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/mdurl@0.1.2",
+      "name": "mdurl",
+      "version": "0.1.2",
+      "purl": "pkg:pypi/mdurl@0.1.2",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/networkx@3.6.1",
+      "name": "networkx",
+      "version": "3.6.1",
+      "purl": "pkg:pypi/networkx@3.6.1",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/numpy@2.5.1",
+      "name": "numpy",
+      "version": "2.5.1",
+      "purl": "pkg:pypi/numpy@2.5.1",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/onnxruntime@1.27.0",
+      "name": "onnxruntime",
+      "version": "1.27.0",
+      "purl": "pkg:pypi/onnxruntime@1.27.0",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/packaging@26.2",
+      "name": "packaging",
+      "version": "26.2",
+      "purl": "pkg:pypi/packaging@26.2",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/protobuf@7.35.1",
+      "name": "protobuf",
+      "version": "7.35.1",
+      "purl": "pkg:pypi/protobuf@7.35.1",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/pydantic@2.13.4",
+      "name": "pydantic",
+      "version": "2.13.4",
+      "purl": "pkg:pypi/pydantic@2.13.4",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/pydantic-core@2.46.4",
+      "name": "pydantic-core",
+      "version": "2.46.4",
+      "purl": "pkg:pypi/pydantic-core@2.46.4",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/pygments@2.20.0",
+      "name": "pygments",
+      "version": "2.20.0",
+      "purl": "pkg:pypi/pygments@2.20.0",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/pymupdf@1.28.0",
+      "name": "pymupdf",
+      "version": "1.28.0",
+      "purl": "pkg:pypi/pymupdf@1.28.0",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/pymupdf-layout@1.28.0",
+      "name": "pymupdf-layout",
+      "version": "1.28.0",
+      "purl": "pkg:pypi/pymupdf-layout@1.28.0",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/pymupdf4llm@1.28.0",
+      "name": "pymupdf4llm",
+      "version": "1.28.0",
+      "purl": "pkg:pypi/pymupdf4llm@1.28.0",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/pypdf@6.14.2",
+      "name": "pypdf",
+      "version": "6.14.2",
+      "purl": "pkg:pypi/pypdf@6.14.2",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/pyyaml@6.0.3",
+      "name": "pyyaml",
+      "version": "6.0.3",
+      "purl": "pkg:pypi/pyyaml@6.0.3",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/rich@15.0.0",
+      "name": "rich",
+      "version": "15.0.0",
+      "purl": "pkg:pypi/rich@15.0.0",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/ruamel-yaml@0.18.17",
+      "name": "ruamel-yaml",
+      "version": "0.18.17",
+      "purl": "pkg:pypi/ruamel-yaml@0.18.17",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/ruamel-yaml-clib@0.2.15",
+      "name": "ruamel-yaml-clib",
+      "version": "0.2.15",
+      "purl": "pkg:pypi/ruamel-yaml-clib@0.2.15",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/shellingham@1.5.4",
+      "name": "shellingham",
+      "version": "1.5.4",
+      "purl": "pkg:pypi/shellingham@1.5.4",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/tabulate@0.10.0",
+      "name": "tabulate",
+      "version": "0.10.0",
+      "purl": "pkg:pypi/tabulate@0.10.0",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/typer@0.27.0",
+      "name": "typer",
+      "version": "0.27.0",
+      "purl": "pkg:pypi/typer@0.27.0",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/typing-extensions@4.16.0",
+      "name": "typing-extensions",
+      "version": "4.16.0",
+      "purl": "pkg:pypi/typing-extensions@4.16.0",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/typing-inspection@0.4.2",
+      "name": "typing-inspection",
+      "version": "0.4.2",
+      "purl": "pkg:pypi/typing-inspection@0.4.2",
+      "scope": "required"
+    },
+    {
+      "type": "data",
+      "bom-ref": "skill:agent-scaffold@7a0fe227a59d6a921ae58523dd83971dbf4e0030",
+      "name": "agent-scaffold",
+      "version": "7a0fe227a59d6a921ae58523dd83971dbf4e0030",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "938260972a665a308338843c106e88c841388dd479fb969fc0e355cf652b63e4"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/sean2077/skills#7a0fe227a59d6a921ae58523dd83971dbf4e0030"
+        }
+      ],
+      "properties": [
+        {
+          "name": "career-os:source-path",
+          "value": "skills/agent-scaffold"
+        },
+        {
+          "name": "career-os:attribution",
+          "value": "Copyright (c) sean2077 and contributors"
+        }
+      ]
+    },
+    {
+      "type": "data",
+      "bom-ref": "skill:conventional-commit@93667c5a5eec5f68cd1097574e27c29994b6c3f2",
+      "name": "conventional-commit",
+      "version": "93667c5a5eec5f68cd1097574e27c29994b6c3f2",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "23d7e497f22e1513e87dbd247dec4b2367c1168590733fb68253dfa3fb90a901"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/sean2077/skills#93667c5a5eec5f68cd1097574e27c29994b6c3f2"
+        }
+      ],
+      "properties": [
+        {
+          "name": "career-os:source-path",
+          "value": "skills/conventional-commit"
+        },
+        {
+          "name": "career-os:attribution",
+          "value": "Copyright (c) sean2077 and contributors"
+        }
+      ]
+    },
+    {
+      "type": "data",
+      "bom-ref": "skill:defuddle@553ef99aa3306dd23f268e1ba9af752577684f69",
+      "name": "defuddle",
+      "version": "553ef99aa3306dd23f268e1ba9af752577684f69",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "b978f265ecb881a99bd99aea0f61f02ed83e5de67273ac5b0e30980833d423a6"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/kepano/obsidian-skills#553ef99aa3306dd23f268e1ba9af752577684f69"
+        }
+      ],
+      "properties": [
+        {
+          "name": "career-os:source-path",
+          "value": "skills/defuddle"
+        },
+        {
+          "name": "career-os:attribution",
+          "value": "Copyright (c) 2026 Steph Ango (@kepano)"
+        }
+      ]
+    },
+    {
+      "type": "data",
+      "bom-ref": "skill:json-canvas@553ef99aa3306dd23f268e1ba9af752577684f69",
+      "name": "json-canvas",
+      "version": "553ef99aa3306dd23f268e1ba9af752577684f69",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "3662389f3dd8678c1643118b236a7f80496895c7cbbc7238f233833234d2fbde"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/kepano/obsidian-skills#553ef99aa3306dd23f268e1ba9af752577684f69"
+        }
+      ],
+      "properties": [
+        {
+          "name": "career-os:source-path",
+          "value": "skills/json-canvas"
+        },
+        {
+          "name": "career-os:attribution",
+          "value": "Copyright (c) 2026 Steph Ango (@kepano)"
+        }
+      ]
+    },
+    {
+      "type": "data",
+      "bom-ref": "skill:obsidian-bases@553ef99aa3306dd23f268e1ba9af752577684f69",
+      "name": "obsidian-bases",
+      "version": "553ef99aa3306dd23f268e1ba9af752577684f69",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "075b8e6e325eab6afd3b035150bfb9e1482408c2e9098cca9f1fc1559a3df7cc"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/kepano/obsidian-skills#553ef99aa3306dd23f268e1ba9af752577684f69"
+        }
+      ],
+      "properties": [
+        {
+          "name": "career-os:source-path",
+          "value": "skills/obsidian-bases"
+        },
+        {
+          "name": "career-os:attribution",
+          "value": "Copyright (c) 2026 Steph Ango (@kepano)"
+        }
+      ]
+    },
+    {
+      "type": "data",
+      "bom-ref": "skill:obsidian-cli@553ef99aa3306dd23f268e1ba9af752577684f69",
+      "name": "obsidian-cli",
+      "version": "553ef99aa3306dd23f268e1ba9af752577684f69",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "c3797c899322217fd27115deab63a9afa8488fbdaa0a12ee1f3a13fc0094e6bf"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/kepano/obsidian-skills#553ef99aa3306dd23f268e1ba9af752577684f69"
+        }
+      ],
+      "properties": [
+        {
+          "name": "career-os:source-path",
+          "value": "skills/obsidian-cli"
+        },
+        {
+          "name": "career-os:attribution",
+          "value": "Copyright (c) 2026 Steph Ango (@kepano)"
+        }
+      ]
+    },
+    {
+      "type": "data",
+      "bom-ref": "skill:obsidian-markdown@553ef99aa3306dd23f268e1ba9af752577684f69",
+      "name": "obsidian-markdown",
+      "version": "553ef99aa3306dd23f268e1ba9af752577684f69",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "db13f2f3153fb7e6d0a7d07f2ec2d7f825796242093fb0b3007898c5e5730820"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/kepano/obsidian-skills#553ef99aa3306dd23f268e1ba9af752577684f69"
+        }
+      ],
+      "properties": [
+        {
+          "name": "career-os:source-path",
+          "value": "skills/obsidian-markdown"
+        },
+        {
+          "name": "career-os:attribution",
+          "value": "Copyright (c) 2026 Steph Ango (@kepano)"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "bom-ref": "font:NotoSansCJKsc-Bold.otf@2.004",
+      "name": "NotoSansCJKsc-Bold.otf",
+      "version": "2.004",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "b5f0d1a190a7f9b43c310a8850630af12553df32c4c050543f9059732d9b4c0a"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "OFL-1.1"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://raw.githubusercontent.com/notofonts/noto-cjk/Sans2.004/Sans/OTF/SimplifiedChinese/NotoSansCJKsc-Bold.otf"
+        },
+        {
+          "type": "release-notes",
+          "url": "https://github.com/notofonts/noto-cjk/releases/tag/Sans2.004"
+        }
+      ],
+      "properties": [
+        {
+          "name": "career-os:bundled",
+          "value": "false"
+        },
+        {
+          "name": "career-os:expected-size",
+          "value": "17002248"
+        },
+        {
+          "name": "career-os:font-family",
+          "value": "Noto Sans CJK SC"
+        },
+        {
+          "name": "career-os:font-role",
+          "value": "display-bold"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "bom-ref": "font:NotoSansCJKsc-Regular.otf@2.004",
+      "name": "NotoSansCJKsc-Regular.otf",
+      "version": "2.004",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "2c76254f6fc379fddfce0a7e84fb5385bb135d3e399294f6eeb6680d0365b74b"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "OFL-1.1"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://raw.githubusercontent.com/notofonts/noto-cjk/Sans2.004/Sans/OTF/SimplifiedChinese/NotoSansCJKsc-Regular.otf"
+        },
+        {
+          "type": "release-notes",
+          "url": "https://github.com/notofonts/noto-cjk/releases/tag/Sans2.004"
+        }
+      ],
+      "properties": [
+        {
+          "name": "career-os:bundled",
+          "value": "false"
+        },
+        {
+          "name": "career-os:expected-size",
+          "value": "16437364"
+        },
+        {
+          "name": "career-os:font-family",
+          "value": "Noto Sans CJK SC"
+        },
+        {
+          "name": "career-os:font-role",
+          "value": "display-regular"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "bom-ref": "font:SourceHanSerifSC-Bold.otf@2.003",
+      "name": "SourceHanSerifSC-Bold.otf",
+      "version": "2.003",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "706b8c0de2deff6cbc0c87e2cdedfd33a78b7ffd76cebb4549012f197ba611fe"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "OFL-1.1"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://raw.githubusercontent.com/adobe-fonts/source-han-serif/2.003R/OTF/SimplifiedChinese/SourceHanSerifSC-Bold.otf"
+        },
+        {
+          "type": "release-notes",
+          "url": "https://github.com/adobe-fonts/source-han-serif/releases/tag/2.003R"
+        }
+      ],
+      "properties": [
+        {
+          "name": "career-os:bundled",
+          "value": "false"
+        },
+        {
+          "name": "career-os:expected-size",
+          "value": "25521732"
+        },
+        {
+          "name": "career-os:font-family",
+          "value": "Source Han Serif SC"
+        },
+        {
+          "name": "career-os:font-role",
+          "value": "body-bold"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "bom-ref": "font:SourceHanSerifSC-Regular.otf@2.003",
+      "name": "SourceHanSerifSC-Regular.otf",
+      "version": "2.003",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "78aa7a328fd974df2d688c8a9fd74a33d8334dfa84ab24d9d11efb2ffc464117"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "OFL-1.1"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://raw.githubusercontent.com/adobe-fonts/source-han-serif/2.003R/OTF/SimplifiedChinese/SourceHanSerifSC-Regular.otf"
+        },
+        {
+          "type": "release-notes",
+          "url": "https://github.com/adobe-fonts/source-han-serif/releases/tag/2.003R"
+        }
+      ],
+      "properties": [
+        {
+          "name": "career-os:bundled",
+          "value": "false"
+        },
+        {
+          "name": "career-os:expected-size",
+          "value": "24543332"
+        },
+        {
+          "name": "career-os:font-family",
+          "value": "Source Han Serif SC"
+        },
+        {
+          "name": "career-os:font-role",
+          "value": "body-regular"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "career-os@0.1.0",
+      "dependsOn": [
+        "font:NotoSansCJKsc-Bold.otf@2.004",
+        "font:NotoSansCJKsc-Regular.otf@2.004",
+        "font:SourceHanSerifSC-Bold.otf@2.003",
+        "font:SourceHanSerifSC-Regular.otf@2.003",
+        "pkg:pypi/pydantic@2.13.4",
+        "pkg:pypi/pymupdf4llm@1.28.0",
+        "pkg:pypi/pypdf@6.14.2",
+        "pkg:pypi/ruamel-yaml@0.18.17",
+        "pkg:pypi/typer@0.27.0",
+        "skill:agent-scaffold@7a0fe227a59d6a921ae58523dd83971dbf4e0030",
+        "skill:conventional-commit@93667c5a5eec5f68cd1097574e27c29994b6c3f2",
+        "skill:defuddle@553ef99aa3306dd23f268e1ba9af752577684f69",
+        "skill:json-canvas@553ef99aa3306dd23f268e1ba9af752577684f69",
+        "skill:obsidian-bases@553ef99aa3306dd23f268e1ba9af752577684f69",
+        "skill:obsidian-cli@553ef99aa3306dd23f268e1ba9af752577684f69",
+        "skill:obsidian-markdown@553ef99aa3306dd23f268e1ba9af752577684f69"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/annotated-doc@0.0.4"
+    },
+    {
+      "ref": "pkg:pypi/annotated-types@0.7.0"
+    },
+    {
+      "ref": "pkg:pypi/colorama@0.4.6"
+    },
+    {
+      "ref": "pkg:pypi/flatbuffers@25.12.19"
+    },
+    {
+      "ref": "pkg:pypi/markdown-it-py@4.2.0",
+      "dependsOn": [
+        "pkg:pypi/mdurl@0.1.2"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/mdurl@0.1.2"
+    },
+    {
+      "ref": "pkg:pypi/networkx@3.6.1"
+    },
+    {
+      "ref": "pkg:pypi/numpy@2.5.1"
+    },
+    {
+      "ref": "pkg:pypi/onnxruntime@1.27.0",
+      "dependsOn": [
+        "pkg:pypi/flatbuffers@25.12.19",
+        "pkg:pypi/numpy@2.5.1",
+        "pkg:pypi/packaging@26.2",
+        "pkg:pypi/protobuf@7.35.1"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/packaging@26.2"
+    },
+    {
+      "ref": "pkg:pypi/protobuf@7.35.1"
+    },
+    {
+      "ref": "pkg:pypi/pydantic@2.13.4",
+      "dependsOn": [
+        "pkg:pypi/annotated-types@0.7.0",
+        "pkg:pypi/pydantic-core@2.46.4",
+        "pkg:pypi/typing-extensions@4.16.0",
+        "pkg:pypi/typing-inspection@0.4.2"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/pydantic-core@2.46.4",
+      "dependsOn": [
+        "pkg:pypi/typing-extensions@4.16.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/pygments@2.20.0"
+    },
+    {
+      "ref": "pkg:pypi/pymupdf@1.28.0"
+    },
+    {
+      "ref": "pkg:pypi/pymupdf-layout@1.28.0",
+      "dependsOn": [
+        "pkg:pypi/networkx@3.6.1",
+        "pkg:pypi/numpy@2.5.1",
+        "pkg:pypi/onnxruntime@1.27.0",
+        "pkg:pypi/pymupdf@1.28.0",
+        "pkg:pypi/pyyaml@6.0.3"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/pymupdf4llm@1.28.0",
+      "dependsOn": [
+        "pkg:pypi/pymupdf-layout@1.28.0",
+        "pkg:pypi/pymupdf@1.28.0",
+        "pkg:pypi/tabulate@0.10.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/pypdf@6.14.2"
+    },
+    {
+      "ref": "pkg:pypi/pyyaml@6.0.3"
+    },
+    {
+      "ref": "pkg:pypi/rich@15.0.0",
+      "dependsOn": [
+        "pkg:pypi/markdown-it-py@4.2.0",
+        "pkg:pypi/pygments@2.20.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/ruamel-yaml@0.18.17",
+      "dependsOn": [
+        "pkg:pypi/ruamel-yaml-clib@0.2.15"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/ruamel-yaml-clib@0.2.15"
+    },
+    {
+      "ref": "pkg:pypi/shellingham@1.5.4"
+    },
+    {
+      "ref": "pkg:pypi/tabulate@0.10.0"
+    },
+    {
+      "ref": "pkg:pypi/typer@0.27.0",
+      "dependsOn": [
+        "pkg:pypi/annotated-doc@0.0.4",
+        "pkg:pypi/colorama@0.4.6",
+        "pkg:pypi/rich@15.0.0",
+        "pkg:pypi/shellingham@1.5.4"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/typing-extensions@4.16.0"
+    },
+    {
+      "ref": "pkg:pypi/typing-inspection@0.4.2",
+      "dependsOn": [
+        "pkg:pypi/typing-extensions@4.16.0"
+      ]
+    },
+    {
+      "ref": "skill:agent-scaffold@7a0fe227a59d6a921ae58523dd83971dbf4e0030"
+    },
+    {
+      "ref": "skill:conventional-commit@93667c5a5eec5f68cd1097574e27c29994b6c3f2"
+    },
+    {
+      "ref": "skill:defuddle@553ef99aa3306dd23f268e1ba9af752577684f69"
+    },
+    {
+      "ref": "skill:json-canvas@553ef99aa3306dd23f268e1ba9af752577684f69"
+    },
+    {
+      "ref": "skill:obsidian-bases@553ef99aa3306dd23f268e1ba9af752577684f69"
+    },
+    {
+      "ref": "skill:obsidian-cli@553ef99aa3306dd23f268e1ba9af752577684f69"
+    },
+    {
+      "ref": "skill:obsidian-markdown@553ef99aa3306dd23f268e1ba9af752577684f69"
+    },
+    {
+      "ref": "font:NotoSansCJKsc-Bold.otf@2.004"
+    },
+    {
+      "ref": "font:NotoSansCJKsc-Regular.otf@2.004"
+    },
+    {
+      "ref": "font:SourceHanSerifSC-Bold.otf@2.003"
+    },
+    {
+      "ref": "font:SourceHanSerifSC-Regular.otf@2.003"
+    }
+  ]
+}

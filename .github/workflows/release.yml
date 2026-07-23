@@ -1,0 +1,208 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    name: Validate release snapshot
+    if: github.repository == 'sean2077/career-os'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+        with:
+          version: "0.11.29"
+          python-version: "3.12"
+          enable-cache: true
+      - run: uv sync --locked --all-groups
+      - name: Audit the complete public privacy history
+        run: uv run career-os release privacy --root . --ref HEAD --history
+      - name: Validate exact changelog section
+        run: >-
+          uv run career-os release notes
+          --tag "$GITHUB_REF_NAME"
+          --output "$RUNNER_TEMP/release-notes.md"
+      - run: uv run ruff check system/tools/career_os system/tests
+      - run: uv run mypy system/tools/career_os
+      - name: Run the full Python suite
+        run: uv run pytest
+      - name: Assert a clean checkout for the golden journey
+        shell: bash
+        run: test -z "$(git status --porcelain)"
+      - name: Validate the clean-install golden journey
+        run: uv run pytest -q system/tests/test_golden_journey.py
+      - run: uv run career-os skills verify
+      - run: uv run career-os check --fast
+      - run: uv run career-os check
+      - name: Verify the light Agent harness
+        shell: bash
+        run: bash .agents/skills/agent-scaffold/agent-scaffold.sh verify --profile light --json
+      - name: Set up cached minimal TeX Live
+        uses: TeX-Live/setup-texlive-action@eb78d21f41941476d9121e3a0abcab73265c876f # v4.1.1
+        with:
+          version: "2026"
+          cache: true
+          packages: |
+            scheme-basic
+            bigintcalc
+            bitset
+            cjk
+            ctex
+            draftwatermark
+            enumitem
+            etoolbox
+            fancyhdr
+            fontspec
+            geometry
+            gettitlestring
+            graphics
+            graphics-cfg
+            graphics-def
+            hycolor
+            hyperref
+            ifmtarg
+            iftex
+            infwarerr
+            intcalc
+            kvdefinekeys
+            kvoptions
+            kvsetkeys
+            l3backend
+            l3kernel
+            l3packages
+            lastpage
+            latexmk
+            ltxcmds
+            metalogo
+            nth
+            pdfescape
+            pdftexcmds
+            realscripts
+            refcount
+            rerunfilecheck
+            setspace
+            stringenc
+            tex-gyre
+            titlesec
+            tools
+            uniquecounter
+            url
+            xcolor
+            xecjk
+            xetex
+            xifthen
+            xltxtra
+      - name: Install PDF inspection tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends poppler-utils
+      - run: uv run career-os resume fonts fetch
+      - run: uv run career-os resume doctor --json
+      - run: uv run career-os resume build --resume en
+      - run: uv run career-os resume build --resume zh-CN
+      - run: uv run career-os resume build --resume multilingual
+      - run: >-
+          uv run career-os resume export
+          --resume en
+          --profile preview
+          --output .career-os/release/fixture-en.pdf
+      - run: >-
+          uv run career-os resume export
+          --resume zh-CN
+          --profile preview
+          --output .career-os/release/fixture-zh-CN.pdf
+      - run: >-
+          uv run career-os resume export
+          --resume multilingual
+          --profile preview
+          --output .career-os/release/fixture-multilingual.pdf
+      - name: Re-audit golden preview PDFs
+        shell: bash
+        run: |
+          uv run python - <<'PY'
+          from pathlib import Path
+          from career_os.resume.privacy import audit_pdf, extract_pdf_text
+
+          identities = {
+              "en": ("alex.morgan@example.test", "+65 0000 0000"),
+              "zh-CN": ("lin.chen@example.test", "+65 0000 0000"),
+              "multilingual": ("taylor.lin@example.test", "+65 0000 0000"),
+          }
+          for name, private_values in identities.items():
+              path = Path(f".career-os/release/fixture-{name}.pdf")
+              report = audit_pdf(Path.cwd(), path, expected_images=0)
+              text = extract_pdf_text(path.read_bytes())
+              assert report.images == 0
+              assert all(value not in text for value in private_values)
+          PY
+          pdfinfo .career-os/release/fixture-en.pdf
+          pdfinfo .career-os/release/fixture-zh-CN.pdf
+          pdfinfo .career-os/release/fixture-multilingual.pdf
+
+  publish:
+    name: Publish GitHub Release
+    if: github.repository == 'sean2077/career-os'
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+        with:
+          version: "0.11.29"
+          python-version: "3.12"
+          enable-cache: true
+      - run: uv sync --locked
+      - name: Revalidate the complete public privacy history
+        run: uv run career-os release privacy --root . --ref HEAD --history
+      - run: uv run career-os check --fast
+      - name: Revalidate exact release notes
+        run: >-
+          uv run career-os release notes
+          --tag "$GITHUB_REF_NAME"
+          --output "$RUNNER_TEMP/release-notes.md"
+      - name: Publish the repository-owned GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          release_args=(
+            "$GITHUB_REF_NAME"
+            --verify-tag
+            --title "$GITHUB_REF_NAME"
+            --notes-file "$RUNNER_TEMP/release-notes.md"
+          )
+          if [[ "$GITHUB_REF_NAME" == *-* ]]; then
+            release_args+=(--prerelease)
+          fi
+          gh release create "${release_args[@]}"
+      - name: Verify published identity
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          test "$(git rev-list -n 1 "$GITHUB_REF_NAME")" = "$GITHUB_SHA"
+          test "$(gh release view "$GITHUB_REF_NAME" --json tagName --jq .tagName)" = "$GITHUB_REF_NAME"
+          test "$(gh release view "$GITHUB_REF_NAME" --json isDraft --jq .isDraft)" = "false"
+          if [[ "$GITHUB_REF_NAME" == *-* ]]; then
+            test "$(gh release view "$GITHUB_REF_NAME" --json isPrerelease --jq .isPrerelease)" = "true"
+          else
+            test "$(gh release view "$GITHUB_REF_NAME" --json isPrerelease --jq .isPrerelease)" = "false"
+          fi

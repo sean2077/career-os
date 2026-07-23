@@ -1,0 +1,33 @@
+\documentclass{career-os}
+\input{identity}
+
+\ResumeDocumentSetup
+  {Target Role}
+  {Audience-specific resume}
+  {Capability one, Capability two}
+
+\begin{document}
+\linespread{1.20}\selectfont
+\ResumeIdentityHeader
+
+\noindent{\large\sffamily\bfseries Target Role}\par
+\vspace{0.25em}
+
+\noindent Write a concise, audience-specific professional summary.
+
+\section{Core Skills}
+\begin{itemize}[parsep=0.25ex]
+  \item \skillitem{Engineering}{Capability one\skilldot Capability two}
+  \item \skillitem{Languages}{List working languages and proficiency.}
+\end{itemize}
+
+\section{Experience}
+\jobsection{Organization}{Industry}{Role}{2024--Present}
+\projectsection{Selected Project}{Responsibility}{2024--Present}
+\begin{itemize}
+  \resumebullet{Outcome}{Replace this sentence with an evidence-backed claim.}
+\end{itemize}
+
+\section{Education}
+\edusection{Institution}{Program}{Degree}{Year}
+\end{document}

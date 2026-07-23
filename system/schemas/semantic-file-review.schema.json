@@ -1,0 +1,680 @@
+{
+  "$defs": {
+    "OutcomeContract": {
+      "additionalProperties": false,
+      "properties": {
+        "authorization": {
+          "minLength": 1,
+          "title": "Authorization",
+          "type": "string"
+        },
+        "canonical_authority": {
+          "minLength": 1,
+          "title": "Canonical Authority",
+          "type": "string"
+        },
+        "lifecycle": {
+          "minLength": 1,
+          "title": "Lifecycle",
+          "type": "string"
+        },
+        "references": {
+          "minLength": 1,
+          "title": "References",
+          "type": "string"
+        },
+        "safety": {
+          "minLength": 1,
+          "title": "Safety",
+          "type": "string"
+        },
+        "user_result": {
+          "minLength": 1,
+          "title": "User Result",
+          "type": "string"
+        }
+      },
+      "required": [
+        "user_result",
+        "canonical_authority",
+        "lifecycle",
+        "references",
+        "safety",
+        "authorization"
+      ],
+      "title": "OutcomeContract",
+      "type": "object"
+    },
+    "RetirementEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "archive_locator": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Archive Locator"
+        },
+        "reason": {
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        },
+        "unique_semantics_proof": {
+          "minLength": 1,
+          "title": "Unique Semantics Proof",
+          "type": "string"
+        }
+      },
+      "required": [
+        "reason",
+        "unique_semantics_proof"
+      ],
+      "title": "RetirementEvidence",
+      "type": "object"
+    },
+    "SemanticBehaviorScenario": {
+      "additionalProperties": false,
+      "properties": {
+        "career_domain": {
+          "anyOf": [
+            {
+              "enum": [
+                "career-evidence",
+                "career-strategy",
+                "role-market",
+                "opportunity-decision",
+                "career-outlook",
+                "capability-readiness",
+                "career-communication"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Career Domain"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/SemanticReviewEvidence"
+          },
+          "minItems": 1,
+          "title": "Evidence",
+          "type": "array"
+        },
+        "failure_closure": {
+          "minLength": 1,
+          "title": "Failure Closure",
+          "type": "string"
+        },
+        "family": {
+          "enum": [
+            "domain-workflow",
+            "cross-authority-guard",
+            "host-adapter",
+            "platform-operation"
+          ],
+          "title": "Family",
+          "type": "string"
+        },
+        "forbidden_external_actions": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Forbidden External Actions",
+          "type": "array"
+        },
+        "forbidden_inferences": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Forbidden Inferences",
+          "type": "array"
+        },
+        "id": {
+          "pattern": "^[a-z0-9][a-z0-9._-]*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "success_outcome": {
+          "minLength": 1,
+          "title": "Success Outcome",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "family",
+        "success_outcome",
+        "failure_closure",
+        "forbidden_inferences",
+        "forbidden_external_actions",
+        "evidence"
+      ],
+      "title": "SemanticBehaviorScenario",
+      "type": "object"
+    },
+    "SemanticFileReviewEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "asset_type": {
+          "enum": [
+            "record",
+            "attachment",
+            "resume",
+            "view",
+            "skill",
+            "tool",
+            "documentation",
+            "other"
+          ],
+          "title": "Asset Type",
+          "type": "string"
+        },
+        "behavior_families": {
+          "items": {
+            "enum": [
+              "domain-workflow",
+              "cross-authority-guard",
+              "host-adapter",
+              "platform-operation"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Behavior Families",
+          "type": "array"
+        },
+        "career_domains": {
+          "items": {
+            "enum": [
+              "career-evidence",
+              "career-strategy",
+              "role-market",
+              "opportunity-decision",
+              "career-outlook",
+              "capability-readiness",
+              "career-communication"
+            ],
+            "type": "string"
+          },
+          "title": "Career Domains",
+          "type": "array"
+        },
+        "disposition": {
+          "enum": [
+            "migrate-exact",
+            "migrate-transform",
+            "replace-by-public",
+            "retain-archive-only",
+            "upstream-gap",
+            "retire"
+          ],
+          "title": "Disposition",
+          "type": "string"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/SemanticReviewEvidence"
+          },
+          "minItems": 1,
+          "title": "Evidence",
+          "type": "array"
+        },
+        "gap_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Gap Ids",
+          "type": "array"
+        },
+        "hash_basis": {
+          "enum": [
+            "worktree-file",
+            "git-symlink-payload",
+            "gitlink-oid"
+          ],
+          "title": "Hash Basis",
+          "type": "string"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        },
+        "notes": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Notes"
+        },
+        "outcome_contracts": {
+          "items": {
+            "$ref": "#/$defs/OutcomeContract"
+          },
+          "minItems": 1,
+          "title": "Outcome Contracts",
+          "type": "array"
+        },
+        "replacement": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Replacement"
+        },
+        "retirement": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RetirementEvidence"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "review_status": {
+          "enum": [
+            "open",
+            "closed"
+          ],
+          "title": "Review Status",
+          "type": "string"
+        },
+        "rule_id": {
+          "pattern": "^[a-z0-9][a-z0-9._-]*$",
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "scenario_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Scenario Ids",
+          "type": "array"
+        },
+        "source_git_mode": {
+          "pattern": "^[0-7]{6}$",
+          "title": "Source Git Mode",
+          "type": "string"
+        },
+        "source_git_oid": {
+          "pattern": "^[a-f0-9]{40}$",
+          "title": "Source Git Oid",
+          "type": "string"
+        },
+        "source_path": {
+          "title": "Source Path",
+          "type": "string"
+        },
+        "source_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Source Sha256",
+          "type": "string"
+        },
+        "source_size": {
+          "minimum": 0,
+          "title": "Source Size",
+          "type": "integer"
+        },
+        "target_refs": {
+          "items": {
+            "$ref": "#/$defs/SemanticTargetReference"
+          },
+          "minItems": 1,
+          "title": "Target Refs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "source_path",
+        "source_sha256",
+        "source_size",
+        "source_git_mode",
+        "source_git_oid",
+        "hash_basis",
+        "asset_type",
+        "disposition",
+        "rule_id",
+        "target_refs",
+        "behavior_families",
+        "outcome_contracts",
+        "evidence",
+        "scenario_ids",
+        "review_status"
+      ],
+      "title": "SemanticFileReviewEntry",
+      "type": "object"
+    },
+    "SemanticGap": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/SemanticReviewEvidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "id": {
+          "pattern": "^[a-z0-9][a-z0-9._-]*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "material": {
+          "title": "Material",
+          "type": "boolean"
+        },
+        "resolution": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Resolution"
+        },
+        "status": {
+          "enum": [
+            "open",
+            "closed"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "material",
+        "status",
+        "description"
+      ],
+      "title": "SemanticGap",
+      "type": "object"
+    },
+    "SemanticReviewEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "anchor": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Anchor"
+        },
+        "assertion": {
+          "minLength": 1,
+          "title": "Assertion",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "target",
+            "outcome-test",
+            "schema",
+            "validator",
+            "scenario",
+            "archive",
+            "retirement"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "scope": {
+          "enum": [
+            "public-framework",
+            "personal-instance"
+          ],
+          "title": "Scope",
+          "type": "string"
+        }
+      },
+      "required": [
+        "scope",
+        "path",
+        "kind",
+        "assertion"
+      ],
+      "title": "SemanticReviewEvidence",
+      "type": "object"
+    },
+    "SemanticTargetReference": {
+      "additionalProperties": false,
+      "properties": {
+        "anchor": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Anchor"
+        },
+        "authority": {
+          "anyOf": [
+            {
+              "enum": [
+                "career-evidence",
+                "career-strategy",
+                "role-market",
+                "opportunity-decision",
+                "career-outlook",
+                "capability-readiness",
+                "career-communication"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Authority"
+        },
+        "lifecycle_id": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Lifecycle Id"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "relation": {
+          "minLength": 1,
+          "title": "Relation",
+          "type": "string"
+        },
+        "scope": {
+          "enum": [
+            "public-framework",
+            "personal-instance"
+          ],
+          "title": "Scope",
+          "type": "string"
+        },
+        "target_id": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z0-9][a-z0-9._-]*$|^[a-f0-9-]{36}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Id"
+        },
+        "target_kind": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z][a-z0-9.-]*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Kind"
+        },
+        "target_status": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Status"
+        }
+      },
+      "required": [
+        "scope",
+        "path",
+        "relation"
+      ],
+      "title": "SemanticTargetReference",
+      "type": "object"
+    }
+  },
+  "$id": "https://career-os.dev/schemas/semantic-file-review.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "control_type": {
+      "const": "semantic-file-review",
+      "default": "semantic-file-review",
+      "title": "Control Type",
+      "type": "string"
+    },
+    "entries": {
+      "items": {
+        "$ref": "#/$defs/SemanticFileReviewEntry"
+      },
+      "minItems": 1,
+      "title": "Entries",
+      "type": "array"
+    },
+    "expected_source_assets": {
+      "minimum": 1,
+      "title": "Expected Source Assets",
+      "type": "integer"
+    },
+    "inventory_path": {
+      "title": "Inventory Path",
+      "type": "string"
+    },
+    "inventory_sha256": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Inventory Sha256",
+      "type": "string"
+    },
+    "residual_gaps": {
+      "items": {
+        "$ref": "#/$defs/SemanticGap"
+      },
+      "title": "Residual Gaps",
+      "type": "array"
+    },
+    "scenarios": {
+      "items": {
+        "$ref": "#/$defs/SemanticBehaviorScenario"
+      },
+      "minItems": 1,
+      "title": "Scenarios",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "source_commit": {
+      "pattern": "^[a-f0-9]{40}$",
+      "title": "Source Commit",
+      "type": "string"
+    },
+    "source_repository": {
+      "minLength": 1,
+      "title": "Source Repository",
+      "type": "string"
+    }
+  },
+  "required": [
+    "source_repository",
+    "source_commit",
+    "inventory_path",
+    "inventory_sha256",
+    "expected_source_assets",
+    "scenarios",
+    "entries"
+  ],
+  "title": "Career OS Semantic File Review",
+  "type": "object"
+}

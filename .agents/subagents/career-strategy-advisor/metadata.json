@@ -1,0 +1,22 @@
+{
+  "name": "career-strategy-advisor",
+  "description": "Produce a dated, source-layered career decision brief from stable authority references without accepting strategy or changing state.",
+  "claude": {
+    "tools": [
+      "Read",
+      "Grep",
+      "Glob",
+      "WebSearch",
+      "WebFetch"
+    ]
+  },
+  "codex": {
+    "model_reasoning_effort": "high",
+    "sandbox_mode": "read-only",
+    "nickname_candidates": [
+      "Advisor",
+      "Horizon",
+      "Compass"
+    ]
+  }
+}

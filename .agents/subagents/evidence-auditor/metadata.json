@@ -1,0 +1,20 @@
+{
+  "name": "evidence-auditor",
+  "description": "Audit atomized public claims against an Internal Evidence Packet and return the resume-evidence-audit/1 contract without making repairs.",
+  "claude": {
+    "tools": [
+      "Read",
+      "Grep",
+      "Glob"
+    ]
+  },
+  "codex": {
+    "model_reasoning_effort": "high",
+    "sandbox_mode": "read-only",
+    "nickname_candidates": [
+      "Auditor",
+      "Verifier",
+      "Boundary"
+    ]
+  }
+}

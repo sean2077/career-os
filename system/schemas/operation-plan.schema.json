@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://career-os.dev/schemas/operation-plan.schema.json",
+  "title": "Career OS Operation Plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "id", "action", "created_at", "source_version", "target_version", "roots", "metadata", "operations", "plan_sha256"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "id": {"type": "string", "format": "uuid"},
+    "action": {"type": "string", "minLength": 1},
+    "created_at": {"type": "string", "format": "date-time"},
+    "source_version": {"type": "string"},
+    "target_version": {"type": "string"},
+    "roots": {"type": "object", "additionalProperties": {"type": "string"}},
+    "metadata": {"type": "object", "additionalProperties": {"type": "string"}},
+    "operations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["op", "root", "path"],
+        "properties": {
+          "op": {"enum": ["mkdir", "write_text", "copy_file", "delete"]},
+          "root": {"enum": ["project", "vault", "data", "runtime", "host_repo"]},
+          "path": {"type": "string"},
+          "expected_sha256": {"type": ["string", "null"]},
+          "result_sha256": {"type": ["string", "null"]},
+          "content": {"type": ["string", "null"]},
+          "source_root": {"type": ["string", "null"], "enum": ["project", "vault", "data", "runtime", "host_repo", "source", null]},
+          "source_path": {"type": ["string", "null"]},
+          "source_sha256": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "plan_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "applied_at": {"type": ["string", "null"], "format": "date-time"},
+    "rolled_back_at": {"type": ["string", "null"], "format": "date-time"}
+  }
+}

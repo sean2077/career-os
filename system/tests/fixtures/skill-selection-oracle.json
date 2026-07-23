@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {"id": "evidence-capture", "selected": [{"skill": "career-evidence", "mode": "capture"}]},
+    {"id": "evidence-debrief", "selected": [{"skill": "career-evidence", "mode": "debrief"}]},
+    {"id": "evidence-consolidate", "selected": [{"skill": "career-evidence", "mode": "consolidate"}]},
+    {"id": "strategy-position", "selected": [{"skill": "career-strategy", "mode": "position"}]},
+    {"id": "strategy-plan", "selected": [{"skill": "career-strategy", "mode": "plan"}]},
+    {"id": "strategy-align", "selected": [{"skill": "career-strategy", "mode": "align"}]},
+    {"id": "market-discover", "selected": [{"skill": "role-market", "mode": "discover"}]},
+    {"id": "market-ingest", "selected": [{"skill": "role-market", "mode": "ingest"}]},
+    {"id": "market-screen", "selected": [{"skill": "role-market", "mode": "screen"}]},
+    {"id": "market-compare", "selected": [{"skill": "role-market", "mode": "compare"}]},
+    {"id": "market-review", "selected": [{"skill": "role-market", "mode": "review"}]},
+    {"id": "opportunity-research", "selected": [{"skill": "opportunity-decision", "mode": "research"}]},
+    {"id": "opportunity-scope", "selected": [{"skill": "opportunity-decision", "mode": "scope"}]},
+    {"id": "opportunity-track", "selected": [{"skill": "opportunity-decision", "mode": "track"}]},
+    {"id": "opportunity-decide", "selected": [{"skill": "opportunity-decision", "mode": "decide"}]},
+    {"id": "outlook-scan", "selected": [{"skill": "career-outlook", "mode": "scan"}]},
+    {"id": "outlook-synthesize", "selected": [{"skill": "career-outlook", "mode": "synthesize"}]},
+    {"id": "outlook-review", "selected": [{"skill": "career-outlook", "mode": "review"}]},
+    {"id": "readiness-diagnose", "selected": [{"skill": "capability-readiness", "mode": "diagnose"}]},
+    {"id": "readiness-learn", "selected": [{"skill": "capability-readiness", "mode": "learn"}]},
+    {"id": "readiness-paper", "selected": [{"skill": "capability-readiness", "mode": "study-paper"}]},
+    {"id": "readiness-practice", "selected": [{"skill": "capability-readiness", "mode": "practice"}]},
+    {"id": "readiness-assess", "selected": [{"skill": "capability-readiness", "mode": "assess"}]},
+    {"id": "readiness-retest", "selected": [{"skill": "capability-readiness", "mode": "retest"}]},
+    {"id": "communication-compose", "selected": [{"skill": "career-communication", "mode": "compose"}]},
+    {"id": "communication-tailor", "selected": [{"skill": "career-communication", "mode": "tailor"}]},
+    {"id": "communication-validate", "selected": [{"skill": "career-communication", "mode": "validate"}]},
+    {"id": "communication-export", "selected": [{"skill": "career-communication", "mode": "export"}]},
+    {"id": "compose-evidence-strategy", "selected": [{"skill": "career-evidence", "mode": "debrief"}, {"skill": "career-strategy", "mode": "position"}]},
+    {"id": "compose-opportunity-flow", "selected": [{"skill": "role-market", "mode": "screen"}, {"skill": "opportunity-decision", "mode": "research"}, {"skill": "career-communication", "mode": "tailor"}, {"skill": "capability-readiness", "mode": "practice"}]},
+    {"id": "gate-external-account-action", "selected": [], "requires_explicit_authorization": true},
+    {"id": "gate-public-application-export", "selected": [{"skill": "career-communication", "mode": "export"}], "requires_explicit_authorization": true},
+    {"id": "gate-irrecoverable-overwrite-delete", "selected": [], "requires_explicit_authorization": true}
+  ],
+  "opportunity_blocks": [
+    {"name": "jd-screening", "skill": "role-market", "mode": "screen"},
+    {"name": "company-opportunity-decision", "skill": "opportunity-decision", "mode": "decide"},
+    {"name": "application-tracking", "skill": "opportunity-decision", "mode": "track"},
+    {"name": "resume-tailoring-safe-export", "skill": "career-communication", "mode": "export"},
+    {"name": "interview-preparation-retest", "skill": "capability-readiness", "mode": "retest"}
+  ],
+  "hard_gate_case_ids": [
+    "gate-external-account-action",
+    "gate-public-application-export",
+    "gate-irrecoverable-overwrite-delete"
+  ]
+}

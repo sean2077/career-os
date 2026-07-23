@@ -1,0 +1,303 @@
+{
+  "$defs": {
+    "LegacyImportEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "source_path": {
+          "title": "Source Path",
+          "type": "string"
+        },
+        "source_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Source Sha256",
+          "type": "string"
+        },
+        "asset_type": {
+          "enum": [
+            "record",
+            "attachment",
+            "resume",
+            "view",
+            "skill",
+            "tool",
+            "documentation",
+            "other"
+          ],
+          "title": "Asset Type",
+          "type": "string"
+        },
+        "disposition": {
+          "enum": [
+            "migrate-exact",
+            "migrate-transform",
+            "replace-by-public",
+            "retain-archive-only",
+            "upstream-gap",
+            "retire"
+          ],
+          "title": "Disposition",
+          "type": "string"
+        },
+        "outputs": {
+          "items": {
+            "$ref": "#/$defs/LegacyImportOutput"
+          },
+          "title": "Outputs",
+          "type": "array"
+        },
+        "replacement": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Replacement"
+        },
+        "transformation_note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Transformation Note"
+        }
+      },
+      "required": [
+        "source_path",
+        "source_sha256",
+        "asset_type",
+        "disposition"
+      ],
+      "title": "LegacyImportEntry",
+      "type": "object"
+    },
+    "LegacyImportManifest": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "id": {
+          "format": "uuid4",
+          "title": "Id",
+          "type": "string"
+        },
+        "source_repository": {
+          "minLength": 1,
+          "title": "Source Repository",
+          "type": "string"
+        },
+        "source_commit": {
+          "pattern": "^[a-f0-9]{40}$",
+          "title": "Source Commit",
+          "type": "string"
+        },
+        "provenance_path": {
+          "default": ".provenance/resume-migration.json",
+          "title": "Provenance Path",
+          "type": "string"
+        },
+        "entries": {
+          "items": {
+            "$ref": "#/$defs/LegacyImportEntry"
+          },
+          "minItems": 1,
+          "title": "Entries",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "source_repository",
+        "source_commit",
+        "entries"
+      ],
+      "title": "LegacyImportManifest",
+      "type": "object"
+    },
+    "LegacyImportManifestV2": {
+      "additionalProperties": false,
+      "description": "Correction manifest that can supersede and retire prior outputs safely.",
+      "properties": {
+        "schema_version": {
+          "const": 2,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "id": {
+          "format": "uuid4",
+          "title": "Id",
+          "type": "string"
+        },
+        "source_repository": {
+          "minLength": 1,
+          "title": "Source Repository",
+          "type": "string"
+        },
+        "source_commit": {
+          "pattern": "^[a-f0-9]{40}$",
+          "title": "Source Commit",
+          "type": "string"
+        },
+        "provenance_path": {
+          "default": ".provenance/resume-migration.json",
+          "title": "Provenance Path",
+          "type": "string"
+        },
+        "supersedes_manifest_ids": {
+          "items": {
+            "format": "uuid4",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Supersedes Manifest Ids",
+          "type": "array",
+          "uniqueItems": true
+        },
+        "entries": {
+          "items": {
+            "$ref": "#/$defs/LegacyImportEntry"
+          },
+          "title": "Entries",
+          "type": "array"
+        },
+        "retire_targets": {
+          "items": {
+            "$ref": "#/$defs/LegacyImportRetiredTarget"
+          },
+          "title": "Retire Targets",
+          "type": "array"
+        }
+      },
+      "required": [
+        "schema_version",
+        "id",
+        "source_repository",
+        "source_commit",
+        "supersedes_manifest_ids"
+      ],
+      "title": "LegacyImportManifestV2",
+      "type": "object"
+    },
+    "LegacyImportOutput": {
+      "additionalProperties": false,
+      "properties": {
+        "target_path": {
+          "title": "Target Path",
+          "type": "string"
+        },
+        "target_id": {
+          "anyOf": [
+            {
+              "format": "uuid4",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Id"
+        },
+        "target_kind": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z][a-z0-9.-]*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Kind"
+        },
+        "prepared_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Prepared Path"
+        },
+        "prepared_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Prepared Sha256"
+        }
+      },
+      "required": [
+        "target_path"
+      ],
+      "title": "LegacyImportOutput",
+      "type": "object"
+    },
+    "LegacyImportRetiredTarget": {
+      "additionalProperties": false,
+      "properties": {
+        "target_path": {
+          "title": "Target Path",
+          "type": "string"
+        },
+        "expected_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Expected Sha256",
+          "type": "string"
+        },
+        "reason": {
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "target_path",
+        "expected_sha256",
+        "reason"
+      ],
+      "title": "LegacyImportRetiredTarget",
+      "type": "object"
+    }
+  },
+  "discriminator": {
+    "mapping": {
+      "1": "#/$defs/LegacyImportManifest",
+      "2": "#/$defs/LegacyImportManifestV2"
+    },
+    "propertyName": "schema_version"
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/LegacyImportManifest"
+    },
+    {
+      "$ref": "#/$defs/LegacyImportManifestV2"
+    }
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://career-os.dev/schemas/legacy-import-manifest.schema.json",
+  "title": "Career OS Legacy Import Manifest"
+}

@@ -1,0 +1,85 @@
+filters:
+  or:
+    - kind.startsWith("evidence.")
+    - kind.startsWith("strategy.")
+    - kind.startsWith("market.")
+    - kind.startsWith("opportunity.")
+    - kind.startsWith("outlook.")
+    - kind.startsWith("readiness.")
+    - kind.startsWith("communication.")
+formulas:
+  required_internal_refs: if(refs, refs.filter(value.required == true).length, 0)
+  required_host_refs: if(host_refs, host_refs.filter(value.required == true).length, 0)
+  host_reference_state: if(formula.required_internal_refs == 0 && formula.required_host_refs == 0, "none", if(formula.required_host_refs == 0, "needs-adapter", "adapted"))
+properties:
+  file.name:
+    displayName: Record
+  kind:
+    displayName: Kind
+  status:
+    displayName: Lifecycle
+  visibility:
+    displayName: Visibility
+  migration_review:
+    displayName: Migration review
+  refs:
+    displayName: Internal references
+  host_refs:
+    displayName: Host adapters
+  formula.required_internal_refs:
+    displayName: Required internal refs
+  formula.required_host_refs:
+    displayName: Required host refs
+  formula.host_reference_state:
+    displayName: Host reference state
+  updated_at:
+    displayName: Updated
+views:
+  - type: table
+    name: All records
+    order:
+      - file.name
+      - kind
+      - status
+      - visibility
+      - migration_review
+      - updated_at
+    sort:
+      - property: kind
+        direction: ASC
+  - type: table
+    name: Migration review
+    filters:
+      and:
+        - migration_review == "required"
+    order:
+      - file.name
+      - kind
+      - status
+      - migration_review
+      - updated_at
+    sort:
+      - property: kind
+        direction: ASC
+      - property: updated_at
+        direction: DESC
+  - type: table
+    name: Host reference health
+    filters:
+      or:
+        - formula.required_internal_refs > 0
+        - formula.required_host_refs > 0
+    order:
+      - file.name
+      - kind
+      - formula.host_reference_state
+      - formula.required_internal_refs
+      - formula.required_host_refs
+      - refs
+      - host_refs
+      - updated_at
+    sort:
+      - property: formula.host_reference_state
+        direction: ASC
+      - property: kind
+        direction: ASC

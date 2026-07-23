@@ -1,0 +1,28 @@
+.claude/settings.local.json
+
+# Career OS local and generated state
+/.career-os/
+/.oma/
+/.obsidian/
+/runtime/
+/build/
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+*.egg-info/
+
+# Editors and operating systems
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json

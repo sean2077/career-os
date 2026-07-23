@@ -1,0 +1,228 @@
+filters:
+  and:
+  - file.ext == "md"
+  - schema_version == 2
+  - kind == "market.jd"
+formulas:
+  priority_rank: if(priority == "p0", 0, if(priority == "p1", 1, if(priority == "p2", 2, if(priority == "p3", 3, 9))))
+  priority_label: if(priority == "p0", "P0", if(priority == "p1", "P1", if(priority == "p2", "P2", if(priority == "p3", "P3", if(priority == "reject", "Reject", "")))))
+  evidence_fit_rank: if(evidence_fit == 5, 0, if(evidence_fit == 4, 1, if(evidence_fit == 3, 2, if(evidence_fit == 2, 3, if(evidence_fit == 1, 4, 9)))))
+  evidence_fit_label: if(evidence_fit == 5, "⭐⭐⭐⭐⭐", if(evidence_fit == 4, "⭐⭐⭐⭐", if(evidence_fit == 3, "⭐⭐⭐", if(evidence_fit == 2, "⭐⭐", if(evidence_fit == 1, "⭐", "")))))
+  recruiting_scope: if(recruiting_scope_key.isEmpty(), "Pending review · " + employer_name, recruiting_scope_key)
+  is_current: if(is_stale, false, true)
+  stale_label: if(is_stale, "Stale", "Current")
+  stale_rank: if(is_stale, 1, 0)
+  gaps_label: if(!gap_summary.isEmpty(), gap_summary, if(gaps, gaps.join("; "), ""))
+properties:
+  file.name:
+    displayName: JD 职位
+  collection:
+    displayName: 批次
+  employer_name:
+    displayName: 公司
+  recruiting_scope_key:
+    displayName: 招聘范围 ID
+  formula.recruiting_scope:
+    displayName: 招聘范围
+  formula.priority_label:
+    displayName: 优先级
+  formula.evidence_fit_label:
+    displayName: 经历匹配度
+  direction_key:
+    displayName: 方向
+  career_lane_key:
+    displayName: 职业路线
+  user_review_signal:
+    displayName: 人工信号
+  duplicate_group:
+    displayName: 近重复组
+  preference_signal:
+    displayName: 偏好
+  growth_signal:
+    displayName: 成长性
+  next_action_detail:
+    displayName: 下一步
+  location:
+    displayName: 地点
+  compensation:
+    displayName: 薪资
+  formula.gaps_label:
+    displayName: 能力缺口
+  review_note:
+    displayName: 备注
+  status:
+    displayName: 复核状态
+  formula.stale_label:
+    displayName: 当前性
+  file.mtime:
+    displayName: 修改时间
+views:
+- type: table
+  name: 当前候选
+  filters:
+    and:
+    - formula.is_current == true
+    - status == "reviewed"
+    - (priority == "p0" || priority == "p1" || priority == "p2")
+    - evidence_fit >= 1
+  groupBy:
+    property: direction_key
+    direction: ASC
+  order:
+  - file.name
+  - formula.priority_label
+  - formula.evidence_fit_label
+  - direction_key
+  - user_review_signal
+  - next_action_detail
+  - location
+  - compensation
+  - formula.gaps_label
+  - review_note
+  sort:
+  - property: compensation
+    direction: DESC
+  - property: user_review_signal
+    direction: ASC
+  - property: formula.priority_rank
+    direction: ASC
+  - property: formula.evidence_fit_rank
+    direction: ASC
+  columnSize:
+    file.name: 288
+    formula.priority_label: 52
+    formula.evidence_fit_label: 133
+    note.direction_key: 216
+    note.user_review_signal: 112
+    note.next_action_detail: 94
+    note.location: 153
+- type: table
+  name: 同公司投递决策
+  filters:
+    and:
+    - formula.is_current == true
+    - status == "reviewed"
+    - (priority == "p0" || priority == "p1" || priority == "p2")
+    - evidence_fit >= 3
+  groupBy:
+    property: formula.recruiting_scope
+    direction: ASC
+  order:
+  - file.name
+  - formula.priority_label
+  - formula.evidence_fit_label
+  - direction_key
+  - compensation
+  - user_review_signal
+  - preference_signal
+  - growth_signal
+  - next_action_detail
+  - location
+  - formula.gaps_label
+  - review_note
+  sort:
+  - property: compensation
+    direction: DESC
+  - property: formula.priority_rank
+    direction: ASC
+  - property: formula.evidence_fit_rank
+    direction: ASC
+  columnSize:
+    file.name: 288
+    formula.priority_label: 52
+    formula.evidence_fit_label: 133
+    note.direction_key: 216
+    note.career_lane_key: 120
+    note.user_review_signal: 112
+    note.duplicate_group: 192
+    note.preference_signal: 72
+    note.growth_signal: 112
+    note.next_action_detail: 94
+    note.location: 153
+    formula.gaps_label: 240
+    note.review_note: 440
+- type: table
+  name: 待人工复核
+  filters:
+    and:
+    - formula.is_current == true
+    - status == "screened"
+  order:
+  - file.name
+  - formula.priority_label
+  - formula.evidence_fit_label
+  - direction_key
+  - user_review_signal
+  - next_action_detail
+  - location
+  - compensation
+  - review_note
+  sort:
+  - property: file.mtime
+    direction: DESC
+  - property: formula.priority_rank
+    direction: ASC
+  columnSize:
+    file.name: 288
+    direction_key: 240
+    review_note: 440
+- type: table
+  name: 暂不推进
+  filters:
+    and:
+    - formula.is_current == true
+    - status == "reviewed"
+    - (priority == "p3" || priority == "reject")
+  order:
+  - file.name
+  - formula.priority_label
+  - formula.evidence_fit_label
+  - direction_key
+  - user_review_signal
+  - next_action_detail
+  - location
+  - compensation
+  - formula.gaps_label
+  - review_note
+  sort:
+  - property: formula.evidence_fit_rank
+    direction: ASC
+  - property: file.mtime
+    direction: DESC
+  columnSize:
+    file.name: 288
+    formula.priority_label: 89
+    formula.evidence_fit_label: 133
+    note.direction_key: 216
+    note.user_review_signal: 112
+    note.next_action_detail: 94
+    note.location: 153
+    formula.gaps_label: 240
+    note.review_note: 440
+- type: table
+  name: 全部
+  order:
+  - file.name
+  - formula.priority_label
+  - formula.evidence_fit_label
+  - direction_key
+  - user_review_signal
+  - next_action_detail
+  - location
+  - compensation
+  - collection
+  - formula.stale_label
+  - status
+  - file.mtime
+  sort:
+  - property: formula.stale_rank
+    direction: ASC
+  - property: collection
+    direction: DESC
+  - property: formula.priority_rank
+    direction: ASC
+  - property: file.mtime
+    direction: DESC
+  columnSize:
+    file.name: 288
+    direction_key: 240

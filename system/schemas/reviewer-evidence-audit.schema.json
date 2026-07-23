@@ -1,0 +1,120 @@
+{
+  "$defs": {
+    "EvidenceClaim": {
+      "additionalProperties": false,
+      "description": "One atomized public claim and its evidence boundary.",
+      "properties": {
+        "claim": {
+          "minLength": 1,
+          "title": "Claim",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "supported",
+            "bounded",
+            "needs-confirmation",
+            "unsupported",
+            "conflicting/stale"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "risk": {
+          "minLength": 1,
+          "title": "Risk",
+          "type": "string"
+        },
+        "evidence": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "boundary": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Boundary"
+        },
+        "conflicts": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Conflicts",
+          "type": "array"
+        },
+        "confirmation_question": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Confirmation Question"
+        },
+        "handoff": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Handoff"
+        }
+      },
+      "required": [
+        "claim",
+        "status",
+        "risk",
+        "evidence",
+        "boundary",
+        "conflicts",
+        "confirmation_question",
+        "handoff"
+      ],
+      "title": "EvidenceClaim",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "The complete output of the Evidence Auditor.",
+  "properties": {
+    "schema": {
+      "const": "resume-evidence-audit/1",
+      "title": "Schema",
+      "type": "string"
+    },
+    "claims": {
+      "items": {
+        "$ref": "#/$defs/EvidenceClaim"
+      },
+      "minItems": 1,
+      "title": "Claims",
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema",
+    "claims"
+  ],
+  "title": "Career OS Evidence Auditor Output",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://career-os.dev/schemas/reviewer-evidence-audit.schema.json"
+}

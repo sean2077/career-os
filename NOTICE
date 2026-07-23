@@ -1,0 +1,40 @@
+Career OS
+Copyright (c) 2026 sean2077
+
+Project-owned code, documentation, schemas, templates, and Skills are licensed under MIT.
+
+Bundled Agent Skills retain their upstream copyright and license terms:
+
+- sean2077/skills — revision 93667c5a5eec5f68cd1097574e27c29994b6c3f2
+  — MIT — system/licenses/sean2077-skills-MIT.txt
+  — https://github.com/sean2077/skills
+- kepano/obsidian-skills — revision 553ef99aa3306dd23f268e1ba9af752577684f69
+  — MIT — system/licenses/kepano-obsidian-skills-MIT.txt
+  — https://github.com/kepano/obsidian-skills
+
+The optional Career OS resume font bundle is licensed under the SIL Open Font License 1.1:
+
+- Source Han Serif SC 2.003 / tag 2.003R
+  - Regular SHA-256: 78aa7a328fd974df2d688c8a9fd74a33d8334dfa84ab24d9d11efb2ffc464117
+  - Bold SHA-256: 706b8c0de2deff6cbc0c87e2cdedfd33a78b7ffd76cebb4549012f197ba611fe
+  - https://github.com/adobe-fonts/source-han-serif/releases/tag/2.003R
+- Noto Sans CJK SC 2.004 / tag Sans2.004
+  - Regular SHA-256: 2c76254f6fc379fddfce0a7e84fb5385bb135d3e399294f6eeb6680d0365b74b
+  - Bold SHA-256: b5f0d1a190a7f9b43c310a8850630af12553df32c4c050543f9059732d9b4c0a
+  - https://github.com/notofonts/noto-cjk/releases/tag/Sans2.004
+- License text: system/licenses/SIL-OFL-1.1.txt
+
+Exact imported revisions, paths, and complete-tree hashes are recorded in skills-lock.json.
+Exact runtime Python versions and dependency edges are recorded in uv.lock and
+system/sbom.cdx.json. Those packages retain their upstream license terms.
+
+The `career-os resume work-experience` projection uses the locked Artifex
+runtime declared in `uv.lock`:
+
+- PyMuPDF4LLM 1.28.0 and PyMuPDF are offered upstream under GNU AGPL 3.0 or an
+  Artifex commercial license.
+- PyMuPDF Layout is offered upstream under the PolyForm Noncommercial License
+  or an Artifex commercial license.
+
+These dependencies are not relicensed by the Career OS MIT license. Review the
+upstream terms for the intended use or install an applicable commercial license.

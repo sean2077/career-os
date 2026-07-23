@@ -1,0 +1,95 @@
+{
+  "additionalProperties": false,
+  "description": "One active or closed branch returned by the Blind Interviewer.",
+  "properties": {
+    "schema": {
+      "const": "resume-interview-probe/1",
+      "title": "Schema",
+      "type": "string"
+    },
+    "packet_status": {
+      "enum": [
+        "accepted",
+        "rejected-leakage",
+        "invalid"
+      ],
+      "title": "Packet Status",
+      "type": "string"
+    },
+    "branch": {
+      "minLength": 1,
+      "title": "Branch",
+      "type": "string"
+    },
+    "claim": {
+      "minLength": 1,
+      "title": "Claim",
+      "type": "string"
+    },
+    "current_question": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Current Question"
+    },
+    "target_dimensions": {
+      "items": {
+        "enum": [
+          "fact-boundary",
+          "technical-depth",
+          "answer-structure",
+          "tradeoff-resilience"
+        ],
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Target Dimensions",
+      "type": "array"
+    },
+    "follow_up_triggers": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Follow Up Triggers",
+      "type": "array"
+    },
+    "outcome": {
+      "anyOf": [
+        {
+          "enum": [
+            "passed",
+            "gap",
+            "blocking-red-flag",
+            "explicitly-skipped"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Outcome"
+    }
+  },
+  "required": [
+    "schema",
+    "packet_status",
+    "branch",
+    "claim",
+    "current_question",
+    "target_dimensions",
+    "follow_up_triggers",
+    "outcome"
+  ],
+  "title": "Career OS Blind Interviewer Output",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://career-os.dev/schemas/reviewer-interview-probe.schema.json"
+}

@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "skills": [
+    {
+      "name": "agent-scaffold",
+      "source_repository": "https://github.com/sean2077/skills",
+      "revision": "7a0fe227a59d6a921ae58523dd83971dbf4e0030",
+      "source_path": "skills/agent-scaffold",
+      "tree_sha256": "938260972a665a308338843c106e88c841388dd479fb969fc0e355cf652b63e4",
+      "license": "MIT",
+      "attribution": "Copyright (c) sean2077 and contributors"
+    },
+    {
+      "name": "conventional-commit",
+      "source_repository": "https://github.com/sean2077/skills",
+      "revision": "93667c5a5eec5f68cd1097574e27c29994b6c3f2",
+      "source_path": "skills/conventional-commit",
+      "tree_sha256": "23d7e497f22e1513e87dbd247dec4b2367c1168590733fb68253dfa3fb90a901",
+      "license": "MIT",
+      "attribution": "Copyright (c) sean2077 and contributors"
+    },
+    {
+      "name": "defuddle",
+      "source_repository": "https://github.com/kepano/obsidian-skills",
+      "revision": "553ef99aa3306dd23f268e1ba9af752577684f69",
+      "source_path": "skills/defuddle",
+      "tree_sha256": "b978f265ecb881a99bd99aea0f61f02ed83e5de67273ac5b0e30980833d423a6",
+      "license": "MIT",
+      "attribution": "Copyright (c) 2026 Steph Ango (@kepano)"
+    },
+    {
+      "name": "json-canvas",
+      "source_repository": "https://github.com/kepano/obsidian-skills",
+      "revision": "553ef99aa3306dd23f268e1ba9af752577684f69",
+      "source_path": "skills/json-canvas",
+      "tree_sha256": "3662389f3dd8678c1643118b236a7f80496895c7cbbc7238f233833234d2fbde",
+      "license": "MIT",
+      "attribution": "Copyright (c) 2026 Steph Ango (@kepano)"
+    },
+    {
+      "name": "obsidian-bases",
+      "source_repository": "https://github.com/kepano/obsidian-skills",
+      "revision": "553ef99aa3306dd23f268e1ba9af752577684f69",
+      "source_path": "skills/obsidian-bases",
+      "tree_sha256": "075b8e6e325eab6afd3b035150bfb9e1482408c2e9098cca9f1fc1559a3df7cc",
+      "license": "MIT",
+      "attribution": "Copyright (c) 2026 Steph Ango (@kepano)"
+    },
+    {
+      "name": "obsidian-cli",
+      "source_repository": "https://github.com/kepano/obsidian-skills",
+      "revision": "553ef99aa3306dd23f268e1ba9af752577684f69",
+      "source_path": "skills/obsidian-cli",
+      "tree_sha256": "c3797c899322217fd27115deab63a9afa8488fbdaa0a12ee1f3a13fc0094e6bf",
+      "license": "MIT",
+      "attribution": "Copyright (c) 2026 Steph Ango (@kepano)"
+    },
+    {
+      "name": "obsidian-markdown",
+      "source_repository": "https://github.com/kepano/obsidian-skills",
+      "revision": "553ef99aa3306dd23f268e1ba9af752577684f69",
+      "source_path": "skills/obsidian-markdown",
+      "tree_sha256": "db13f2f3153fb7e6d0a7d07f2ec2d7f825796242093fb0b3007898c5e5730820",
+      "license": "MIT",
+      "attribution": "Copyright (c) 2026 Steph Ango (@kepano)"
+    }
+  ]
+}

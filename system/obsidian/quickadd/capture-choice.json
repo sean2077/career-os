@@ -1,0 +1,37 @@
+{
+  "id": "ca2ee657-1ec2-46b4-9d35-1ab0a58d68f8",
+  "name": "Career OS: Capture evidence",
+  "type": "Capture",
+  "command": true,
+  "captureTo": "__CAREER_OS_CAPTURE_PATH__",
+  "captureToActiveFile": false,
+  "captureToCanvasNodeId": "",
+  "activeFileWritePosition": "cursor",
+  "createFileIfItDoesntExist": {
+    "enabled": true,
+    "createWithTemplate": false,
+    "template": ""
+  },
+  "format": {
+    "enabled": true,
+    "format": "## {{DATE:YYYY-MM-DD HH:mm}}\n\n{{VALUE:note|type:multiline}}\n"
+  },
+  "useSelectionAsCaptureValue": false,
+  "insertAfter": {
+    "enabled": false,
+    "after": "",
+    "insertAtEnd": false,
+    "considerSubsections": false,
+    "createIfNotFound": false,
+    "createIfNotFoundLocation": "top",
+    "inline": false,
+    "replaceExisting": false,
+    "blankLineAfterMatchMode": "auto"
+  },
+  "newLineCapture": {"enabled": false, "direction": "below"},
+  "prepend": false,
+  "appendLink": false,
+  "task": false,
+  "openFile": false,
+  "fileOpening": {"location": "tab", "direction": "vertical", "mode": "default", "focus": true}
+}

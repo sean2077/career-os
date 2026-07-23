@@ -1,0 +1,39 @@
+# Career OS editor-only XeLaTeX configuration.
+# Shareable PDFs must still be produced by `career-os resume export`.
+
+use Cwd qw(abs_path);
+use File::Basename qw(dirname);
+use File::Spec;
+
+my $career_os_rc_path = abs_path($rc_files_read[-1])
+  or die "cannot resolve Career OS latexmkrc\n";
+my $career_os_resume_root = dirname($career_os_rc_path);
+my $career_os_system_root = dirname($career_os_resume_root);
+my $career_os_project_root = dirname($career_os_system_root);
+my $career_os_windows =
+  (($^O eq 'MSWin32') || ($^O =~ /cygwin|msys/i) || (($ENV{'OS'} || '') eq 'Windows_NT'));
+my $career_os_separator = $career_os_windows ? ';' : ':';
+
+my $career_os_tex_root = File::Spec->catdir($career_os_project_root, 'system', 'resume');
+my $career_os_font_root = File::Spec->catdir($career_os_project_root, '.career-os', 'fonts');
+my $career_os_build_root = File::Spec->catdir($career_os_project_root, 'build', 'vscode');
+$career_os_tex_root =~ s{\\}{/}g;
+$career_os_font_root =~ s{\\}{/}g;
+$career_os_build_root =~ s{\\}{/}g;
+
+# Keep resume-local inputs (especially identity.tex) ahead of shared assets.
+# The shared root is intentionally non-recursive so fixtures cannot shadow them.
+$ENV{'TEXINPUTS'} =
+  '.' . $career_os_separator
+  . $career_os_tex_root . $career_os_separator
+  . ($ENV{'TEXINPUTS'} || '');
+$ENV{'OPENTYPEFONTS'} =
+  $career_os_font_root . '//' . $career_os_separator . ($ENV{'OPENTYPEFONTS'} || '');
+
+if ($career_os_windows && !($ENV{'WINDIR'} || '') && ($ENV{'SystemRoot'} || '')) {
+  $ENV{'WINDIR'} = $ENV{'SystemRoot'};
+}
+
+$pdf_mode = 5;
+$out_dir = $career_os_build_root;
+$xelatex = 'xelatex -no-shell-escape %O %S';

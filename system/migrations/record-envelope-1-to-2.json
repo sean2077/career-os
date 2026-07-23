@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "id": "record-envelope-v1-to-v2",
+  "source_record_schema": 1,
+  "target_record_schema": 2,
+  "transform": "record-envelope-v1-to-v2"
+}

@@ -1,0 +1,36 @@
+filters:
+  and:
+  - file.ext == "md"
+  - schema_version == 2
+  - kind == "market.channel"
+  - status == "active"
+formulas:
+  career_lanes: if(host_refs, host_refs.filter(value.relation == "career-lane").map(file(value.path).asLink(file(value.path).basename)), "")
+properties:
+  file.name:
+    displayName: Channel
+  tier:
+    displayName: Tier
+  role:
+    displayName: Role
+  formula.career_lanes:
+    displayName: Career Lanes
+  last_verified_at:
+    displayName: Last Verified
+  url:
+    displayName: Official Site
+  rank:
+    displayName: Sort Rank
+views:
+- type: table
+  name: Current Channels
+  order:
+  - file.name
+  - tier
+  - role
+  - formula.career_lanes
+  - last_verified_at
+  - url
+  sort:
+  - property: rank
+    direction: ASC

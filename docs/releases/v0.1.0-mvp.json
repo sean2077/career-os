@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "release": "v0.1.0",
+  "base_extraction_manifest": "docs/releases/v0.1.0-extraction.json",
+  "history_shape": "single-root-mvp",
+  "self_exclusion": "docs/releases/v0.1.0-mvp.json",
+  "entries": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "result_sha256": "c07aa35f461e289b1760d93624b33efeb7a1bc753682f360711cdb04c953d6e3",
+      "reason": "mvp-security-hardening"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "result_sha256": "25ce6ee9f10f991c97c0ab7dddc011886f387d79c0b66ecab9a55199edfd5400",
+      "reason": "mvp-security-hardening"
+    },
+    {
+      "path": "AGENTS.md",
+      "result_sha256": "f8ba9e6a769637a90abb644b5d7cb357978cd19e912cb9b77f8e0d1859be8528",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "result_sha256": "446cd33ed0656533b45d711dd959e1ee9835a3bbd2b67ad9b3462892ac5a4534",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/releases/v0.1.0.md",
+      "result_sha256": "1dce24b0cca6e59ed7e4b8feccaafd47b693563a3435b7ae378c2cc0aafa36c3",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/tooling.md",
+      "result_sha256": "32247dedafaba55f1dc7f763faa724162d830e0293f7773f1efa062d676d33ce",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/privacy/public-fixture-policy.json",
+      "result_sha256": "49dcd3967d1eb15f5ef601e156a5c3a3361a186e77697965663c7eae891553d2",
+      "reason": "mvp-security-hardening"
+    },
+    {
+      "path": "system/tests/test_downstream.py",
+      "result_sha256": "28b4d3e6dbe29ff159256f0ec936693bcb24167469c58ff13a1ba4da1ddac319",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tests/test_extraction_manifest.py",
+      "result_sha256": "9b2e73b985258426adafff1c524bb65aa1a737bfac0349d61aaf547435fc821e",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tests/test_public_privacy.py",
+      "result_sha256": "a44e61c55246539c812f2d0d0ab8eff8c4a525af11e25cb2a7666bdb86161334",
+      "reason": "mvp-security-hardening"
+    },
+    {
+      "path": "system/tests/test_release.py",
+      "result_sha256": "c166f6143875af8e6d76d9bf8e31e32d8476c93d879b89363778a9acfb27f011",
+      "reason": "mvp-security-hardening"
+    },
+    {
+      "path": "system/tools/career_os/checks.py",
+      "result_sha256": "afdb33a7392fd9ec74be48adb58a1fd2be207ff0b84dc2d0ef966cc51b8676f7",
+      "reason": "mvp-security-hardening"
+    },
+    {
+      "path": "system/tools/career_os/cli/release.py",
+      "result_sha256": "173581f6314c6fb727e68ba0ceb9d77858f083cefff75532fc8e3c35c9a58247",
+      "reason": "mvp-security-hardening"
+    },
+    {
+      "path": "system/tools/career_os/config.py",
+      "result_sha256": "571880516468c012670f93e10337ac99d2e6fe3f006490e7d771a8ae5e7c6d19",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tools/career_os/downstream.py",
+      "result_sha256": "3c39914d2dfe9400777c4a122fe789eb798f69c2bf83c0fbbafba9e1a5f02531",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tools/career_os/public_privacy.py",
+      "result_sha256": "8b03901ad328656a6de09d025b2150623fbb08fdda61d5711f504339da1c34e3",
+      "reason": "mvp-security-hardening"
+    }
+  ]
+}

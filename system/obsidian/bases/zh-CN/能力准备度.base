@@ -1,0 +1,237 @@
+filters:
+  and:
+  - file.ext == "md"
+  - schema_version == 2
+  - or:
+    - kind.startsWith("readiness.")
+    - kind == "evidence.story"
+    - kind == "communication.audit"
+formulas:
+  session_age_days: if(session_date, (today() - date(session_date)).days, "")
+  readiness_kind: if(kind == "communication.audit", "audit", if(kind == "readiness.session", "session", if(kind == "readiness.gap", "gap", if(kind == "evidence.story", "story", kind))))
+  target_jd_path: if(host_refs, host_refs.filter(value.relation == "target-jd").map(value.path).join(""), "")
+  target_jd: if(!formula.target_jd_path.isEmpty() && file(formula.target_jd_path), file(formula.target_jd_path).asLink(file(formula.target_jd_path).basename), "")
+  career_lanes: if(host_refs, host_refs.filter(value.relation == "career-lane").map(file(value.path).asLink(file(value.path).basename)), "")
+  experience_stories: if(host_refs, host_refs.filter(value.relation == "experience-story").map(file(value.path).asLink(file(value.path).basename)), "")
+  resume_audit_path: if(host_refs, host_refs.filter(value.relation == "resume-audit").map(value.path).join(""), "")
+  resume_audit: if(!formula.resume_audit_path.isEmpty() && file(formula.resume_audit_path), file(formula.resume_audit_path).asLink(file(formula.resume_audit_path).basename), "")
+  last_retest: if(host_refs, host_refs.filter(value.relation == "last-retest").map(file(value.path).asLink(file(value.path).basename)), "")
+  closure_evidence: if(host_refs, host_refs.filter(value.relation == "closure-evidence").map(file(value.path).asLink(file(value.path).basename)), "")
+  resume_roots: if(host_refs, host_refs.filter(value.relation == "resume-root").map(file(value.path).asLink(file(value.path).basename)), "")
+properties:
+  file.name:
+    displayName: 记录
+  formula.readiness_kind:
+    displayName: 类型
+  session_date:
+    displayName: 面试日期
+  formula.session_age_days:
+    displayName: 距今天数
+  formula.career_lanes:
+    displayName: 职业路线
+  target:
+    displayName: 目标
+  formula.target_jd:
+    displayName: 目标 JD
+  formula.experience_stories:
+    displayName: 经历故事引用
+  formula.resume_audit:
+    displayName: 简历审核
+  session_type:
+    displayName: 模式
+  scope:
+    displayName: 范围
+  fact_boundary:
+    displayName: 事实边界
+  technical_depth:
+    displayName: 技术深度
+  answer_structure:
+    displayName: 回答结构
+  tradeoff_resilience:
+    displayName: 权衡韧性
+  blocking_red_flag:
+    displayName: 阻塞性红旗
+  verdict:
+    displayName: 结论
+  attempt:
+    displayName: 尝试次数
+  gap_type:
+    displayName: 差距类型
+  status:
+    displayName: 状态
+  priority:
+    displayName: 优先级
+  formula.last_retest:
+    displayName: 最近复测
+  formula.closure_evidence:
+    displayName: 闭环证据
+  story_role:
+    displayName: 故事角色
+  readiness_state:
+    displayName: 故事状态
+  audit_date:
+    displayName: 审核日期
+  career_lane:
+    displayName: 审核路线
+  formula.resume_roots:
+    displayName: 简历根文件
+  source_fingerprint:
+    displayName: 来源指纹
+  blocking_findings:
+    displayName: 阻塞问题
+  confirmation_count:
+    displayName: 确认数量
+  user_confirmed:
+    displayName: 用户已确认
+views:
+- type: table
+  name: 最新严格评估
+  filters:
+    and:
+    - kind == "readiness.session"
+    - session_type == "strict"
+    - verdict != "historical"
+  order:
+  - file.name
+  - session_date
+  - formula.session_age_days
+  - formula.career_lanes
+  - target
+  - formula.target_jd
+  - formula.experience_stories
+  - formula.resume_audit
+  - scope
+  - verdict
+  - fact_boundary
+  - technical_depth
+  - answer_structure
+  - tradeoff_resilience
+  - blocking_red_flag
+  sort:
+  - property: session_date
+    direction: DESC
+- type: table
+  name: JD 准备输入
+  filters:
+    or:
+    - target == "jd"
+    - kind == "readiness.gap"
+  order:
+  - file.name
+  - formula.readiness_kind
+  - formula.target_jd
+  - formula.career_lanes
+  - session_type
+  - verdict
+  - session_date
+  - attempt
+  - priority
+  - gap_type
+  - status
+  sort:
+  - property: session_date
+    direction: DESC
+- type: table
+  name: 待补或阻塞差距
+  filters:
+    and:
+    - kind == "readiness.gap"
+    - (status == "open" || status == "learning" || status == "practice" || status == "retest" || status == "blocked")
+  order:
+  - file.name
+  - formula.career_lanes
+  - priority
+  - gap_type
+  - status
+  - formula.target_jd
+  - formula.last_retest
+  - formula.closure_evidence
+  sort:
+  - property: priority
+    direction: ASC
+  - property: updated_at
+    direction: DESC
+- type: table
+  name: 复测队列
+  filters:
+    or:
+    - kind == "readiness.gap" && status == "retest"
+    - kind == "readiness.session" && verdict == "not-ready"
+  order:
+  - file.name
+  - formula.readiness_kind
+  - formula.career_lanes
+  - scope
+  - attempt
+  - formula.last_retest
+  - gap_type
+  - status
+  - updated_at
+  sort:
+  - property: updated_at
+    direction: DESC
+- type: table
+  name: 主要经历故事
+  filters:
+    and:
+    - kind == "evidence.story"
+    - story_role == "primary"
+  order:
+  - file.name
+  - formula.career_lanes
+  - story_role
+  - readiness_state
+  - updated_at
+  sort:
+  - property: file.name
+    direction: ASC
+- type: table
+  name: 当前简历审核
+  filters:
+    and:
+    - kind == "communication.audit"
+  order:
+  - file.name
+  - audit_date
+  - scope
+  - career_lane
+  - formula.resume_roots
+  - source_fingerprint
+  - status
+  - blocking_findings
+  - confirmation_count
+  - user_confirmed
+  sort:
+  - property: audit_date
+    direction: DESC
+- type: table
+  name: 主张确认队列
+  filters:
+    and:
+    - kind == "communication.audit"
+    - confirmation_count > 0
+  order:
+  - file.name
+  - career_lane
+  - status
+  - confirmation_count
+  - updated_at
+  sort:
+  - property: updated_at
+    direction: DESC
+- type: table
+  name: 经历故事压测队列
+  filters:
+    and:
+    - kind == "evidence.story"
+    - story_role == "primary"
+    - readiness_state != "ready"
+  order:
+  - file.name
+  - formula.career_lanes
+  - story_role
+  - readiness_state
+  - updated_at
+  sort:
+  - property: file.name
+    direction: ASC

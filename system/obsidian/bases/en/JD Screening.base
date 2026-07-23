@@ -1,0 +1,228 @@
+filters:
+  and:
+  - file.ext == "md"
+  - schema_version == 2
+  - kind == "market.jd"
+formulas:
+  priority_rank: if(priority == "p0", 0, if(priority == "p1", 1, if(priority == "p2", 2, if(priority == "p3", 3, 9))))
+  priority_label: if(priority == "p0", "P0", if(priority == "p1", "P1", if(priority == "p2", "P2", if(priority == "p3", "P3", if(priority == "reject", "Reject", "")))))
+  evidence_fit_rank: if(evidence_fit == 5, 0, if(evidence_fit == 4, 1, if(evidence_fit == 3, 2, if(evidence_fit == 2, 3, if(evidence_fit == 1, 4, 9)))))
+  evidence_fit_label: if(evidence_fit == 5, "⭐⭐⭐⭐⭐", if(evidence_fit == 4, "⭐⭐⭐⭐", if(evidence_fit == 3, "⭐⭐⭐", if(evidence_fit == 2, "⭐⭐", if(evidence_fit == 1, "⭐", "")))))
+  recruiting_scope: if(recruiting_scope_key.isEmpty(), "Pending review · " + employer_name, recruiting_scope_key)
+  is_current: if(is_stale, false, true)
+  stale_label: if(is_stale, "Stale", "Current")
+  stale_rank: if(is_stale, 1, 0)
+  gaps_label: if(!gap_summary.isEmpty(), gap_summary, if(gaps, gaps.join("; "), ""))
+properties:
+  file.name:
+    displayName: JD
+  collection:
+    displayName: Collection
+  employer_name:
+    displayName: Employer
+  recruiting_scope_key:
+    displayName: Recruiting Scope ID
+  formula.recruiting_scope:
+    displayName: Recruiting Scope
+  formula.priority_label:
+    displayName: Priority
+  formula.evidence_fit_label:
+    displayName: Evidence Fit
+  direction_key:
+    displayName: Direction
+  career_lane_key:
+    displayName: Career Lane
+  user_review_signal:
+    displayName: Review Signal
+  duplicate_group:
+    displayName: Duplicate Group
+  preference_signal:
+    displayName: Preference
+  growth_signal:
+    displayName: Growth
+  next_action_detail:
+    displayName: Next Action
+  location:
+    displayName: Location
+  compensation:
+    displayName: Compensation
+  formula.gaps_label:
+    displayName: Gaps
+  review_note:
+    displayName: Review Note
+  status:
+    displayName: Review Status
+  formula.stale_label:
+    displayName: Currency
+  file.mtime:
+    displayName: Modified
+views:
+- type: table
+  name: Current Candidates
+  filters:
+    and:
+    - formula.is_current == true
+    - status == "reviewed"
+    - (priority == "p0" || priority == "p1" || priority == "p2")
+    - evidence_fit >= 1
+  groupBy:
+    property: direction_key
+    direction: ASC
+  order:
+  - file.name
+  - formula.priority_label
+  - formula.evidence_fit_label
+  - direction_key
+  - user_review_signal
+  - next_action_detail
+  - location
+  - compensation
+  - formula.gaps_label
+  - review_note
+  sort:
+  - property: compensation
+    direction: DESC
+  - property: user_review_signal
+    direction: ASC
+  - property: formula.priority_rank
+    direction: ASC
+  - property: formula.evidence_fit_rank
+    direction: ASC
+  columnSize:
+    file.name: 288
+    formula.priority_label: 52
+    formula.evidence_fit_label: 133
+    note.direction_key: 216
+    note.user_review_signal: 112
+    note.next_action_detail: 94
+    note.location: 153
+- type: table
+  name: Same-Company Application Decisions
+  filters:
+    and:
+    - formula.is_current == true
+    - status == "reviewed"
+    - (priority == "p0" || priority == "p1" || priority == "p2")
+    - evidence_fit >= 3
+  groupBy:
+    property: formula.recruiting_scope
+    direction: ASC
+  order:
+  - file.name
+  - formula.priority_label
+  - formula.evidence_fit_label
+  - direction_key
+  - compensation
+  - user_review_signal
+  - preference_signal
+  - growth_signal
+  - next_action_detail
+  - location
+  - formula.gaps_label
+  - review_note
+  sort:
+  - property: compensation
+    direction: DESC
+  - property: formula.priority_rank
+    direction: ASC
+  - property: formula.evidence_fit_rank
+    direction: ASC
+  columnSize:
+    file.name: 288
+    formula.priority_label: 52
+    formula.evidence_fit_label: 133
+    note.direction_key: 216
+    note.career_lane_key: 120
+    note.user_review_signal: 112
+    note.duplicate_group: 192
+    note.preference_signal: 72
+    note.growth_signal: 112
+    note.next_action_detail: 94
+    note.location: 153
+    formula.gaps_label: 240
+    note.review_note: 440
+- type: table
+  name: Manual Review
+  filters:
+    and:
+    - formula.is_current == true
+    - status == "screened"
+  order:
+  - file.name
+  - formula.priority_label
+  - formula.evidence_fit_label
+  - direction_key
+  - user_review_signal
+  - next_action_detail
+  - location
+  - compensation
+  - review_note
+  sort:
+  - property: file.mtime
+    direction: DESC
+  - property: formula.priority_rank
+    direction: ASC
+  columnSize:
+    file.name: 288
+    direction_key: 240
+    review_note: 440
+- type: table
+  name: On Hold
+  filters:
+    and:
+    - formula.is_current == true
+    - status == "reviewed"
+    - (priority == "p3" || priority == "reject")
+  order:
+  - file.name
+  - formula.priority_label
+  - formula.evidence_fit_label
+  - direction_key
+  - user_review_signal
+  - next_action_detail
+  - location
+  - compensation
+  - formula.gaps_label
+  - review_note
+  sort:
+  - property: formula.evidence_fit_rank
+    direction: ASC
+  - property: file.mtime
+    direction: DESC
+  columnSize:
+    file.name: 288
+    formula.priority_label: 89
+    formula.evidence_fit_label: 133
+    note.direction_key: 216
+    note.user_review_signal: 112
+    note.next_action_detail: 94
+    note.location: 153
+    formula.gaps_label: 240
+    note.review_note: 440
+- type: table
+  name: All
+  order:
+  - file.name
+  - formula.priority_label
+  - formula.evidence_fit_label
+  - direction_key
+  - user_review_signal
+  - next_action_detail
+  - location
+  - compensation
+  - collection
+  - formula.stale_label
+  - status
+  - file.mtime
+  sort:
+  - property: formula.stale_rank
+    direction: ASC
+  - property: collection
+    direction: DESC
+  - property: formula.priority_rank
+    direction: ASC
+  - property: file.mtime
+    direction: DESC
+  columnSize:
+    file.name: 288
+    direction_key: 240

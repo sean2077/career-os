@@ -1,0 +1,53 @@
+{
+  "schema_version": 2,
+  "bundle": "career-os-resume-fonts",
+  "revision": 1,
+  "packages": [
+    {
+      "family": "Source Han Serif SC",
+      "version": "2.003",
+      "source": "https://github.com/adobe-fonts/source-han-serif/releases/tag/2.003R",
+      "license": "OFL-1.1",
+      "license_path": "system/licenses/SIL-OFL-1.1.txt",
+      "assets": [
+        {
+          "name": "SourceHanSerifSC-Regular.otf",
+          "role": "body-regular",
+          "url": "https://raw.githubusercontent.com/adobe-fonts/source-han-serif/2.003R/OTF/SimplifiedChinese/SourceHanSerifSC-Regular.otf",
+          "sha256": "78aa7a328fd974df2d688c8a9fd74a33d8334dfa84ab24d9d11efb2ffc464117",
+          "size": 24543332
+        },
+        {
+          "name": "SourceHanSerifSC-Bold.otf",
+          "role": "body-bold",
+          "url": "https://raw.githubusercontent.com/adobe-fonts/source-han-serif/2.003R/OTF/SimplifiedChinese/SourceHanSerifSC-Bold.otf",
+          "sha256": "706b8c0de2deff6cbc0c87e2cdedfd33a78b7ffd76cebb4549012f197ba611fe",
+          "size": 25521732
+        }
+      ]
+    },
+    {
+      "family": "Noto Sans CJK SC",
+      "version": "2.004",
+      "source": "https://github.com/notofonts/noto-cjk/releases/tag/Sans2.004",
+      "license": "OFL-1.1",
+      "license_path": "system/licenses/SIL-OFL-1.1.txt",
+      "assets": [
+        {
+          "name": "NotoSansCJKsc-Regular.otf",
+          "role": "display-regular",
+          "url": "https://raw.githubusercontent.com/notofonts/noto-cjk/Sans2.004/Sans/OTF/SimplifiedChinese/NotoSansCJKsc-Regular.otf",
+          "sha256": "2c76254f6fc379fddfce0a7e84fb5385bb135d3e399294f6eeb6680d0365b74b",
+          "size": 16437364
+        },
+        {
+          "name": "NotoSansCJKsc-Bold.otf",
+          "role": "display-bold",
+          "url": "https://raw.githubusercontent.com/notofonts/noto-cjk/Sans2.004/Sans/OTF/SimplifiedChinese/NotoSansCJKsc-Bold.otf",
+          "sha256": "b5f0d1a190a7f9b43c310a8850630af12553df32c4c050543f9059732d9b4c0a",
+          "size": 17002248
+        }
+      ]
+    }
+  ]
+}

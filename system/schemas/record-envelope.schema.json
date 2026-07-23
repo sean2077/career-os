@@ -1,0 +1,5567 @@
+{
+  "$defs": {
+    "CommunicationAudit": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid4",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "communication.audit",
+          "title": "Kind",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 2,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "languages": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Languages"
+        },
+        "visibility": {
+          "default": "private",
+          "enum": [
+            "private",
+            "shareable",
+            "public"
+          ],
+          "title": "Visibility",
+          "type": "string"
+        },
+        "refs": {
+          "items": {
+            "$ref": "#/$defs/InternalRef"
+          },
+          "title": "Refs",
+          "type": "array"
+        },
+        "host_refs": {
+          "items": {
+            "$ref": "#/$defs/HostRef"
+          },
+          "title": "Host Refs",
+          "type": "array"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "status": {
+          "enum": [
+            "draft",
+            "reviewed",
+            "blocked",
+            "stale"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "status_history": {
+          "items": {
+            "$ref": "#/$defs/StatusTransition"
+          },
+          "title": "Status History",
+          "type": "array"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        },
+        "aliases": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Aliases",
+          "type": "array"
+        },
+        "migration_review": {
+          "enum": [
+            "not-applicable",
+            "required",
+            "completed"
+          ],
+          "title": "Migration Review",
+          "type": "string"
+        },
+        "legacy_fields": {
+          "additionalProperties": true,
+          "title": "Legacy Fields",
+          "type": "object"
+        },
+        "audit_date": {
+          "format": "date",
+          "title": "Audit Date",
+          "type": "string"
+        },
+        "scope": {
+          "minLength": 1,
+          "title": "Scope",
+          "type": "string"
+        },
+        "career_lane": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Career Lane"
+        },
+        "source_fingerprint": {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "title": "Source Fingerprint",
+          "type": "string"
+        },
+        "target_jd_fingerprint": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Jd Fingerprint"
+        },
+        "evidence_fingerprint": {
+          "anyOf": [
+            {
+              "pattern": "^sha256:[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence Fingerprint"
+        },
+        "blocking_findings": {
+          "minimum": 0,
+          "title": "Blocking Findings",
+          "type": "integer"
+        },
+        "confirmation_count": {
+          "minimum": 0,
+          "title": "Confirmation Count",
+          "type": "integer"
+        },
+        "reviewer_status": {
+          "enum": [
+            "complete",
+            "fallback",
+            "missing"
+          ],
+          "title": "Reviewer Status",
+          "type": "string"
+        },
+        "user_confirmed": {
+          "title": "User Confirmed",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "schema_version",
+        "created_at",
+        "updated_at",
+        "status",
+        "migration_review",
+        "audit_date",
+        "scope",
+        "source_fingerprint",
+        "blocking_findings",
+        "confirmation_count",
+        "reviewer_status",
+        "user_confirmed"
+      ],
+      "title": "CommunicationAudit",
+      "type": "object"
+    },
+    "CommunicationExport": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid4",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "communication.export",
+          "title": "Kind",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 2,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "languages": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Languages"
+        },
+        "visibility": {
+          "default": "private",
+          "enum": [
+            "private",
+            "shareable",
+            "public"
+          ],
+          "title": "Visibility",
+          "type": "string"
+        },
+        "refs": {
+          "items": {
+            "$ref": "#/$defs/InternalRef"
+          },
+          "title": "Refs",
+          "type": "array"
+        },
+        "host_refs": {
+          "items": {
+            "$ref": "#/$defs/HostRef"
+          },
+          "title": "Host Refs",
+          "type": "array"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "status": {
+          "enum": [
+            "planned",
+            "generated",
+            "released",
+            "revoked"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "status_history": {
+          "items": {
+            "$ref": "#/$defs/StatusTransition"
+          },
+          "title": "Status History",
+          "type": "array"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        },
+        "aliases": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Aliases",
+          "type": "array"
+        },
+        "migration_review": {
+          "enum": [
+            "not-applicable",
+            "required",
+            "completed"
+          ],
+          "title": "Migration Review",
+          "type": "string"
+        },
+        "legacy_fields": {
+          "additionalProperties": true,
+          "title": "Legacy Fields",
+          "type": "object"
+        },
+        "profile": {
+          "enum": [
+            "preview",
+            "application"
+          ],
+          "title": "Profile",
+          "type": "string"
+        },
+        "authorization": {
+          "enum": [
+            "missing",
+            "explicit"
+          ],
+          "title": "Authorization",
+          "type": "string"
+        },
+        "artifact_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Artifact Sha256"
+        },
+        "destination": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Destination"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "schema_version",
+        "created_at",
+        "updated_at",
+        "status",
+        "migration_review",
+        "profile",
+        "authorization"
+      ],
+      "title": "CommunicationExport",
+      "type": "object"
+    },
+    "CommunicationProfile": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid4",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "communication.profile",
+          "title": "Kind",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 2,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "languages": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Languages"
+        },
+        "visibility": {
+          "default": "private",
+          "enum": [
+            "private",
+            "shareable",
+            "public"
+          ],
+          "title": "Visibility",
+          "type": "string"
+        },
+        "refs": {
+          "items": {
+            "$ref": "#/$defs/InternalRef"
+          },
+          "title": "Refs",
+          "type": "array"
+        },
+        "host_refs": {
+          "items": {
+            "$ref": "#/$defs/HostRef"
+          },
+          "title": "Host Refs",
+          "type": "array"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "status": {
+          "enum": [
+            "draft",
+            "approved",
+            "superseded"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "status_history": {
+          "items": {
+            "$ref": "#/$defs/StatusTransition"
+          },
+          "title": "Status History",
+          "type": "array"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        },
+        "aliases": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Aliases",
+          "type": "array"
+        },
+        "migration_review": {
+          "enum": [
+            "not-applicable",
+            "required",
+            "completed"
+          ],
+          "title": "Migration Review",
+          "type": "string"
+        },
+        "legacy_fields": {
+          "additionalProperties": true,
+          "title": "Legacy Fields",
+          "type": "object"
+        },
+        "audience": {
+          "minLength": 1,
+          "title": "Audience",
+          "type": "string"
+        },
+        "identity_policy": {
+          "enum": [
+            "anonymous",
+            "preview",
+            "application",
+            "public"
+          ],
+          "title": "Identity Policy",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "schema_version",
+        "created_at",
+        "updated_at",
+        "status",
+        "migration_review",
+        "audience",
+        "identity_policy"
+      ],
+      "title": "CommunicationProfile",
+      "type": "object"
+    },
+    "CommunicationResume": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid4",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "communication.resume",
+          "title": "Kind",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 2,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "languages": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Languages"
+        },
+        "visibility": {
+          "default": "private",
+          "enum": [
+            "private",
+            "shareable",
+            "public"
+          ],
+          "title": "Visibility",
+          "type": "string"
+        },
+        "refs": {
+          "items": {
+            "$ref": "#/$defs/InternalRef"
+          },
+          "title": "Refs",
+          "type": "array"
+        },
+        "host_refs": {
+          "items": {
+            "$ref": "#/$defs/HostRef"
+          },
+          "title": "Host Refs",
+          "type": "array"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "status": {
+          "enum": [
+            "draft",
+            "validated",
+            "application-ready",
+            "superseded"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "status_history": {
+          "items": {
+            "$ref": "#/$defs/StatusTransition"
+          },
+          "title": "Status History",
+          "type": "array"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        },
+        "aliases": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Aliases",
+          "type": "array"
+        },
+        "migration_review": {
+          "enum": [
+            "not-applicable",
+            "required",
+            "completed"
+          ],
+          "title": "Migration Review",
+          "type": "string"
+        },
+        "legacy_fields": {
+          "additionalProperties": true,
+          "title": "Legacy Fields",
+          "type": "object"
+        },
+        "root_name": {
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$",
+          "title": "Root Name",
+          "type": "string"
+        },
+        "audience": {
+          "minLength": 1,
+          "title": "Audience",
+          "type": "string"
+        },
+        "export_policy": {
+          "enum": [
+            "preview",
+            "application"
+          ],
+          "title": "Export Policy",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "schema_version",
+        "created_at",
+        "updated_at",
+        "status",
+        "migration_review",
+        "root_name",
+        "audience",
+        "export_policy"
+      ],
+      "title": "CommunicationResume",
+      "type": "object"
+    },
+    "EngagementEvent": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid4",
+          "title": "Id",
+          "type": "string"
+        },
+        "event_type": {
+          "enum": [
+            "recruiter-contacted",
+            "referral-created",
+            "application-submitted",
+            "application-withdrawn",
+            "application-rejected",
+            "interview-scheduled",
+            "interview-completed",
+            "offer-received",
+            "offer-accepted",
+            "offer-declined",
+            "process-closed",
+            "employment-started",
+            "employment-ended"
+          ],
+          "title": "Event Type",
+          "type": "string"
+        },
+        "occurred_at": {
+          "format": "date-time",
+          "title": "Occurred At",
+          "type": "string"
+        },
+        "occurred_at_precision": {
+          "default": "instant",
+          "enum": [
+            "instant",
+            "day",
+            "month",
+            "year"
+          ],
+          "title": "Occurred At Precision",
+          "type": "string"
+        },
+        "source": {
+          "enum": [
+            "user-report",
+            "external-record"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        }
+      },
+      "required": [
+        "id",
+        "event_type",
+        "occurred_at",
+        "source"
+      ],
+      "title": "EngagementEvent",
+      "type": "object"
+    },
+    "EvidenceCapture": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid4",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "evidence.capture",
+          "title": "Kind",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 2,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "languages": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Languages"
+        },
+        "visibility": {
+          "default": "private",
+          "enum": [
+            "private",
+            "shareable",
+            "public"
+          ],
+          "title": "Visibility",
+          "type": "string"
+        },
+        "refs": {
+          "items": {
+            "$ref": "#/$defs/InternalRef"
+          },
+          "title": "Refs",
+          "type": "array"
+        },
+        "host_refs": {
+          "items": {
+            "$ref": "#/$defs/HostRef"
+          },
+          "title": "Host Refs",
+          "type": "array"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "status": {
+          "enum": [
+            "needs-debrief",
+            "ready-to-archive",
+            "archived"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "status_history": {
+          "items": {
+            "$ref": "#/$defs/StatusTransition"
+          },
+          "title": "Status History",
+          "type": "array"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        },
+        "aliases": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Aliases",
+          "type": "array"
+        },
+        "migration_review": {
+          "enum": [
+            "not-applicable",
+            "required",
+            "completed"
+          ],
+          "title": "Migration Review",
+          "type": "string"
+        },
+        "legacy_fields": {
+          "additionalProperties": true,
+          "title": "Legacy Fields",
+          "type": "object"
+        },
+        "source_type": {
+          "enum": [
+            "user-report",
+            "document",
+            "host-note",
+            "external",
+            "unknown"
+          ],
+          "title": "Source Type",
+          "type": "string"
+        },
+        "captured_at": {
+          "format": "date-time",
+          "title": "Captured At",
+          "type": "string"
+        },
+        "provenance": {
+          "minLength": 1,
+          "title": "Provenance",
+          "type": "string"
+        },
+        "attribution": {
+          "enum": [
+            "user",
+            "team",
+            "third-party",
+            "mixed",
+            "unknown"
+          ],
+          "title": "Attribution",
+          "type": "string"
+        },
+        "sensitivity": {
+          "enum": [
+            "none",
+            "internal",
+            "private-sensitive",
+            "third-party",
+            "unknown"
+          ],
+          "title": "Sensitivity",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "schema_version",
+        "created_at",
+        "updated_at",
+        "status",
+        "migration_review",
+        "source_type",
+        "captured_at",
+        "provenance",
+        "attribution",
+        "sensitivity"
+      ],
+      "title": "EvidenceCapture",
+      "type": "object"
+    },
+    "EvidenceClaim": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid4",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "evidence.claim",
+          "title": "Kind",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 2,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "languages": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Languages"
+        },
+        "visibility": {
+          "default": "private",
+          "enum": [
+            "private",
+            "shareable",
+            "public"
+          ],
+          "title": "Visibility",
+          "type": "string"
+        },
+        "refs": {
+          "items": {
+            "$ref": "#/$defs/InternalRef"
+          },
+          "title": "Refs",
+          "type": "array"
+        },
+        "host_refs": {
+          "items": {
+            "$ref": "#/$defs/HostRef"
+          },
+          "title": "Host Refs",
+          "type": "array"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "status": {
+          "enum": [
+            "draft",
+            "reviewed",
+            "approved",
+            "rejected",
+            "withdrawn"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "status_history": {
+          "items": {
+            "$ref": "#/$defs/StatusTransition"
+          },
+          "title": "Status History",
+          "type": "array"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        },
+        "aliases": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Aliases",
+          "type": "array"
+        },
+        "migration_review": {
+          "enum": [
+            "not-applicable",
+            "required",
+            "completed"
+          ],
+          "title": "Migration Review",
+          "type": "string"
+        },
+        "legacy_fields": {
+          "additionalProperties": true,
+          "title": "Legacy Fields",
+          "type": "object"
+        },
+        "allowed_uses": {
+          "items": {
+            "enum": [
+              "internal",
+              "resume",
+              "recruiter",
+              "application",
+              "public"
+            ],
+            "type": "string"
+          },
+          "title": "Allowed Uses",
+          "type": "array"
+        },
+        "claim_risk": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "title": "Claim Risk",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "schema_version",
+        "created_at",
+        "updated_at",
+        "status",
+        "migration_review",
+        "allowed_uses",
+        "claim_risk"
+      ],
+      "title": "EvidenceClaim",
+      "type": "object"
+    },
+    "EvidenceStory": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid4",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "evidence.story",
+          "title": "Kind",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 2,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "languages": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Languages"
+        },
+        "visibility": {
+          "default": "private",
+          "enum": [
+            "private",
+            "shareable",
+            "public"
+          ],
+          "title": "Visibility",
+          "type": "string"
+        },
+        "refs": {
+          "items": {
+            "$ref": "#/$defs/InternalRef"
+          },
+          "title": "Refs",
+          "type": "array"
+        },
+        "host_refs": {
+          "items": {
+            "$ref": "#/$defs/HostRef"
+          },
+          "title": "Host Refs",
+          "type": "array"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "status": {
+          "enum": [
+            "draft",
+            "reviewed"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "status_history": {
+          "items": {
+            "$ref": "#/$defs/StatusTransition"
+          },
+          "title": "Status History",
+          "type": "array"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        },
+        "aliases": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Aliases",
+          "type": "array"
+        },
+        "migration_review": {
+          "enum": [
+            "not-applicable",
+            "required",
+            "completed"
+          ],
+          "title": "Migration Review",
+          "type": "string"
+        },
+        "legacy_fields": {
+          "additionalProperties": true,
+          "title": "Legacy Fields",
+          "type": "object"
+        },
+        "sensitive_boundary": {
+          "minLength": 1,
+          "title": "Sensitive Boundary",
+          "type": "string"
+        },
+        "story_role": {
+          "anyOf": [
+            {
+              "enum": [
+                "primary",
+                "supporting",
+                "candidate"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Story Role"
+        },
+        "readiness_state": {
+          "anyOf": [
+            {
+              "enum": [
+                "content-ready",
+                "ready",
+                "needs-work",
+                "blocked"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Readiness State"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "schema_version",
+        "created_at",
+        "updated_at",
+        "status",
+        "migration_review",
+        "sensitive_boundary"
+      ],
+      "title": "EvidenceStory",
+      "type": "object"
+    },
+    "EvidenceWork": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid4",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "evidence.work",
+          "title": "Kind",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 2,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "languages": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Languages"
+        },
+        "visibility": {
+          "default": "private",
+          "enum": [
+            "private",
+            "shareable",
+            "public"
+          ],
+          "title": "Visibility",
+          "type": "string"
+        },
+        "refs": {
+          "items": {
+            "$ref": "#/$defs/InternalRef"
+          },
+          "title": "Refs",
+          "type": "array"
+        },
+        "host_refs": {
+          "items": {
+            "$ref": "#/$defs/HostRef"
+          },
+          "title": "Host Refs",
+          "type": "array"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "status": {
+          "enum": [
+            "draft",
+            "grounded",
+            "verified"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "status_history": {
+          "items": {
+            "$ref": "#/$defs/StatusTransition"
+          },
+          "title": "Status History",
+          "type": "array"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        },
+        "aliases": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Aliases",
+          "type": "array"
+        },
+        "migration_review": {
+          "enum": [
+            "not-applicable",
+            "required",
+            "completed"
+          ],
+          "title": "Migration Review",
+          "type": "string"
+        },
+        "legacy_fields": {
+          "additionalProperties": true,
+          "title": "Legacy Fields",
+          "type": "object"
+        },
+        "contribution_scope": {
+          "enum": [
+            "individual",
+            "shared",
+            "team",
+            "unknown"
+          ],
+          "title": "Contribution Scope",
+          "type": "string"
+        },
+        "evidence_strength": {
+          "enum": [
+            "weak",
+            "medium",
+            "strong"
+          ],
+          "title": "Evidence Strength",
+          "type": "string"
+        },
+        "evidence_summary": {
+          "minLength": 1,
+          "title": "Evidence Summary",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "schema_version",
+        "created_at",
+        "updated_at",
+        "status",
+        "migration_review",
+        "contribution_scope",
+        "evidence_strength",
+        "evidence_summary"
+      ],
+      "title": "EvidenceWork",
+      "type": "object"
+    },
+    "HostRef": {
+      "additionalProperties": false,
+      "properties": {
+        "relation": {
+          "minLength": 1,
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "title": "Relation",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "target_id": {
+          "anyOf": [
+            {
+              "format": "uuid4",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Id"
+        },
+        "anchor": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Anchor"
+        },
+        "required": {
+          "title": "Required",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "relation",
+        "path",
+        "required"
+      ],
+      "title": "HostRef",
+      "type": "object"
+    },
+    "InternalRef": {
+      "additionalProperties": false,
+      "properties": {
+        "relation": {
+          "minLength": 1,
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "title": "Relation",
+          "type": "string"
+        },
+        "target_id": {
+          "format": "uuid4",
+          "title": "Target Id",
+          "type": "string"
+        },
+        "required": {
+          "title": "Required",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "relation",
+        "target_id",
+        "required"
+      ],
+      "title": "InternalRef",
+      "type": "object"
+    },
+    "MarketChannel": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid4",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "market.channel",
+          "title": "Kind",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 2,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "languages": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Languages"
+        },
+        "visibility": {
+          "default": "private",
+          "enum": [
+            "private",
+            "shareable",
+            "public"
+          ],
+          "title": "Visibility",
+          "type": "string"
+        },
+        "refs": {
+          "items": {
+            "$ref": "#/$defs/InternalRef"
+          },
+          "title": "Refs",
+          "type": "array"
+        },
+        "host_refs": {
+          "items": {
+            "$ref": "#/$defs/HostRef"
+          },
+          "title": "Host Refs",
+          "type": "array"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "status": {
+          "enum": [
+            "active",
+            "stale",
+            "retired"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "status_history": {
+          "items": {
+            "$ref": "#/$defs/StatusTransition"
+          },
+          "title": "Status History",
+          "type": "array"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        },
+        "aliases": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Aliases",
+          "type": "array"
+        },
+        "migration_review": {
+          "enum": [
+            "not-applicable",
+            "required",
+            "completed"
+          ],
+          "title": "Migration Review",
+          "type": "string"
+        },
+        "legacy_fields": {
+          "additionalProperties": true,
+          "title": "Legacy Fields",
+          "type": "object"
+        },
+        "rank": {
+          "minimum": 1,
+          "title": "Rank",
+          "type": "integer"
+        },
+        "tier": {
+          "minLength": 1,
+          "title": "Tier",
+          "type": "string"
+        },
+        "role": {
+          "minLength": 1,
+          "title": "Role",
+          "type": "string"
+        },
+        "url": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Url"
+        },
+        "last_verified_at": {
+          "format": "date",
+          "title": "Last Verified At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "schema_version",
+        "created_at",
+        "updated_at",
+        "status",
+        "migration_review",
+        "rank",
+        "tier",
+        "role",
+        "last_verified_at"
+      ],
+      "title": "MarketChannel",
+      "type": "object"
+    },
+    "MarketDirection": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid4",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "market.direction",
+          "title": "Kind",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 2,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "languages": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Languages"
+        },
+        "visibility": {
+          "default": "private",
+          "enum": [
+            "private",
+            "shareable",
+            "public"
+          ],
+          "title": "Visibility",
+          "type": "string"
+        },
+        "refs": {
+          "items": {
+            "$ref": "#/$defs/InternalRef"
+          },
+          "title": "Refs",
+          "type": "array"
+        },
+        "host_refs": {
+          "items": {
+            "$ref": "#/$defs/HostRef"
+          },
+          "title": "Host Refs",
+          "type": "array"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "status": {
+          "enum": [
+            "candidate",
+            "reviewed",
+            "active",
+            "rejected",
+            "superseded"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "status_history": {
+          "items": {
+            "$ref": "#/$defs/StatusTransition"
+          },
+          "title": "Status History",
+          "type": "array"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        },
+        "aliases": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Aliases",
+          "type": "array"
+        },
+        "migration_review": {
+          "enum": [
+            "not-applicable",
+            "required",
+            "completed"
+          ],
+          "title": "Migration Review",
+          "type": "string"
+        },
+        "legacy_fields": {
+          "additionalProperties": true,
+          "title": "Legacy Fields",
+          "type": "object"
+        },
+        "review_on": {
+          "format": "date",
+          "title": "Review On",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "schema_version",
+        "created_at",
+        "updated_at",
+        "status",
+        "migration_review",
+        "review_on"
+      ],
+      "title": "MarketDirection",
+      "type": "object"
+    },
+    "MarketJD": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid4",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "market.jd",
+          "title": "Kind",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 2,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "languages": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Languages"
+        },
+        "visibility": {
+          "default": "private",
+          "enum": [
+            "private",
+            "shareable",
+            "public"
+          ],
+          "title": "Visibility",
+          "type": "string"
+        },
+        "refs": {
+          "items": {
+            "$ref": "#/$defs/InternalRef"
+          },
+          "title": "Refs",
+          "type": "array"
+        },
+        "host_refs": {
+          "items": {
+            "$ref": "#/$defs/HostRef"
+          },
+          "title": "Host Refs",
+          "type": "array"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "status": {
+          "enum": [
+            "captured",
+            "screened",
+            "reviewed",
+            "skipped"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "status_history": {
+          "items": {
+            "$ref": "#/$defs/StatusTransition"
+          },
+          "title": "Status History",
+          "type": "array"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        },
+        "aliases": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Aliases",
+          "type": "array"
+        },
+        "migration_review": {
+          "enum": [
+            "not-applicable",
+            "required",
+            "completed"
+          ],
+          "title": "Migration Review",
+          "type": "string"
+        },
+        "legacy_fields": {
+          "additionalProperties": true,
+          "title": "Legacy Fields",
+          "type": "object"
+        },
+        "source_status": {
+          "enum": [
+            "full",
+            "partial",
+            "summary-only",
+            "unavailable"
+          ],
+          "title": "Source Status",
+          "type": "string"
+        },
+        "source_channel": {
+          "minLength": 1,
+          "title": "Source Channel",
+          "type": "string"
+        },
+        "source_origin": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Origin"
+        },
+        "source_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Url"
+        },
+        "captured_at": {
+          "format": "date-time",
+          "title": "Captured At",
+          "type": "string"
+        },
+        "missing_sections": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Missing Sections",
+          "type": "array"
+        },
+        "source_body_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Source Body Sha256",
+          "type": "string"
+        },
+        "collection": {
+          "anyOf": [
+            {
+              "pattern": "^\\d{4}-\\d{2}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Collection"
+        },
+        "employer_name": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Employer Name"
+        },
+        "location": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Location"
+        },
+        "compensation": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Compensation"
+        },
+        "recruiting_scope_key": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Recruiting Scope Key"
+        },
+        "is_stale": {
+          "default": false,
+          "title": "Is Stale",
+          "type": "boolean"
+        },
+        "evidence_fit": {
+          "anyOf": [
+            {
+              "maximum": 5,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence Fit"
+        },
+        "preference": {
+          "anyOf": [
+            {
+              "enum": [
+                "low",
+                "medium",
+                "high",
+                "unknown"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Preference"
+        },
+        "priority": {
+          "anyOf": [
+            {
+              "enum": [
+                "p0",
+                "p1",
+                "p2",
+                "p3",
+                "reject",
+                "unknown"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Priority"
+        },
+        "next_action": {
+          "anyOf": [
+            {
+              "enum": [
+                "observe",
+                "clarify",
+                "candidate",
+                "reject"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Next Action"
+        },
+        "gaps": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Gaps",
+          "type": "array"
+        },
+        "gap_summary": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Gap Summary"
+        },
+        "direction_key": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Direction Key"
+        },
+        "career_lane_key": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Career Lane Key"
+        },
+        "user_review_signal": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "User Review Signal"
+        },
+        "growth_signal": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Growth Signal"
+        },
+        "preference_signal": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Preference Signal"
+        },
+        "next_action_detail": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Next Action Detail"
+        },
+        "duplicate_group": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Duplicate Group"
+        },
+        "case_target": {
+          "anyOf": [
+            {
+              "enum": [
+                "positive",
+                "boundary",
+                "observe",
+                "negative"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Case Target"
+        },
+        "review_note": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Review Note"
+        },
+        "reviewed_at": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reviewed At"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "schema_version",
+        "created_at",
+        "updated_at",
+        "status",
+        "migration_review",
+        "source_status",
+        "source_channel",
+        "captured_at",
+        "missing_sections",
+        "source_body_sha256"
+      ],
+      "title": "MarketJD",
+      "type": "object"
+    },
+    "OpportunityCompany": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid4",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "opportunity.company",
+          "title": "Kind",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 2,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "languages": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Languages"
+        },
+        "visibility": {
+          "default": "private",
+          "enum": [
+            "private",
+            "shareable",
+            "public"
+          ],
+          "title": "Visibility",
+          "type": "string"
+        },
+        "refs": {
+          "items": {
+            "$ref": "#/$defs/InternalRef"
+          },
+          "title": "Refs",
+          "type": "array"
+        },
+        "host_refs": {
+          "items": {
+            "$ref": "#/$defs/HostRef"
+          },
+          "title": "Host Refs",
+          "type": "array"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "status": {
+          "enum": [
+            "pending-review",
+            "reviewed",
+            "stale"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "status_history": {
+          "items": {
+            "$ref": "#/$defs/StatusTransition"
+          },
+          "title": "Status History",
+          "type": "array"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        },
+        "aliases": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Aliases",
+          "type": "array"
+        },
+        "migration_review": {
+          "enum": [
+            "not-applicable",
+            "required",
+            "completed"
+          ],
+          "title": "Migration Review",
+          "type": "string"
+        },
+        "legacy_fields": {
+          "additionalProperties": true,
+          "title": "Legacy Fields",
+          "type": "object"
+        },
+        "canonical_name": {
+          "minLength": 1,
+          "title": "Canonical Name",
+          "type": "string"
+        },
+        "fact_state": {
+          "enum": [
+            "fact",
+            "inference",
+            "unknown",
+            "mixed"
+          ],
+          "title": "Fact State",
+          "type": "string"
+        },
+        "refreshed_at": {
+          "format": "date",
+          "title": "Refreshed At",
+          "type": "string"
+        },
+        "freshness_days": {
+          "minimum": 1,
+          "title": "Freshness Days",
+          "type": "integer"
+        },
+        "watch_state": {
+          "anyOf": [
+            {
+              "enum": [
+                "current",
+                "target",
+                "watch",
+                "avoid",
+                "unknown"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Watch State"
+        },
+        "company_lifecycle": {
+          "anyOf": [
+            {
+              "enum": [
+                "listed",
+                "mature-private",
+                "venture-startup",
+                "unknown"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Company Lifecycle"
+        },
+        "research_level": {
+          "anyOf": [
+            {
+              "enum": [
+                "lead",
+                "standard",
+                "deep",
+                "update",
+                "unknown"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Research Level"
+        },
+        "assessment_status": {
+          "anyOf": [
+            {
+              "enum": [
+                "draft",
+                "current",
+                "stale",
+                "blocked"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Assessment Status"
+        },
+        "strength": {
+          "anyOf": [
+            {
+              "enum": [
+                "weak",
+                "mixed",
+                "positive",
+                "strong",
+                "unknown"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Strength"
+        },
+        "business_outlook": {
+          "anyOf": [
+            {
+              "enum": [
+                "negative",
+                "mixed",
+                "positive",
+                "strong",
+                "unknown"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Business Outlook"
+        },
+        "employer_quality": {
+          "anyOf": [
+            {
+              "enum": [
+                "negative",
+                "mixed",
+                "positive",
+                "strong",
+                "unknown"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Employer Quality"
+        },
+        "career_alignment": {
+          "anyOf": [
+            {
+              "enum": [
+                "negative",
+                "mixed",
+                "positive",
+                "strong",
+                "unknown"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Career Alignment"
+        },
+        "risk": {
+          "anyOf": [
+            {
+              "enum": [
+                "low",
+                "medium",
+                "high",
+                "critical",
+                "unknown"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Risk"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "enum": [
+                "low",
+                "medium",
+                "high",
+                "unknown"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        },
+        "trend": {
+          "anyOf": [
+            {
+              "enum": [
+                "declining",
+                "mixed",
+                "improving",
+                "unknown"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Trend"
+        },
+        "review_status": {
+          "anyOf": [
+            {
+              "enum": [
+                "pending",
+                "reviewed"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Review Status"
+        },
+        "reviewed_at": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reviewed At"
+        },
+        "last_researched_at": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Researched At"
+        },
+        "refresh_due": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Refresh Due"
+        },
+        "next_action": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Next Action"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "schema_version",
+        "created_at",
+        "updated_at",
+        "status",
+        "migration_review",
+        "canonical_name",
+        "fact_state",
+        "refreshed_at",
+        "freshness_days"
+      ],
+      "title": "OpportunityCompany",
+      "type": "object"
+    },
+    "OpportunityDecision": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid4",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "opportunity.decision",
+          "title": "Kind",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 2,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "languages": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Languages"
+        },
+        "visibility": {
+          "default": "private",
+          "enum": [
+            "private",
+            "shareable",
+            "public"
+          ],
+          "title": "Visibility",
+          "type": "string"
+        },
+        "refs": {
+          "items": {
+            "$ref": "#/$defs/InternalRef"
+          },
+          "title": "Refs",
+          "type": "array"
+        },
+        "host_refs": {
+          "items": {
+            "$ref": "#/$defs/HostRef"
+          },
+          "title": "Host Refs",
+          "type": "array"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "status": {
+          "enum": [
+            "draft",
+            "reviewed",
+            "decided",
+            "superseded"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "status_history": {
+          "items": {
+            "$ref": "#/$defs/StatusTransition"
+          },
+          "title": "Status History",
+          "type": "array"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        },
+        "aliases": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Aliases",
+          "type": "array"
+        },
+        "migration_review": {
+          "enum": [
+            "not-applicable",
+            "required",
+            "completed"
+          ],
+          "title": "Migration Review",
+          "type": "string"
+        },
+        "legacy_fields": {
+          "additionalProperties": true,
+          "title": "Legacy Fields",
+          "type": "object"
+        },
+        "decision": {
+          "enum": [
+            "continue",
+            "hold",
+            "decline",
+            "accept",
+            "reject",
+            "unknown"
+          ],
+          "title": "Decision",
+          "type": "string"
+        },
+        "rationale": {
+          "minLength": 1,
+          "title": "Rationale",
+          "type": "string"
+        },
+        "review_on": {
+          "format": "date",
+          "title": "Review On",
+          "type": "string"
+        },
+        "triggers": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Triggers",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "schema_version",
+        "created_at",
+        "updated_at",
+        "status",
+        "migration_review",
+        "decision",
+        "rationale",
+        "review_on",
+        "triggers"
+      ],
+      "title": "OpportunityDecision",
+      "type": "object"
+    },
+    "OpportunityEngagement": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid4",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "opportunity.engagement",
+          "title": "Kind",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 2,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "languages": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Languages"
+        },
+        "visibility": {
+          "default": "private",
+          "enum": [
+            "private",
+            "shareable",
+            "public"
+          ],
+          "title": "Visibility",
+          "type": "string"
+        },
+        "refs": {
+          "items": {
+            "$ref": "#/$defs/InternalRef"
+          },
+          "title": "Refs",
+          "type": "array"
+        },
+        "host_refs": {
+          "items": {
+            "$ref": "#/$defs/HostRef"
+          },
+          "title": "Host Refs",
+          "type": "array"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "status": {
+          "enum": [
+            "active",
+            "paused",
+            "closed"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "status_history": {
+          "items": {
+            "$ref": "#/$defs/StatusTransition"
+          },
+          "title": "Status History",
+          "type": "array"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        },
+        "aliases": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Aliases",
+          "type": "array"
+        },
+        "migration_review": {
+          "enum": [
+            "not-applicable",
+            "required",
+            "completed"
+          ],
+          "title": "Migration Review",
+          "type": "string"
+        },
+        "legacy_fields": {
+          "additionalProperties": true,
+          "title": "Legacy Fields",
+          "type": "object"
+        },
+        "engagement_type": {
+          "enum": [
+            "employment",
+            "recruiter-contact",
+            "referral",
+            "application",
+            "interview",
+            "offer",
+            "unknown"
+          ],
+          "title": "Engagement Type",
+          "type": "string"
+        },
+        "stage": {
+          "enum": [
+            "identified",
+            "contacted",
+            "scoped",
+            "applied",
+            "interviewing",
+            "offer",
+            "employed",
+            "closed"
+          ],
+          "title": "Stage",
+          "type": "string"
+        },
+        "application_state": {
+          "enum": [
+            "not-applied",
+            "unknown",
+            "applied",
+            "withdrawn",
+            "rejected",
+            "offer",
+            "accepted",
+            "declined"
+          ],
+          "title": "Application State",
+          "type": "string"
+        },
+        "is_current_employment": {
+          "title": "Is Current Employment",
+          "type": "boolean"
+        },
+        "events": {
+          "items": {
+            "$ref": "#/$defs/EngagementEvent"
+          },
+          "title": "Events",
+          "type": "array"
+        },
+        "decision_state": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Decision State"
+        },
+        "role": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Role"
+        },
+        "team": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Team"
+        },
+        "started_on": {
+          "anyOf": [
+            {
+              "pattern": "^\\d{4}(?:-\\d{2}(?:-\\d{2})?)?$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Started On"
+        },
+        "review_on": {
+          "anyOf": [
+            {
+              "pattern": "^\\d{4}(?:-\\d{2}(?:-\\d{2})?)?$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Review On"
+        },
+        "strategy_fit": {
+          "anyOf": [
+            {
+              "enum": [
+                "negative",
+                "mixed",
+                "positive",
+                "strong",
+                "unknown"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Strategy Fit"
+        },
+        "opportunity_quality": {
+          "anyOf": [
+            {
+              "enum": [
+                "negative",
+                "mixed",
+                "positive",
+                "strong",
+                "unknown"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Opportunity Quality"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "enum": [
+                "low",
+                "medium",
+                "high",
+                "unknown"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        },
+        "review_status": {
+          "anyOf": [
+            {
+              "enum": [
+                "pending",
+                "reviewed"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Review Status"
+        },
+        "reviewed_at": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reviewed At"
+        },
+        "next_action": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Next Action"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "schema_version",
+        "created_at",
+        "updated_at",
+        "status",
+        "migration_review",
+        "engagement_type",
+        "stage",
+        "application_state",
+        "is_current_employment",
+        "events"
+      ],
+      "title": "OpportunityEngagement",
+      "type": "object"
+    },
+    "OpportunityScope": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid4",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "opportunity.scope",
+          "title": "Kind",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 2,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "languages": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Languages"
+        },
+        "visibility": {
+          "default": "private",
+          "enum": [
+            "private",
+            "shareable",
+            "public"
+          ],
+          "title": "Visibility",
+          "type": "string"
+        },
+        "refs": {
+          "items": {
+            "$ref": "#/$defs/InternalRef"
+          },
+          "title": "Refs",
+          "type": "array"
+        },
+        "host_refs": {
+          "items": {
+            "$ref": "#/$defs/HostRef"
+          },
+          "title": "Host Refs",
+          "type": "array"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "status": {
+          "enum": [
+            "draft",
+            "verified",
+            "conservative",
+            "superseded"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "status_history": {
+          "items": {
+            "$ref": "#/$defs/StatusTransition"
+          },
+          "title": "Status History",
+          "type": "array"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        },
+        "aliases": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Aliases",
+          "type": "array"
+        },
+        "migration_review": {
+          "enum": [
+            "not-applicable",
+            "required",
+            "completed"
+          ],
+          "title": "Migration Review",
+          "type": "string"
+        },
+        "legacy_fields": {
+          "additionalProperties": true,
+          "title": "Legacy Fields",
+          "type": "object"
+        },
+        "team": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Team"
+        },
+        "role": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Role"
+        },
+        "location": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Location"
+        },
+        "channel": {
+          "minLength": 1,
+          "title": "Channel",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "schema_version",
+        "created_at",
+        "updated_at",
+        "status",
+        "migration_review",
+        "channel"
+      ],
+      "title": "OpportunityScope",
+      "type": "object"
+    },
+    "OutlookReview": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid4",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "outlook.review",
+          "title": "Kind",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 2,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "languages": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Languages"
+        },
+        "visibility": {
+          "default": "private",
+          "enum": [
+            "private",
+            "shareable",
+            "public"
+          ],
+          "title": "Visibility",
+          "type": "string"
+        },
+        "refs": {
+          "items": {
+            "$ref": "#/$defs/InternalRef"
+          },
+          "title": "Refs",
+          "type": "array"
+        },
+        "host_refs": {
+          "items": {
+            "$ref": "#/$defs/HostRef"
+          },
+          "title": "Host Refs",
+          "type": "array"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "status": {
+          "enum": [
+            "pending",
+            "reviewed",
+            "rejected",
+            "superseded"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "status_history": {
+          "items": {
+            "$ref": "#/$defs/StatusTransition"
+          },
+          "title": "Status History",
+          "type": "array"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        },
+        "aliases": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Aliases",
+          "type": "array"
+        },
+        "migration_review": {
+          "enum": [
+            "not-applicable",
+            "required",
+            "completed"
+          ],
+          "title": "Migration Review",
+          "type": "string"
+        },
+        "legacy_fields": {
+          "additionalProperties": true,
+          "title": "Legacy Fields",
+          "type": "object"
+        },
+        "as_of": {
+          "format": "date",
+          "title": "As Of",
+          "type": "string"
+        },
+        "personal_fit": {
+          "enum": [
+            "missing",
+            "partial",
+            "satisfied"
+          ],
+          "title": "Personal Fit",
+          "type": "string"
+        },
+        "market_revealed": {
+          "enum": [
+            "missing",
+            "partial",
+            "satisfied"
+          ],
+          "title": "Market Revealed",
+          "type": "string"
+        },
+        "independent_external": {
+          "enum": [
+            "missing",
+            "partial",
+            "satisfied"
+          ],
+          "title": "Independent External",
+          "type": "string"
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "title": "Confidence",
+          "type": "string"
+        },
+        "rationale": {
+          "minLength": 1,
+          "title": "Rationale",
+          "type": "string"
+        },
+        "invalidation_conditions": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Invalidation Conditions",
+          "type": "array"
+        },
+        "review_authority": {
+          "anyOf": [
+            {
+              "const": "user",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Review Authority"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "schema_version",
+        "created_at",
+        "updated_at",
+        "status",
+        "migration_review",
+        "as_of",
+        "personal_fit",
+        "market_revealed",
+        "independent_external",
+        "confidence",
+        "rationale",
+        "invalidation_conditions"
+      ],
+      "title": "OutlookReview",
+      "type": "object"
+    },
+    "OutlookSignal": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid4",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "outlook.signal",
+          "title": "Kind",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 2,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "languages": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Languages"
+        },
+        "visibility": {
+          "default": "private",
+          "enum": [
+            "private",
+            "shareable",
+            "public"
+          ],
+          "title": "Visibility",
+          "type": "string"
+        },
+        "refs": {
+          "items": {
+            "$ref": "#/$defs/InternalRef"
+          },
+          "title": "Refs",
+          "type": "array"
+        },
+        "host_refs": {
+          "items": {
+            "$ref": "#/$defs/HostRef"
+          },
+          "title": "Host Refs",
+          "type": "array"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "status": {
+          "enum": [
+            "captured",
+            "verified",
+            "stale",
+            "rejected"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "status_history": {
+          "items": {
+            "$ref": "#/$defs/StatusTransition"
+          },
+          "title": "Status History",
+          "type": "array"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        },
+        "aliases": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Aliases",
+          "type": "array"
+        },
+        "migration_review": {
+          "enum": [
+            "not-applicable",
+            "required",
+            "completed"
+          ],
+          "title": "Migration Review",
+          "type": "string"
+        },
+        "legacy_fields": {
+          "additionalProperties": true,
+          "title": "Legacy Fields",
+          "type": "object"
+        },
+        "source_class": {
+          "enum": [
+            "policy",
+            "labour",
+            "industry",
+            "technology",
+            "unknown"
+          ],
+          "title": "Source Class",
+          "type": "string"
+        },
+        "event_date": {
+          "format": "date",
+          "title": "Event Date",
+          "type": "string"
+        },
+        "published_at": {
+          "format": "date",
+          "title": "Published At",
+          "type": "string"
+        },
+        "retrieved_at": {
+          "format": "date",
+          "title": "Retrieved At",
+          "type": "string"
+        },
+        "source_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Url"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "schema_version",
+        "created_at",
+        "updated_at",
+        "status",
+        "migration_review",
+        "source_class",
+        "event_date",
+        "published_at",
+        "retrieved_at"
+      ],
+      "title": "OutlookSignal",
+      "type": "object"
+    },
+    "OutlookThesis": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid4",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "outlook.thesis",
+          "title": "Kind",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 2,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "languages": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Languages"
+        },
+        "visibility": {
+          "default": "private",
+          "enum": [
+            "private",
+            "shareable",
+            "public"
+          ],
+          "title": "Visibility",
+          "type": "string"
+        },
+        "refs": {
+          "items": {
+            "$ref": "#/$defs/InternalRef"
+          },
+          "title": "Refs",
+          "type": "array"
+        },
+        "host_refs": {
+          "items": {
+            "$ref": "#/$defs/HostRef"
+          },
+          "title": "Host Refs",
+          "type": "array"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "status": {
+          "enum": [
+            "candidate",
+            "reviewed",
+            "rejected",
+            "superseded"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "status_history": {
+          "items": {
+            "$ref": "#/$defs/StatusTransition"
+          },
+          "title": "Status History",
+          "type": "array"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        },
+        "aliases": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Aliases",
+          "type": "array"
+        },
+        "migration_review": {
+          "enum": [
+            "not-applicable",
+            "required",
+            "completed"
+          ],
+          "title": "Migration Review",
+          "type": "string"
+        },
+        "legacy_fields": {
+          "additionalProperties": true,
+          "title": "Legacy Fields",
+          "type": "object"
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "title": "Confidence",
+          "type": "string"
+        },
+        "horizon": {
+          "minLength": 1,
+          "title": "Horizon",
+          "type": "string"
+        },
+        "invalidation_conditions": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Invalidation Conditions",
+          "type": "array"
+        },
+        "review_authority": {
+          "anyOf": [
+            {
+              "const": "user",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Review Authority"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "schema_version",
+        "created_at",
+        "updated_at",
+        "status",
+        "migration_review",
+        "confidence",
+        "horizon",
+        "invalidation_conditions"
+      ],
+      "title": "OutlookThesis",
+      "type": "object"
+    },
+    "ReadinessAssessment": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid4",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "readiness.assessment",
+          "title": "Kind",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 2,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "languages": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Languages"
+        },
+        "visibility": {
+          "default": "private",
+          "enum": [
+            "private",
+            "shareable",
+            "public"
+          ],
+          "title": "Visibility",
+          "type": "string"
+        },
+        "refs": {
+          "items": {
+            "$ref": "#/$defs/InternalRef"
+          },
+          "title": "Refs",
+          "type": "array"
+        },
+        "host_refs": {
+          "items": {
+            "$ref": "#/$defs/HostRef"
+          },
+          "title": "Host Refs",
+          "type": "array"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "status": {
+          "enum": [
+            "draft",
+            "assessed",
+            "superseded"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "status_history": {
+          "items": {
+            "$ref": "#/$defs/StatusTransition"
+          },
+          "title": "Status History",
+          "type": "array"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        },
+        "aliases": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Aliases",
+          "type": "array"
+        },
+        "migration_review": {
+          "enum": [
+            "not-applicable",
+            "required",
+            "completed"
+          ],
+          "title": "Migration Review",
+          "type": "string"
+        },
+        "legacy_fields": {
+          "additionalProperties": true,
+          "title": "Legacy Fields",
+          "type": "object"
+        },
+        "assessment_type": {
+          "enum": [
+            "baseline",
+            "jd-delta",
+            "retest",
+            "unknown"
+          ],
+          "title": "Assessment Type",
+          "type": "string"
+        },
+        "result": {
+          "enum": [
+            "pass",
+            "fail",
+            "blocked"
+          ],
+          "title": "Result",
+          "type": "string"
+        },
+        "reviewer_status": {
+          "enum": [
+            "verified",
+            "fallback",
+            "missing"
+          ],
+          "title": "Reviewer Status",
+          "type": "string"
+        },
+        "input_fingerprint": {
+          "minLength": 1,
+          "title": "Input Fingerprint",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "schema_version",
+        "created_at",
+        "updated_at",
+        "status",
+        "migration_review",
+        "assessment_type",
+        "result",
+        "reviewer_status",
+        "input_fingerprint"
+      ],
+      "title": "ReadinessAssessment",
+      "type": "object"
+    },
+    "ReadinessGap": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid4",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "readiness.gap",
+          "title": "Kind",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 2,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "languages": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Languages"
+        },
+        "visibility": {
+          "default": "private",
+          "enum": [
+            "private",
+            "shareable",
+            "public"
+          ],
+          "title": "Visibility",
+          "type": "string"
+        },
+        "refs": {
+          "items": {
+            "$ref": "#/$defs/InternalRef"
+          },
+          "title": "Refs",
+          "type": "array"
+        },
+        "host_refs": {
+          "items": {
+            "$ref": "#/$defs/HostRef"
+          },
+          "title": "Host Refs",
+          "type": "array"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "status": {
+          "enum": [
+            "open",
+            "learning",
+            "practice",
+            "blocked",
+            "retest",
+            "closed"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "status_history": {
+          "items": {
+            "$ref": "#/$defs/StatusTransition"
+          },
+          "title": "Status History",
+          "type": "array"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        },
+        "aliases": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Aliases",
+          "type": "array"
+        },
+        "migration_review": {
+          "enum": [
+            "not-applicable",
+            "required",
+            "completed"
+          ],
+          "title": "Migration Review",
+          "type": "string"
+        },
+        "legacy_fields": {
+          "additionalProperties": true,
+          "title": "Legacy Fields",
+          "type": "object"
+        },
+        "gap_type": {
+          "enum": [
+            "knowledge",
+            "practice",
+            "production-evidence",
+            "unknown"
+          ],
+          "title": "Gap Type",
+          "type": "string"
+        },
+        "target": {
+          "minLength": 1,
+          "title": "Target",
+          "type": "string"
+        },
+        "closure_note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Closure Note"
+        },
+        "priority": {
+          "anyOf": [
+            {
+              "enum": [
+                "p0",
+                "p1",
+                "p2"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Priority"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "schema_version",
+        "created_at",
+        "updated_at",
+        "status",
+        "migration_review",
+        "gap_type",
+        "target"
+      ],
+      "title": "ReadinessGap",
+      "type": "object"
+    },
+    "ReadinessNote": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid4",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "readiness.note",
+          "title": "Kind",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 2,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "languages": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Languages"
+        },
+        "visibility": {
+          "default": "private",
+          "enum": [
+            "private",
+            "shareable",
+            "public"
+          ],
+          "title": "Visibility",
+          "type": "string"
+        },
+        "refs": {
+          "items": {
+            "$ref": "#/$defs/InternalRef"
+          },
+          "title": "Refs",
+          "type": "array"
+        },
+        "host_refs": {
+          "items": {
+            "$ref": "#/$defs/HostRef"
+          },
+          "title": "Host Refs",
+          "type": "array"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "status": {
+          "enum": [
+            "draft",
+            "reviewed"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "status_history": {
+          "items": {
+            "$ref": "#/$defs/StatusTransition"
+          },
+          "title": "Status History",
+          "type": "array"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        },
+        "aliases": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Aliases",
+          "type": "array"
+        },
+        "migration_review": {
+          "enum": [
+            "not-applicable",
+            "required",
+            "completed"
+          ],
+          "title": "Migration Review",
+          "type": "string"
+        },
+        "legacy_fields": {
+          "additionalProperties": true,
+          "title": "Legacy Fields",
+          "type": "object"
+        },
+        "note_type": {
+          "enum": [
+            "learning",
+            "paper",
+            "practice",
+            "unknown"
+          ],
+          "title": "Note Type",
+          "type": "string"
+        },
+        "source_title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Title"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "schema_version",
+        "created_at",
+        "updated_at",
+        "status",
+        "migration_review",
+        "note_type"
+      ],
+      "title": "ReadinessNote",
+      "type": "object"
+    },
+    "ReadinessSession": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid4",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "readiness.session",
+          "title": "Kind",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 2,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "languages": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Languages"
+        },
+        "visibility": {
+          "default": "private",
+          "enum": [
+            "private",
+            "shareable",
+            "public"
+          ],
+          "title": "Visibility",
+          "type": "string"
+        },
+        "refs": {
+          "items": {
+            "$ref": "#/$defs/InternalRef"
+          },
+          "title": "Refs",
+          "type": "array"
+        },
+        "host_refs": {
+          "items": {
+            "$ref": "#/$defs/HostRef"
+          },
+          "title": "Host Refs",
+          "type": "array"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "status": {
+          "enum": [
+            "planned",
+            "completed",
+            "invalidated"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "status_history": {
+          "items": {
+            "$ref": "#/$defs/StatusTransition"
+          },
+          "title": "Status History",
+          "type": "array"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        },
+        "aliases": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Aliases",
+          "type": "array"
+        },
+        "migration_review": {
+          "enum": [
+            "not-applicable",
+            "required",
+            "completed"
+          ],
+          "title": "Migration Review",
+          "type": "string"
+        },
+        "legacy_fields": {
+          "additionalProperties": true,
+          "title": "Legacy Fields",
+          "type": "object"
+        },
+        "session_type": {
+          "enum": [
+            "coach",
+            "strict",
+            "retest",
+            "unknown"
+          ],
+          "title": "Session Type",
+          "type": "string"
+        },
+        "outcome": {
+          "enum": [
+            "pass",
+            "fail",
+            "blocked",
+            "unscored"
+          ],
+          "title": "Outcome",
+          "type": "string"
+        },
+        "reviewer_status": {
+          "enum": [
+            "verified",
+            "fallback",
+            "missing"
+          ],
+          "title": "Reviewer Status",
+          "type": "string"
+        },
+        "input_fingerprint": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Input Fingerprint"
+        },
+        "session_date": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Session Date"
+        },
+        "target": {
+          "anyOf": [
+            {
+              "enum": [
+                "lane",
+                "jd",
+                "historical"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target"
+        },
+        "scope": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Scope"
+        },
+        "attempt": {
+          "anyOf": [
+            {
+              "maximum": 2,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Attempt"
+        },
+        "fact_boundary": {
+          "anyOf": [
+            {
+              "enum": [
+                "unscored",
+                "not-ready",
+                "weak",
+                "ready",
+                "strong"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fact Boundary"
+        },
+        "technical_depth": {
+          "anyOf": [
+            {
+              "enum": [
+                "unscored",
+                "not-ready",
+                "weak",
+                "ready",
+                "strong"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Technical Depth"
+        },
+        "answer_structure": {
+          "anyOf": [
+            {
+              "enum": [
+                "unscored",
+                "not-ready",
+                "weak",
+                "ready",
+                "strong"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Answer Structure"
+        },
+        "tradeoff_resilience": {
+          "anyOf": [
+            {
+              "enum": [
+                "unscored",
+                "not-ready",
+                "weak",
+                "ready",
+                "strong"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tradeoff Resilience"
+        },
+        "blocking_red_flag": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Blocking Red Flag"
+        },
+        "verdict": {
+          "anyOf": [
+            {
+              "enum": [
+                "unscored",
+                "not-ready",
+                "ready",
+                "blocked",
+                "stale",
+                "historical"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Verdict"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "schema_version",
+        "created_at",
+        "updated_at",
+        "status",
+        "migration_review",
+        "session_type",
+        "outcome",
+        "reviewer_status"
+      ],
+      "title": "ReadinessSession",
+      "type": "object"
+    },
+    "StatusTransition": {
+      "additionalProperties": false,
+      "properties": {
+        "from_status": {
+          "minLength": 1,
+          "title": "From Status",
+          "type": "string"
+        },
+        "to_status": {
+          "minLength": 1,
+          "title": "To Status",
+          "type": "string"
+        },
+        "at": {
+          "format": "date-time",
+          "title": "At",
+          "type": "string"
+        },
+        "reason": {
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        },
+        "evidence_ref_ids": {
+          "items": {
+            "format": "uuid4",
+            "type": "string"
+          },
+          "title": "Evidence Ref Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "from_status",
+        "to_status",
+        "at",
+        "reason"
+      ],
+      "title": "StatusTransition",
+      "type": "object"
+    },
+    "StrategyLane": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid4",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "strategy.lane",
+          "title": "Kind",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 2,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "languages": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Languages"
+        },
+        "visibility": {
+          "default": "private",
+          "enum": [
+            "private",
+            "shareable",
+            "public"
+          ],
+          "title": "Visibility",
+          "type": "string"
+        },
+        "refs": {
+          "items": {
+            "$ref": "#/$defs/InternalRef"
+          },
+          "title": "Refs",
+          "type": "array"
+        },
+        "host_refs": {
+          "items": {
+            "$ref": "#/$defs/HostRef"
+          },
+          "title": "Host Refs",
+          "type": "array"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "status": {
+          "enum": [
+            "candidate",
+            "reviewed",
+            "accepted",
+            "rejected",
+            "deferred",
+            "superseded"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "status_history": {
+          "items": {
+            "$ref": "#/$defs/StatusTransition"
+          },
+          "title": "Status History",
+          "type": "array"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        },
+        "aliases": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Aliases",
+          "type": "array"
+        },
+        "migration_review": {
+          "enum": [
+            "not-applicable",
+            "required",
+            "completed"
+          ],
+          "title": "Migration Review",
+          "type": "string"
+        },
+        "legacy_fields": {
+          "additionalProperties": true,
+          "title": "Legacy Fields",
+          "type": "object"
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "title": "Confidence",
+          "type": "string"
+        },
+        "review_on": {
+          "format": "date",
+          "title": "Review On",
+          "type": "string"
+        },
+        "disconfirming_signals": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Disconfirming Signals",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "schema_version",
+        "created_at",
+        "updated_at",
+        "status",
+        "migration_review",
+        "confidence",
+        "review_on",
+        "disconfirming_signals"
+      ],
+      "title": "StrategyLane",
+      "type": "object"
+    },
+    "StrategyPlan": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid4",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "strategy.plan",
+          "title": "Kind",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 2,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "languages": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Languages"
+        },
+        "visibility": {
+          "default": "private",
+          "enum": [
+            "private",
+            "shareable",
+            "public"
+          ],
+          "title": "Visibility",
+          "type": "string"
+        },
+        "refs": {
+          "items": {
+            "$ref": "#/$defs/InternalRef"
+          },
+          "title": "Refs",
+          "type": "array"
+        },
+        "host_refs": {
+          "items": {
+            "$ref": "#/$defs/HostRef"
+          },
+          "title": "Host Refs",
+          "type": "array"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "status": {
+          "enum": [
+            "draft",
+            "active",
+            "paused",
+            "completed",
+            "superseded"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "status_history": {
+          "items": {
+            "$ref": "#/$defs/StatusTransition"
+          },
+          "title": "Status History",
+          "type": "array"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        },
+        "aliases": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Aliases",
+          "type": "array"
+        },
+        "migration_review": {
+          "enum": [
+            "not-applicable",
+            "required",
+            "completed"
+          ],
+          "title": "Migration Review",
+          "type": "string"
+        },
+        "legacy_fields": {
+          "additionalProperties": true,
+          "title": "Legacy Fields",
+          "type": "object"
+        },
+        "horizon_start": {
+          "format": "date",
+          "title": "Horizon Start",
+          "type": "string"
+        },
+        "horizon_end": {
+          "format": "date",
+          "title": "Horizon End",
+          "type": "string"
+        },
+        "review_on": {
+          "format": "date",
+          "title": "Review On",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "schema_version",
+        "created_at",
+        "updated_at",
+        "status",
+        "migration_review",
+        "horizon_start",
+        "horizon_end",
+        "review_on"
+      ],
+      "title": "StrategyPlan",
+      "type": "object"
+    },
+    "StrategyPositioning": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "format": "uuid4",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "const": "strategy.positioning",
+          "title": "Kind",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 2,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        },
+        "languages": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Languages"
+        },
+        "visibility": {
+          "default": "private",
+          "enum": [
+            "private",
+            "shareable",
+            "public"
+          ],
+          "title": "Visibility",
+          "type": "string"
+        },
+        "refs": {
+          "items": {
+            "$ref": "#/$defs/InternalRef"
+          },
+          "title": "Refs",
+          "type": "array"
+        },
+        "host_refs": {
+          "items": {
+            "$ref": "#/$defs/HostRef"
+          },
+          "title": "Host Refs",
+          "type": "array"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "status": {
+          "enum": [
+            "candidate",
+            "reviewed",
+            "accepted",
+            "rejected",
+            "deferred",
+            "superseded"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "status_history": {
+          "items": {
+            "$ref": "#/$defs/StatusTransition"
+          },
+          "title": "Status History",
+          "type": "array"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        },
+        "aliases": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Aliases",
+          "type": "array"
+        },
+        "migration_review": {
+          "enum": [
+            "not-applicable",
+            "required",
+            "completed"
+          ],
+          "title": "Migration Review",
+          "type": "string"
+        },
+        "legacy_fields": {
+          "additionalProperties": true,
+          "title": "Legacy Fields",
+          "type": "object"
+        },
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "title": "Confidence",
+          "type": "string"
+        },
+        "review_on": {
+          "format": "date",
+          "title": "Review On",
+          "type": "string"
+        },
+        "disconfirming_signals": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Disconfirming Signals",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "schema_version",
+        "created_at",
+        "updated_at",
+        "status",
+        "migration_review",
+        "confidence",
+        "review_on",
+        "disconfirming_signals"
+      ],
+      "title": "StrategyPositioning",
+      "type": "object"
+    }
+  },
+  "discriminator": {
+    "mapping": {
+      "communication.audit": "#/$defs/CommunicationAudit",
+      "communication.export": "#/$defs/CommunicationExport",
+      "communication.profile": "#/$defs/CommunicationProfile",
+      "communication.resume": "#/$defs/CommunicationResume",
+      "evidence.capture": "#/$defs/EvidenceCapture",
+      "evidence.claim": "#/$defs/EvidenceClaim",
+      "evidence.story": "#/$defs/EvidenceStory",
+      "evidence.work": "#/$defs/EvidenceWork",
+      "market.channel": "#/$defs/MarketChannel",
+      "market.direction": "#/$defs/MarketDirection",
+      "market.jd": "#/$defs/MarketJD",
+      "opportunity.company": "#/$defs/OpportunityCompany",
+      "opportunity.decision": "#/$defs/OpportunityDecision",
+      "opportunity.engagement": "#/$defs/OpportunityEngagement",
+      "opportunity.scope": "#/$defs/OpportunityScope",
+      "outlook.review": "#/$defs/OutlookReview",
+      "outlook.signal": "#/$defs/OutlookSignal",
+      "outlook.thesis": "#/$defs/OutlookThesis",
+      "readiness.assessment": "#/$defs/ReadinessAssessment",
+      "readiness.gap": "#/$defs/ReadinessGap",
+      "readiness.note": "#/$defs/ReadinessNote",
+      "readiness.session": "#/$defs/ReadinessSession",
+      "strategy.lane": "#/$defs/StrategyLane",
+      "strategy.plan": "#/$defs/StrategyPlan",
+      "strategy.positioning": "#/$defs/StrategyPositioning"
+    },
+    "propertyName": "kind"
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/EvidenceCapture"
+    },
+    {
+      "$ref": "#/$defs/EvidenceWork"
+    },
+    {
+      "$ref": "#/$defs/EvidenceStory"
+    },
+    {
+      "$ref": "#/$defs/EvidenceClaim"
+    },
+    {
+      "$ref": "#/$defs/StrategyPositioning"
+    },
+    {
+      "$ref": "#/$defs/StrategyLane"
+    },
+    {
+      "$ref": "#/$defs/StrategyPlan"
+    },
+    {
+      "$ref": "#/$defs/MarketDirection"
+    },
+    {
+      "$ref": "#/$defs/MarketChannel"
+    },
+    {
+      "$ref": "#/$defs/MarketJD"
+    },
+    {
+      "$ref": "#/$defs/OpportunityCompany"
+    },
+    {
+      "$ref": "#/$defs/OpportunityScope"
+    },
+    {
+      "$ref": "#/$defs/OpportunityEngagement"
+    },
+    {
+      "$ref": "#/$defs/OpportunityDecision"
+    },
+    {
+      "$ref": "#/$defs/OutlookSignal"
+    },
+    {
+      "$ref": "#/$defs/OutlookThesis"
+    },
+    {
+      "$ref": "#/$defs/OutlookReview"
+    },
+    {
+      "$ref": "#/$defs/ReadinessGap"
+    },
+    {
+      "$ref": "#/$defs/ReadinessNote"
+    },
+    {
+      "$ref": "#/$defs/ReadinessSession"
+    },
+    {
+      "$ref": "#/$defs/ReadinessAssessment"
+    },
+    {
+      "$ref": "#/$defs/CommunicationProfile"
+    },
+    {
+      "$ref": "#/$defs/CommunicationAudit"
+    },
+    {
+      "$ref": "#/$defs/CommunicationResume"
+    },
+    {
+      "$ref": "#/$defs/CommunicationExport"
+    }
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://career-os.dev/schemas/record-envelope.schema.json",
+  "title": "Career OS Kind-Specific Record"
+}

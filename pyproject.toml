@@ -1,0 +1,54 @@
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "career-os"
+version = "0.1.0"
+description = "An Agent-native, local-first, and embeddable career development operating system for Obsidian."
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT"
+authors = [{ name = "sean2077" }]
+dependencies = [
+  "pydantic>=2.11,<3",
+  "pymupdf4llm==1.28.0",
+  "pypdf>=5,<7",
+  "ruamel-yaml>=0.18,<0.19",
+  "typer>=0.16,<1",
+]
+
+[project.scripts]
+career-os = "career_os.cli:app"
+
+[dependency-groups]
+dev = [
+  "mypy>=1.17,<2",
+  "pytest>=8.4,<9",
+  "pytest-cov>=6.2,<7",
+  "ruff>=0.12,<1",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["system/tools/career_os"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+extend-exclude = [".agents"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.12"
+mypy_path = "system/tools"
+strict = true
+exclude = ["^\\.agents/"]
+
+[tool.pytest.ini_options]
+testpaths = ["system/tests"]
+addopts = "-q"
+
+[tool.coverage.run]
+source = ["career_os"]

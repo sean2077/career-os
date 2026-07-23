@@ -1,0 +1,151 @@
+filters:
+  and:
+  - file.ext == "md"
+  - schema_version == 2
+  - kind == "opportunity.engagement"
+formulas:
+  company_path: if(host_refs, host_refs.filter(value.relation == "company").map(value.path).join(""), "")
+  company: if(!formula.company_path.isEmpty() && file(formula.company_path), file(formula.company_path).asLink(file(formula.company_path).basename), "")
+  target_jd_path: if(host_refs, host_refs.filter(value.relation == "target-jd").map(value.path).join(""), "")
+  target_jd: if(!formula.target_jd_path.isEmpty() && file(formula.target_jd_path), file(formula.target_jd_path).asLink(file(formula.target_jd_path).basename), "")
+  effective_review_state: if(review_status != "reviewed" || reviewed_at.isEmpty(), "pending", if(date(updated_at) > date(reviewed_at), "needs-review", "reviewed"))
+  company_business_outlook: if(!formula.company_path.isEmpty() && file(formula.company_path), file(formula.company_path).properties.business_outlook, "")
+  company_employer_quality: if(!formula.company_path.isEmpty() && file(formula.company_path), file(formula.company_path).properties.employer_quality, "")
+  company_risk: if(!formula.company_path.isEmpty() && file(formula.company_path), file(formula.company_path).properties.risk, "")
+  company_confidence: if(!formula.company_path.isEmpty() && file(formula.company_path), file(formula.company_path).properties.confidence, "")
+  company_attention: if(formula.company_path.isEmpty() || !file(formula.company_path), "", if(file(formula.company_path).properties.assessment_status == "blocked", "blocked", if(file(formula.company_path).properties.assessment_status == "stale" || file(formula.company_path).properties.refresh_due < today(), "stale/overdue", "")))
+  metadata_issues: if(id.isEmpty(), "Missing id ", "") + if(updated_at.isEmpty(), "Missing updated date ", "") + if(review_status == "reviewed" && reviewed_at.isEmpty(), "Missing review date", "")
+  relationship_issues: if(formula.company_path.isEmpty(), "Missing company link ", if(!file(formula.company_path), "Broken company link ", if(file(formula.company_path).properties.kind != "opportunity.company", "Source is not Company ", ""))) + if(!formula.target_jd_path.isEmpty() && (!file(formula.target_jd_path) || file(formula.target_jd_path).properties.kind != "market.jd"), "Broken JD source", "")
+properties:
+  file.name:
+    displayName: Engagement
+  formula.company:
+    displayName: Company
+  formula.target_jd:
+    displayName: JD Source
+  engagement_type:
+    displayName: Type
+  stage:
+    displayName: Stage
+  application_state:
+    displayName: Application State
+  decision_state:
+    displayName: Decision State
+  role:
+    displayName: Role
+  team:
+    displayName: Team
+  started_on:
+    displayName: Started
+  review_on:
+    displayName: Review Node
+  strategy_fit:
+    displayName: Career Fit
+  opportunity_quality:
+    displayName: Opportunity Quality
+  confidence:
+    displayName: Opportunity Confidence
+  formula.company_business_outlook:
+    displayName: Company Outlook
+  formula.company_employer_quality:
+    displayName: Employer Quality
+  formula.company_risk:
+    displayName: Company Risk
+  formula.company_confidence:
+    displayName: Company Confidence
+  formula.company_attention:
+    displayName: Company Freshness
+  review_status:
+    displayName: Human Review
+  reviewed_at:
+    displayName: Reviewed
+  formula.effective_review_state:
+    displayName: Effective Review State
+  formula.metadata_issues:
+    displayName: Metadata Issues
+  formula.relationship_issues:
+    displayName: Relationship Issues
+  next_action:
+    displayName: Next Action
+  updated_at:
+    displayName: Updated
+views:
+- type: table
+  name: Decision Overview
+  groupBy:
+    property: decision_state
+    direction: ASC
+  order:
+  - file.name
+  - formula.company
+  - engagement_type
+  - stage
+  - role
+  - team
+  - started_on
+  - review_on
+  - formula.effective_review_state
+  - strategy_fit
+  - opportunity_quality
+  - confidence
+  - formula.company_business_outlook
+  - formula.company_employer_quality
+  - formula.company_risk
+  - formula.company_confidence
+  - formula.company_attention
+  - next_action
+  - updated_at
+  sort:
+  - property: updated_at
+    direction: DESC
+  - property: file.name
+    direction: ASC
+- type: table
+  name: Review
+  filters:
+    or:
+    - formula.effective_review_state != "reviewed"
+    - '!formula.metadata_issues.isEmpty()'
+    - '!formula.relationship_issues.isEmpty()'
+    - '!formula.company_attention.isEmpty()'
+  order:
+  - file.name
+  - formula.company
+  - formula.target_jd
+  - engagement_type
+  - started_on
+  - review_on
+  - decision_state
+  - formula.effective_review_state
+  - review_status
+  - reviewed_at
+  - updated_at
+  - formula.relationship_issues
+  - formula.metadata_issues
+  - formula.company_attention
+  - next_action
+  sort:
+  - property: formula.effective_review_state
+    direction: ASC
+  - property: updated_at
+    direction: DESC
+- type: table
+  name: Application Tracking
+  filters:
+    and:
+    - application_state != "not-applied"
+  order:
+  - file.name
+  - formula.company
+  - status
+  - engagement_type
+  - stage
+  - application_state
+  - role
+  - team
+  - review_on
+  - next_action
+  - updated_at
+  sort:
+  - property: updated_at
+    direction: DESC

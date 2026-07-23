@@ -1,0 +1,187 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{career-os-style}[2026/07/22 Privacy-aware legacy-calibrated export style]
+
+\RequirePackage{graphicx}
+\RequirePackage{fancyhdr}
+\RequirePackage{lastpage}
+\RequirePackage{draftwatermark}
+\RequirePackage{xifthen}
+
+\providecommand{\ResumeExportProfile}{internal}
+\providecommand{\ResumeExportRecipient}{}
+\providecommand{\ResumeExportPurpose}{}
+\providecommand{\ResumeExportWatermark}{}
+\providecommand{\ResumeExportDate}{}
+\providecommand{\ResumeExportId}{}
+\providecommand{\ResumeHasAvatar}{0}
+\providecommand{\ResumeAvatarPath}{}
+
+\newif\ifResumeExportInternal
+\newif\ifResumeExportPreview
+\newif\ifResumeExportApplication
+
+\ifthenelse{\equal{\ResumeExportProfile}{internal}}{%
+  \ResumeExportInternaltrue
+}{%
+  \ifthenelse{\equal{\ResumeExportProfile}{preview}}{%
+    \ResumeExportPreviewtrue
+  }{%
+    \ifthenelse{\equal{\ResumeExportProfile}{application}}{%
+      \ResumeExportApplicationtrue
+    }{%
+      \PackageError{career-os-style}{Unknown export profile `\ResumeExportProfile'}%
+        {Use internal, preview, or application.}%
+    }%
+  }%
+}
+
+\newcommand{\ResumeExportRequire}[2]{%
+  \ifthenelse{\equal{#1}{}}{%
+    \PackageError{career-os-style}{Missing #2 for `\ResumeExportProfile' export}%
+      {Provide a non-empty #2 for this export profile.}%
+  }{}%
+}
+
+\ifResumeExportPreview
+  \ResumeExportRequire{\ResumeExportDate}{date}%
+  \ResumeExportRequire{\ResumeExportId}{export ID}%
+\fi
+\ifResumeExportApplication
+  \ResumeExportRequire{\ResumeExportDate}{date}%
+  \ResumeExportRequire{\ResumeExportId}{export ID}%
+\fi
+
+\SetWatermarkAngle{35}
+\SetWatermarkScale{1}
+\ifResumeExportInternal
+  \SetWatermarkText{INTERNAL BUILD\\DO NOT SHARE}
+  \SetWatermarkFontSize{1.25cm}
+  \SetWatermarkLightness{0.94}
+\fi
+\ifResumeExportPreview
+  \ifthenelse{\equal{\ResumeExportWatermark}{}}{%
+    \ifthenelse{\equal{\ResumeExportRecipient}{}}{%
+      \SetWatermarkText{猎头预览\\不构成投递授权}%
+    }{%
+      \SetWatermarkText{仅供 \ResumeExportRecipient\\不构成投递授权}%
+    }%
+  }{%
+    \SetWatermarkText{\ResumeExportWatermark}%
+  }%
+  \SetWatermarkFontSize{0.9cm}
+  \SetWatermarkLightness{0.91}
+\fi
+\ifResumeExportApplication
+  \SetWatermarkText{\ResumeExportWatermark}
+  \SetWatermarkFontSize{0.9cm}
+  \SetWatermarkLightness{0.91}
+\fi
+
+\newcommand{\ResumeExportFooterText}{%
+  \ifResumeExportInternal
+    INTERNAL BUILD · DO NOT SHARE%
+  \fi
+  \ifResumeExportPreview
+    \ifthenelse{\equal{\ResumeExportRecipient}{}}{%
+      \ifthenelse{\equal{\ResumeExportPurpose}{}}{%
+        猎头预览 · 不构成投递授权 · \ResumeExportDate\ · \ResumeExportId%
+      }{%
+        猎头预览 · 仅用于 \ResumeExportPurpose\ 初评 · 不构成投递授权 · \ResumeExportDate\ · \ResumeExportId%
+      }%
+    }{%
+      \ifthenelse{\equal{\ResumeExportPurpose}{}}{%
+        仅供 \ResumeExportRecipient\ 初评 · 不构成投递授权 · \ResumeExportDate\ · \ResumeExportId%
+      }{%
+        仅供 \ResumeExportRecipient\ 评估 \ResumeExportPurpose\ · 不构成投递授权 · \ResumeExportDate\ · \ResumeExportId%
+      }%
+    }%
+  \fi
+  \ifResumeExportApplication
+    \ifthenelse{\equal{\ResumeExportRecipient}{}}{%
+      \ifthenelse{\equal{\ResumeExportPurpose}{}}{%
+        正式简历 · \ResumeExportDate\ · \ResumeExportId%
+      }{%
+        仅用于 \ResumeExportPurpose\ · \ResumeExportDate\ · \ResumeExportId%
+      }%
+    }{%
+      \ifthenelse{\equal{\ResumeExportPurpose}{}}{%
+        仅供 \ResumeExportRecipient\ 招聘使用 · \ResumeExportDate\ · \ResumeExportId%
+      }{%
+        仅供 \ResumeExportRecipient\ 招聘 \ResumeExportPurpose\ 使用 · \ResumeExportDate\ · \ResumeExportId%
+      }%
+    }%
+  \fi
+}
+
+\AtBeginDocument{%
+  \fancyhf{}%
+  \fancyfoot[L]{%
+    \parbox[b]{0.86\textwidth}{%
+      \raggedright\sffamily\fontsize{6.5}{7.5}\selectfont\color{black!42}%
+      \ResumeExportFooterText
+    }%
+  }%
+  \fancyfoot[R]{\sffamily\fontsize{7}{8}\selectfont\color{black!55}\thepage/\pageref{LastPage}}%
+  \renewcommand{\headrulewidth}{0pt}%
+  \renewcommand{\footrulewidth}{0pt}%
+  \pagestyle{fancy}%
+  \pagenumbering{arabic}%
+}
+
+\newcommand{\ResumeDocumentSetup}[3]{%
+  \ifResumeExportPreview
+    \hypersetup{%
+      pdftitle={简历预览 - #1},%
+      pdfauthor={},%
+      pdfsubject={#2},%
+      pdfkeywords={#3},%
+      pdflang={zh-CN}%
+    }%
+  \else
+    \hypersetup{%
+      pdftitle={\ResumeFullName\space - #1},%
+      pdfauthor={\ResumeFullName},%
+      pdfsubject={#2},%
+      pdfkeywords={#3},%
+      pdflang={zh-CN}%
+    }%
+  \fi
+}
+
+\newcommand{\ResumePublicLinks}{%
+  \contactlabel{GitHub}\ \href{\ResumeGitHubUrl}{\ResumeGitHubLabel}%
+  \hspace{1.5em}%
+  \contactlabel{Blog}\ \href{\ResumeBlogUrl}{\ResumeBlogLabel}%
+}
+
+\newcommand{\ResumeIdentityHeader}{%
+  \noindent
+  \ifResumeExportPreview
+    \begin{minipage}[c]{\textwidth}
+      \raggedright
+      {\Huge\sffamily\bfseries \ResumeFullName} \\[0.5em]
+      \ResumePublicLinks
+    \end{minipage}
+  \else
+    \begin{minipage}[c]{0.75\textwidth}
+      \raggedright
+      {\Huge\sffamily\bfseries \ResumeFullName} \\[0.5em]
+      \begin{tabular}{@{}l@{\hspace{1.5em}}l@{}}
+        \contactlabel{Email}\ \href{mailto:\ResumeEmail}{\ResumeEmail} &
+        \contactlabel{Phone}\ \ResumePhone \\[0.3em]
+        \contactlabel{GitHub}\ \href{\ResumeGitHubUrl}{\ResumeGitHubLabel} &
+        \contactlabel{Blog}\ \href{\ResumeBlogUrl}{\ResumeBlogLabel} \\
+      \end{tabular}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}[c]{0.23\textwidth}
+      \raggedleft
+      \ifnum\ResumeHasAvatar=1\relax
+        \includegraphics[width=2.8cm]{\ResumeAvatarPath}
+      \fi
+    \end{minipage}
+  \fi
+
+  \vspace{0.6em}
+}
+\endinput

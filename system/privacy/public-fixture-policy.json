@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "approved_blob_sha256": {
+    ".github/workflows/ci.yml": [
+      "c07aa35f461e289b1760d93624b33efeb7a1bc753682f360711cdb04c953d6e3"
+    ],
+    ".github/workflows/release.yml": [
+      "25ce6ee9f10f991c97c0ab7dddc011886f387d79c0b66ecab9a55199edfd5400"
+    ],
+    "system/resume/fixtures/en/identity.tex": [
+      "841774be35df9ecc8966afd64e73bdbe30afb9f7249db6ecf7c49abf3ec2f87a"
+    ],
+    "system/resume/fixtures/en/resume.tex": [
+      "46a003c217b080d650aaa13c5dc137c786d4487758e6589e4199e4e954a7db6a"
+    ],
+    "system/resume/fixtures/multilingual/identity.tex": [
+      "d3dcf5f2c702287b6b1cecfd08986b7103c73ef1d72b564266f578c6209f3509"
+    ],
+    "system/resume/fixtures/multilingual/resume.tex": [
+      "5dea9ebcbbb129e25fdec6346e365d4b3896728d1d68e6d987e0310d3c7c77a4"
+    ],
+    "system/resume/fixtures/zh-CN/identity.tex": [
+      "cff858b837a3f1d26724758a8ff0b7923c0d911b654a38bb2b6c27706cf84a7c"
+    ],
+    "system/resume/fixtures/zh-CN/resume.tex": [
+      "b2b7c14de57ca005b0831f198cf52f4d7410c1738feb180ced375e45fe6a19fd"
+    ],
+    "system/resume/templates/identity.tex": [
+      "673a11d33869aee1233d7900e974c8aeb45454f943c1a1229b54d5943971e903"
+    ],
+    "system/resume/templates/single-column.tex": [
+      "c5ea8a161752f7055d93d3e87aed22f0541a3459d09d51cdba04b87007927e9c"
+    ],
+    "system/tests/test_public_privacy.py": [
+      "a44e61c55246539c812f2d0d0ab8eff8c4a525af11e25cb2a7666bdb86161334"
+    ],
+    "system/tests/test_resume.py": [
+      "9503c3ebde780a75c0c97782403438069f8ebac3886581cea80d3e68a38f5bfe"
+    ],
+    "system/tests/test_resume_adversarial.py": [
+      "34bc84ff740ea04b171cf6e589921a75f48247004924329d331eb1b8b897cb1c"
+    ],
+    "system/tests/test_resume_fonts.py": [
+      "06d3469b12375f18e9c7ecbbd1220973a40d4fd69cacbc000b26c29b77829dda"
+    ],
+    "system/tests/test_resume_variants.py": [
+      "6a2b78961b842b408dc79207f9a10258fb394c2ba35a3065de58a177eca41234"
+    ],
+    "system/tests/test_resume_work_experience.py": [
+      "6532fb61d3c6eae014eb0a9e327deb8e7e6960dd3289e0625815932402b5d528"
+    ],
+    "system/tools/career_os/cli/release.py": [
+      "173581f6314c6fb727e68ba0ceb9d77858f083cefff75532fc8e3c35c9a58247"
+    ],
+    "system/tools/career_os/public_privacy.py": [
+        "8b03901ad328656a6de09d025b2150623fbb08fdda61d5711f504339da1c34e3"
+    ]
+  }
+}

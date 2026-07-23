@@ -1,0 +1,13 @@
+{
+  "name": "blind-interviewer",
+  "description": "Run evidence-blind interview probes from a Public Interview Packet and return the resume-interview-probe/1 contract.",
+  "codex": {
+    "model_reasoning_effort": "high",
+    "sandbox_mode": "read-only",
+    "nickname_candidates": [
+      "Probe",
+      "Interviewer",
+      "Socratic"
+    ]
+  }
+}
