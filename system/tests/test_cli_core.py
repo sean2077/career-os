@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 import shutil
 import subprocess
 import tomllib
@@ -27,6 +28,8 @@ from career_os.config import (
 )
 from pydantic import ValidationError
 from typer.testing import CliRunner
+
+ANSI_ESCAPE = re.compile(r"\x1b\[[;?0-9]*[a-zA-Z]")
 
 
 def _write_config(root: Path) -> None:
@@ -310,7 +313,7 @@ def test_init_rejects_removed_data_root_option(tmp_path: Path) -> None:
     )
 
     assert result.exit_code == 2
-    assert "No such option: --data-root" in result.stderr
+    assert "No such option: --data-root" in ANSI_ESCAPE.sub("", result.stderr)
     assert not (project / "career").exists()
 
 

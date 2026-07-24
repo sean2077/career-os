@@ -52,7 +52,7 @@
     },
     {
       "path": "CHANGELOG.md",
-      "result_sha256": "461529eb2702d430af94a54954b6eed6d0e5ebf9820d22cdd384353b365501aa",
+      "result_sha256": "3e60852df1ac7fe0bd1cabe42e811fddf7090b6e4a50b708cf1ee8852557568c",
       "reason": "release-evidence"
     },
     {
@@ -352,7 +352,7 @@
     },
     {
       "path": "system/tests/test_cli_core.py",
-      "result_sha256": "3fab04188fdc77876c9af69914a2c9482d896a7e3de335cdb0923379b3732d0d",
+      "result_sha256": "f0cc593324e63e6573814342309e23e27122063268e59102f9be4a8cba2a60ec",
       "reason": "release-evidence"
     },
     {

@@ -49,6 +49,8 @@ All notable changes to Career OS are documented here.
 - Prevented lifecycle transition labels such as `Company: draft -> reviewed`
   from becoming false-positive private company candidates while retaining
   exact matching for labeled identity, company, location, and contact values.
+- Made the removed `--data-root` regression assertion portable across
+  ANSI-styled Typer/Rich CI output.
 - Removed obsolete `v0.1.0-rc.*` release notes now that the clean-install-only
   stable MVP is the sole published release line.
 
