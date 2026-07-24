@@ -1,5 +1,10 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{career-os}[2026/07/22 Career OS legacy-calibrated resume class]
+\RequirePackage{kvoptions}
+\SetupKeyvalOptions{family=CareerOS,prefix=CareerOS@}
+\DeclareStringOption[en]{language}
+\ProcessKeyvalOptions*
+\newcommand{\CareerOSDocumentLanguage}{\CareerOS@language}
 \LoadClass[11pt]{article}
 
 \setlength{\parindent}{0pt}

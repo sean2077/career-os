@@ -122,6 +122,7 @@ class ResumeListItem:
 @dataclass(frozen=True)
 class ResolvedResumeRoot:
     name: str
+    language: str
     source_root: Path
     source: Path
     identity: Path
@@ -137,8 +138,10 @@ class _BuiltResume:
 
 
 _DOCUMENT_CLASS = re.compile(
-    r"\\documentclass(?:\s*\[[^\]]*\])?\s*\{career-os\}", re.IGNORECASE
+    r"\\documentclass(?:\s*\[(?P<options>[^\]]*)\])?\s*\{career-os\}",
+    re.IGNORECASE,
 )
+_BCP47 = re.compile(r"(?=.{2,35}$)(?:[A-Za-z]{2,8})(?:-[A-Za-z0-9]{1,8})*", re.ASCII)
 _FONT_DEFINITION = re.compile(
     r"\\(?:newcommand|renewcommand|providecommand)\s*"
     r"\{\\CareerOS(?:Latin|CJK)[A-Za-z]+Font\}"
@@ -162,7 +165,7 @@ _IDENTITY_DEFINITION = re.compile(
 _IDENTITY_ESCAPE = re.compile(r"\\([_%#&])")
 _IDENTITY_UNSAFE_ESCAPE = re.compile(r"\\(?![_%#&])")
 _IDENTITY_UNESCAPED_SPECIAL = re.compile(r"(?<!\\)[$%#&_~^]")
-_EXPORT_ID = re.compile(r"^(?:HC|AP)-\d{8}-[A-F0-9]{8}$")
+_EXPORT_ID = re.compile(r"^(?:HC|AP)-\d{8}-[A-F0-9]{4}$")
 _AVATAR_SUFFIXES = (".png", ".jpg", ".jpeg")
 
 
@@ -468,13 +471,26 @@ def export_resume(
     *,
     resume: str,
     profile: ExportProfile,
-    output: Path,
+    output: Path | None = None,
     confirm_application: bool,
     recipient: str | None = None,
     purpose: str | None = None,
     watermark: str | None = None,
 ) -> ExportResult:
     root = _resolve_named_resume(paths, resume)
+    identity = _read_identity(root)
+    context = _export_context(
+        profile,
+        recipient=recipient,
+        purpose=purpose,
+        watermark=watermark,
+    )
+    if output is None:
+        output = (
+            paths.build_root
+            / "share"
+            / _default_export_filename(root, identity=identity, context=context)
+        )
     if output.suffix.lower() != ".pdf":
         raise ValueError("resume export destination must use the .pdf extension")
     if output.exists():
@@ -487,17 +503,15 @@ def export_resume(
         profile=profile,
         confirm_application=confirm_application,
     )
-    context = _export_context(
-        profile,
-        recipient=recipient,
-        purpose=purpose,
-        watermark=watermark,
-    )
     built = _build_resume_root(paths, root, profile=profile, context=context)
     sanitized = sanitize_pdf(Path(built.result.pdf))
     expected_images = 1 if profile == "application" and root.avatar is not None else 0
-    privacy = audit_pdf(paths.project_root, sanitized, expected_images=expected_images)
-    identity = _read_identity(root)
+    privacy = audit_pdf(
+        paths.project_root,
+        sanitized,
+        expected_images=expected_images,
+        allow_mailto=profile == "application",
+    )
     _validate_export_projection(
         extract_pdf_text(sanitized),
         profile=profile,
@@ -521,6 +535,7 @@ def export_resume(
                     "schema_version": 1,
                     "created_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
                     "resume": root.name,
+                    "language": root.language,
                     "profile": profile,
                     "export_date": context.export_date,
                     "export_id": context.export_id,
@@ -647,8 +662,10 @@ def _resolve_resume_source(paths: ProjectPaths, source: Path) -> ResolvedResumeR
     if not source.is_file() or source.suffix.lower() != ".tex":
         raise ValueError(f"resume source is missing or is not TeX: {source}")
     source_text = source.read_text(encoding="utf-8-sig")
-    if not _DOCUMENT_CLASS.search(_strip_tex_comments(source_text)):
+    stripped_source = _strip_tex_comments(source_text)
+    if not _DOCUMENT_CLASS.search(stripped_source):
         raise ValueError(f"resume source must use \\documentclass{{career-os}}: {source}")
+    language = _resume_language(stripped_source)
     if _FONT_DEFINITION.search(_strip_tex_comments(source_text)):
         raise ValueError(
             "resume font roles must be configured in career-os.toml, not a TeX root"
@@ -666,6 +683,7 @@ def _resolve_resume_source(paths: ProjectPaths, source: Path) -> ResolvedResumeR
     audit_tex_bundle(paths.project_root, texts, declared_inputs={"identity.tex"})
     temporary = ResolvedResumeRoot(
         name=_resume_name(source),
+        language=language,
         source_root=source.parent,
         source=source,
         identity=identity,
@@ -677,6 +695,7 @@ def _resolve_resume_source(paths: ProjectPaths, source: Path) -> ResolvedResumeR
         _verify_avatar(avatar)
     return ResolvedResumeRoot(
         name=temporary.name,
+        language=temporary.language,
         source_root=temporary.source_root,
         source=temporary.source,
         identity=temporary.identity,
@@ -1028,7 +1047,7 @@ def _export_context(
     watermark_value = _normalize_export_field("watermark", watermark)
     now = datetime.now(UTC)
     prefix = "HC" if profile == "preview" else "AP"
-    export_id = f"{prefix}-{now:%Y%m%d}-{secrets.token_hex(4).upper()}"
+    export_id = f"{prefix}-{now:%Y%m%d}-{secrets.token_hex(2).upper()}"
     if not _EXPORT_ID.fullmatch(export_id):
         raise ValueError("generated export ID is invalid")
     return ExportContext(
@@ -1039,6 +1058,68 @@ def _export_context(
         export_date=now.date().isoformat(),
         export_id=export_id,
     )
+
+
+def _resume_language(source_text: str) -> str:
+    match = _DOCUMENT_CLASS.search(source_text)
+    if match is None:
+        raise ValueError("resume source must use \\documentclass{career-os}")
+    language = "en"
+    observed = False
+    for raw_option in (match.group("options") or "").split(","):
+        option = raw_option.strip()
+        if not option:
+            continue
+        key, separator, value = option.partition("=")
+        if key.strip().lower() != "language":
+            continue
+        if observed:
+            raise ValueError("resume source declares language more than once")
+        observed = True
+        if not separator or not value.strip():
+            raise ValueError("resume source language option must have one BCP 47 value")
+        language = value.strip()
+    if not _BCP47.fullmatch(language):
+        raise ValueError(f"resume source language must be one BCP 47 tag: {language!r}")
+    return language
+
+
+def _default_export_filename(
+    root: ResolvedResumeRoot,
+    *,
+    identity: ResumeIdentity,
+    context: ExportContext,
+) -> str:
+    profile_code = "HC" if context.profile == "preview" else "AP"
+    export_date = context.export_date.replace("-", "")
+    random_id = context.export_id.rsplit("-", 1)[-1]
+    track = "".join(
+        segment[:1].upper() + segment[1:]
+        for segment in re.split(r"[-_.]+", root.name)
+        if segment
+    )
+    components = (
+        _export_filename_component("name", identity.full_name),
+        _export_filename_component("track", track),
+        profile_code,
+        root.language,
+        export_date,
+        random_id,
+    )
+    return "-".join(components) + ".pdf"
+
+
+def _export_filename_component(label: str, value: str) -> str:
+    normalized = re.sub(r"\s+", "-", value.strip())
+    if (
+        not normalized
+        or normalized in {".", ".."}
+        or len(normalized) > 80
+        or re.search(r'[<>:"/\\|?*\x00-\x1f\x7f]', normalized)
+        or normalized.endswith((".", " "))
+    ):
+        raise ValueError(f"resume export {label} is unsafe for a portable filename")
+    return normalized
 
 
 def _normalize_export_field(name: str, value: str | None) -> str:

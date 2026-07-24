@@ -40,8 +40,9 @@ Generated exports require explicit authorization and an artifact checksum.
 ## Change Rules
 
 Keep wording proportional to evidence and contribution boundaries. Do not expose
-private-sensitive material, unsupported metrics, hidden attribution, external links,
-or application state. Editing or exporting locally never authorizes sending, upload,
+private-sensitive material, unsupported metrics, hidden attribution, unreviewed or
+unsafe external links, or application state. Reviewed resume links remain interactive
+in exported PDFs. Editing or exporting locally never authorizes sending, upload,
 platform mutation, or application.
 
 ## Completion Gate

@@ -63,13 +63,60 @@ def test_resume_list_rejects_duplicate_derived_names(tmp_path: Path) -> None:
         list_resumes(paths)
 
 
-def test_export_cli_uses_resume_name_and_fixed_profiles() -> None:
-    result = CliRunner().invoke(app, ["resume", "export", "--help"])
-    help_text = Text.from_ansi(result.stdout).plain
+def test_export_cli_uses_safe_defaults_and_hidden_legacy_flags(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    paths = _paths(tmp_path)
+    calls: list[dict[str, object]] = []
 
-    assert result.exit_code == 0
+    class Result:
+        def as_dict(self) -> dict[str, bool]:
+            return {"exported": True}
+
+    def fake_export(_paths: ProjectPaths, **kwargs: object) -> Result:
+        assert _paths == paths
+        calls.append(kwargs)
+        return Result()
+
+    monkeypatch.setattr("career_os.cli.resume.resolve_paths", lambda _root: paths)
+    monkeypatch.setattr("career_os.cli.resume.export_resume", fake_export)
+    runner = CliRunner()
+
+    preview = runner.invoke(app, ["resume", "export"])
+    application = runner.invoke(
+        app,
+        ["resume", "export", "application", "--resume", "agent-platform"],
+    )
+    legacy = runner.invoke(
+        app,
+        [
+            "resume",
+            "export",
+            "--profile",
+            "preview",
+            "--resume",
+            "en",
+            "--output",
+            str(tmp_path / "legacy.pdf"),
+        ],
+    )
+    help_result = runner.invoke(app, ["resume", "export", "--help"])
+    help_text = Text.from_ansi(help_result.stdout).plain
+
+    assert preview.exit_code == application.exit_code == legacy.exit_code == 0
+    assert calls[0]["resume"] == "general"
+    assert calls[0]["profile"] == "preview"
+    assert calls[0]["output"] is None
+    assert calls[0]["confirm_application"] is False
+    assert calls[1]["resume"] == "agent-platform"
+    assert calls[1]["profile"] == "application"
+    assert calls[1]["confirm_application"] is True
+    assert calls[2]["profile"] == "preview"
+    assert calls[2]["output"] == tmp_path / "legacy.pdf"
+    assert help_result.exit_code == 0
     assert "--resume" in help_text
-    assert "--profile" in help_text
+    assert "--profile" not in help_text
+    assert "--confirm-application" not in help_text
     assert "--variant" not in help_text
     assert "--manifest" not in help_text
 

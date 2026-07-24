@@ -42,11 +42,13 @@
     "system/tests/test_resume.py": [
       "9503c3ebde780a75c0c97782403438069f8ebac3886581cea80d3e68a38f5bfe",
       "d26f2a79385ee6940e8b093b7966de0010d5d075cdda5ac6f52a87467df40d79",
-      "b05be1b5dc44150667892892c8f7a554eae337a09a163e43d7054b083cb3f0d7"
+      "b05be1b5dc44150667892892c8f7a554eae337a09a163e43d7054b083cb3f0d7",
+      "0cea86367459cca0eb0d9ca899f080abd7118d05b9779a016708ac5ecf87a93d"
     ],
     "system/tests/test_resume_adversarial.py": [
       "34bc84ff740ea04b171cf6e589921a75f48247004924329d331eb1b8b897cb1c",
-      "889a3c4e2d78be17b112774b5d649dc4edac1dfa01156ffe2c1830e2585315e3"
+      "889a3c4e2d78be17b112774b5d649dc4edac1dfa01156ffe2c1830e2585315e3",
+      "2fcb80a44fba019f262544f32b3f4a8ee4c63f7dc961ee804a853d4cccc79d33"
     ],
     "system/tests/test_resume_fonts.py": [
       "06d3469b12375f18e9c7ecbbd1220973a40d4fd69cacbc000b26c29b77829dda",
@@ -56,7 +58,8 @@
     ],
     "system/tests/test_resume_variants.py": [
       "6a2b78961b842b408dc79207f9a10258fb394c2ba35a3065de58a177eca41234",
-      "71c5737b813da341ce818f215d77bfc256be7fab6cc8ac656bd3ad65721a39e0"
+      "71c5737b813da341ce818f215d77bfc256be7fab6cc8ac656bd3ad65721a39e0",
+      "7b5aebcaf6bbf9891c04b3b8729e24b5ef1d632844f4a22125802f94d3c8231d"
     ],
     "system/tests/test_resume_work_experience.py": [
       "6532fb61d3c6eae014eb0a9e327deb8e7e6960dd3289e0625815932402b5d528",

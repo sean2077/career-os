@@ -30,13 +30,13 @@ Career OS keeps career evidence, strategy, market sensing, opportunity decisions
 
 ### Agent-native architecture
 
-[![Career OS architecture map](docs/assets/career-map.png)](system/obsidian/career-map.canvas)
+[![Career OS architecture map](docs/assets/career-map.png)](docs/assets/career-map.png)
 
 [Open the full-size PNG](docs/assets/career-map.png) · [Open the source Canvas](system/obsidian/career-map.canvas)
 
 ### Outcome-first workflow guide
 
-[![Career OS outcome-first workflow guide](docs/assets/career-guide.png)](system/obsidian/career-guide.canvas)
+[![Career OS outcome-first workflow guide](docs/assets/career-guide.png)](docs/assets/career-guide.png)
 
 [Open the full-size PNG](docs/assets/career-guide.png) · [Open the source Canvas](system/obsidian/career-guide.canvas)
 

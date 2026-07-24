@@ -211,13 +211,18 @@ committed changelog. The workflow publishes no generated or fallback notes.
 
 Resume commands use user-owned handwritten TeX sources. `resume list` discovers
 roots containing `\documentclass{career-os}` recursively; `resume build
---resume NAME` creates only ignored internal output. `resume export --resume
-NAME --profile preview|application` is the atomic no-overwrite publication
-boundary; application also requires approved claims, target and identity
-records, plus `--confirm-application`. The fixed source convention permits only
-the root, adjacent `identity.tex`, and an optional application avatar. Preview
-exports exclude contact details and avatars, and every export receives an ID
-plus a receipt with hashes computed from the inputs actually built. `resume
+--resume NAME` creates only ignored internal output. `resume export` defaults
+to the `general` root, the safer `preview` profile, and a unique destination
+under `build/share/`; `--resume` and `--output` override those conventions.
+Automatic filenames order the human-facing identity, track, `HC`/`AP` profile,
+root-declared language, UTC date, and four-character random ID. The filename,
+PDF, and receipt use the same random segment.
+`resume export application` is the explicit CLI confirmation for the
+application profile and additionally requires approved claims, target, and
+identity records. The fixed source convention permits only the root, adjacent
+`identity.tex`, and an optional application avatar. Preview exports exclude
+contact details and avatars, and every export receives an ID plus a receipt
+with hashes computed from the inputs actually built. `resume
 work-experience` writes only an ignored temporary Markdown copy aid. The class
 owns default fonts; optional project-wide filenames live in `career-os.toml`
 and resolve without content pins, generated macros live under

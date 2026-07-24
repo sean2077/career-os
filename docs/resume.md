@@ -58,6 +58,9 @@ editor previews under `build/vscode/`. Editor PDFs remain internal; only
 
 `resume list` recursively finds `.tex` files containing
 `\documentclass{career-os}`. Each root uses the adjacent `identity.tex`.
+Each root owns exactly one BCP 47 language through the optional class setting
+`\documentclass[language=zh-CN]{career-os}`; an omitted setting defaults to
+`en`.
 
 - `general.tex` is named `general`.
 - `agent-platform.tex` is named `agent-platform`.
@@ -85,28 +88,39 @@ render-transparent evidence bindings.
 The two supported PDF profiles are fixed in the tool:
 
 ```text
-uv run career-os resume export --resume general --profile preview --output <new-preview.pdf>
-uv run career-os resume export --resume general --profile application --output <new-application.pdf> --confirm-application
+uv run career-os resume export
+uv run career-os resume export application
+uv run career-os resume export application --resume agent-platform --recipient <company> --purpose <role>
 ```
 
-Use different output paths to keep any number of generated PDF versions.
-`--recipient`, `--purpose`, and `--watermark` add one invocation's export
-context. Destinations are published atomically and never overwritten.
+The no-argument command exports the `general` resume with the safer `preview`
+profile. The explicit `application` argument is the CLI confirmation for an
+application-grade export. Output defaults to a unique ID-bearing PDF under
+`build/share/`; `--output` selects another new path when needed. Automatic
+filenames use
+`<Name>-<Track>-<HC|AP>-<Lang>-<YYYYMMDD>-<RandomID>.pdf`, where `HC` is the
+preview profile, `AP` is the application profile, and `RandomID` is four
+uppercase hexadecimal characters. The filename, PDF, and receipt use the same
+four-character random segment.
+`--recipient` and `--purpose` add one invocation's export context. Destinations
+are published atomically and never overwritten.
 
 Preview includes the name and reviewed public links but excludes email, phone,
 mailto links, and the avatar. Application includes the approved full identity
 and an optional PNG or JPEG named by `\ResumeAvatarAsset` in `identity.tex`.
-The final exporter removes PDF links and unsafe metadata, audits the sanitized
-artifact, and writes an ignored receipt containing computed source, identity,
-avatar, and PDF hashes.
+The final exporter preserves reviewed HTTPS, application `mailto:`, and internal
+PDF links while removing unsafe metadata. Its final audit rejects attachments,
+additional actions, and link actions outside HTTPS, `mailto:`, or internal
+navigation. The ignored receipt contains computed source, identity, avatar, and
+PDF hashes.
 
 The matching `communication.resume` record remains the policy authority. Its
 required `uses-claim`, `target-jd`, and `identity-profile` references replace
 the duplicated IDs formerly stored beside TeX. Application export additionally
-requires an application-ready record, `--confirm-application`, a reviewed
-target JD with unchanged source body, an approved application identity, and
-approved evidence-backed claims. Every application experience bullet must bind
-at least one claim.
+requires an explicit prompt-time request followed by the `application` CLI
+argument, an application-ready record, a reviewed target JD with unchanged
+source body, an approved application identity, and approved evidence-backed
+claims. Every application experience bullet must bind at least one claim.
 
 Creating a PDF never authorizes sending, uploading, applying, messaging, or
 changing an external account.

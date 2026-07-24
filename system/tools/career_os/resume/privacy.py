@@ -9,6 +9,7 @@ import subprocess
 from dataclasses import asdict, dataclass
 from pathlib import Path, PurePosixPath
 from typing import Any, BinaryIO
+from urllib.parse import urlsplit
 
 from pydantic import BaseModel, ConfigDict, Field
 from pypdf import PdfReader, PdfWriter
@@ -75,7 +76,6 @@ def audit_tex_source(project_root: Path, text: str) -> tuple[str, ...]:
     if failures:
         raise ValueError("resume source failed export checks: " + ", ".join(failures))
     return (
-        "source-links-confined-to-final-pdf-sanitization",
         "source-no-attachments-or-images",
         "source-no-file-or-shell-primitives",
         "source-no-configured-secrets",
@@ -126,7 +126,6 @@ def audit_tex_bundle(
         raise ValueError("resume source bundle failed export checks: " + ", ".join(failures))
     return (
         "source-dependencies-declared-and-used",
-        "source-links-confined-to-final-pdf-sanitization",
         "source-no-attachments-or-images",
         "source-no-undeclared-file-or-shell-primitives",
         "source-no-configured-secrets",
@@ -134,7 +133,11 @@ def audit_tex_bundle(
 
 
 def audit_pdf(
-    project_root: Path, source: Path | bytes, *, expected_images: int = 0
+    project_root: Path,
+    source: Path | bytes,
+    *,
+    expected_images: int = 0,
+    allow_mailto: bool = True,
 ) -> PrivacyReport:
     reader = _reader(source)
     if reader.is_encrypted:
@@ -170,9 +173,17 @@ def audit_pdf(
             action = _resolve(annotation.get("/A"))
             if subtype == "/FileAttachment":
                 failures.append(f"attachment-annotation:page-{index}")
-            if subtype == "/Link" or annotation.get("/Dest") is not None:
-                failures.append(f"link:page-{index}")
-            if hasattr(action, "get") or annotation.get("/AA") is not None:
+            if annotation.get("/AA") is not None:
+                failures.append(f"action:page-{index}")
+            if subtype == "/Link":
+                _audit_link_annotation(
+                    annotation,
+                    action,
+                    page=index,
+                    allow_mailto=allow_mailto,
+                    failures=failures,
+                )
+            elif hasattr(action, "get") or annotation.get("/Dest") is not None:
                 failures.append(f"action:page-{index}")
 
     text = extract_pdf_text(source)
@@ -188,7 +199,7 @@ def audit_pdf(
         checks=(
             "pdf-no-unsafe-document-metadata",
             "pdf-no-xmp-metadata",
-            "pdf-no-external-links",
+            "pdf-links-preserved-and-audited",
             "pdf-expected-image-count",
             "pdf-no-configured-secrets",
         ),
@@ -224,11 +235,38 @@ def sanitize_pdf(source: Path) -> bytes:
     writer = PdfWriter()
     for page in reader.pages:
         writer.add_page(page)
-    writer.remove_links()
     writer.add_metadata({"/Creator": "Career OS", "/Producer": "Career OS"})
     output = io.BytesIO()
     writer.write(output)
     return output.getvalue()
+
+
+def _audit_link_annotation(
+    annotation: Any,
+    action: Any,
+    *,
+    page: int,
+    allow_mailto: bool,
+    failures: list[str],
+) -> None:
+    destination = annotation.get("/Dest")
+    if destination is not None:
+        if hasattr(action, "get"):
+            failures.append(f"ambiguous-link-target:page-{page}")
+        return
+    if not hasattr(action, "get"):
+        failures.append(f"missing-link-target:page-{page}")
+        return
+    action_type = str(action.get("/S", ""))
+    if action_type == "/GoTo":
+        return
+    if action_type != "/URI":
+        failures.append(f"unsafe-link-action:{action_type or 'missing'}:page-{page}")
+        return
+    uri = str(action.get("/URI", "")).strip()
+    allowed_schemes = {"https", "mailto"} if allow_mailto else {"https"}
+    if urlsplit(uri).scheme.casefold() not in allowed_schemes:
+        failures.append(f"unsafe-link-uri:page-{page}")
 
 
 def pdf_tool_candidates(name: str) -> list[Path]:

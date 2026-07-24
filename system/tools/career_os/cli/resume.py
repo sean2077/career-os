@@ -107,17 +107,19 @@ def build_command(
 
 @app.command("export")
 def export_command(
-    resume: Annotated[str, typer.Option(help="Discovered resume name.")],
-    profile: Annotated[str, typer.Option(help="Fixed export profile: preview or application.")],
-    output: Annotated[Path, typer.Option(help="New shareable PDF destination.")],
+    profile: Annotated[
+        str,
+        typer.Argument(help="Fixed export profile: preview or application."),
+    ] = "preview",
+    resume: Annotated[
+        str,
+        typer.Option(help="Discovered resume name."),
+    ] = "general",
+    output: Annotated[
+        Path | None,
+        typer.Option(help="Optional PDF destination; defaults under build/share/."),
+    ] = None,
     root: Annotated[Path, typer.Option(help="Path inside the Career OS project.")] = Path("."),
-    confirm_application: Annotated[
-        bool,
-        typer.Option(
-            "--confirm-application",
-            help="Confirm this explicit application-grade export request.",
-        ),
-    ] = False,
     recipient: Annotated[
         str | None,
         typer.Option(help="Optional recipient printed into the export context."),
@@ -128,20 +130,35 @@ def export_command(
     ] = None,
     watermark: Annotated[
         str | None,
-        typer.Option(help="Override the fixed profile's default watermark."),
+        typer.Option(help="Override the fixed profile's default watermark.", hidden=True),
     ] = None,
+    legacy_profile: Annotated[
+        str | None,
+        typer.Option("--profile", hidden=True),
+    ] = None,
+    confirm_application: Annotated[
+        bool,
+        typer.Option("--confirm-application", hidden=True),
+    ] = False,
 ) -> None:
     """Build, validate, sanitize, and write a new shareable PDF."""
-    if profile not in {"preview", "application"}:
-        raise typer.BadParameter("profile must be preview or application", param_hint="--profile")
-    selected = cast(Literal["preview", "application"], profile)
+    selected_value = legacy_profile or profile
+    if selected_value not in {"preview", "application"}:
+        raise typer.BadParameter(
+            "profile must be preview or application",
+            param_hint="PROFILE",
+        )
+    selected = cast(Literal["preview", "application"], selected_value)
+    application_confirmed = confirm_application or (
+        legacy_profile is None and selected == "application"
+    )
     try:
         result = export_resume(
             resolve_paths(root),
             resume=resume,
             profile=selected,
             output=output,
-            confirm_application=confirm_application,
+            confirm_application=application_confirmed,
             recipient=recipient,
             purpose=purpose,
             watermark=watermark,

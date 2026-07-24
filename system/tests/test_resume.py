@@ -24,7 +24,8 @@ from career_os.resume.service import (
     new_resume,
     validate_resume_source,
 )
-from pypdf import PdfWriter
+from pypdf import PdfReader, PdfWriter
+from pypdf.annotations import Link
 
 
 def _paths(root: Path) -> ProjectPaths:
@@ -163,7 +164,7 @@ def test_font_fetch_verifies_hash_and_refuses_changed_existing_file(
 
 def test_privacy_checks_reject_source_secrets_and_pdf_metadata(tmp_path: Path) -> None:
     _write_privacy_patterns(tmp_path)
-    assert "source-links-confined-to-final-pdf-sanitization" in audit_tex_source(
+    assert "source-no-attachments-or-images" in audit_tex_source(
         tmp_path, r"\href{https://example.test}{link}"
     )
     with pytest.raises(ValueError, match="secret:test-token"):
@@ -182,6 +183,45 @@ def test_privacy_checks_reject_source_secrets_and_pdf_metadata(tmp_path: Path) -
     report = audit_pdf(tmp_path, clean)
     assert report.pages == 1
     assert report.images == 0
+
+
+def test_pdf_sanitization_preserves_safe_links_and_rejects_unsafe_uris(
+    tmp_path: Path,
+) -> None:
+    _write_privacy_patterns(tmp_path)
+    linked = tmp_path / "linked.pdf"
+    writer = PdfWriter()
+    writer.add_blank_page(width=100, height=100)
+    writer.add_blank_page(width=100, height=100)
+    writer.add_annotation(0, Link(rect=(0, 0, 20, 20), url="https://example.test"))
+    writer.add_annotation(0, Link(rect=(20, 0, 40, 20), url="mailto:alex@example.test"))
+    writer.add_annotation(0, Link(rect=(40, 0, 60, 20), target_page_index=1))
+    with linked.open("wb") as handle:
+        writer.write(handle)
+
+    sanitized = sanitize_pdf(linked)
+    reader = PdfReader(io.BytesIO(sanitized))
+    link_targets = []
+    for reference in reader.pages[0].get("/Annots", []):
+        annotation = reference.get_object()
+        action = annotation.get("/A")
+        link_targets.append(
+            str(action.get("/S")) if action is not None else "/Dest"
+        )
+    assert link_targets == ["/URI", "/URI", "/Dest"]
+    with pytest.raises(ValueError, match="unsafe-link-uri"):
+        audit_pdf(tmp_path, sanitized, allow_mailto=False)
+    report = audit_pdf(tmp_path, sanitized, allow_mailto=True)
+    assert "pdf-links-preserved-and-audited" in report.checks
+
+    unsafe = tmp_path / "unsafe-link.pdf"
+    writer = PdfWriter()
+    writer.add_blank_page(width=100, height=100)
+    writer.add_annotation(0, Link(rect=(0, 0, 20, 20), url="file:///private.txt"))
+    with unsafe.open("wb") as handle:
+        writer.write(handle)
+    with pytest.raises(ValueError, match="unsafe-link-uri"):
+        audit_pdf(tmp_path, unsafe)
 
 
 def test_pdf_text_extraction_prefers_poppler_for_cjk_fonts(

@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 import base64
+import re
 from pathlib import Path
 
 import pytest
 from career_os.config import ProjectPaths
 from career_os.resume.service import (
     BuildResult,
+    ExportContext,
     _BuiltResume,
     _export_context,
     export_resume,
@@ -37,12 +39,19 @@ def _write_privacy_patterns(root: Path) -> None:
     target.write_text("[]\n", encoding="utf-8")
 
 
-def _create_root(paths: ProjectPaths, *, name: str, avatar: str = "") -> Path:
+def _create_root(
+    paths: ProjectPaths,
+    *,
+    name: str,
+    avatar: str = "",
+    language: str | None = None,
+) -> Path:
     root = paths.data_root / f"70-career-communication/resumes/{name}"
     root.mkdir(parents=True)
     source = root / "resume.tex"
+    class_options = f"[language={language}]" if language is not None else ""
     source.write_text(
-        "\\documentclass{career-os}\n"
+        f"\\documentclass{class_options}{{career-os}}\n"
         "\\input{identity}\n"
         "\\begin{document}Synthetic resume.\\end{document}\n",
         encoding="utf-8",
@@ -100,7 +109,35 @@ def test_malformed_and_ambiguous_avatar_files_are_rejected(tmp_path: Path) -> No
         validate_resume_source(paths, source)
 
 
-def test_export_context_rejects_injection_and_oversize() -> None:
+def test_resume_language_defaults_to_en_and_rejects_invalid_tags(tmp_path: Path) -> None:
+    paths = _paths(tmp_path)
+    _write_privacy_patterns(tmp_path)
+    default_source = _create_root(paths, name="default-language")
+    validate_resume_source(paths, default_source)
+
+    explicit_source = _create_root(paths, name="explicit-language", language="zh-CN")
+    validate_resume_source(paths, explicit_source)
+
+    invalid_source = _create_root(paths, name="invalid-language", language="../zh-CN")
+    with pytest.raises(ValueError, match="one BCP 47 tag"):
+        validate_resume_source(paths, invalid_source)
+
+
+def test_export_context_uses_four_character_id_and_rejects_invalid_fields(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(
+        "career_os.resume.service.secrets.token_hex",
+        lambda byte_count: "a1b2" if byte_count == 2 else pytest.fail("unexpected ID size"),
+    )
+    context = _export_context(
+        "preview",
+        recipient=None,
+        purpose=None,
+        watermark=None,
+    )
+    assert re.fullmatch(r"HC-\d{8}-A1B2", context.export_id)
+
     with pytest.raises(ValueError, match="unsafe TeX"):
         _export_context(
             "preview",
@@ -122,7 +159,7 @@ def test_receipt_failure_removes_shareable_output(
 ) -> None:
     paths = _paths(tmp_path)
     _write_privacy_patterns(tmp_path)
-    source = _create_root(paths, name="receipt-failure")
+    source = _create_root(paths, name="receipt-failure", language="zh-CN")
     built = tmp_path / "built.pdf"
     writer = PdfWriter()
     writer.add_blank_page(width=100, height=100)
@@ -144,21 +181,37 @@ def test_receipt_failure_removes_shareable_output(
         "career_os.resume.service._validate_export_projection",
         lambda *_args, **_kwargs: None,
     )
+    context = ExportContext(
+        profile="preview",
+        recipient="",
+        purpose="",
+        watermark="",
+        export_date="2026-07-24",
+        export_id="HC-20260724-A1B2",
+    )
+    monkeypatch.setattr(
+        "career_os.resume.service._export_context",
+        lambda *_args, **_kwargs: context,
+    )
+    output = (
+        paths.build_root
+        / "share"
+        / "Alex-Morgan-ReceiptFailure-HC-zh-CN-20260724-A1B2.pdf"
+    )
     original_write_text = Path.write_text
 
     def fail_receipt(path: Path, *args: object, **kwargs: object) -> int:
         if path.parent.name == "export-receipts":
+            assert output.is_file()
             raise OSError("synthetic receipt failure")
         return original_write_text(path, *args, **kwargs)
 
     monkeypatch.setattr(Path, "write_text", fail_receipt)
-    output = tmp_path / "shareable.pdf"
     with pytest.raises(OSError, match="synthetic receipt failure"):
         export_resume(
             paths,
             resume="receipt-failure",
             profile="preview",
-            output=output,
             confirm_application=False,
         )
     assert not output.exists()

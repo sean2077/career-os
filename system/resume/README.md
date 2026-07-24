@@ -19,6 +19,11 @@ file named `resume.tex`, is the CLI name. The adjacent `identity.tex` and an
 optional local avatar complete the fixed source convention; no resume manifest
 or template selector is required.
 
+A root may declare its single BCP 47 content language with
+`\documentclass[language=zh-CN]{career-os}`. The class and CLI default to `en`
+when the option is omitted. The declaration also owns PDF language metadata and
+the language segment in automatic export filenames.
+
 Personal roots may override the class font filename macros before
 `\documentclass`. Owner-provided binaries stay only in ignored
 `.career-os/fonts/`, which the CLI and `latexmkrc` search recursively.
