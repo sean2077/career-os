@@ -85,6 +85,41 @@ profile; worktree and trunk-guard governance are intentionally disabled.
   record Wikilinks are resolved by the full check.
 - `paths --json` reports `vault_mount_root` when an external sibling project is projected through a configured Vault-relative symlink.
 
+### Test growth discipline
+
+Test count and wall time are maintained budgets, not measures of completeness.
+A code change does not earn a new test by default. Before adding one:
+
+- Name the distinct externally observable behavior, regression, or high-risk
+  boundary that would otherwise remain unprotected.
+- Use the narrowest stable seam that callers rely on. Prefer a public CLI,
+  service, model, or file contract over implementation details and call
+  choreography.
+- Search existing tests and deterministic checks first. Extend, consolidate, or
+  replace existing coverage when it can detect the same failure; do not stack a
+  pytest wrapper around `career-os check`, a host check, resume compilation, or a
+  release/privacy gate.
+- Add one failing vertical slice at a time. Do not prebuild speculative test
+  matrices, duplicate happy paths, tautological assertions, or cases added only
+  to increase coverage.
+- Treat subprocesses, temporary Git repositories, whole-workspace scans, TeX
+  compilation, host applications, and network access as slow boundaries. Keep a
+  new slow test in the default suite only when a cheaper layer cannot protect the
+  distinct risk, and consolidate expensive setup across related assertions.
+
+Direct tests of private helpers are exceptional: the helper must express a
+stable policy, a public-behavior test must prove the wiring, and the direct test
+must replace materially more expensive duplicate setup. Test doubles may isolate
+an independently tested boundary, but must not assert internal call sequences.
+When behavior is removed or one test subsumes another, delete or merge the stale
+coverage in the same change. Any net growth in collected tests or suite time must
+be justified by the newly protected behavior.
+
+These rules adapt the behavior-seam and vertical-slice guidance from Matt
+Pocock's [TDD Skill](https://github.com/mattpocock/skills/blob/ed37663cc5fbef691ddfecd080dff42f7e7e350d/skills/engineering/tdd/SKILL.md),
+reviewed on 2026-07-24, while preserving Career OS's separate deterministic and
+high-risk gates.
+
 Both check depths validate the deterministic CycloneDX SBOM, notices, real
 Agent harness symlinks, ignored-state boundary, and executable placement. CI
 runs the core gate on Windows, Ubuntu, and macOS; an Ubuntu job additionally

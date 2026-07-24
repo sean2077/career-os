@@ -38,11 +38,9 @@ jobs:
       - run: uv run mypy system/tools/career_os
       - name: Run the full Python suite
         run: uv run pytest
-      - name: Assert a clean checkout for the golden journey
+      - name: Assert tests leave a clean checkout
         shell: bash
         run: test -z "$(git status --porcelain)"
-      - name: Validate the clean-install golden journey
-        run: uv run pytest -q system/tests/test_golden_journey.py
       - run: uv run career-os skills verify
       - run: uv run career-os check --fast
       - run: uv run career-os check

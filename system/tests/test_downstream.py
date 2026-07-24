@@ -88,14 +88,14 @@ def _clone_downstream(source: Path, target: Path) -> None:
 
 
 def test_integrated_workbench_rejects_downstream_sync(
-    repositories: tuple[Path, Path],
+    tmp_path: Path,
 ) -> None:
-    source, target = repositories
-    source_commit = _update_source(source)
+    target = tmp_path / "career-home"
+    source_commit = _write_source(target)
     config = target / "career-os.toml"
     config.write_text(
         config.read_text(encoding="utf-8").replace(
-            'development_topology = "split-downstream"',
+            'development_topology = "standalone-framework"',
             'development_topology = "integrated-workbench"',
         ),
         encoding="utf-8",
@@ -106,7 +106,7 @@ def test_integrated_workbench_rejects_downstream_sync(
         create_downstream_sync_plan(
             resolve_paths(target),
             source_kind="local",
-            source_root=source,
+            source_root=tmp_path / "unused-source",
             commit=source_commit,
             tag=None,
         )
@@ -135,29 +135,6 @@ def repositories(
         downstream, "_require_downstream_safety", lambda _root, **_kwargs: None
     )
     return source, target
-
-
-def test_local_source_sync_does_not_require_public_upstream(tmp_path: Path) -> None:
-    source = tmp_path / "career-os"
-    target = tmp_path / "career-home"
-    _write_source(source)
-    _clone_downstream(source, target)
-    _git(target, "remote", "remove", "upstream")
-    source_commit = _update_source(source)
-
-    plan, plan_path = create_downstream_sync_plan(
-        resolve_paths(target),
-        source_kind="local",
-        source_root=source,
-        commit=source_commit,
-        tag=None,
-    )
-    applied = apply_downstream_sync_plan(plan_path, resolve_paths(target))
-    rolled_back = rollback_downstream_sync_plan(plan_path, resolve_paths(target))
-
-    assert plan.source_kind == "local"
-    assert applied.applied_at is not None
-    assert rolled_back.rolled_back_at is not None
 
 
 def test_local_source_sync_supports_unrelated_git_histories(
@@ -271,6 +248,7 @@ def test_local_commit_plan_apply_and_rollback_preserve_private_data(
     repositories: tuple[Path, Path],
 ) -> None:
     source, target = repositories
+    _git(target, "remote", "remove", "upstream")
     source_commit = _update_source(source)
     target_head = _git(target, "rev-parse", "HEAD")
 
@@ -317,68 +295,69 @@ def test_local_commit_plan_apply_and_rollback_preserve_private_data(
     assert rerolled.rolled_back_at == rolled_back.rolled_back_at
 
 
-@pytest.mark.parametrize("reference_kind", ["commit", "tag"])
 def test_upstream_supports_exact_commit_and_annotated_tag(
-    repositories: tuple[Path, Path], reference_kind: str
+    repositories: tuple[Path, Path],
 ) -> None:
     source, target = repositories
     source_commit = _update_source(source)
-    commit: str | None = source_commit
-    tag: str | None = None
-    if reference_kind == "tag":
-        tag = "v1.0.0"
-        commit = None
-        _git(source, "tag", "-a", tag, "-m", "release v1.0.0")
+    tag = "v1.0.0"
+    _git(source, "tag", "-a", tag, "-m", "release v1.0.0")
 
-    plan, _plan_path = create_downstream_sync_plan(
-        resolve_paths(target),
-        source_kind="upstream",
-        source_root=None,
-        commit=commit,
-        tag=tag,
-    )
-
-    assert plan.source_kind == "upstream"
-    assert plan.reference_kind == reference_kind
-    assert plan.source_commit == source_commit
-    if tag is not None:
-        local_tag = subprocess.run(
-            ["git", "-C", str(target), "show-ref", "--verify", f"refs/tags/{tag}"],
-            check=False,
-            capture_output=True,
-            text=True,
+    for reference_kind, commit, requested_tag in (
+        ("commit", source_commit, None),
+        ("tag", None, tag),
+    ):
+        plan, _plan_path = create_downstream_sync_plan(
+            resolve_paths(target),
+            source_kind="upstream",
+            source_root=None,
+            commit=commit,
+            tag=requested_tag,
         )
-        assert local_tag.returncode != 0
+
+        assert plan.source_kind == "upstream"
+        assert plan.reference_kind == reference_kind
+        assert plan.source_commit == source_commit
+
+    local_tag = subprocess.run(
+        ["git", "-C", str(target), "show-ref", "--verify", f"refs/tags/{tag}"],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert local_tag.returncode != 0
 
 
-@pytest.mark.parametrize(
-    "protected_path",
-    [
+def test_source_commit_rejects_every_reserved_private_or_local_root(
+    repositories: tuple[Path, Path],
+) -> None:
+    source, target = repositories
+    protected_paths = (
         "career/private.md",
         ".career-os/private.json",
         ".obsidian/workspace.json",
         "runtime/cache.txt",
         "build/output.txt",
-    ],
-)
-def test_source_commit_rejects_every_reserved_private_or_local_root(
-    repositories: tuple[Path, Path], protected_path: str,
-) -> None:
-    source, target = repositories
-    private = source / protected_path
-    private.parent.mkdir()
-    private.write_text("must not sync\n", encoding="utf-8")
-    _git(source, "add", "-f", protected_path)
+    )
+    paths = resolve_paths(target)
+    for protected_path in protected_paths:
+        private = source / protected_path
+        private.parent.mkdir(exist_ok=True)
+        private.write_text("must not sync\n", encoding="utf-8")
+        _git(source, "add", "-f", protected_path)
     _git(source, "commit", "-m", "bad: add private data")
 
-    with pytest.raises(ValueError, match="tracks protected private or local state"):
+    with pytest.raises(
+        ValueError, match="tracks protected private or local state"
+    ) as error:
         create_downstream_sync_plan(
-            resolve_paths(target),
+            paths,
             source_kind="local",
             source_root=source,
             commit=_git(source, "rev-parse", "HEAD"),
             tag=None,
         )
+    assert all(protected_path in str(error.value) for protected_path in protected_paths)
 
 
 def test_plan_rejects_dirty_system_paths(repositories: tuple[Path, Path]) -> None:
@@ -429,40 +408,32 @@ def test_local_tag_must_be_annotated(repositories: tuple[Path, Path]) -> None:
         )
 
 
-def test_local_annotated_tag_does_not_create_target_tag(
-    repositories: tuple[Path, Path],
+def test_plan_requires_one_exact_reference(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    source, target = repositories
-    source_commit = _update_source(source)
-    _git(source, "tag", "-a", "v1.0.0", "-m", "release v1.0.0")
-
-    plan, _plan_path = create_downstream_sync_plan(
-        resolve_paths(target),
-        source_kind="local",
-        source_root=source,
-        commit=None,
-        tag="v1.0.0",
+    target = tmp_path / "career-home"
+    source_commit = _write_source(target)
+    config = target / "career-os.toml"
+    config.write_text(
+        config.read_text(encoding="utf-8").replace(
+            'development_topology = "standalone-framework"',
+            'development_topology = "split-downstream"',
+        ),
+        encoding="utf-8",
+        newline="\n",
     )
-
-    assert plan.source_commit == source_commit
-    local_tag = subprocess.run(
-        ["git", "-C", str(target), "show-ref", "--verify", "refs/tags/v1.0.0"],
-        check=False,
-        capture_output=True,
-        text=True,
+    _git(target, "add", "career-os.toml")
+    _git(target, "commit", "-m", "chore: enable split downstream")
+    _git(target, "switch", "-c", "sync/test")
+    monkeypatch.setattr(
+        downstream, "_require_downstream_safety", lambda _root, **_kwargs: None
     )
-    assert local_tag.returncode != 0
-
-
-def test_plan_requires_one_exact_reference(repositories: tuple[Path, Path]) -> None:
-    source, target = repositories
-    source_commit = _update_source(source)
 
     with pytest.raises(ValueError, match="full 40-character"):
         create_downstream_sync_plan(
             resolve_paths(target),
             source_kind="local",
-            source_root=source,
+            source_root=tmp_path / "unused-source",
             commit=source_commit[:12],
             tag=None,
         )
@@ -470,13 +441,15 @@ def test_plan_requires_one_exact_reference(repositories: tuple[Path, Path]) -> N
         create_downstream_sync_plan(
             resolve_paths(target),
             source_kind="local",
-            source_root=source,
+            source_root=tmp_path / "unused-source",
             commit=source_commit,
             tag="v1.0.0",
         )
 
 
-def test_apply_rejects_tampered_patch(repositories: tuple[Path, Path]) -> None:
+def test_apply_rejects_tampered_plan_or_patch(
+    repositories: tuple[Path, Path],
+) -> None:
     source, target = repositories
     source_commit = _update_source(source)
     plan, plan_path = create_downstream_sync_plan(
@@ -487,9 +460,19 @@ def test_apply_rejects_tampered_patch(repositories: tuple[Path, Path]) -> None:
         tag=None,
     )
     patch_path = plan_path.parent / plan.patch_file
-    patch_path.write_bytes(patch_path.read_bytes() + b"tampered\n")
+    original_patch = patch_path.read_bytes()
+    patch_path.write_bytes(original_patch + b"tampered\n")
 
     with pytest.raises(ValueError, match="patch hash"):
+        apply_downstream_sync_plan(plan_path, resolve_paths(target))
+
+    patch_path.write_bytes(original_patch)
+    payload = plan_path.read_text(encoding="utf-8").replace(
+        '"target_branch": "sync/test"', '"target_branch": "sync/tampered"'
+    )
+    plan_path.write_text(payload, encoding="utf-8")
+
+    with pytest.raises(ValueError, match="plan hash"):
         apply_downstream_sync_plan(plan_path, resolve_paths(target))
 
 
@@ -533,25 +516,6 @@ def test_apply_rejects_branch_or_path_drift(
         apply_downstream_sync_plan(plan_path, resolve_paths(target))
 
 
-def test_apply_rejects_tampered_plan(repositories: tuple[Path, Path]) -> None:
-    source, target = repositories
-    source_commit = _update_source(source)
-    _plan, plan_path = create_downstream_sync_plan(
-        resolve_paths(target),
-        source_kind="local",
-        source_root=source,
-        commit=source_commit,
-        tag=None,
-    )
-    payload = plan_path.read_text(encoding="utf-8").replace(
-        '"target_branch": "sync/test"', '"target_branch": "sync/tampered"'
-    )
-    plan_path.write_text(payload, encoding="utf-8")
-
-    with pytest.raises(ValueError, match="plan hash"):
-        apply_downstream_sync_plan(plan_path, resolve_paths(target))
-
-
 def test_validate_archives_applied_annotated_tag_evidence(
     repositories: tuple[Path, Path],
 ) -> None:
@@ -567,6 +531,14 @@ def test_validate_archives_applied_annotated_tag_evidence(
     )
     apply_downstream_sync_plan(plan_path, resolve_paths(target))
     output = target / ".career-os/downstream/downstream-sync.json"
+
+    local_tag = subprocess.run(
+        ["git", "-C", str(target), "show-ref", "--verify", "refs/tags/v1.0.0"],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert local_tag.returncode != 0
 
     validation = validate_downstream_sync_plan(plan_path, output, resolve_paths(target))
 
