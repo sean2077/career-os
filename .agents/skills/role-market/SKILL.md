@@ -31,10 +31,15 @@ cannot advance application or readiness state.
    retrieval date, quotations, and missing fields.
 3. Keep explicit requirements in `## JD 原文` and interpretation in
    `## 重新评价`; never create a second Screening Note for the same JD.
-4. Link evidence and readiness records by ID; do not infer readiness from a match
+4. Resolve an identified employer against canonical Company records. Compose
+   Opportunity Decision `research`: reuse a fresh, decision-complete Company;
+   otherwise create or refresh it, then link the JD's `company` property. Keep an
+   anonymous or ambiguous employer unresolved instead of guessing from its label.
+5. Link evidence and readiness records by ID; do not infer readiness from a match
    score or mechanism check.
-5. Keep screening independent from company decisions, application state, resume
-   tailoring, and interview preparation.
+6. Keep Company facts and assessment in Opportunity Decision. A linked Company
+   may inform JD priority, preference, and risk, but never JD evidence fit,
+   application state, resume tailoring, or interview readiness.
 
 Signed-in or fragile channels require user-prepared access and read-only work.
 Stop at login, security, redirect, blank, stale, refresh, or ambiguous state.

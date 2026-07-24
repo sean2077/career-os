@@ -25,8 +25,10 @@ remain protected source evidence.
 | Role Direction | `market.direction` | `directions/` |
 | JD instance | `market.jd` | `jds/YYYY-MM/` |
 
-Company quality and application progress belong to Opportunity Decision. Readiness
-and resume tailoring remain separate downstream judgments.
+Company quality and application progress belong to Opportunity Decision. An
+identified-employer screening consumes the canonical Company through a Wikilink
+without copying its facts. Readiness and resume tailoring remain separate
+downstream judgments.
 
 ## Lifecycle
 
@@ -38,8 +40,11 @@ JD: captured -> screened -> reviewed | skipped
 
 Each JD records its collection, employer label, location and compensation when
 the source explicitly provides them. `is_stale` records age independently from
-the screening lifecycle. When a Recruiting Scope has been resolved, the JD
-carries a `recruiting-scope` reference; an absent reference remains unresolved
+the screening lifecycle. When Company identity has been resolved, the JD carries
+a `company` reference; an anonymous or ambiguous employer remains explicitly
+unresolved rather than being guessed from its display label. When a Recruiting
+Scope has been resolved, the JD
+carries a `recruiting_scope` reference; an absent reference remains unresolved
 and cannot be guessed from display names.
 Source status is one of `full`, `partial`, `summary-only`, or `unavailable`;
 incomplete sources explicitly name their missing sections. Every JD stores the
@@ -49,12 +54,15 @@ detected while the reassessment section remains editable.
 ## Change Rules
 
 Do not rewrite source prose to fit a preferred narrative. Separate explicit
-requirements from interpretation. Never derive Company identity, application state,
-readiness, or Strategy from a display name or match score.
+requirements from interpretation. Resolve Company identity through Opportunity
+Decision research, never from a display name or match score. Never derive
+application state, readiness, or Strategy from a Company assessment.
 
 ## Completion Gate
 
 Market work is complete when channel freshness, source fidelity, dates,
 direction, evidence fit, priority, gaps, references, and review state are explicit
-and internally valid in the same JD Note. Dedicated Bases are retrieval views
-only; they never create a second factual authority.
+and internally valid in the same JD Note. For an identified employer, the JD also
+links a current-enough canonical Company or states the unresolved identity or
+research blocker explicitly. Dedicated Bases are retrieval views only; they never
+create a second factual authority.

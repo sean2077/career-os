@@ -13,6 +13,7 @@ Career OS is an Agent-native, local-first, embeddable career development operati
 
 - Start from the user's natural-language outcome and select or compose the seven Career Skills. Never ask the user to choose a Skill, mode, owner, worker, or validator.
 - Keep Career Evidence, Career Strategy, Role Market, Opportunity Decision, Career Outlook, Capability Readiness, and Career Communication as distinct canonical authorities. Cross-authority workflows use stable references rather than copied facts.
+- When analyzing a JD with an identified employer, compose Role Market with Opportunity Decision: resolve or refresh the canonical Company, link the JD by Wikilink, and keep Company assessment separate from JD evidence fit and event-backed application state.
 - Career Skills remain workflow and record owners. Project subagents are read-only reviewers; validate their JSON contracts before use, and treat unavailable, invalid, or leaked review as fallback that cannot grant readiness, claim approval, or strategy acceptance.
 - Write record schema 3 and its kind-specific lifecycle. Git-relative validation owns lifecycle transitions; plan, review, and explicitly apply migrations for older user records.
 - `ProjectConfig` is the `career-os.toml` authority. Any field, table, default, or enum change must update its serializer, regenerate `system/schemas/project-config.schema.json`, and update related tests and documentation in the same change; never hand-edit the schema independently.

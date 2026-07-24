@@ -24,7 +24,8 @@ employment Engagement may be marked as current employment.
 
 ## Workflow
 
-1. Reuse Company and Recruiting Scope records before creating an Engagement.
+1. Resolve and reuse Company and Recruiting Scope records before creating an
+   Engagement or linking a JD.
 2. Keep recruiter contact distinct from application state; unknown state remains
    unknown.
 3. Link the exact JD, screening, resume export, and readiness session by stable ID
@@ -32,6 +33,25 @@ employment Engagement may be marked as current employment.
 4. Record external events only from direct evidence or explicit user report.
 5. Keep the decision reversible unless the user explicitly authorizes the
    external action.
+
+## JD-triggered Company refresh
+
+When Role Market analyzes a specific JD with an identified employer, compose
+`research` before finalizing the screening:
+
+- Reuse the canonical Company only when its identity is resolved, its freshness
+  window is current, and the dimensions that could change this JD's priority or
+  risk are sufficiently covered.
+- Create or refresh the Company when it is absent, stale, past `refresh_due`, or
+  missing decision-critical evidence. At minimum separate official
+  self-description, public or independent evidence, inference, and unknowns;
+  record source dates and the next refresh boundary.
+- Link the JD to the Company by Wikilink. Do not copy Company facts into Role
+  Market, infer legal identity from a display label, or create a Recruiting Scope
+  until team, role, location, channel, and entity boundaries justify it.
+- Company assessment may change JD priority, preference, risk, or clarification
+  questions. It never changes JD evidence fit and never advances Engagement,
+  application, resume, or readiness state.
 
 ## Company research transports
 

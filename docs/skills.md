@@ -39,7 +39,10 @@ acceptance.
 
 The opportunity flow deliberately keeps JD screening, company/opportunity
 decision, application tracking, resume tailoring/export, and interview
-preparation/retest as five independently authoritative blocks.
+preparation/retest as five independently authoritative blocks. Screening an
+identified-employer JD composes `role-market` with `opportunity-decision` to
+resolve or refresh the canonical Company and link it back to the JD; Company
+quality may affect priority or risk but never evidence fit or application state.
 
 Bundled companion Skills `conventional-commit` and `agent-scaffold` come from [sean2077/skills](https://github.com/sean2077/skills). Optional recommendations from that project are `semver-release`, `project-docs-organizer`, and `tooling-conventions`.
 

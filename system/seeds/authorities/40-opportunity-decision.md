@@ -43,6 +43,12 @@ remain typed Opportunity fields. They are independent from event-backed
 application state and may be displayed through dedicated Bases without becoming
 a second authority.
 
+An identified-employer JD triggers Company resolution through this authority.
+Reuse a Company whose identity, freshness window, and decision-critical
+dimensions remain current; otherwise create or refresh it. Separate official
+self-description, public or independent evidence, inference, and unknowns, then
+link the JD rather than copying Company facts into Role Market.
+
 ## Change Rules
 
 Separate fact, inference, and unknown. Record external events only from direct
@@ -52,5 +58,6 @@ application state, and decision state independent.
 ## Completion Gate
 
 Opportunity work is complete when entity resolution, event chronology, application
-state, current-employment uniqueness, decision rationale, blockers, and references
-validate. External action remains separately authorized.
+state, current-employment uniqueness, decision rationale, Company source layers
+and freshness, blockers, and references validate. External action remains
+separately authorized.
