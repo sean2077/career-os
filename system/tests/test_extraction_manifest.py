@@ -15,6 +15,7 @@ SUPPLEMENT_PATHS = (
     "docs/releases/v0.3.0-extraction.json",
     "docs/releases/v0.3.1-extraction.json",
     "docs/releases/v0.4.0-extraction.json",
+    "docs/releases/v0.5.0-extraction.json",
 )
 
 
@@ -78,6 +79,17 @@ def test_public_extraction_manifest_is_complete_and_hash_bound() -> None:
         "self_exclusion": SUPPLEMENT_PATHS[3],
         "entries": supplements[3]["entries"],
     }
+    assert supplements[4] == {
+        "schema_version": 1,
+        "release": "v0.5.0",
+        "base_extraction_manifest": MANIFEST_PATH,
+        "previous_supplement": SUPPLEMENT_PATHS[3],
+        "history_shape": "home-roundtrip",
+        "home_freeze": "b69928c3296c74c165709f4b796422ac765e8369",
+        "public_base": "9d3c4c8e3a5b0a5838a2c348c53c8dedbc43a1c0",
+        "self_exclusion": SUPPLEMENT_PATHS[4],
+        "entries": supplements[4]["entries"],
+    }
     assert not [
         entry
         for entry in entries
@@ -107,6 +119,10 @@ def test_public_extraction_manifest_is_complete_and_hash_bound() -> None:
         previous_effective = dict(effective)
         for entry in supplement_entries:
             assert set(entry) == {"path", "result_sha256", "reason"}
+            assert not any(
+                entry["path"].startswith(prefix)
+                for prefix in manifest["prohibited_roots"]
+            )
             assert entry["reason"] in {
                 "downstream-adaptation",
                 "mvp-security-hardening",
@@ -115,10 +131,12 @@ def test_public_extraction_manifest_is_complete_and_hash_bound() -> None:
             result = entry["result_sha256"]
             if result is None:
                 effective.pop(entry["path"], None)
+                tracked.discard(entry["path"])
             else:
                 assert len(result) == 64
                 assert set(result) <= set("0123456789abcdef")
                 effective[entry["path"]] = result
+                tracked.add(entry["path"])
         if index == len(supplements) - 1:
             latest_previous_effective = previous_effective
             latest_by_path = supplement_by_path

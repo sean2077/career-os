@@ -1,10 +1,10 @@
 # Installation Requirements
 
-> **v0.4.0 boundary:** install from a clean public checkout. Shareable resume
-> exports now use safer defaults, source-declared languages, audited links, and
-> four-character random IDs. Defuddle and OpenCLI remain removed, and the
-> v0.2.0 schema boundary still requires explicit schema-2-to-3 migration for
-> v0.1.0 records.
+> **v0.5.0 boundary:** install from a clean public checkout. The root Obsidian
+> entry points are now `Career Home.md` and `职业主页.md`; update external links
+> or embeds that target the former filenames. The v0.4.0 resume-export
+> behavior remains unchanged, and the v0.2.0 schema boundary still requires
+> explicit schema-2-to-3 migration for v0.1.0 records.
 
 Career OS separates core, live Obsidian, and resume readiness. A successful
 core check does not imply that the optional Obsidian CLI or XeLaTeX resume
