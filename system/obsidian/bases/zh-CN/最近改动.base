@@ -1,0 +1,28 @@
+filters:
+  and:
+    - file.ext == "md"
+    - file.inFolder(file("Home.md").folder)
+properties:
+  file.name:
+    displayName: 文件
+  file.folder:
+    displayName: 目录
+  file.mtime:
+    displayName: 修改时间
+views:
+  - type: table
+    name: 最近 10 个
+    order:
+      - file.name
+      - file.folder
+      - file.mtime
+    sort:
+      - property: file.mtime
+        direction: DESC
+      - property: file.path
+        direction: ASC
+    limit: 10
+    columnSize:
+      file.name: 300
+      file.folder: 420
+      file.mtime: 180

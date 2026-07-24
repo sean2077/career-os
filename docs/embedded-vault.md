@@ -78,8 +78,8 @@ after detach.
 Root `Home.md`, `主页.md`, and portable assets under `system/obsidian/` are versioned
 directly:
 
-- paired native Markdown Workbench homepages, each with five expanded
-  language-matched Base views and seven Authority links;
+- paired native Markdown Workbench homepages, each with one Recent Changes view,
+  five expanded language-matched authority Base views, and seven Authority links;
 - a lightweight Markdown dashboard with the generic Base and two explanatory
   Canvas embeds;
 - an Obsidian Base with domain workbenches for evidence, strategy, JD screening,
@@ -89,17 +89,21 @@ directly:
   deterministic interfaces, and hard safety boundaries;
 - a usage-guide Canvas with seven single-authority and four cross-authority
   outcome cards;
+- one paired English/Chinese Recent Changes Base scoped to the current project
+  and limited to the ten latest local Markdown-note modification times;
 - five paired English/Chinese Workbench Bases for JD screening, recruiting
   channels, Company Portfolio, Engagement Decisions, and Capability Readiness.
 
-The generic Base and all ten Workbench Bases discover notes through stable
-`schema_version`, `kind`, and kind-specific properties. The paired files differ
-only in filename, view names, and column display names. Initialization never
-creates, copies, renders, or overwrites either root homepage or any Base. A host note
-can link or embed the framework assets. `career-os views build` is an
-idempotent read-only verifier for all sixteen assets; `career-os check` also
-verifies both homepages, Base inventory, presentation-only pair parity, and
-semantic contracts. Neither command creates a data-root or runtime view tree.
+The generic Base and all ten authority Workbench Bases discover notes through
+stable `schema_version`, `kind`, and kind-specific properties. The Recent
+Changes pair anchors the project folder to the unique root `Home.md`,
+filters Markdown notes, sorts by `file.mtime`, and limits the result to ten. Paired files
+differ only in filename, view names, and column display names. Initialization
+never creates, copies, renders, or overwrites either root homepage or any Base.
+A host note can link or embed the framework assets. `career-os views build` is
+an idempotent read-only verifier for all eighteen assets; `career-os check`
+also verifies both homepages, Base inventory, presentation-only pair parity,
+and semantic contracts. Neither command creates a data-root or runtime view tree.
 The homepages, Bases, and Canvas files are views only; Markdown frontmatter and
 authority records remain canonical.
 

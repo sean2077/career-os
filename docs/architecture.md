@@ -16,14 +16,16 @@ repository projected into the Vault; the mount moves the project, not the data
 authority within it.
 
 Root `Home.md` and `主页.md`, the generic Obsidian Base and dashboard, two
-explanatory Canvas files, and ten paired English/Chinese Workbench Bases are
-system-owned, Git-tracked assets. Each homepage is a native Markdown live panel:
-the English page embeds the five English Base views, while the Chinese page
-embeds the five Chinese views. Both language variants query
-schema-2 records by `kind`, while only filenames, view names, and column display
-names differ. Initialization never creates or overwrites either homepage or any
-Base. Bases remain projections over stable record properties, not factual
-authorities.
+explanatory Canvas files, ten authority Workbench Bases, and two localized
+Recent Changes Bases are system-owned, Git-tracked assets. Each homepage is a
+native Markdown live panel: its localized Recent Changes view appears first,
+followed by five localized authority Workbench views. The authority views query
+schema-3 records by `kind`; the recent-files pair anchors its project folder to
+the unique root `Home.md` and sorts Markdown notes by local modification
+time. Paired files differ only in filename, view
+name, and column display names. Initialization never creates or overwrites
+either homepage or any Base. Bases remain projections over stable record or
+file properties, not factual authorities.
 `.career-os/runtime/` is the single local scratch root. Root `runtime/` remains
 ignored only to protect legacy raw state and has no current producer.
 

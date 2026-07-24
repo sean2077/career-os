@@ -11,6 +11,14 @@ tags: [career-os, framework-view]
 >
 > [[records.base|Open All Records]] · [[dashboard.md|Open Text Dashboard]] · [[career-map.canvas|Open Architecture Map]] · [[career-guide.canvas|Open Workflow Guide]]
 
+## Recent Changes
+
+Review the ten most recently modified Markdown notes in this project.
+
+[[Recent Changes.base#Recent 10|Open Recent Changes]]
+
+![[Recent Changes.base#Recent 10]]
+
 ## Discover
 
 ### Recruiting Channels

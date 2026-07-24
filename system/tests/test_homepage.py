@@ -8,6 +8,7 @@ from career_os.checks import _validate_dashboard_markdown, _validate_homepage_ma
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 WORKBENCH_LINKS = (
+    ("Recent Changes.base#Recent 10", "Open Recent Changes"),
     ("Recruiting Channels.base#Current Channels", "Open Recruiting Channels"),
     ("JD Screening.base#Current Candidates", "Open JD Screening"),
     ("Company Portfolio.base#Portfolio", "Open Company Portfolio"),
@@ -15,6 +16,7 @@ WORKBENCH_LINKS = (
     ("Capability Readiness.base#Latest Strict", "Open Capability Readiness"),
 )
 CHINESE_WORKBENCH_LINKS = (
+    ("最近改动.base#最近 10 个", "打开最近改动"),
     ("招聘渠道.base#当前渠道", "打开招聘渠道"),
     ("JD 筛选工作台.base#当前候选", "打开 JD 筛选"),
     ("公司组合.base#总表", "打开公司组合"),
@@ -79,6 +81,7 @@ def test_repository_homepage_is_native_live_workbench_panel() -> None:
         assert target not in homepage
     headings = (
         "# Career Home",
+        "## Recent Changes",
         "## Discover",
         "### Recruiting Channels",
         "### JD Screening",
@@ -91,6 +94,11 @@ def test_repository_homepage_is_native_live_workbench_panel() -> None:
     )
     assert [homepage.index(heading) for heading in headings] == sorted(
         homepage.index(heading) for heading in headings
+    )
+    assert (
+        homepage.index("> [!tip] Agent-first")
+        < homepage.index("## Recent Changes")
+        < homepage.index("## Discover")
     )
 
 
@@ -111,6 +119,11 @@ def test_repository_chinese_homepage_expands_only_chinese_workbenches() -> None:
         assert homepage.count(f"![[{target}]]") == 0
     for target, _alias in WORKBENCH_LINKS:
         assert target not in homepage
+    assert (
+        homepage.index("> [!tip] Agent 优先")
+        < homepage.index("## 最近改动")
+        < homepage.index("## 发现机会")
+    )
 
 
 def test_homepage_rejects_missing_and_duplicate_navigation_targets() -> None:

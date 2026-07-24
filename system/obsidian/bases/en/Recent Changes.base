@@ -1,0 +1,28 @@
+filters:
+  and:
+    - file.ext == "md"
+    - file.inFolder(file("Home.md").folder)
+properties:
+  file.name:
+    displayName: File
+  file.folder:
+    displayName: Folder
+  file.mtime:
+    displayName: Modified
+views:
+  - type: table
+    name: Recent 10
+    order:
+      - file.name
+      - file.folder
+      - file.mtime
+    sort:
+      - property: file.mtime
+        direction: DESC
+      - property: file.path
+        direction: ASC
+    limit: 10
+    columnSize:
+      file.name: 300
+      file.folder: 420
+      file.mtime: 180

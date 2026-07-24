@@ -933,6 +933,13 @@ _WORKBENCH_BASE_PAIRS = (
         ),
     ),
 )
+_RECENT_BASE_PAIR = (
+    "system/obsidian/bases/en/Recent Changes.base",
+    "system/obsidian/bases/zh-CN/最近改动.base",
+)
+_RECENT_BASE_PROJECT_FILTER = (
+    'file.inFolder(file("Home.md").folder)'
+)
 
 for (
     _legacy_path,
@@ -977,6 +984,60 @@ for (
 
 _ENGLISH_WORKBENCH_BASES = frozenset(pair[1] for pair in _WORKBENCH_BASE_PAIRS)
 _CHINESE_WORKBENCH_BASES = frozenset(pair[2] for pair in _WORKBENCH_BASE_PAIRS)
+_ENGLISH_LOCALIZED_BASES = _ENGLISH_WORKBENCH_BASES | {_RECENT_BASE_PAIR[0]}
+_CHINESE_LOCALIZED_BASES = _CHINESE_WORKBENCH_BASES | {_RECENT_BASE_PAIR[1]}
+_LOCALIZED_BASE_PAIRS = tuple(
+    (english_path, chinese_path)
+    for _legacy_path, english_path, chinese_path, _views, _filters in (
+        _WORKBENCH_BASE_PAIRS
+    )
+) + (_RECENT_BASE_PAIR,)
+_RECENT_BASE_CONTRACT: dict[str, Any] = {
+    "global_filters": (
+        'file.ext == "md"',
+        _RECENT_BASE_PROJECT_FILTER,
+    ),
+    "exact_global_filters": True,
+    "formula_tokens": {},
+    "properties": {
+        "file.name",
+        "file.folder",
+        "file.mtime",
+    },
+    "exact_properties": True,
+    "property_labels": {
+        "file.name": "File",
+        "file.folder": "Folder",
+        "file.mtime": "Modified",
+    },
+    "views": {
+        "Recent 10": {
+            "type": "table",
+            "limit": 10,
+            "order": (
+                "file.name",
+                "file.folder",
+                "file.mtime",
+            ),
+            "sort": (
+                ("file.mtime", "DESC"),
+                ("file.path", "ASC"),
+            ),
+            "exact_sort": True,
+        }
+    },
+}
+_BASE_CONTRACTS[_RECENT_BASE_PAIR[0]] = _RECENT_BASE_CONTRACT
+_RECENT_BASE_CHINESE_CONTRACT = deepcopy(_RECENT_BASE_CONTRACT)
+_RECENT_BASE_CHINESE_CONTRACT["property_labels"] = {
+    "file.name": "文件",
+    "file.folder": "目录",
+    "file.mtime": "修改时间",
+}
+_RECENT_BASE_CHINESE_CONTRACT["views"] = {
+    "最近 10 个": _RECENT_BASE_CHINESE_CONTRACT["views"].pop("Recent 10")
+}
+_BASE_CONTRACTS[_RECENT_BASE_PAIR[1]] = _RECENT_BASE_CHINESE_CONTRACT
 _AUTHORITY_CONTRACT_PATHS = {
     "system/seeds/authorities/10-career-evidence.md",
     "system/seeds/authorities/20-career-strategy.md",
@@ -987,6 +1048,7 @@ _AUTHORITY_CONTRACT_PATHS = {
     "system/seeds/authorities/70-career-communication.md",
 }
 _HOMEPAGE_WORKBENCH_LINKS = (
+    ("Recent Changes.base#Recent 10", "Open Recent Changes"),
     ("Recruiting Channels.base#Current Channels", "Open Recruiting Channels"),
     ("JD Screening.base#Current Candidates", "Open JD Screening"),
     ("Company Portfolio.base#Portfolio", "Open Company Portfolio"),
@@ -994,6 +1056,7 @@ _HOMEPAGE_WORKBENCH_LINKS = (
     ("Capability Readiness.base#Latest Strict", "Open Capability Readiness"),
 )
 _HOMEPAGE_CHINESE_WORKBENCH_LINKS = (
+    ("最近改动.base#最近 10 个", "打开最近改动"),
     ("招聘渠道.base#当前渠道", "打开招聘渠道"),
     ("JD 筛选工作台.base#当前候选", "打开 JD 筛选"),
     ("公司组合.base#总表", "打开公司组合"),
@@ -1042,6 +1105,7 @@ _HOMEPAGE_WORKBENCH_FILES = frozenset(
 _HOMEPAGE_HEADINGS = {
     "en": (
     "# Career Home",
+    "## Recent Changes",
     "## Discover",
     "### Recruiting Channels",
     "### JD Screening",
@@ -1054,6 +1118,7 @@ _HOMEPAGE_HEADINGS = {
     ),
     "zh-CN": (
         "# 职业主页",
+        "## 最近改动",
         "## 发现机会",
         "### 招聘渠道",
         "### JD 筛选",
@@ -1084,6 +1149,14 @@ tags: [career-os, framework-view]
     "[[career-map.canvas|Open Architecture Map]] · "
     "[[career-guide.canvas|Open Workflow Guide]]\n"
     """
+## Recent Changes
+
+Review the ten most recently modified Markdown notes in this project.
+
+[[Recent Changes.base#Recent 10|Open Recent Changes]]
+
+![[Recent Changes.base#Recent 10]]
+
 ## Discover
 
 ### Recruiting Channels
@@ -1141,7 +1214,8 @@ Inspect evidence-backed gaps, practice, and retest status.
 - [[70-career-communication.md|Career Communication]]
 """
     ),
-    "zh-CN": """---
+    "zh-CN": (
+    """---
 tags: [career-os, framework-view]
 ---
 # 职业主页
@@ -1152,8 +1226,16 @@ tags: [career-os, framework-view]
 >
 > [[Home.md|English Home]]
 >
-> [[records.base|全部记录]] · [[dashboard.md|文本仪表盘]]
-> [[career-map.canvas|架构图]] · [[career-guide.canvas|工作流指南]]
+> [[records.base|全部记录]] · [[dashboard.md|文本仪表盘]] · """
+    """[[career-map.canvas|架构图]] · [[career-guide.canvas|工作流指南]]
+
+## 最近改动
+
+查看本项目最近修改的十篇 Markdown 笔记。
+
+[[最近改动.base#最近 10 个|打开最近改动]]
+
+![[最近改动.base#最近 10 个]]
 
 ## 发现机会
 
@@ -1210,7 +1292,8 @@ tags: [career-os, framework-view]
 - [[50-career-outlook.md|职业展望]]
 - [[60-capability-readiness.md|能力准备度]]
 - [[70-career-communication.md|职业沟通]]
-""",
+"""
+    ),
 }
 _TASK_CARD_FIELDS = (
     "**Say:**",
@@ -1860,9 +1943,7 @@ def _check_obsidian_sources(paths: ProjectPaths) -> list[CheckIssue]:
             issues.append(CheckIssue("obsidian.source", "pass", str(path), "valid"))
         except (OSError, ValueError, json.JSONDecodeError, YAMLError) as error:
             issues.append(CheckIssue("obsidian.source", "fail", str(path), str(error)))
-    for _legacy, english_relative, chinese_relative, _views, _filters in (
-        _WORKBENCH_BASE_PAIRS
-    ):
+    for english_relative, chinese_relative in _LOCALIZED_BASE_PAIRS:
         english_path = paths.project_root / english_relative
         chinese_path = paths.project_root / chinese_relative
         missing = [
@@ -1957,8 +2038,9 @@ def _validate_base(name: str, base: Any, *, data_root: str | None = None) -> Non
     names = [view["name"] for view in views]
     if len(names) != len(set(names)):
         raise ValueError(f"{name} view names must be unique")
-    if name in _ENGLISH_WORKBENCH_BASES | _CHINESE_WORKBENCH_BASES:
+    if name in _ENGLISH_LOCALIZED_BASES | _CHINESE_LOCALIZED_BASES:
         _validate_workbench_base_presentation(name, base)
+    if name in _ENGLISH_WORKBENCH_BASES | _CHINESE_WORKBENCH_BASES:
         _validate_workbench_base_portability(name, base)
 
     contract = _BASE_CONTRACTS.get(name)
@@ -2003,6 +2085,16 @@ def _validate_base(name: str, base: Any, *, data_root: str | None = None) -> Non
     if formula_contract and not isinstance(formulas, dict):
         raise ValueError(f"{name} must define formulas")
     formulas = formulas if isinstance(formulas, dict) else {}
+    for formula_name, expected_expression in contract.get(
+        "formula_expressions", {}
+    ).items():
+        expression = formulas.get(formula_name)
+        if not isinstance(expression, str) or _normalize_base_expression(
+            expression
+        ) != _normalize_base_expression(expected_expression):
+            raise ValueError(
+                f"{name} formula {formula_name} does not match the contract"
+            )
     for formula_name, tokens in formula_contract.items():
         expression = formulas.get(formula_name)
         if not isinstance(expression, str):
@@ -2039,6 +2131,16 @@ def _validate_base(name: str, base: Any, *, data_root: str | None = None) -> Non
     views_by_name = {view["name"]: view for view in views}
     for view_name, view_contract in contract["views"].items():
         view = views_by_name[view_name]
+        expected_type = view_contract.get("type")
+        if expected_type is not None and view.get("type") != expected_type:
+            raise ValueError(
+                f"{name} view {view_name} type must be {expected_type}"
+            )
+        expected_limit = view_contract.get("limit")
+        if expected_limit is not None and view.get("limit") != expected_limit:
+            raise ValueError(
+                f"{name} view {view_name} limit must be {expected_limit}"
+            )
         view_filter_list = _base_filter_expressions(view.get("filters"))
         filters = set(view_filter_list)
         expected_view_filters = tuple(
@@ -2176,7 +2278,7 @@ def _validate_workbench_base_presentation(name: str, base: dict[str, Any]) -> No
             )
         labels.append(label)
     view_names = [str(view["name"]) for view in views]
-    if name in _ENGLISH_WORKBENCH_BASES:
+    if name in _ENGLISH_LOCALIZED_BASES:
         formulas = base.get("formulas")
         formula_values = formulas.values() if isinstance(formulas, dict) else ()
         visible = (*labels, *view_names, *formula_values)
@@ -2535,7 +2637,7 @@ def _validate_homepage_markdown(text: str, *, locale: str = "en") -> None:
         if match.group("embed") is not None:
             if target not in workbench_views:
                 raise ValueError(
-                    f"{homepage_name} permits embeds only for its five canonical Workbenches"
+                    f"{homepage_name} permits embeds only for its six canonical Workbenches"
                 )
             if alias is not None:
                 raise ValueError(f"{homepage_name} Workbench embeds must not use aliases")

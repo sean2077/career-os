@@ -23,7 +23,12 @@ from typer.testing import CliRunner
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 
+RECENT_BASE_PAIR = (
+    Path("en/Recent Changes.base"),
+    Path("zh-CN/最近改动.base"),
+)
 BASE_PAIRS = (
+    RECENT_BASE_PAIR,
     (Path("en/Recruiting Channels.base"), Path("zh-CN/招聘渠道.base")),
     (Path("en/JD Screening.base"), Path("zh-CN/JD 筛选工作台.base")),
     (Path("en/Company Portfolio.base"), Path("zh-CN/公司组合.base")),
@@ -145,7 +150,7 @@ def test_framework_views_are_tracked_portable_and_not_generated(tmp_path: Path) 
     first = build_views(paths)
     second = build_views(paths)
     assert first == second == list(expected)
-    assert len(expected) == 16
+    assert len(expected) == 18
     assert expected[0] == paths.project_root / "Home.md"
     assert expected[1] == paths.project_root / "主页.md"
     assert all(path.is_file() for path in first)
@@ -187,11 +192,35 @@ def test_localized_system_bases_are_portable_and_not_materialized(
     paths = _fixture_paths(tmp_path, host_git=False)
     base_root = paths.project_root / "system/obsidian/bases"
     bases = [base_root / relative for pair in BASE_PAIRS for relative in pair]
+    authority_bases = [
+        base_root / relative for pair in BASE_PAIRS[1:] for relative in pair
+    ]
+    recent_bases = [base_root / relative for relative in RECENT_BASE_PAIR]
 
     assert all(path.is_file() for path in bases)
     assert all("__CAREER_OS_" not in path.read_text(encoding="utf-8") for path in bases)
-    assert all("file.inFolder(" not in path.read_text(encoding="utf-8") for path in bases)
-    assert all("schema_version == 3" in path.read_text(encoding="utf-8") for path in bases)
+    assert all(
+        "file.inFolder(" not in path.read_text(encoding="utf-8")
+        for path in authority_bases
+    )
+    assert all(
+        "schema_version == 3" in path.read_text(encoding="utf-8")
+        for path in authority_bases
+    )
+    assert all(
+        'file.ext == "md"'
+        in path.read_text(encoding="utf-8")
+        for path in recent_bases
+    )
+    assert all(
+        'file.inFolder(file("Home.md").folder)'
+        in path.read_text(encoding="utf-8")
+        for path in recent_bases
+    )
+    assert all(
+        "system/obsidian/bases" not in path.read_text(encoding="utf-8")
+        for path in recent_bases
+    )
     assert not any(paths.data_root.rglob("*.base"))
 
 
@@ -209,9 +238,15 @@ def test_dedicated_bases_pass_semantic_contracts(tmp_path: Path) -> None:
     assert not failures, [(issue.path, issue.detail) for issue in failures]
 
 
-def test_dedicated_base_inventory_is_fail_closed(tmp_path: Path) -> None:
+@pytest.mark.parametrize(
+    "relative",
+    ["zh-CN/JD 筛选工作台.base", "zh-CN/最近改动.base"],
+)
+def test_dedicated_base_inventory_is_fail_closed(
+    tmp_path: Path, relative: str
+) -> None:
     paths = _fixture_paths(tmp_path, host_git=False)
-    base = paths.project_root / "system/obsidian/bases/zh-CN/JD 筛选工作台.base"
+    base = paths.project_root / "system/obsidian/bases" / relative
     base.unlink()
 
     failures = [issue for issue in _check_obsidian_sources(paths) if issue.status == "fail"]
@@ -248,7 +283,7 @@ def test_root_homepage_inventory_is_fail_closed(
         ),
         (
             "en/Company Portfolio.base",
-            "  - formula.related_engagements\n",
+            "      - formula.related_engagements\n",
             "",
             "required columns",
         ),
@@ -264,6 +299,30 @@ def test_root_homepage_inventory_is_fail_closed(
             "name: Missing",
             "required views",
         ),
+        (
+            "en/Recent Changes.base",
+            "limit: 10",
+            "limit: 11",
+            "limit must be 10",
+        ),
+        (
+            "en/Recent Changes.base",
+            "file.inFolder",
+            "file.hasLink",
+            "global filters do not exactly match",
+        ),
+        (
+            "en/Recent Changes.base",
+            'file.ext == "md"',
+            'file.ext == "base"',
+            "global filters do not exactly match",
+        ),
+        (
+            "en/Recent Changes.base",
+            "property: file.mtime\n        direction: DESC",
+            "property: file.mtime\n        direction: ASC",
+            "missing required sort keys",
+        ),
     ],
 )
 def test_dedicated_base_semantics_fail_closed(
@@ -271,10 +330,9 @@ def test_dedicated_base_semantics_fail_closed(
 ) -> None:
     paths = _fixture_paths(tmp_path, host_git=False)
     base = paths.project_root / "system/obsidian/bases" / relative
-    base.write_text(
-        base.read_text(encoding="utf-8").replace(before, after, 1),
-        encoding="utf-8",
-    )
+    original = base.read_text(encoding="utf-8")
+    assert before in original
+    base.write_text(original.replace(before, after, 1), encoding="utf-8")
 
     failures = [issue for issue in _check_obsidian_sources(paths) if issue.status == "fail"]
 
@@ -308,6 +366,12 @@ def test_dedicated_base_semantics_fail_closed(
             'file.inFolder("career/40-opportunity-decision/engagements")',
             "fixed paths",
         ),
+        (
+            "zh-CN/最近改动.base",
+            "displayName: 文件",
+            "displayName: File",
+            "Chinese display names",
+        ),
     ],
 )
 def test_localized_base_pairs_fail_closed_on_presentation_or_semantic_drift(
@@ -328,12 +392,13 @@ def test_localized_base_pairs_fail_closed_on_presentation_or_semantic_drift(
     assert any(expected in issue.detail for issue in failures)
 
 
-def test_localized_base_pair_rejects_extra_view(tmp_path: Path) -> None:
+def test_localized_base_pair_rejects_unexpected_view(tmp_path: Path) -> None:
     paths = _fixture_paths(tmp_path, host_git=False)
     base = paths.project_root / "system/obsidian/bases/en/Recruiting Channels.base"
+    original = base.read_text(encoding="utf-8")
+    assert "name: Current Channels" in original
     base.write_text(
-        base.read_text(encoding="utf-8")
-        + "\n- type: table\n  name: Extra\n  order:\n  - file.name\n",
+        original.replace("name: Current Channels", "name: Extra", 1),
         encoding="utf-8",
     )
 

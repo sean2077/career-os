@@ -134,15 +134,17 @@ remain private under `system/tools/career_os/` and `system/schemas/`; no retired
 Skill-local validator script is retained.
 
 `views build` remains a read-only verifier for root `Home.md` and `主页.md`, the four generic
-assets, and ten paired English/Chinese Workbench Bases under
+assets, ten English/Chinese authority Workbench Bases, and two localized Recent
+Changes Bases under
 `system/obsidian/`. Its JSON retains `asset_root`, reports the root file
-separately as `homepage`, adds both roots as `homepages`, lists sixteen
+separately as `homepage`, adds both roots as `homepages`, lists eighteen
 `assets`, and keeps `generated: []`.
 `init` never creates or manages a Base. `check` validates the native Markdown
-section order, canonical copy, filename-only navigation, five expanded
+section order, canonical copy, filename-only navigation, six expanded
 language-matched views per homepage, and absence of custom presentation
-dependencies, plus schema/kind portability and presentation-only parity for
-each Base pair. The two README previews remain
+dependencies, plus the Recent Changes project scope and limit, schema/kind
+portability, Markdown-only filter, and presentation-only parity for each Base
+pair. The two README previews remain
 reviewed native Obsidian Full canvas PNG exports under `docs/assets/`;
 The two Markdown homepages add no third image. Maintainers may drive Obsidian's built-in
 exporter through `obsidian eval`; Career OS intentionally ships no parallel
