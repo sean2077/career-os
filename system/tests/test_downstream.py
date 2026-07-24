@@ -218,18 +218,7 @@ def test_sync_adapts_standalone_source_config_to_downstream_installation(
     target_config.write_text(
         target_config.read_text(encoding="utf-8")
         .replace('build_root = "build"', 'build_root = "local-build"')
-        .replace('preferred_language = "en"', 'preferred_language = "zh-CN"')
-        + """
-
-[research.opencli]
-enabled = true
-profile = "career-research"
-timeout_seconds = 45
-capture_subdir = "research/opencli"
-
-[research.opencli.sources]
-weixin = ["search"]
-""",
+        .replace('preferred_language = "en"', 'preferred_language = "zh-CN"'),
         encoding="utf-8",
         newline="\n",
     )
@@ -262,9 +251,6 @@ weixin = ["search"]
     assert adapted.development_topology == "split-downstream"
     assert adapted.build_root == "local-build"
     assert adapted.preferred_language == "zh-CN"
-    assert adapted.research.opencli.enabled is True
-    assert adapted.research.opencli.timeout_seconds == 45
-    assert adapted.research.opencli.sources == {"weixin": ["search"]}
     assert adapted.obsidian.minimum_version == "1.13.0"
     assert adapted.resume.engine == "xelatex"
     assert target_config.read_text(encoding="utf-8").startswith(

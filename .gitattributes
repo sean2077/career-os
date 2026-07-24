@@ -23,7 +23,6 @@ CLAUDE.md symlink
 # Locked external Skill snapshots retain upstream bytes exactly.
 .agents/skills/agent-scaffold/** -text
 .agents/skills/conventional-commit/** -text
-.agents/skills/defuddle/** -text
 .agents/skills/json-canvas/** -text
 .agents/skills/obsidian-bases/** -text
 .agents/skills/obsidian-cli/** -text

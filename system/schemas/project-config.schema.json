@@ -20,63 +20,6 @@
       "title": "ObsidianConfig",
       "type": "object"
     },
-    "OpenCLIConfig": {
-      "additionalProperties": false,
-      "description": "Allowlisted OpenCLI research integration settings.",
-      "properties": {
-        "enabled": {
-          "default": false,
-          "description": "Whether read-only OpenCLI research commands are enabled.",
-          "title": "Enabled",
-          "type": "boolean"
-        },
-        "profile": {
-          "default": "career-research",
-          "description": "Portable OpenCLI profile alias used for research commands.",
-          "title": "Profile",
-          "type": "string"
-        },
-        "timeout_seconds": {
-          "default": 60,
-          "description": "Maximum execution time for one OpenCLI command, in seconds.",
-          "maximum": 300,
-          "minimum": 1,
-          "title": "Timeout Seconds",
-          "type": "integer"
-        },
-        "capture_subdir": {
-          "default": "research/opencli",
-          "description": "Portable POSIX subdirectory under the fixed local runtime root for captured research.",
-          "title": "Capture Subdir",
-          "type": "string"
-        },
-        "sources": {
-          "additionalProperties": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "description": "Allowlist mapping each OpenCLI site name to its permitted read commands.",
-          "title": "Sources",
-          "type": "object"
-        }
-      },
-      "title": "OpenCLIConfig",
-      "type": "object"
-    },
-    "ResearchConfig": {
-      "additionalProperties": false,
-      "description": "Optional external research integration settings.",
-      "properties": {
-        "opencli": {
-          "$ref": "#/$defs/OpenCLIConfig",
-          "description": "Read-only OpenCLI research integration."
-        }
-      },
-      "title": "ResearchConfig",
-      "type": "object"
-    },
     "ResumeConfig": {
       "additionalProperties": false,
       "description": "Resume build configuration.",
@@ -426,10 +369,6 @@
     "resume": {
       "$ref": "#/$defs/ResumeConfig",
       "description": "Resume build settings."
-    },
-    "research": {
-      "$ref": "#/$defs/ResearchConfig",
-      "description": "Optional external research integrations."
     }
   },
   "required": [

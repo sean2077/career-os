@@ -16,11 +16,3 @@ engine = "xelatex"
 directory = ".career-os/fonts"
 
 [resume.fonts.roles]
-
-[research.opencli]
-enabled = false
-profile = "career-research"
-timeout_seconds = 60
-capture_subdir = "research/opencli"
-
-[research.opencli.sources]

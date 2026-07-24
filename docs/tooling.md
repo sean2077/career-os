@@ -191,11 +191,8 @@ and resolve without content pins, generated macros live under
 Obsidian version and CLI response only when the executable is registered and an
 Obsidian process is already running, so diagnosis never launches the app. A
 missing or stopped optional Obsidian CLI is `attention`; filesystem checks still
-run. When OpenCLI research is enabled, doctor validates Node.js, the OpenCLI
-version response, the configured allowlist against `opencli list -f json`, and
-an already-running loopback bridge. It never launches the bridge, browser, or a
-research command. It also reports the same local downstream remote-safety state
-as `check`, including a clean pass when no public update remote is configured.
+run. It also reports the same local downstream remote-safety state as `check`,
+including a clean pass when no public update remote is configured.
 
 `skills verify` always validates inventory, projections, locks, and the isolated
 selection prompt/oracle fixtures. A true blind behavioral run additionally

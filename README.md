@@ -156,8 +156,7 @@ and are resolved by filename before XeLaTeX. See
 Career OS ships seven project-owned career workflow Skills, plus locked
 snapshots of selected Skills from
 [sean2077/skills](https://github.com/sean2077/skills),
-[kepano/obsidian-skills](https://github.com/kepano/obsidian-skills), and
-[jackwener/OpenCLI](https://github.com/jackwener/OpenCLI). See
+[kepano/obsidian-skills](https://github.com/kepano/obsidian-skills). See
 [the Skill catalog](docs/skills.md) for ownership and attribution.
 
 ## Status

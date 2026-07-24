@@ -84,60 +84,13 @@ def test_project_config_schema_documents_every_setting() -> None:
             assert isinstance(field_description, str) and field_description.strip(), name
 
 
-def test_opencli_config_defaults_disabled_for_older_project_files(tmp_path: Path) -> None:
-    _write_config(tmp_path)
-
-    config = load_project_config(tmp_path)
-
-    assert config.research.opencli.enabled is False
-    assert config.research.opencli.sources == {}
-
-
-@pytest.mark.parametrize(
-    ("field", "value", "message"),
-    [
-        ("capture_subdir", "../research", "capture_subdir"),
-        ("capture_subdir", "C:/research", "capture_subdir"),
-        ("profile", "career research", "profile"),
-    ],
-)
-def test_opencli_config_rejects_nonportable_values(
-    field: str, value: str, message: str
-) -> None:
-    payload = {
-        "schema_version": 2,
-        "system_version": "0.1.0",
-        "research": {
-            "opencli": {
-                "enabled": True,
-                "sources": {"weixin": ["search"]},
-                field: value,
-            }
-        },
-    }
-
-    with pytest.raises(ValidationError, match=message):
-        ProjectConfig.model_validate(payload)
-
-
-@pytest.mark.parametrize(
-    "sources",
-    [
-        {},
-        {"browser": ["state"]},
-        {"weixin": []},
-        {"weixin": ["search", "search"]},
-    ],
-)
-def test_enabled_opencli_config_rejects_empty_or_unsafe_allowlists(
-    sources: dict[str, list[str]],
-) -> None:
-    with pytest.raises(ValidationError):
+def test_project_config_rejects_retired_research_integrations() -> None:
+    with pytest.raises(ValidationError, match="research"):
         ProjectConfig.model_validate(
             {
                 "schema_version": 2,
                 "system_version": "0.1.0",
-                "research": {"opencli": {"enabled": True, "sources": sources}},
+                "research": {"opencli": {"enabled": False}},
             }
         )
 

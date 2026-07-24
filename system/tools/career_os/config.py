@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 CONFIG_NAME = "career-os.toml"
 PROJECT_CONFIG_SCHEMA_DIRECTIVE = "#:schema ./system/schemas/project-config.schema.json"
@@ -20,9 +20,6 @@ DevelopmentTopology = Literal[
     "integrated-workbench",
     "split-downstream",
 ]
-_OPENCLI_IDENTIFIER = re.compile(r"^[a-z0-9][a-z0-9_-]*$")
-_OPENCLI_PROFILE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$")
-_OPENCLI_FORBIDDEN_SITES = frozenset({"browser", "external", "plugin"})
 _FONT_FILENAME = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*$")
 
 
@@ -144,90 +141,6 @@ class ResumeConfig(BaseModel):
     )
 
 
-class OpenCLIConfig(BaseModel):
-    """Allowlisted OpenCLI research integration settings."""
-
-    model_config = ConfigDict(extra="forbid")
-
-    enabled: bool = Field(
-        default=False,
-        description="Whether read-only OpenCLI research commands are enabled.",
-    )
-    profile: str = Field(
-        default="career-research",
-        description="Portable OpenCLI profile alias used for research commands.",
-    )
-    timeout_seconds: int = Field(
-        default=60,
-        ge=1,
-        le=300,
-        description="Maximum execution time for one OpenCLI command, in seconds.",
-    )
-    capture_subdir: str = Field(
-        default="research/opencli",
-        description=(
-            "Portable POSIX subdirectory under the fixed local runtime root for "
-            "captured research."
-        ),
-    )
-    sources: dict[str, list[str]] = Field(
-        default_factory=dict,
-        description=(
-            "Allowlist mapping each OpenCLI site name to its permitted read commands."
-        ),
-    )
-
-    @field_validator("profile")
-    @classmethod
-    def validate_profile(cls, value: str) -> str:
-        if not _OPENCLI_PROFILE.fullmatch(value):
-            raise ValueError(
-                "OpenCLI profile must be a portable alias using letters, numbers, '.', '_', or '-'"
-            )
-        return value
-
-    @field_validator("capture_subdir")
-    @classmethod
-    def validate_capture_subdir(cls, value: str) -> str:
-        return normalize_portable_subdir(value, field_name="research.opencli.capture_subdir")
-
-    @field_validator("sources")
-    @classmethod
-    def validate_sources(cls, value: dict[str, list[str]]) -> dict[str, list[str]]:
-        for site, commands in value.items():
-            if not _OPENCLI_IDENTIFIER.fullmatch(site):
-                raise ValueError(f"OpenCLI site name is invalid: {site!r}")
-            if site in _OPENCLI_FORBIDDEN_SITES:
-                raise ValueError(f"OpenCLI raw command namespace is forbidden: {site}")
-            if not commands:
-                raise ValueError(f"OpenCLI site must allow at least one command: {site}")
-            if len(commands) != len(set(commands)):
-                raise ValueError(f"OpenCLI commands must be unique for site: {site}")
-            invalid = [item for item in commands if not _OPENCLI_IDENTIFIER.fullmatch(item)]
-            if invalid:
-                raise ValueError(
-                    f"OpenCLI command name is invalid for {site}: {invalid[0]!r}"
-                )
-        return value
-
-    @model_validator(mode="after")
-    def require_sources_when_enabled(self) -> OpenCLIConfig:
-        if self.enabled and not self.sources:
-            raise ValueError("enabled OpenCLI research requires at least one configured source")
-        return self
-
-
-class ResearchConfig(BaseModel):
-    """Optional external research integration settings."""
-
-    model_config = ConfigDict(extra="forbid")
-
-    opencli: OpenCLIConfig = Field(
-        default_factory=OpenCLIConfig,
-        description="Read-only OpenCLI research integration.",
-    )
-
-
 class ProjectConfig(BaseModel):
     """Career OS project configuration stored in career-os.toml."""
 
@@ -261,10 +174,6 @@ class ProjectConfig(BaseModel):
     resume: ResumeConfig = Field(
         default_factory=ResumeConfig,
         description="Resume build settings.",
-    )
-    research: ResearchConfig = Field(
-        default_factory=ResearchConfig,
-        description="Optional external research integrations.",
     )
 
 
@@ -435,22 +344,6 @@ def serialize_project_config(config: ProjectConfig) -> str:
     lines.extend(
         f"{role} = {json.dumps(filename)}"
         for role, filename in sorted(config.resume.fonts.roles.configured().items())
-    )
-    lines.extend(
-        [
-        "",
-        "[research.opencli]",
-        f"enabled = {str(config.research.opencli.enabled).lower()}",
-        f"profile = {json.dumps(config.research.opencli.profile)}",
-        f"timeout_seconds = {config.research.opencli.timeout_seconds}",
-        f"capture_subdir = {json.dumps(config.research.opencli.capture_subdir)}",
-        "",
-        "[research.opencli.sources]",
-        ]
-    )
-    lines.extend(
-        f"{site} = [{', '.join(json.dumps(command) for command in commands)}]"
-        for site, commands in sorted(config.research.opencli.sources.items())
     )
     lines.append("")
     return "\n".join(lines)

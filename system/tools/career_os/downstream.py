@@ -612,7 +612,6 @@ def _adapt_source_config(
             "development_topology": "split-downstream",
             "build_root": target_config.build_root,
             "preferred_language": target_config.preferred_language,
-            "research": target_config.research.model_dump(),
         }
     )
     object_id = _git(

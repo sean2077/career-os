@@ -22,10 +22,9 @@ PROJECT_SKILLS = frozenset(
 )
 SEAN_SKILLS = frozenset({"agent-scaffold", "conventional-commit"})
 OBSIDIAN_SKILLS = frozenset(
-    {"obsidian-markdown", "obsidian-bases", "json-canvas", "obsidian-cli", "defuddle"}
+    {"obsidian-markdown", "obsidian-bases", "json-canvas", "obsidian-cli"}
 )
-OPENCLI_SKILLS = frozenset({"opencli-usage"})
-BUNDLED_SKILLS = SEAN_SKILLS | OBSIDIAN_SKILLS | OPENCLI_SKILLS
+BUNDLED_SKILLS = SEAN_SKILLS | OBSIDIAN_SKILLS
 EXPECTED_SKILLS = PROJECT_SKILLS | BUNDLED_SKILLS
 MODE_MATRIX = {
     "career-evidence": {"capture", "debrief", "consolidate"},
@@ -377,5 +376,5 @@ def _inventory_detail(actual: set[str]) -> str:
     missing = sorted(EXPECTED_SKILLS - actual)
     extra = sorted(actual - EXPECTED_SKILLS)
     if not missing and not extra:
-        return "exactly 7 Career, 2 Sean, 5 Obsidian, and 1 OpenCLI Skill"
+        return "exactly 7 Career, 2 Sean, and 4 Obsidian Skills"
     return json.dumps({"missing": missing, "extra": extra}, sort_keys=True)

@@ -29,7 +29,6 @@ from career_os.config import (
     write_install_state,
 )
 from career_os.git_safety import inspect_downstream_git_safety
-from career_os.opencli import opencli_doctor_checks
 from career_os.records.models import StrategyPositioning
 from career_os.seed import initialize_data_root
 
@@ -230,7 +229,6 @@ def doctor_command(
             initialized=(project_root / INSTALL_STATE).is_file(),
         )
     )
-    checks.extend(opencli_doctor_checks(project_root, project_config))
     checks.extend(_obsidian_doctor_checks(project_root, project_config))
     try:
         git_root = subprocess.run(

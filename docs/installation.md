@@ -15,7 +15,6 @@ toolchain is ready.
 | --- | --- | --- |
 | Core records, Skills, schemas, plans, and filesystem checks | Git, `uv`, and Python 3.12 or newer | `uv run career-os doctor --json` |
 | Live Obsidian CLI operations | Core plus Obsidian 1.12.7 or newer, CLI enabled, and the application running | `uv run career-os doctor --json` |
-| Optional OpenCLI company-research sources | Core plus Node.js 20+, OpenCLI, and Browser Bridge/login state for browser-backed configured adapters | `opencli doctor` then `uv run career-os doctor --json` |
 | Resume build and export | Core plus `latexmk`, XeLaTeX, the required TeX packages, and the default or TeX-named local fonts | `uv run career-os resume doctor --json` |
 | Optional high-fidelity PDF inspection | Resume stack plus `pdftoppm`, `pdfinfo`, and `pdftotext` from Poppler | `uv run career-os resume doctor --json` |
 
@@ -71,53 +70,6 @@ reports inventory, localization-parity, or semantic drift for review.
 
 Missing optional Obsidian, LaTeX, or PDF commands appear as `attention` in the
 core doctor. They do not block filesystem-only career workflows.
-
-## Optional OpenCLI company research
-
-OpenCLI is an optional acquisition transport for `opportunity-decision`, not a
-Career OS research authority or universal search backend. Portable, non-secret
-allowlists live in `career-os.toml`; browser cookies, login state, extension
-state, and device paths remain local to each machine.
-
-Install the current stable OpenCLI runtime on every device that will use the
-configured sources:
-
-```text
-node --version
-npm install -g @jackwener/opencli@latest
-opencli --version
-opencli list -f json
-```
-
-The OpenCLI v1.8.6 package manifest declares Node.js 20 or newer. Its bundled
-`opencli-usage` prose still says Node.js 21; Career OS follows the package
-manifest and checks the actual executable rather than editing the locked
-upstream Skill.
-
-Install the signed
-[OpenCLI Browser Bridge extension](https://chromewebstore.google.com/detail/opencli/ildkmabpimmkaediidaifkhjpohdnifk)
-from the Chrome Web Store. Use a dedicated, low-privilege research Chrome
-profile and assign the portable alias configured by the project:
-
-```text
-opencli profile list
-opencli profile rename <contextId> career-research
-opencli profile use career-research
-opencli doctor
-uv run career-os doctor --json
-```
-
-Complete website login manually. Stop at CAPTCHA, rate limiting, or risk
-control. The bridge must remain loopback-only; do not expose its unauthenticated
-WebSocket through a LAN listener, WSL forwarding, container port, or tunnel.
-Career OS doctor probes an already-running loopback port but never starts the
-daemon, Chrome, the extension, or a search.
-
-For each configured command, doctor requires both the project allowlist and a
-matching live registry entry declaring `access: read`. Missing installations
-and a stopped bridge are `attention`; invalid configuration, an unreadable live
-registry, a missing adapter, or a non-read command is `fail`. Raw captures
-belong only under `.career-os/runtime/` and are preserved by project cleanup.
 
 ## XeLaTeX resume toolchain
 

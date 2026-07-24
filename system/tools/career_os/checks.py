@@ -1618,10 +1618,8 @@ def _check_supply_chain(paths: ProjectPaths) -> list[CheckIssue]:
         required = {
             "93667c5a5eec5f68cd1097574e27c29994b6c3f2",
             "553ef99aa3306dd23f268e1ba9af752577684f69",
-            "cad35e7a6a5ff3f7d6b859bfa4c45195c0390260",
             "system/licenses/sean2077-skills-MIT.txt",
             "system/licenses/kepano-obsidian-skills-MIT.txt",
-            "system/licenses/jackwener-opencli-Apache-2.0.txt",
         }
         font_manifest = load_font_manifest(paths.project_root)
         required.update(package.license_path for package in font_manifest.packages)

@@ -35,14 +35,6 @@ file/stdin input, safe JSON output, and exit codes. No Skill-local script,
 second executable, compatibility shim, or rollback path is warranted because
 the command never mutates state.
 
-OpenCLI prerequisite and live-registry validation aggregate into the existing
-read-only `career-os doctor` job because they diagnose one configured optional
-capability and own no persistent state. Adapter execution remains an external
-`opencli` contract called directly by `opportunity-decision`; Career OS adds no
-research runner, browser wrapper, provider registry, or compatibility command.
-Raw captures remain ignored `.career-os/runtime/` state, while reviewed Company
-facts remain owned by Opportunity Decision.
-
 Ignored-state reclamation is one independent top-level job:
 `career-os cleanup`. Its default is a read-only dry run; `--apply` is the sole
 mutation boundary. The private cleanup module owns the product allowlist, Git
