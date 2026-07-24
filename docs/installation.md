@@ -1,7 +1,9 @@
 # Installation Requirements
 
-> **v0.1.0 boundary:** install from a clean public checkout. This stable release
-> does not support in-place upgrades from `v0.1.0-rc.*`.
+> **v0.2.0 boundary:** install from a clean public checkout. Existing `v0.1.0`
+> records require the explicit schema-2-to-3 migration, while legacy project
+> root aliases fail closed and require reinitialization or a reviewed local-state
+> rewrite.
 
 Career OS separates core, live Obsidian, and resume readiness. A successful
 core check does not imply that the optional Obsidian CLI or XeLaTeX resume

@@ -2,10 +2,10 @@
 
 This guide describes the supported `split-downstream` topology for a private
 Career Home that consumes the public `standalone-framework` repository.
-`v0.1.0` is clean-install-only; this guide does not define a prerelease upgrade
-path. An `upstream` remote is optional for local OS work. If one is configured,
-keep it fetch-only; do not treat an upstream sync as a prerequisite for local
-work.
+`v0.2.0` requires explicit record migration from schema 2 to schema 3 and does
+not accept legacy project-root aliases. An `upstream` remote is optional for
+local OS work. If one is configured, keep it fetch-only; do not treat an
+upstream sync as a prerequisite for local work.
 
 In split mode, the recommended real-world installation is a private downstream
 repository. Its optional remote roles are:

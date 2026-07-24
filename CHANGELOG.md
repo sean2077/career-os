@@ -4,12 +4,21 @@ All notable changes to Career OS are documented here.
 
 ## [Unreleased]
 
+## [v0.2.0] — 2026-07-24
+
 ### Added
 
 - Added top-level `career-os cleanup`, a dry-run-first command that enumerates
   only known reproducible build, distribution, cache, generated, and temporary
   roots, with human and JSON reports, explicit `--apply`, and content-drift
   protection.
+- Added a generated JSON Schema for `career-os.toml` plus explicit schema-2
+  project and installation state.
+- Added the record-envelope 2-to-3 migration and schema-3 lifecycle validation.
+- Added optional, disabled-by-default OpenCLI acquisition for Opportunity
+  Decision. Only configured commands that the live registry marks read-only are
+  callable; browser, external, plugin, write, and self-repair surfaces remain
+  prohibited.
 
 ### Changed
 
@@ -21,9 +30,16 @@ All notable changes to Career OS are documented here.
 - Owner-provided resume font overrides are now resolved by filename without
   configured checksums, so replacing a same-name file requires no configuration
   update. Downloaded system-default fonts remain integrity-verified.
+- Replaced generic record reference arrays with schema-owned relation fields,
+  Git-relative lifecycle validation, and simpler migration provenance.
+- Displayed relationship links by basename in Obsidian Bases and added
+  bilingual company names to the company portfolio.
+- Extended public extraction evidence so reviewed file deletions are
+  hash-bound rather than silently falling outside the snapshot.
 
 ### Fixed
 
+- Installed the XeLaTeX packages required by the resume class in public CI.
 - Made public-only snapshot tests topology-aware and documented the
   ancestry-independent downstream plan/apply flow for existing private Career
   Home histories.
@@ -38,6 +54,25 @@ All notable changes to Career OS are documented here.
 - Removed `ProjectConfig.data_root`, `ProjectConfig.runtime_root`,
   `InstallState.data_root`, and `init --data-root`; legacy fields fail closed
   and require reinitialization or an explicit local-state rewrite.
+- Removed the semantic-review sidecar subsystem, redundant install/vault state
+  schemas, and obsolete legacy inventory schemas in favor of record-owned
+  schema-3 state and hash-bound operation plans.
+
+### Security
+
+- Re-reviewed every changed guarded resume/privacy test and privacy
+  implementation blob against synthetic-only fixtures, then updated the
+  append-only fixture policy.
+- Re-ran the complete public-history audit and exact, redacted comparison
+  against the private Career Home before publication.
+
+### Boundaries
+
+- This is a breaking pre-1.0 release. Legacy project-root aliases fail closed;
+  existing records require the explicit schema-2-to-3 migration before full
+  validation.
+- OpenCLI remains optional and disabled in the public configuration. The
+  integration does not grant write, outreach, application, or account authority.
 
 ## [v0.1.0] — 2026-07-24
 

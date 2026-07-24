@@ -52,7 +52,7 @@
     },
     {
       "path": "CHANGELOG.md",
-      "result_sha256": "0221cdb8622781ab860a5938853363872742f337b2728a712bb54d1e1726496e",
+      "result_sha256": "6fee2dbc150dc7c234ded50bb0fcc2c124ab18a931f1e83b083c2cecef506734",
       "reason": "release-evidence"
     },
     {
@@ -67,7 +67,7 @@
     },
     {
       "path": "career-os.toml",
-      "result_sha256": "e35b0471f1c6452654198c3132bbbbed8aca08aa3fd421bb2f2b37a9bc921e10",
+      "result_sha256": "d4f8d275411543cfcb1dc982aed5ed26430d89e63692621717c2c3f04b892283",
       "reason": "downstream-adaptation"
     },
     {
@@ -97,22 +97,27 @@
     },
     {
       "path": "docs/installation.md",
-      "result_sha256": "58c06cc5c5311998d90399b81844f87077773b780e0e192e07fd3723c65a4ea9",
+      "result_sha256": "9165872f6ba264152c7d2b85044b090fbeafae11201c005535104e552a5a45d0",
       "reason": "release-evidence"
     },
     {
       "path": "docs/private-downstream.md",
-      "result_sha256": "64d7adf007d9d6ddba4ffa2c5586ab812667649ee18f13050dff50cff0b2c07a",
+      "result_sha256": "7e81250601615735896833878f69cd27b9d691adfc3b9e88c389db2f45413328",
       "reason": "downstream-adaptation"
     },
     {
       "path": "docs/releases/README.md",
-      "result_sha256": "8e938401ebe8bfabcf0711e5f34b73514fd373cd54b0d043f49d44a4f3f39ec7",
+      "result_sha256": "fc3669b5e648e25802ca44bbe843885cbb51f5d7db6f12f9e93e4b9e7f305f6e",
       "reason": "release-evidence"
     },
     {
       "path": "docs/releases/v0.1.0.md",
       "result_sha256": "1dce24b0cca6e59ed7e4b8feccaafd47b693563a3435b7ae378c2cc0aafa36c3",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/releases/v0.2.0.md",
+      "result_sha256": "56478fba60d46f83cc5ecdf7156d49c36af8d4fea53c891eaeb9f982dce0ac9c",
       "reason": "release-evidence"
     },
     {
@@ -143,6 +148,11 @@
     {
       "path": "docs/tooling.md",
       "result_sha256": "16c8f44d76a9c03b48f501afd174b4e835727e9af8c30d9bab44a4e6139fc9af",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "pyproject.toml",
+      "result_sha256": "ebf1dc6e5960a95ea91c84722de7266e8d12089db16720e3a4ace0eb41118d3c",
       "reason": "release-evidence"
     },
     {
@@ -237,7 +247,7 @@
     },
     {
       "path": "system/sbom.cdx.json",
-      "result_sha256": "89a07f8a0c74739472fc191437e831870d7eb770dd31867d31a75c38927d5518",
+      "result_sha256": "bd891bc0967fa4cac075fecaf22cbdff9b6741005c0062961042410796491bf9",
       "reason": "release-evidence"
     },
     {
@@ -347,7 +357,7 @@
     },
     {
       "path": "system/tests/test_cli_smoke.py",
-      "result_sha256": "faf577fe21d0caa673ad915271ece404b1ea6dad003b26c71ef037ad35b2a729",
+      "result_sha256": "a9e15cf8bb516a5c1fb33fd60865d3d5ff1a4423774fc4523e3699fdac9b7d95",
       "reason": "release-evidence"
     },
     {
@@ -443,6 +453,11 @@
     {
       "path": "system/tests/test_supply_chain.py",
       "result_sha256": "ed1b7f20620a3bd894436220082e96ce1daa0c6b848f83557ad57cf8eca1fb91",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tools/career_os/__init__.py",
+      "result_sha256": "c7155a2d117da048961111a78afdd565b687ba8b7f19ed641271aff36c59d25c",
       "reason": "release-evidence"
     },
     {
@@ -578,6 +593,11 @@
     {
       "path": "system/tools/career_os/skills.py",
       "result_sha256": "14d13cb441cb0f02d928972684c3590a72a1992e4731625005ebf178b54090cd",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "uv.lock",
+      "result_sha256": "befcf63f2d208627123928eee4bd2d3cca09ea33af7b23bc53bfdb4726e87717",
       "reason": "release-evidence"
     }
   ]

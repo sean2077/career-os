@@ -1,6 +1,6 @@
 #:schema ./system/schemas/project-config.schema.json
 schema_version = 2
-system_version = "0.1.0"
+system_version = "0.2.0"
 development_topology = "standalone-framework"
 build_root = "build"
 preferred_language = "en"
