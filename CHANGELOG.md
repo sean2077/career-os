@@ -4,6 +4,47 @@ All notable changes to Career OS are documented here.
 
 ## [Unreleased]
 
+## [v0.4.0] — 2026-07-25
+
+### Added
+
+- Added one source-owned BCP 47 language per resume root through the optional
+  `language` document-class setting, defaulting to `en`.
+- Added portable automatic export filenames that bind the human-facing name,
+  resume track, preview/application profile, source language, UTC date, and
+  four-character uppercase hexadecimal random ID.
+
+### Changed
+
+- Made `resume export` default to the `general` preview under `build/share/`;
+  `resume export application` is now the explicit application-grade CLI
+  confirmation, while the former flags remain hidden compatibility inputs.
+- Tightened Career Communication guidance around content-first pagination and
+  the distinction between internal builds and shareable exports.
+- Linked README previews directly to their full-size reviewed PNG assets while
+  preserving the tracked Canvas sources.
+
+### Fixed
+
+- Preserved reviewed HTTPS, application-profile `mailto:`, and internal PDF
+  links in exported resumes while rejecting attachments, additional actions,
+  unsafe URI schemes, and preview-profile mail links.
+- Unified the automatic filename, projected PDF export ID, and receipt on the
+  same four-character random segment.
+
+### Security
+
+- Re-reviewed the three changed resume test blobs as synthetic-only and
+  appended their exact hashes to the guarded fixture policy.
+- Re-ran the complete public-history audit and redacted comparison against the
+  private Career Home before publication.
+
+### Boundaries
+
+- Raw `resume build` output remains internal. A successful export does not
+  authorize sending, uploading, applying, messaging, or changing an external
+  account.
+
 ## [v0.3.1] — 2026-07-24
 
 ### Fixed

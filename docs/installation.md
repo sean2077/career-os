@@ -1,11 +1,10 @@
 # Installation Requirements
 
-> **v0.3.1 boundary:** install from a clean public checkout. Defuddle and
-> OpenCLI integrations are no longer shipped, and legacy `[research.opencli]`
-> configuration fails closed. The v0.2.0 schema boundary remains: existing
-> v0.1.0 records require the explicit schema-2-to-3 migration, while legacy
-> project-root aliases require reinitialization or a reviewed local-state
-> rewrite.
+> **v0.4.0 boundary:** install from a clean public checkout. Shareable resume
+> exports now use safer defaults, source-declared languages, audited links, and
+> four-character random IDs. Defuddle and OpenCLI remain removed, and the
+> v0.2.0 schema boundary still requires explicit schema-2-to-3 migration for
+> v0.1.0 records.
 
 Career OS separates core, live Obsidian, and resume readiness. A successful
 core check does not imply that the optional Obsidian CLI or XeLaTeX resume

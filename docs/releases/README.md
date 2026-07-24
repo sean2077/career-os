@@ -17,6 +17,7 @@ release.
 
 ## Release evidence
 
+- [v0.4.0](v0.4.0.md): adds safer shareable-resume defaults, language-aware filenames, audited link preservation, and unified four-character export IDs.
 - [v0.3.1](v0.3.1.md): rolls forward the immutable v0.3.0 tag after removing a stale deleted-test path from the release workflow and revalidating the complete release boundary.
 - [v0.3.0](v0.3.0.md): removes Defuddle/OpenCLI, adds localized Recent Changes views and JD-to-Company composition, consolidates test cost, and records an immutable Home-to-public extraction supplement.
 - [v0.2.0](v0.2.0.md): fixed state roots, schema-3 records, deterministic cleanup, optional read-only OpenCLI acquisition, filename-based resume fonts, and reviewed Home-to-public extraction.

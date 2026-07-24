@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "release": "v0.4.0",
+  "base_extraction_manifest": "docs/releases/v0.1.0-extraction.json",
+  "previous_supplement": "docs/releases/v0.3.1-extraction.json",
+  "history_shape": "home-roundtrip",
+  "home_freeze": "708bd8f2ad24eea6869f78e580058fef69801b08",
+  "public_base": "e610cb0774b7fd870241d3caca64a0a7e30a438d",
+  "self_exclusion": "docs/releases/v0.4.0-extraction.json",
+  "entries": [
+    {
+      "path": ".agents/skills/career-communication/SKILL.md",
+      "result_sha256": "e63357cbd5a4b420172faf46225f5e817d5b69cdcaa460a173417228a1888eb2",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "AGENTS.md",
+      "result_sha256": "9d9191a40c35c95577a260850698a91d061948b6b87c77accf6adb5bf2d9a61b",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "result_sha256": "3401708eb835d7e8e4e0bda71b2c37157c5cab43e78d04795993294bb00a01a3",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "README.md",
+      "result_sha256": "ccb70ff2b919e3a0ed1e439377f36a23ccca2ac1b93eef62d252b1b9a11427b9",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "career-os.toml",
+      "result_sha256": "3504766ff505b2e3e2635dc96a1558ccf84668242e51b6f2eb2ea9f63a3bae8f",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/installation.md",
+      "result_sha256": "b069fa6fdd419d3c7fe31edf7b261e1bbc2924c152a8341c70e0bf8e4e0f54d8",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/releases/README.md",
+      "result_sha256": "8e1c8107a6f2d85b589e9f317f5784d67f033edae62b4b4853ea117e376ed324",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/releases/v0.4.0.md",
+      "result_sha256": "62f620df77ab484d9d6675e0aa2ebfa515dfa109da1579fc427b6b037e228306",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/resume.md",
+      "result_sha256": "5a2c3be80fd3a3dfed9bd31f00e100925acc5c519f5f06af2c49e42ff04c088d",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "docs/tooling.md",
+      "result_sha256": "7850d6d3907b2e98e95f5c22b3c89b457f75435599302419ec3d718dabe8a258",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "pyproject.toml",
+      "result_sha256": "d17dda3658e269a345c80e0a8980b96d6e66bdb088022b0219e3b0386fc37f8b",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/privacy/public-fixture-policy.json",
+      "result_sha256": "86aecea15ed269036bcf09d0036109108b4e96a743f1bb9818a13bceede05dec",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/resume/README.md",
+      "result_sha256": "c2bc7472a82b3f68e2046c01ce00e9224c54dbaac9cc98e366ab601f622e8ce2",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/resume/career-os-style.sty",
+      "result_sha256": "455f4f2e3eab9ac4576b4948c8f4cd4b20248d469a6d9a41eed31072a03a2452",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/resume/career-os.cls",
+      "result_sha256": "f84164bfd64442ae31b165393265fdad961aa1698a82fed8e21d5a05975a0707",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/sbom.cdx.json",
+      "result_sha256": "8b0b1ae95ba7d85cde920b82f4b5e352f4a948a46184545daa0e666f9ea340c0",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/seeds/authorities/70-career-communication.md",
+      "result_sha256": "69bc83a1f9c0ebe0a43490cb86cc551af1712b6273ff85aa55134252ef6b03a5",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tests/test_cli_smoke.py",
+      "result_sha256": "b4303bc2bd841fc86de0b8c0619cb9a62ca3bf9e3b0b4d42f8d13e7998a0041b",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tests/test_extraction_manifest.py",
+      "result_sha256": "408388960a4f1a880e99f4a11a1c2721e162a5d4b58c5c1fa7ab080847a8b4e0",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tests/test_resume.py",
+      "result_sha256": "0cea86367459cca0eb0d9ca899f080abd7118d05b9779a016708ac5ecf87a93d",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tests/test_resume_adversarial.py",
+      "result_sha256": "2fcb80a44fba019f262544f32b3f4a8ee4c63f7dc961ee804a853d4cccc79d33",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tests/test_resume_variants.py",
+      "result_sha256": "7b5aebcaf6bbf9891c04b3b8729e24b5ef1d632844f4a22125802f94d3c8231d",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tools/career_os/__init__.py",
+      "result_sha256": "5b2ee69a1ad388fc83e1b0590e485f841b40929039d331085c7e49c518a0b58f",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tools/career_os/cli/resume.py",
+      "result_sha256": "16ec4b7aea765e919668c71823d7c875228c86a7916a0949fcc17bf764f8eff0",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tools/career_os/resume/privacy.py",
+      "result_sha256": "745fe75d77b2f0752a852b77b8ec4b7ce1f6c757a09047570ffc5ddfd482e3c9",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tools/career_os/resume/service.py",
+      "result_sha256": "eec3aa6a63aca0e12503497dc3651447c3f5676b0d84bc229988782aed17ff5e",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "uv.lock",
+      "result_sha256": "fa5a37d588ad3e01c8705bc15b3b49da8f2ebd8e8a3ff88429946114e41d0d15",
+      "reason": "release-evidence"
+    }
+  ]
+}
