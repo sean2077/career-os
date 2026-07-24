@@ -1,14 +1,14 @@
 {
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
-  "serialNumber": "urn:uuid:a2b2f534-cea2-5761-953e-85e198ffe6fc",
+  "serialNumber": "urn:uuid:73c470a9-7c39-5d15-b880-f09ae3091bed",
   "version": 1,
   "metadata": {
     "component": {
       "type": "application",
-      "bom-ref": "career-os@0.3.0",
+      "bom-ref": "career-os@0.3.1",
       "name": "career-os",
-      "version": "0.3.0",
+      "version": "0.3.1",
       "licenses": [
         {
           "license": {
@@ -646,7 +646,7 @@
   ],
   "dependencies": [
     {
-      "ref": "career-os@0.3.0",
+      "ref": "career-os@0.3.1",
       "dependsOn": [
         "font:NotoSansCJKsc-Bold.otf@2.004",
         "font:NotoSansCJKsc-Regular.otf@2.004",

@@ -162,8 +162,8 @@ snapshots of selected Skills from
 
 ## Status
 
-The current stable line is `v0.3.0`; see its
-[verification evidence](docs/releases/v0.3.0.md). Before `v1.0`, only the
+The current stable line is `v0.3.1`; see its
+[verification evidence](docs/releases/v0.3.1.md). Before `v1.0`, only the
 interfaces explicitly documented by a release are supported.
 
 ## License

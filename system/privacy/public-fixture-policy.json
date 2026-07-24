@@ -6,7 +6,8 @@
       "5af8a010d4fc548e1281c9d601a6c69b3587afdb747978947b1482fa78d69447"
     ],
     ".github/workflows/release.yml": [
-      "25ce6ee9f10f991c97c0ab7dddc011886f387d79c0b66ecab9a55199edfd5400"
+      "25ce6ee9f10f991c97c0ab7dddc011886f387d79c0b66ecab9a55199edfd5400",
+      "78d0cef9eb4195216a3bd17f07ed2a8deace5acd458e61f88a4df5c7a29ccfad"
     ],
     "system/resume/fixtures/en/identity.tex": [
       "841774be35df9ecc8966afd64e73bdbe30afb9f7249db6ecf7c49abf3ec2f87a"

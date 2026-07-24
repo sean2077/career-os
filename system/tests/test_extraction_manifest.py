@@ -13,6 +13,7 @@ MANIFEST_PATH = "docs/releases/v0.1.0-extraction.json"
 SUPPLEMENT_PATHS = (
     "docs/releases/v0.1.0-mvp.json",
     "docs/releases/v0.3.0-extraction.json",
+    "docs/releases/v0.3.1-extraction.json",
 )
 
 
@@ -53,6 +54,17 @@ def test_public_extraction_manifest_is_complete_and_hash_bound() -> None:
         "public_base": "d0bfb1fa5bf8e139b2ec5f9d2417a3344151da92",
         "self_exclusion": SUPPLEMENT_PATHS[1],
         "entries": supplements[1]["entries"],
+    }
+    assert supplements[2] == {
+        "schema_version": 1,
+        "release": "v0.3.1",
+        "base_extraction_manifest": MANIFEST_PATH,
+        "previous_supplement": SUPPLEMENT_PATHS[1],
+        "history_shape": "release-roll-forward",
+        "failed_tag": "v0.3.0",
+        "public_base": "bc635b6ee28986b80772e93abd1ead8e8a80bfc3",
+        "self_exclusion": SUPPLEMENT_PATHS[2],
+        "entries": supplements[2]["entries"],
     }
     assert not [
         entry

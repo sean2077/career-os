@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "release": "v0.3.1",
+  "base_extraction_manifest": "docs/releases/v0.1.0-extraction.json",
+  "previous_supplement": "docs/releases/v0.3.0-extraction.json",
+  "history_shape": "release-roll-forward",
+  "failed_tag": "v0.3.0",
+  "public_base": "bc635b6ee28986b80772e93abd1ead8e8a80bfc3",
+  "self_exclusion": "docs/releases/v0.3.1-extraction.json",
+  "entries": [
+    {
+      "path": ".github/workflows/release.yml",
+      "result_sha256": "78d0cef9eb4195216a3bd17f07ed2a8deace5acd458e61f88a4df5c7a29ccfad",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "result_sha256": "69b577328a4a2721c05d0a8e0838f058856af7f6f67366eb74aaecd083c84519",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "README.md",
+      "result_sha256": "0b3e6fa91655fe5bdf2bc4964707821294c0bf84e7ef612b5ab4dea4fdb7c401",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "career-os.toml",
+      "result_sha256": "3c1692e6ca2a272f19d7331fb193ae1daa14f614956cb8b1063e033b5f2808f4",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/installation.md",
+      "result_sha256": "efdb0bb7e32a618391c30315d88ac2eba5cd5c78d5b3bc489ce7d9c0ab36d0a8",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/releases/README.md",
+      "result_sha256": "dadd427a9ca466cbc98e5b4c9a47e2baba0eb13b322f6592425f59a58f952c2e",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/releases/v0.3.1.md",
+      "result_sha256": "b0012e376de68d75745a0b57ad70c5a9c9b2d0c7f90bf4db6bf9b7dc7d3277b1",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "pyproject.toml",
+      "result_sha256": "43861c900c5b2331b07d2404d7dc00ba2f1c261e84b95e8e3ba614df69f0a940",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/privacy/public-fixture-policy.json",
+      "result_sha256": "04e74cfa2f3804238029e806d5001bec965ea80e3a60cc9c8295252e429a62c2",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/sbom.cdx.json",
+      "result_sha256": "aa829360c115b669764a30673b7712ba4dfbba5a1b36fd98046815c3a73dfcc4",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tests/test_cli_smoke.py",
+      "result_sha256": "fb5ee58fa3c97285a51fdb6765285b7c20a2d9160549a2dcaa481dcb3ef8ffb0",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tests/test_extraction_manifest.py",
+      "result_sha256": "2d2fd469fdaaf597bbdbddedd71ce10d33e3ac024bf0aa9f0eb1f4f40ae6c687",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tools/career_os/__init__.py",
+      "result_sha256": "bb36bd36fc85457fb00f1767649f00340150a2951493481b2822c64857aac554",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "uv.lock",
+      "result_sha256": "25f638f4c92714101147a2445a05a5e70369ad00728adc8e452f0e3646bfbaea",
+      "reason": "release-evidence"
+    }
+  ]
+}

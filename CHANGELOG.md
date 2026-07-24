@@ -4,6 +4,26 @@ All notable changes to Career OS are documented here.
 
 ## [Unreleased]
 
+## [v0.3.1] — 2026-07-24
+
+### Fixed
+
+- Removed a stale release-workflow invocation of the deleted redundant
+  `system/tests/test_golden_journey.py` wrapper. The workflow still runs the
+  complete Python suite, enforces a clean checkout, and executes all repository,
+  privacy, Skill, harness, and synthetic resume gates.
+
+### Security
+
+- Re-reviewed the changed release workflow as synthetic-only and appended its
+  exact blob hash to the guarded fixture policy.
+
+### Boundaries
+
+- The published `v0.3.0` annotated tag remains immutable. Its failed workflow
+  did not create a GitHub Release; this patch is the roll-forward release
+  boundary and does not move, delete, or reuse that tag.
+
 ## [v0.3.0] — 2026-07-24
 
 ### Added
