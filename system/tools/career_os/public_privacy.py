@@ -355,6 +355,8 @@ def _add_private_candidate(
     has_cjk = bool(re.search(r"[\u3400-\u9fff]", value))
     if len(value) < (2 if has_cjk else 4):
         return
+    if "->" in value:
+        return
     if _allowed_public_email(value) or _PUBLIC_GITHUB_RE.fullmatch(value):
         return
     digits = "".join(re.findall(r"\d", value))

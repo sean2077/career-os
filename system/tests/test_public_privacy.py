@@ -175,6 +175,43 @@ def test_exact_public_seed_copy_does_not_become_a_private_candidate(
     assert report.private_candidate_count == 0
 
 
+def test_company_lifecycle_label_does_not_become_a_private_candidate(
+    tmp_path: Path,
+) -> None:
+    public = tmp_path / "public"
+    private = tmp_path / "private"
+    _repository(public)
+    _write_policy(public, {})
+    public.joinpath("README.md").write_text(
+        "Company: pending-review -> reviewed -> stale -> pending-review\n",
+        encoding="utf-8",
+        newline="\n",
+    )
+    _commit_all(public, "test: add public lifecycle documentation")
+
+    private.joinpath("career/40-opportunity-decision").mkdir(parents=True)
+    private.joinpath("career-os.toml").write_text(
+        "schema_version = 2\n",
+        encoding="utf-8",
+        newline="\n",
+    )
+    private.joinpath("career/40-opportunity-decision/README.md").write_text(
+        "Private workflow notes.\n"
+        "Company: pending-review -> reviewed -> stale -> pending-review\n",
+        encoding="utf-8",
+        newline="\n",
+    )
+
+    report = audit_public_repository(
+        public,
+        include_history=True,
+        private_root=private,
+    )
+
+    assert report.ok
+    assert report.private_candidate_count == 0
+
+
 def test_obvious_public_patterns_fail_without_echoing_values(tmp_path: Path) -> None:
     _repository(tmp_path)
     _write_policy(tmp_path, {})

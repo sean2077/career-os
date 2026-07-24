@@ -46,6 +46,9 @@ All notable changes to Career OS are documented here.
 - Kept superseded migration completions verifiable after an intentional
   downstream topology or Git-history rewrite without mutating historical
   hash-bound evidence.
+- Prevented lifecycle transition labels such as `Company: draft -> reviewed`
+  from becoming false-positive private company candidates while retaining
+  exact matching for labeled identity, company, location, and contact values.
 - Removed obsolete `v0.1.0-rc.*` release notes now that the clean-install-only
   stable MVP is the sole published release line.
 

@@ -34,7 +34,8 @@
     "system/tests/test_public_privacy.py": [
       "a44e61c55246539c812f2d0d0ab8eff8c4a525af11e25cb2a7666bdb86161334",
       "552f6fc352b29dbcd46d87f569b2e16dd79085e09ac9fbe8d03aaef89d92d98e",
-      "beaf32089060caa3f01a148d23898678cb55941e1c1664d34b054b459c46251d"
+      "beaf32089060caa3f01a148d23898678cb55941e1c1664d34b054b459c46251d",
+      "bdaec9dbd84b3aad4f23d5a91011cf045f5372f0cbcf2097736b86a5281f996d"
     ],
     "system/tests/test_resume.py": [
       "9503c3ebde780a75c0c97782403438069f8ebac3886581cea80d3e68a38f5bfe",
@@ -64,7 +65,8 @@
     ],
     "system/tools/career_os/public_privacy.py": [
       "8b03901ad328656a6de09d025b2150623fbb08fdda61d5711f504339da1c34e3",
-      "f8def7e4f7c8b98a442909530ed30f1bead2c8df759d2a45dbf8905c44954606"
+      "f8def7e4f7c8b98a442909530ed30f1bead2c8df759d2a45dbf8905c44954606",
+      "731fe2613dc9ddf29b1bf814042bb577be53a41cb96fa49d59e7bf8868905730"
     ]
   }
 }

@@ -52,7 +52,7 @@
     },
     {
       "path": "CHANGELOG.md",
-      "result_sha256": "6fee2dbc150dc7c234ded50bb0fcc2c124ab18a931f1e83b083c2cecef506734",
+      "result_sha256": "461529eb2702d430af94a54954b6eed6d0e5ebf9820d22cdd384353b365501aa",
       "reason": "release-evidence"
     },
     {
@@ -232,7 +232,7 @@
     },
     {
       "path": "system/privacy/public-fixture-policy.json",
-      "result_sha256": "41edeb20c86c0bfa18315df1ad48b55bf86d590d61607a19d38b60ac143f0d93",
+      "result_sha256": "48a48078f0b097ee7abc852ead6645642ebdcf05f761799dd687e89292980f7c",
       "reason": "mvp-security-hardening"
     },
     {
@@ -402,7 +402,7 @@
     },
     {
       "path": "system/tests/test_public_privacy.py",
-      "result_sha256": "beaf32089060caa3f01a148d23898678cb55941e1c1664d34b054b459c46251d",
+      "result_sha256": "bdaec9dbd84b3aad4f23d5a91011cf045f5372f0cbcf2097736b86a5281f996d",
       "reason": "mvp-security-hardening"
     },
     {
@@ -552,7 +552,7 @@
     },
     {
       "path": "system/tools/career_os/public_privacy.py",
-      "result_sha256": "f8def7e4f7c8b98a442909530ed30f1bead2c8df759d2a45dbf8905c44954606",
+      "result_sha256": "731fe2613dc9ddf29b1bf814042bb577be53a41cb96fa49d59e7bf8868905730",
       "reason": "mvp-security-hardening"
     },
     {
