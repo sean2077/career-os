@@ -221,6 +221,19 @@ _LIST_RELATIONS = {
     ("communication.resume", "uses_claim"),
 }
 
+_RELATION_FIELD_OVERRIDES: dict[tuple[str, str], str | None] = {
+    ("strategy.lane", "supported-by-outlook"): "outlook_input",
+    ("market.direction", "career-lane"): None,
+    ("communication.audit", "audits-profile"): "resume_root",
+    ("communication.audit", "audits-claim"): None,
+    ("communication.audit", "target-jd"): None,
+    ("communication.resume", "reviewed-by"): None,
+}
+
+
+def _v3_relation_field(kind: str, relation: str) -> str | None:
+    return _RELATION_FIELD_OVERRIDES.get((kind, relation), relation.replace("-", "_"))
+
 
 def _migrate_v2_to_v3(
     raw: dict[str, Any],
@@ -251,11 +264,12 @@ def _migrate_v2_to_v3(
         target_id = host_ref.get("target_id")
         if not isinstance(relation, str) or not isinstance(path, str):
             raise ValueError("schema-2 host_ref relation and path must be strings")
-        field = relation.replace("-", "_")
+        field = _v3_relation_field(kind, relation)
         link_target = path[:-3] if path.lower().endswith(".md") else path
         anchor = host_ref.get("anchor") or ""
         link = f"[[{link_target}{anchor}]]"
-        relation_links.setdefault(field, []).append(link)
+        if field is not None:
+            relation_links.setdefault(field, []).append(link)
         if target_id is not None:
             linked_ref_keys.add((relation, str(target_id)))
     for ref in refs:
@@ -269,9 +283,9 @@ def _migrate_v2_to_v3(
                     "schema-2 internal reference target is missing: "
                     f"{key[0]} -> {key[1]}"
                 )
-            relation_links.setdefault(key[0].replace("-", "_"), []).append(
-                f"[[{target}]]"
-            )
+            field = _v3_relation_field(kind, key[0])
+            if field is not None:
+                relation_links.setdefault(field, []).append(f"[[{target}]]")
     for field, links in relation_links.items():
         unique = list(dict.fromkeys(links))
         if (kind, field) in _LIST_RELATIONS:

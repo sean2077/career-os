@@ -77,6 +77,11 @@ duplicated reference arrays and status history, converts relation names to
 top-level Wikilinks, and preserves the Markdown body except for the retired
 machine-owned `## Authority links` section.
 
+The transform maps schema-2 relationship vocabulary by record kind rather than
+assuming spelling identity. Relations retired from the schema-3 machine
+contract are removed only from frontmatter; their narrative Wikilinks remain in
+the Markdown body for review.
+
 Unresolved imported data may temporarily carry `migration_review: required`
 and `legacy_fields`. Confirmation removes both fields; no `completed` marker
 or tracked provenance ledger is written. Successful tooling proves only that

@@ -7,6 +7,7 @@ import pytest
 from career_os.config import resolve_paths
 from career_os.records import (
     KIND_LIFECYCLES,
+    ParsedRecord,
     load_record,
     record_json_schema,
     validate_record_envelope,
@@ -98,6 +99,31 @@ def test_company_supports_bilingual_display_names() -> None:
 
     assert company.display_name_zh == "示例科技"
     assert company.display_name_en == "Example Technology"
+
+
+def test_market_channel_without_optional_career_lane_is_semantically_valid() -> None:
+    payload = {
+        "id": "33333333-3333-4333-8333-333333333333",
+        "kind": "market.channel",
+        "schema_version": 3,
+        "created_at": "2026-07-24T00:00:00Z",
+        "updated_at": "2026-07-24T00:00:00Z",
+        "visibility": "private",
+        "status": "active",
+        "rank": 1,
+        "tier": "core",
+        "role": "Synthetic discovery channel",
+        "last_verified_at": "2026-07-24",
+    }
+    record = ParsedRecord(
+        path=Path("synthetic-channel.md"),
+        envelope=validate_record_envelope(payload),
+        body="# Synthetic channel\n",
+        raw_frontmatter=payload,
+    )
+    paths = resolve_paths(Path(__file__).resolve().parents[2])
+
+    assert check_record_semantics([record], paths) == []
 
 
 def test_workspace_covers_all_kinds_and_wikilink_semantics() -> None:

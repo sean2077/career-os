@@ -147,7 +147,7 @@ def check_record_semantics(
             _check_strategy_outlook_refs(issues, record, resolved)
         elif isinstance(envelope, MarketJD):
             _check_jd(issues, record, resolved, envelope)
-        elif isinstance(envelope, MarketChannel) and envelope.career_lane is not None:
+        elif isinstance(envelope, MarketChannel) and envelope.career_lane:
             _require_targets(
                 issues, record, resolved, "career_lane", {"strategy.lane"}
             )

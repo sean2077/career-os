@@ -5,6 +5,7 @@ from pathlib import Path
 import pytest
 from career_os.config import ProjectPaths
 from career_os.migrations import (
+    _migrate_v2_to_v3,
     _serialize_record,
     create_record_migration_plan,
     verify_migration_definition,
@@ -30,6 +31,46 @@ def test_record_serialization_does_not_add_trailing_whitespace() -> None:
     )
 
     assert all(line == line.rstrip() for line in serialized.splitlines())
+
+
+def test_v2_relationship_vocabulary_maps_to_v3_authority_fields() -> None:
+    raw = {
+        "id": "99999999-9999-4999-8999-999999999999",
+        "kind": "strategy.lane",
+        "schema_version": 2,
+        "created_at": "2026-07-20T00:00:00Z",
+        "updated_at": "2026-07-20T00:00:00Z",
+        "visibility": "private",
+        "title": "Synthetic strategy lane",
+        "status": "accepted",
+        "status_history": [],
+        "tags": [],
+        "aliases": [],
+        "migration_review": "not-applicable",
+        "confidence": "high",
+        "review_on": "2026-10-20",
+        "disconfirming_signals": [],
+        "refs": [
+            {
+                "relation": "supported-by-outlook",
+                "target_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+                "required": True,
+            }
+        ],
+        "host_refs": [
+            {
+                "relation": "supported-by-outlook",
+                "target_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+                "path": "career/50-career-outlook/review.md",
+                "required": True,
+            }
+        ],
+    }
+
+    migrated, _body = _migrate_v2_to_v3(raw, "# Synthetic lane\n", {})
+
+    assert migrated["outlook_input"] == "[[career/50-career-outlook/review]]"
+    assert "supported_by_outlook" not in migrated
 
 
 def test_plan_apply_and_rollback(tmp_path: Path) -> None:
