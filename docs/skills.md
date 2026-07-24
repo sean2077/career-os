@@ -45,9 +45,22 @@ Bundled companion Skills `conventional-commit` and `agent-scaffold` come from [s
 
 Bundled Obsidian Skills `obsidian-markdown`, `obsidian-bases`, `json-canvas`, `obsidian-cli`, and `defuddle` come from [kepano/obsidian-skills](https://github.com/kepano/obsidian-skills).
 
+The single bundled OpenCLI Skill `opencli-usage` comes from
+[jackwener/OpenCLI](https://github.com/jackwener/OpenCLI). It provides live
+adapter discovery only. `opportunity-decision` remains the company-research
+orchestrator and may combine OpenCLI with official sources, ordinary web
+research, direct URLs, user-provided material, and offline evidence. The
+project deliberately does not bundle `smart-search`, raw browser, sitemap,
+adapter-authoring, or autofix Skills.
+
+The OpenCLI v1.8.6 package manifest declares Node.js 20 or newer, while the
+locked upstream `opencli-usage` prose says Node.js 21. The snapshot remains
+unmodified; installation guidance and `career-os doctor` use the package
+manifest as the runtime authority.
+
 Exact revisions, source paths, licenses, and tree hashes live in `skills-lock.json`. Bundled external Skill content is not modified.
 
-`career-os skills verify` checks the exact 14-Skill inventory, required
+`career-os skills verify` checks the exact 15-Skill inventory, required
 frontmatter, locked external trees, real Claude projections, and the absence of a
 `.codex/skills` projection. The canonical tree digest hashes each sorted POSIX
 relative path together with the SHA-256 of its file bytes.

@@ -23,8 +23,6 @@ def _write_config(root: Path, version: str = "0.1.0-rc.2") -> None:
     root.joinpath("career-os.toml").write_text(
         f'''schema_version = 2
 system_version = "{version}"
-data_root = "career"
-runtime_root = "runtime"
 build_root = "build"
 preferred_language = "en"
 

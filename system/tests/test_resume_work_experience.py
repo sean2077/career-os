@@ -27,7 +27,7 @@ def _paths(root: Path) -> ProjectPaths:
     return ProjectPaths(
         project_root=root,
         data_root=root / "career",
-        runtime_root=root / "runtime",
+        runtime_root=root / ".career-os/runtime",
         build_root=root / "build",
         local_state_root=root / ".career-os",
         vault_root=root,

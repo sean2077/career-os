@@ -3,11 +3,12 @@ from __future__ import annotations
 import json
 import shutil
 import subprocess
+import tomllib
 from pathlib import Path
 
 import pytest
 import typer
-from career_os.checks import CheckIssue
+from career_os.checks import CheckIssue, _check_schemas
 from career_os.cli import app
 from career_os.cli.core import (
     _obsidian_doctor_checks,
@@ -15,17 +16,24 @@ from career_os.cli.core import (
     _version_at_least,
     init_command,
 )
-from career_os.config import load_project_config, normalize_vault_mount
+from career_os.config import (
+    InstallState,
+    ProjectConfig,
+    ProjectPaths,
+    load_project_config,
+    normalize_vault_mount,
+    project_config_json_schema,
+    serialize_project_config,
+)
 from pydantic import ValidationError
 from typer.testing import CliRunner
 
 
 def _write_config(root: Path) -> None:
     root.joinpath("career-os.toml").write_text(
-        """schema_version = 1
+        """#:schema ./system/schemas/project-config.schema.json
+schema_version = 2
 system_version = "0.1.0-rc.1"
-data_root = "career"
-runtime_root = "runtime"
 build_root = "build"
 preferred_language = "en"
 
@@ -42,6 +50,124 @@ engine = "xelatex"
     shutil.copytree(source_seeds, root / "system/seeds")
     source_bases = Path(__file__).resolve().parents[1] / "obsidian/bases"
     shutil.copytree(source_bases, root / "system/obsidian/bases")
+
+
+def test_project_config_schema_matches_runtime_model_and_round_trips() -> None:
+    repository_root = Path(__file__).resolve().parents[2]
+    committed = json.loads(
+        repository_root.joinpath(
+            "system/schemas/project-config.schema.json"
+        ).read_text(encoding="utf-8")
+    )
+    assert committed == project_config_json_schema()
+
+    config = load_project_config(repository_root)
+    serialized = serialize_project_config(config)
+    assert serialized.startswith(
+        "#:schema ./system/schemas/project-config.schema.json\n"
+    )
+    assert ProjectConfig.model_validate(tomllib.loads(serialized)) == config
+
+
+def test_project_config_schema_documents_every_setting() -> None:
+    schema = project_config_json_schema()
+    object_schemas = [schema, *schema["$defs"].values()]
+
+    for object_schema in object_schemas:
+        description = object_schema.get("description")
+        assert isinstance(description, str) and description.strip()
+        for name, property_schema in object_schema["properties"].items():
+            field_description = property_schema.get("description")
+            assert isinstance(field_description, str) and field_description.strip(), name
+
+
+def test_opencli_config_defaults_disabled_for_older_project_files(tmp_path: Path) -> None:
+    _write_config(tmp_path)
+
+    config = load_project_config(tmp_path)
+
+    assert config.research.opencli.enabled is False
+    assert config.research.opencli.sources == {}
+
+
+@pytest.mark.parametrize(
+    ("field", "value", "message"),
+    [
+        ("capture_subdir", "../research", "capture_subdir"),
+        ("capture_subdir", "C:/research", "capture_subdir"),
+        ("profile", "career research", "profile"),
+    ],
+)
+def test_opencli_config_rejects_nonportable_values(
+    field: str, value: str, message: str
+) -> None:
+    payload = {
+        "schema_version": 2,
+        "system_version": "0.1.0",
+        "research": {
+            "opencli": {
+                "enabled": True,
+                "sources": {"weixin": ["search"]},
+                field: value,
+            }
+        },
+    }
+
+    with pytest.raises(ValidationError, match=message):
+        ProjectConfig.model_validate(payload)
+
+
+@pytest.mark.parametrize(
+    "sources",
+    [
+        {},
+        {"browser": ["state"]},
+        {"weixin": []},
+        {"weixin": ["search", "search"]},
+    ],
+)
+def test_enabled_opencli_config_rejects_empty_or_unsafe_allowlists(
+    sources: dict[str, list[str]],
+) -> None:
+    with pytest.raises(ValidationError):
+        ProjectConfig.model_validate(
+            {
+                "schema_version": 2,
+                "system_version": "0.1.0",
+                "research": {"opencli": {"enabled": True, "sources": sources}},
+            }
+        )
+
+
+def test_schema_check_rejects_stale_project_config_schema(tmp_path: Path) -> None:
+    schema_root = tmp_path / "system/schemas"
+    schema_root.mkdir(parents=True)
+    stale = project_config_json_schema()
+    stale["title"] = "Stale Project Configuration"
+    schema_root.joinpath("project-config.schema.json").write_text(
+        json.dumps(stale),
+        encoding="utf-8",
+    )
+    paths = ProjectPaths(
+        project_root=tmp_path,
+        data_root=tmp_path / "career",
+        runtime_root=tmp_path / ".career-os/runtime",
+        build_root=tmp_path / "build",
+        local_state_root=tmp_path / ".career-os",
+        vault_root=tmp_path,
+        mode="standalone",
+    )
+
+    issues = _check_schemas(paths)
+
+    failures = [issue for issue in issues if issue.status == "fail"]
+    assert {issue.id for issue in failures} == {
+        "schema.inventory",
+        "schema.json",
+    }
+    assert any(
+        "does not match the runtime model" in issue.detail for issue in failures
+    )
 
 
 def test_init_is_idempotent_and_multilingual(tmp_path: Path) -> None:
@@ -163,38 +289,29 @@ def test_init_supports_external_project_through_relative_vault_mount(
     assert not any(project.joinpath("career").rglob("*.base"))
 
 
-def test_init_preserves_homepage_with_custom_external_data_root(tmp_path: Path) -> None:
+def test_init_rejects_removed_data_root_option(tmp_path: Path) -> None:
     vault = tmp_path / "vault"
     project = vault / "career-home"
-    data_root = vault / "private-career"
     project.mkdir(parents=True)
     _write_config(project)
-    homepage = project / "Home.md"
-    shutil.copy2(Path(__file__).resolve().parents[2] / "Home.md", homepage)
-    homepage_before = homepage.read_bytes()
-    arguments = [
-        "init",
-        "--mode",
-        "embedded",
-        "--root",
-        str(project),
-        "--vault-root",
-        str(vault),
-        "--data-root",
-        str(data_root),
-        "--languages",
-        "en,zh-CN",
-    ]
+    result = CliRunner().invoke(
+        app,
+        [
+            "init",
+            "--mode",
+            "embedded",
+            "--root",
+            str(project),
+            "--vault-root",
+            str(vault),
+            "--data-root",
+            str(vault / "private-career"),
+        ],
+    )
 
-    first = CliRunner().invoke(app, arguments)
-    second = CliRunner().invoke(app, arguments)
-
-    assert first.exit_code == 0, first.stdout
-    assert second.exit_code == 0, second.stdout
-    assert json.loads(second.stdout)["created"] == []
-    assert homepage.read_bytes() == homepage_before
-    assert (data_root / "README.md").is_file()
-    assert not any(data_root.rglob("*.base"))
+    assert result.exit_code == 2
+    assert "No such option: --data-root" in result.stderr
+    assert not (project / "career").exists()
 
 
 def test_init_rejects_external_project_without_vault_mount(tmp_path: Path) -> None:
@@ -236,6 +353,34 @@ def test_paths_reports_resolved_roots(tmp_path: Path) -> None:
     payload = json.loads(result.stdout)
     assert payload["ok"] is True
     assert Path(payload["data_root"]) == tmp_path / "career"
+    assert Path(payload["runtime_root"]) == tmp_path / ".career-os/runtime"
+
+
+@pytest.mark.parametrize("removed_field", ["data_root", "runtime_root"])
+def test_project_config_rejects_removed_root_fields(removed_field: str) -> None:
+    with pytest.raises(ValidationError, match=removed_field):
+        ProjectConfig.model_validate(
+            {
+                "schema_version": 2,
+                "system_version": "0.1.0",
+                removed_field: "custom",
+            }
+        )
+
+
+def test_install_state_rejects_legacy_schema_and_data_root() -> None:
+    with pytest.raises(ValidationError):
+        InstallState.model_validate(
+            {
+                "schema_version": 1,
+                "mode": "standalone",
+                "project_root": ".",
+                "vault_root": ".",
+                "data_root": "career",
+                "system_version": "0.1.0",
+                "languages": ["en"],
+            }
+        )
 
 
 def test_paths_accepts_explicit_json_interface(tmp_path: Path) -> None:
@@ -244,6 +389,24 @@ def test_paths_accepts_explicit_json_interface(tmp_path: Path) -> None:
 
     assert result.exit_code == 0, result.stdout
     assert json.loads(result.stdout)["ok"] is True
+
+
+@pytest.mark.parametrize("relative", ["career", ".career-os/runtime"])
+def test_paths_rejects_linked_fixed_roots(tmp_path: Path, relative: str) -> None:
+    _write_config(tmp_path)
+    outside = tmp_path / "outside"
+    outside.mkdir()
+    link = tmp_path / relative
+    link.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        link.symlink_to(outside, target_is_directory=True)
+    except OSError as error:
+        pytest.skip(f"local platform does not permit directory symlinks: {error}")
+
+    result = CliRunner().invoke(app, ["paths", "--json", "--root", str(tmp_path)])
+
+    assert result.exit_code == 1
+    assert "fixed project path" in result.stdout
 
 
 @pytest.mark.parametrize("json_output", [False, True])

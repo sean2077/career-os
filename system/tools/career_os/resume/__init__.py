@@ -1,5 +1,6 @@
 from career_os.resume.fonts import (
     fetch_fonts,
+    prepare_resume_fonts,
     verify_fonts,
 )
 from career_os.resume.service import (
@@ -18,6 +19,7 @@ __all__ = [
     "fetch_fonts",
     "list_resumes",
     "new_resume",
+    "prepare_resume_fonts",
     "resume_doctor",
     "validate_resume_source",
     "verify_fonts",

@@ -14,6 +14,7 @@ fixed `career-os` class plus safe build/export tooling.
 
 ```text
 uv run career-os resume fonts fetch
+uv run career-os resume fonts verify
 uv run career-os resume doctor --json
 uv run career-os resume new my-resume
 ```
@@ -22,23 +23,29 @@ The default Source Han Serif SC and Noto Sans CJK SC files are verified against
 `system/resume/fonts.json` and installed under ignored `.career-os/fonts/`.
 Font binaries never enter Git.
 
-### Personal fonts
+### Project-wide local fonts
 
-Put owner-supplied font files anywhere below ignored `.career-os/fonts/`, then
-set their filenames before `\documentclass{career-os}` in the handwritten root:
+Put owner-supplied files in a directory below `.career-os/fonts/`, then declare
+the directory and optional fixed role overrides in `career-os.toml`:
 
-```tex
-\newcommand{\CareerOSCJKBodyRegularFont}{OwnerSong-Regular.otf}
-\newcommand{\CareerOSCJKBodyBoldFont}{OwnerHei-Regular.otf}
-\newcommand{\CareerOSCJKBodyItalicFont}{OwnerKai-Regular.otf}
-\newcommand{\CareerOSCJKBodyBoldItalicFont}{OwnerHei-Regular.otf}
-\documentclass{career-os}
+```toml
+[resume.fonts]
+directory = ".career-os/fonts/personal"
+
+[resume.fonts.roles]
+cjk_body_regular = "OwnerSong-Regular.otf"
+cjk_body_bold = "OwnerHei-Regular.otf"
 ```
 
-The CLI and `system/resume/latexmkrc` search `.career-os/fonts/` recursively.
-The remaining overridable family macros are declared together at the top of
-`system/resume/career-os.cls`. A missing named font fails during XeLaTeX
-compilation; there is no profile descriptor or silent substitution layer.
+Unspecified roles continue to use system defaults. `resume fonts verify`,
+doctor, build, export, and `system/resume/latexmkrc` share the resolver.
+Verification materializes only `.career-os/generated/resume-fonts.tex`.
+Owner-supplied overrides are resolved by filename without a stored content
+hash, so replacing a file with another font under the same name takes effect on
+the next verify, doctor, build, or export. Missing files fail before XeLaTeX;
+invalid or incompatible replacements fail during compilation. There is no
+per-resume descriptor, template selector, or silent substitution. Downloaded
+system-default fonts remain hash-verified against `system/resume/fonts.json`.
 
 ### VS Code
 

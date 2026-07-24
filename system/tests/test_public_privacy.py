@@ -109,7 +109,7 @@ def test_private_cross_comparison_catches_short_cjk_identity_and_locations(
 
     private.joinpath("career/profile").mkdir(parents=True)
     private.joinpath("career-os.toml").write_text(
-        'data_root = "career"\n',
+        'schema_version = 2\n',
         encoding="utf-8",
         newline="\n",
     )
@@ -157,7 +157,7 @@ def test_exact_public_seed_copy_does_not_become_a_private_candidate(
 
     private.joinpath("career/40-opportunity-decision").mkdir(parents=True)
     private.joinpath("career-os.toml").write_text(
-        'data_root = "career"\n',
+        'schema_version = 2\n',
         encoding="utf-8",
         newline="\n",
     )

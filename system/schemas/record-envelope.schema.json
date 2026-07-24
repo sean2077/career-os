@@ -14,7 +14,7 @@
           "type": "string"
         },
         "schema_version": {
-          "const": 2,
+          "const": 3,
           "title": "Schema Version",
           "type": "integer"
         },
@@ -53,20 +53,6 @@
           "title": "Visibility",
           "type": "string"
         },
-        "refs": {
-          "items": {
-            "$ref": "#/$defs/InternalRef"
-          },
-          "title": "Refs",
-          "type": "array"
-        },
-        "host_refs": {
-          "items": {
-            "$ref": "#/$defs/HostRef"
-          },
-          "title": "Host Refs",
-          "type": "array"
-        },
         "title": {
           "anyOf": [
             {
@@ -89,40 +75,61 @@
           "title": "Status",
           "type": "string"
         },
-        "status_history": {
-          "items": {
-            "$ref": "#/$defs/StatusTransition"
-          },
-          "title": "Status History",
-          "type": "array"
-        },
         "tags": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Tags",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tags"
         },
         "aliases": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Aliases",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Aliases"
         },
         "migration_review": {
-          "enum": [
-            "not-applicable",
-            "required",
-            "completed"
+          "anyOf": [
+            {
+              "const": "required",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
           ],
-          "title": "Migration Review",
-          "type": "string"
+          "default": null,
+          "title": "Migration Review"
         },
         "legacy_fields": {
-          "additionalProperties": true,
-          "title": "Legacy Fields",
-          "type": "object"
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Legacy Fields"
         },
         "audit_date": {
           "format": "date",
@@ -200,6 +207,19 @@
         "user_confirmed": {
           "title": "User Confirmed",
           "type": "boolean"
+        },
+        "resume_root": {
+          "anyOf": [
+            {
+              "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Resume Root"
         }
       },
       "required": [
@@ -209,7 +229,6 @@
         "created_at",
         "updated_at",
         "status",
-        "migration_review",
         "audit_date",
         "scope",
         "source_fingerprint",
@@ -235,7 +254,7 @@
           "type": "string"
         },
         "schema_version": {
-          "const": 2,
+          "const": 3,
           "title": "Schema Version",
           "type": "integer"
         },
@@ -274,20 +293,6 @@
           "title": "Visibility",
           "type": "string"
         },
-        "refs": {
-          "items": {
-            "$ref": "#/$defs/InternalRef"
-          },
-          "title": "Refs",
-          "type": "array"
-        },
-        "host_refs": {
-          "items": {
-            "$ref": "#/$defs/HostRef"
-          },
-          "title": "Host Refs",
-          "type": "array"
-        },
         "title": {
           "anyOf": [
             {
@@ -310,40 +315,61 @@
           "title": "Status",
           "type": "string"
         },
-        "status_history": {
-          "items": {
-            "$ref": "#/$defs/StatusTransition"
-          },
-          "title": "Status History",
-          "type": "array"
-        },
         "tags": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Tags",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tags"
         },
         "aliases": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Aliases",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Aliases"
         },
         "migration_review": {
-          "enum": [
-            "not-applicable",
-            "required",
-            "completed"
+          "anyOf": [
+            {
+              "const": "required",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
           ],
-          "title": "Migration Review",
-          "type": "string"
+          "default": null,
+          "title": "Migration Review"
         },
         "legacy_fields": {
-          "additionalProperties": true,
-          "title": "Legacy Fields",
-          "type": "object"
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Legacy Fields"
         },
         "profile": {
           "enum": [
@@ -385,6 +411,32 @@
           ],
           "default": null,
           "title": "Destination"
+        },
+        "export_of": {
+          "anyOf": [
+            {
+              "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Export Of"
+        },
+        "target_jd": {
+          "anyOf": [
+            {
+              "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Jd"
         }
       },
       "required": [
@@ -394,7 +446,6 @@
         "created_at",
         "updated_at",
         "status",
-        "migration_review",
         "profile",
         "authorization"
       ],
@@ -415,7 +466,7 @@
           "type": "string"
         },
         "schema_version": {
-          "const": 2,
+          "const": 3,
           "title": "Schema Version",
           "type": "integer"
         },
@@ -453,20 +504,6 @@
           ],
           "title": "Visibility",
           "type": "string"
-        },
-        "refs": {
-          "items": {
-            "$ref": "#/$defs/InternalRef"
-          },
-          "title": "Refs",
-          "type": "array"
-        },
-        "host_refs": {
-          "items": {
-            "$ref": "#/$defs/HostRef"
-          },
-          "title": "Host Refs",
-          "type": "array"
         },
         "title": {
           "anyOf": [
@@ -489,40 +526,61 @@
           "title": "Status",
           "type": "string"
         },
-        "status_history": {
-          "items": {
-            "$ref": "#/$defs/StatusTransition"
-          },
-          "title": "Status History",
-          "type": "array"
-        },
         "tags": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Tags",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tags"
         },
         "aliases": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Aliases",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Aliases"
         },
         "migration_review": {
-          "enum": [
-            "not-applicable",
-            "required",
-            "completed"
+          "anyOf": [
+            {
+              "const": "required",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
           ],
-          "title": "Migration Review",
-          "type": "string"
+          "default": null,
+          "title": "Migration Review"
         },
         "legacy_fields": {
-          "additionalProperties": true,
-          "title": "Legacy Fields",
-          "type": "object"
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Legacy Fields"
         },
         "audience": {
           "minLength": 1,
@@ -538,6 +596,27 @@
           ],
           "title": "Identity Policy",
           "type": "string"
+        },
+        "claim_evidence": {
+          "items": {
+            "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+            "type": "string"
+          },
+          "title": "Claim Evidence",
+          "type": "array"
+        },
+        "current_employment": {
+          "anyOf": [
+            {
+              "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Current Employment"
         }
       },
       "required": [
@@ -547,7 +626,6 @@
         "created_at",
         "updated_at",
         "status",
-        "migration_review",
         "audience",
         "identity_policy"
       ],
@@ -568,7 +646,7 @@
           "type": "string"
         },
         "schema_version": {
-          "const": 2,
+          "const": 3,
           "title": "Schema Version",
           "type": "integer"
         },
@@ -606,20 +684,6 @@
           ],
           "title": "Visibility",
           "type": "string"
-        },
-        "refs": {
-          "items": {
-            "$ref": "#/$defs/InternalRef"
-          },
-          "title": "Refs",
-          "type": "array"
-        },
-        "host_refs": {
-          "items": {
-            "$ref": "#/$defs/HostRef"
-          },
-          "title": "Host Refs",
-          "type": "array"
         },
         "title": {
           "anyOf": [
@@ -643,40 +707,61 @@
           "title": "Status",
           "type": "string"
         },
-        "status_history": {
-          "items": {
-            "$ref": "#/$defs/StatusTransition"
-          },
-          "title": "Status History",
-          "type": "array"
-        },
         "tags": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Tags",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tags"
         },
         "aliases": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Aliases",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Aliases"
         },
         "migration_review": {
-          "enum": [
-            "not-applicable",
-            "required",
-            "completed"
+          "anyOf": [
+            {
+              "const": "required",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
           ],
-          "title": "Migration Review",
-          "type": "string"
+          "default": null,
+          "title": "Migration Review"
         },
         "legacy_fields": {
-          "additionalProperties": true,
-          "title": "Legacy Fields",
-          "type": "object"
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Legacy Fields"
         },
         "root_name": {
           "minLength": 1,
@@ -696,6 +781,40 @@
           ],
           "title": "Export Policy",
           "type": "string"
+        },
+        "identity_profile": {
+          "anyOf": [
+            {
+              "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Identity Profile"
+        },
+        "target_jd": {
+          "anyOf": [
+            {
+              "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Jd"
+        },
+        "uses_claim": {
+          "items": {
+            "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+            "type": "string"
+          },
+          "title": "Uses Claim",
+          "type": "array"
         }
       },
       "required": [
@@ -705,7 +824,6 @@
         "created_at",
         "updated_at",
         "status",
-        "migration_review",
         "root_name",
         "audience",
         "export_policy"
@@ -800,7 +918,7 @@
           "type": "string"
         },
         "schema_version": {
-          "const": 2,
+          "const": 3,
           "title": "Schema Version",
           "type": "integer"
         },
@@ -839,20 +957,6 @@
           "title": "Visibility",
           "type": "string"
         },
-        "refs": {
-          "items": {
-            "$ref": "#/$defs/InternalRef"
-          },
-          "title": "Refs",
-          "type": "array"
-        },
-        "host_refs": {
-          "items": {
-            "$ref": "#/$defs/HostRef"
-          },
-          "title": "Host Refs",
-          "type": "array"
-        },
         "title": {
           "anyOf": [
             {
@@ -874,40 +978,61 @@
           "title": "Status",
           "type": "string"
         },
-        "status_history": {
-          "items": {
-            "$ref": "#/$defs/StatusTransition"
-          },
-          "title": "Status History",
-          "type": "array"
-        },
         "tags": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Tags",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tags"
         },
         "aliases": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Aliases",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Aliases"
         },
         "migration_review": {
-          "enum": [
-            "not-applicable",
-            "required",
-            "completed"
+          "anyOf": [
+            {
+              "const": "required",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
           ],
-          "title": "Migration Review",
-          "type": "string"
+          "default": null,
+          "title": "Migration Review"
         },
         "legacy_fields": {
-          "additionalProperties": true,
-          "title": "Legacy Fields",
-          "type": "object"
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Legacy Fields"
         },
         "source_type": {
           "enum": [
@@ -951,6 +1076,14 @@
           ],
           "title": "Sensitivity",
           "type": "string"
+        },
+        "represented_by": {
+          "items": {
+            "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+            "type": "string"
+          },
+          "title": "Represented By",
+          "type": "array"
         }
       },
       "required": [
@@ -960,7 +1093,6 @@
         "created_at",
         "updated_at",
         "status",
-        "migration_review",
         "source_type",
         "captured_at",
         "provenance",
@@ -984,7 +1116,7 @@
           "type": "string"
         },
         "schema_version": {
-          "const": 2,
+          "const": 3,
           "title": "Schema Version",
           "type": "integer"
         },
@@ -1022,20 +1154,6 @@
           ],
           "title": "Visibility",
           "type": "string"
-        },
-        "refs": {
-          "items": {
-            "$ref": "#/$defs/InternalRef"
-          },
-          "title": "Refs",
-          "type": "array"
-        },
-        "host_refs": {
-          "items": {
-            "$ref": "#/$defs/HostRef"
-          },
-          "title": "Host Refs",
-          "type": "array"
         },
         "title": {
           "anyOf": [
@@ -1060,40 +1178,61 @@
           "title": "Status",
           "type": "string"
         },
-        "status_history": {
-          "items": {
-            "$ref": "#/$defs/StatusTransition"
-          },
-          "title": "Status History",
-          "type": "array"
-        },
         "tags": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Tags",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tags"
         },
         "aliases": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Aliases",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Aliases"
         },
         "migration_review": {
-          "enum": [
-            "not-applicable",
-            "required",
-            "completed"
+          "anyOf": [
+            {
+              "const": "required",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
           ],
-          "title": "Migration Review",
-          "type": "string"
+          "default": null,
+          "title": "Migration Review"
         },
         "legacy_fields": {
-          "additionalProperties": true,
-          "title": "Legacy Fields",
-          "type": "object"
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Legacy Fields"
         },
         "allowed_uses": {
           "items": {
@@ -1117,6 +1256,22 @@
           ],
           "title": "Claim Risk",
           "type": "string"
+        },
+        "context": {
+          "items": {
+            "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+            "type": "string"
+          },
+          "title": "Context",
+          "type": "array"
+        },
+        "supported_by": {
+          "items": {
+            "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+            "type": "string"
+          },
+          "title": "Supported By",
+          "type": "array"
         }
       },
       "required": [
@@ -1126,7 +1281,6 @@
         "created_at",
         "updated_at",
         "status",
-        "migration_review",
         "allowed_uses",
         "claim_risk"
       ],
@@ -1147,7 +1301,7 @@
           "type": "string"
         },
         "schema_version": {
-          "const": 2,
+          "const": 3,
           "title": "Schema Version",
           "type": "integer"
         },
@@ -1186,20 +1340,6 @@
           "title": "Visibility",
           "type": "string"
         },
-        "refs": {
-          "items": {
-            "$ref": "#/$defs/InternalRef"
-          },
-          "title": "Refs",
-          "type": "array"
-        },
-        "host_refs": {
-          "items": {
-            "$ref": "#/$defs/HostRef"
-          },
-          "title": "Host Refs",
-          "type": "array"
-        },
         "title": {
           "anyOf": [
             {
@@ -1220,40 +1360,61 @@
           "title": "Status",
           "type": "string"
         },
-        "status_history": {
-          "items": {
-            "$ref": "#/$defs/StatusTransition"
-          },
-          "title": "Status History",
-          "type": "array"
-        },
         "tags": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Tags",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tags"
         },
         "aliases": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Aliases",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Aliases"
         },
         "migration_review": {
-          "enum": [
-            "not-applicable",
-            "required",
-            "completed"
+          "anyOf": [
+            {
+              "const": "required",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
           ],
-          "title": "Migration Review",
-          "type": "string"
+          "default": null,
+          "title": "Migration Review"
         },
         "legacy_fields": {
-          "additionalProperties": true,
-          "title": "Legacy Fields",
-          "type": "object"
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Legacy Fields"
         },
         "sensitive_boundary": {
           "minLength": 1,
@@ -1294,6 +1455,32 @@
           ],
           "default": null,
           "title": "Readiness State"
+        },
+        "career_lane": {
+          "anyOf": [
+            {
+              "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Career Lane"
+        },
+        "derived_from": {
+          "anyOf": [
+            {
+              "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Derived From"
         }
       },
       "required": [
@@ -1303,7 +1490,6 @@
         "created_at",
         "updated_at",
         "status",
-        "migration_review",
         "sensitive_boundary"
       ],
       "title": "EvidenceStory",
@@ -1323,7 +1509,7 @@
           "type": "string"
         },
         "schema_version": {
-          "const": 2,
+          "const": 3,
           "title": "Schema Version",
           "type": "integer"
         },
@@ -1362,20 +1548,6 @@
           "title": "Visibility",
           "type": "string"
         },
-        "refs": {
-          "items": {
-            "$ref": "#/$defs/InternalRef"
-          },
-          "title": "Refs",
-          "type": "array"
-        },
-        "host_refs": {
-          "items": {
-            "$ref": "#/$defs/HostRef"
-          },
-          "title": "Host Refs",
-          "type": "array"
-        },
         "title": {
           "anyOf": [
             {
@@ -1397,40 +1569,61 @@
           "title": "Status",
           "type": "string"
         },
-        "status_history": {
-          "items": {
-            "$ref": "#/$defs/StatusTransition"
-          },
-          "title": "Status History",
-          "type": "array"
-        },
         "tags": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Tags",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tags"
         },
         "aliases": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Aliases",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Aliases"
         },
         "migration_review": {
-          "enum": [
-            "not-applicable",
-            "required",
-            "completed"
+          "anyOf": [
+            {
+              "const": "required",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
           ],
-          "title": "Migration Review",
-          "type": "string"
+          "default": null,
+          "title": "Migration Review"
         },
         "legacy_fields": {
-          "additionalProperties": true,
-          "title": "Legacy Fields",
-          "type": "object"
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Legacy Fields"
         },
         "contribution_scope": {
           "enum": [
@@ -1455,6 +1648,40 @@
           "minLength": 1,
           "title": "Evidence Summary",
           "type": "string"
+        },
+        "company": {
+          "anyOf": [
+            {
+              "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Company"
+        },
+        "company_context": {
+          "anyOf": [
+            {
+              "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Company Context"
+        },
+        "work_context": {
+          "items": {
+            "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+            "type": "string"
+          },
+          "title": "Work Context",
+          "type": "array"
         }
       },
       "required": [
@@ -1464,90 +1691,11 @@
         "created_at",
         "updated_at",
         "status",
-        "migration_review",
         "contribution_scope",
         "evidence_strength",
         "evidence_summary"
       ],
       "title": "EvidenceWork",
-      "type": "object"
-    },
-    "HostRef": {
-      "additionalProperties": false,
-      "properties": {
-        "relation": {
-          "minLength": 1,
-          "pattern": "^[a-z][a-z0-9-]*$",
-          "title": "Relation",
-          "type": "string"
-        },
-        "path": {
-          "title": "Path",
-          "type": "string"
-        },
-        "target_id": {
-          "anyOf": [
-            {
-              "format": "uuid4",
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Target Id"
-        },
-        "anchor": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Anchor"
-        },
-        "required": {
-          "title": "Required",
-          "type": "boolean"
-        }
-      },
-      "required": [
-        "relation",
-        "path",
-        "required"
-      ],
-      "title": "HostRef",
-      "type": "object"
-    },
-    "InternalRef": {
-      "additionalProperties": false,
-      "properties": {
-        "relation": {
-          "minLength": 1,
-          "pattern": "^[a-z][a-z0-9-]*$",
-          "title": "Relation",
-          "type": "string"
-        },
-        "target_id": {
-          "format": "uuid4",
-          "title": "Target Id",
-          "type": "string"
-        },
-        "required": {
-          "title": "Required",
-          "type": "boolean"
-        }
-      },
-      "required": [
-        "relation",
-        "target_id",
-        "required"
-      ],
-      "title": "InternalRef",
       "type": "object"
     },
     "MarketChannel": {
@@ -1564,7 +1712,7 @@
           "type": "string"
         },
         "schema_version": {
-          "const": 2,
+          "const": 3,
           "title": "Schema Version",
           "type": "integer"
         },
@@ -1603,20 +1751,6 @@
           "title": "Visibility",
           "type": "string"
         },
-        "refs": {
-          "items": {
-            "$ref": "#/$defs/InternalRef"
-          },
-          "title": "Refs",
-          "type": "array"
-        },
-        "host_refs": {
-          "items": {
-            "$ref": "#/$defs/HostRef"
-          },
-          "title": "Host Refs",
-          "type": "array"
-        },
         "title": {
           "anyOf": [
             {
@@ -1638,40 +1772,61 @@
           "title": "Status",
           "type": "string"
         },
-        "status_history": {
-          "items": {
-            "$ref": "#/$defs/StatusTransition"
-          },
-          "title": "Status History",
-          "type": "array"
-        },
         "tags": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Tags",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tags"
         },
         "aliases": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Aliases",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Aliases"
         },
         "migration_review": {
-          "enum": [
-            "not-applicable",
-            "required",
-            "completed"
+          "anyOf": [
+            {
+              "const": "required",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
           ],
-          "title": "Migration Review",
-          "type": "string"
+          "default": null,
+          "title": "Migration Review"
         },
         "legacy_fields": {
-          "additionalProperties": true,
-          "title": "Legacy Fields",
-          "type": "object"
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Legacy Fields"
         },
         "rank": {
           "minimum": 1,
@@ -1705,6 +1860,14 @@
           "format": "date",
           "title": "Last Verified At",
           "type": "string"
+        },
+        "career_lane": {
+          "items": {
+            "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+            "type": "string"
+          },
+          "title": "Career Lane",
+          "type": "array"
         }
       },
       "required": [
@@ -1714,7 +1877,6 @@
         "created_at",
         "updated_at",
         "status",
-        "migration_review",
         "rank",
         "tier",
         "role",
@@ -1737,7 +1899,7 @@
           "type": "string"
         },
         "schema_version": {
-          "const": 2,
+          "const": 3,
           "title": "Schema Version",
           "type": "integer"
         },
@@ -1775,20 +1937,6 @@
           ],
           "title": "Visibility",
           "type": "string"
-        },
-        "refs": {
-          "items": {
-            "$ref": "#/$defs/InternalRef"
-          },
-          "title": "Refs",
-          "type": "array"
-        },
-        "host_refs": {
-          "items": {
-            "$ref": "#/$defs/HostRef"
-          },
-          "title": "Host Refs",
-          "type": "array"
         },
         "title": {
           "anyOf": [
@@ -1813,40 +1961,61 @@
           "title": "Status",
           "type": "string"
         },
-        "status_history": {
-          "items": {
-            "$ref": "#/$defs/StatusTransition"
-          },
-          "title": "Status History",
-          "type": "array"
-        },
         "tags": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Tags",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tags"
         },
         "aliases": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Aliases",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Aliases"
         },
         "migration_review": {
-          "enum": [
-            "not-applicable",
-            "required",
-            "completed"
+          "anyOf": [
+            {
+              "const": "required",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
           ],
-          "title": "Migration Review",
-          "type": "string"
+          "default": null,
+          "title": "Migration Review"
         },
         "legacy_fields": {
-          "additionalProperties": true,
-          "title": "Legacy Fields",
-          "type": "object"
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Legacy Fields"
         },
         "review_on": {
           "format": "date",
@@ -1861,7 +2030,6 @@
         "created_at",
         "updated_at",
         "status",
-        "migration_review",
         "review_on"
       ],
       "title": "MarketDirection",
@@ -1881,7 +2049,7 @@
           "type": "string"
         },
         "schema_version": {
-          "const": 2,
+          "const": 3,
           "title": "Schema Version",
           "type": "integer"
         },
@@ -1920,20 +2088,6 @@
           "title": "Visibility",
           "type": "string"
         },
-        "refs": {
-          "items": {
-            "$ref": "#/$defs/InternalRef"
-          },
-          "title": "Refs",
-          "type": "array"
-        },
-        "host_refs": {
-          "items": {
-            "$ref": "#/$defs/HostRef"
-          },
-          "title": "Host Refs",
-          "type": "array"
-        },
         "title": {
           "anyOf": [
             {
@@ -1956,40 +2110,61 @@
           "title": "Status",
           "type": "string"
         },
-        "status_history": {
-          "items": {
-            "$ref": "#/$defs/StatusTransition"
-          },
-          "title": "Status History",
-          "type": "array"
-        },
         "tags": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Tags",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tags"
         },
         "aliases": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Aliases",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Aliases"
         },
         "migration_review": {
-          "enum": [
-            "not-applicable",
-            "required",
-            "completed"
+          "anyOf": [
+            {
+              "const": "required",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
           ],
-          "title": "Migration Review",
-          "type": "string"
+          "default": null,
+          "title": "Migration Review"
         },
         "legacy_fields": {
-          "additionalProperties": true,
-          "title": "Legacy Fields",
-          "type": "object"
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Legacy Fields"
         },
         "source_status": {
           "enum": [
@@ -2001,9 +2176,9 @@
           "title": "Source Status",
           "type": "string"
         },
-        "source_channel": {
+        "source_channel_name": {
           "minLength": 1,
-          "title": "Source Channel",
+          "title": "Source Channel Name",
           "type": "string"
         },
         "source_origin": {
@@ -2342,6 +2517,84 @@
           ],
           "default": null,
           "title": "Reviewed At"
+        },
+        "career_lane": {
+          "anyOf": [
+            {
+              "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Career Lane"
+        },
+        "company": {
+          "anyOf": [
+            {
+              "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Company"
+        },
+        "engagement": {
+          "anyOf": [
+            {
+              "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Engagement"
+        },
+        "market_direction": {
+          "anyOf": [
+            {
+              "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Market Direction"
+        },
+        "recruiting_scope": {
+          "anyOf": [
+            {
+              "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Recruiting Scope"
+        },
+        "source_channel": {
+          "anyOf": [
+            {
+              "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Channel"
         }
       },
       "required": [
@@ -2351,9 +2604,8 @@
         "created_at",
         "updated_at",
         "status",
-        "migration_review",
         "source_status",
-        "source_channel",
+        "source_channel_name",
         "captured_at",
         "missing_sections",
         "source_body_sha256"
@@ -2375,7 +2627,7 @@
           "type": "string"
         },
         "schema_version": {
-          "const": 2,
+          "const": 3,
           "title": "Schema Version",
           "type": "integer"
         },
@@ -2414,20 +2666,6 @@
           "title": "Visibility",
           "type": "string"
         },
-        "refs": {
-          "items": {
-            "$ref": "#/$defs/InternalRef"
-          },
-          "title": "Refs",
-          "type": "array"
-        },
-        "host_refs": {
-          "items": {
-            "$ref": "#/$defs/HostRef"
-          },
-          "title": "Host Refs",
-          "type": "array"
-        },
         "title": {
           "anyOf": [
             {
@@ -2449,45 +2687,92 @@
           "title": "Status",
           "type": "string"
         },
-        "status_history": {
-          "items": {
-            "$ref": "#/$defs/StatusTransition"
-          },
-          "title": "Status History",
-          "type": "array"
-        },
         "tags": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Tags",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tags"
         },
         "aliases": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Aliases",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Aliases"
         },
         "migration_review": {
-          "enum": [
-            "not-applicable",
-            "required",
-            "completed"
+          "anyOf": [
+            {
+              "const": "required",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
           ],
-          "title": "Migration Review",
-          "type": "string"
+          "default": null,
+          "title": "Migration Review"
         },
         "legacy_fields": {
-          "additionalProperties": true,
-          "title": "Legacy Fields",
-          "type": "object"
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Legacy Fields"
         },
         "canonical_name": {
           "minLength": 1,
           "title": "Canonical Name",
           "type": "string"
+        },
+        "display_name_zh": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Display Name Zh"
+        },
+        "display_name_en": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Display Name En"
         },
         "fact_state": {
           "enum": [
@@ -2790,7 +3075,6 @@
         "created_at",
         "updated_at",
         "status",
-        "migration_review",
         "canonical_name",
         "fact_state",
         "refreshed_at",
@@ -2813,7 +3097,7 @@
           "type": "string"
         },
         "schema_version": {
-          "const": 2,
+          "const": 3,
           "title": "Schema Version",
           "type": "integer"
         },
@@ -2852,20 +3136,6 @@
           "title": "Visibility",
           "type": "string"
         },
-        "refs": {
-          "items": {
-            "$ref": "#/$defs/InternalRef"
-          },
-          "title": "Refs",
-          "type": "array"
-        },
-        "host_refs": {
-          "items": {
-            "$ref": "#/$defs/HostRef"
-          },
-          "title": "Host Refs",
-          "type": "array"
-        },
         "title": {
           "anyOf": [
             {
@@ -2888,40 +3158,61 @@
           "title": "Status",
           "type": "string"
         },
-        "status_history": {
-          "items": {
-            "$ref": "#/$defs/StatusTransition"
-          },
-          "title": "Status History",
-          "type": "array"
-        },
         "tags": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Tags",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tags"
         },
         "aliases": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Aliases",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Aliases"
         },
         "migration_review": {
-          "enum": [
-            "not-applicable",
-            "required",
-            "completed"
+          "anyOf": [
+            {
+              "const": "required",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
           ],
-          "title": "Migration Review",
-          "type": "string"
+          "default": null,
+          "title": "Migration Review"
         },
         "legacy_fields": {
-          "additionalProperties": true,
-          "title": "Legacy Fields",
-          "type": "object"
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Legacy Fields"
         },
         "decision": {
           "enum": [
@@ -2951,6 +3242,19 @@
           },
           "title": "Triggers",
           "type": "array"
+        },
+        "engagement": {
+          "anyOf": [
+            {
+              "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Engagement"
         }
       },
       "required": [
@@ -2960,7 +3264,6 @@
         "created_at",
         "updated_at",
         "status",
-        "migration_review",
         "decision",
         "rationale",
         "review_on",
@@ -2983,7 +3286,7 @@
           "type": "string"
         },
         "schema_version": {
-          "const": 2,
+          "const": 3,
           "title": "Schema Version",
           "type": "integer"
         },
@@ -3022,20 +3325,6 @@
           "title": "Visibility",
           "type": "string"
         },
-        "refs": {
-          "items": {
-            "$ref": "#/$defs/InternalRef"
-          },
-          "title": "Refs",
-          "type": "array"
-        },
-        "host_refs": {
-          "items": {
-            "$ref": "#/$defs/HostRef"
-          },
-          "title": "Host Refs",
-          "type": "array"
-        },
         "title": {
           "anyOf": [
             {
@@ -3057,40 +3346,61 @@
           "title": "Status",
           "type": "string"
         },
-        "status_history": {
-          "items": {
-            "$ref": "#/$defs/StatusTransition"
-          },
-          "title": "Status History",
-          "type": "array"
-        },
         "tags": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Tags",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tags"
         },
         "aliases": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Aliases",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Aliases"
         },
         "migration_review": {
-          "enum": [
-            "not-applicable",
-            "required",
-            "completed"
+          "anyOf": [
+            {
+              "const": "required",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
           ],
-          "title": "Migration Review",
-          "type": "string"
+          "default": null,
+          "title": "Migration Review"
         },
         "legacy_fields": {
-          "additionalProperties": true,
-          "title": "Legacy Fields",
-          "type": "object"
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Legacy Fields"
         },
         "engagement_type": {
           "enum": [
@@ -3306,6 +3616,53 @@
           ],
           "default": null,
           "title": "Next Action"
+        },
+        "company": {
+          "anyOf": [
+            {
+              "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Company"
+        },
+        "recruiting_scope": {
+          "anyOf": [
+            {
+              "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Recruiting Scope"
+        },
+        "source_work": {
+          "items": {
+            "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+            "type": "string"
+          },
+          "title": "Source Work",
+          "type": "array"
+        },
+        "target_jd": {
+          "anyOf": [
+            {
+              "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Jd"
         }
       },
       "required": [
@@ -3315,7 +3672,6 @@
         "created_at",
         "updated_at",
         "status",
-        "migration_review",
         "engagement_type",
         "stage",
         "application_state",
@@ -3339,7 +3695,7 @@
           "type": "string"
         },
         "schema_version": {
-          "const": 2,
+          "const": 3,
           "title": "Schema Version",
           "type": "integer"
         },
@@ -3378,20 +3734,6 @@
           "title": "Visibility",
           "type": "string"
         },
-        "refs": {
-          "items": {
-            "$ref": "#/$defs/InternalRef"
-          },
-          "title": "Refs",
-          "type": "array"
-        },
-        "host_refs": {
-          "items": {
-            "$ref": "#/$defs/HostRef"
-          },
-          "title": "Host Refs",
-          "type": "array"
-        },
         "title": {
           "anyOf": [
             {
@@ -3414,40 +3756,61 @@
           "title": "Status",
           "type": "string"
         },
-        "status_history": {
-          "items": {
-            "$ref": "#/$defs/StatusTransition"
-          },
-          "title": "Status History",
-          "type": "array"
-        },
         "tags": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Tags",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tags"
         },
         "aliases": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Aliases",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Aliases"
         },
         "migration_review": {
-          "enum": [
-            "not-applicable",
-            "required",
-            "completed"
+          "anyOf": [
+            {
+              "const": "required",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
           ],
-          "title": "Migration Review",
-          "type": "string"
+          "default": null,
+          "title": "Migration Review"
         },
         "legacy_fields": {
-          "additionalProperties": true,
-          "title": "Legacy Fields",
-          "type": "object"
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Legacy Fields"
         },
         "team": {
           "anyOf": [
@@ -3489,6 +3852,19 @@
           "minLength": 1,
           "title": "Channel",
           "type": "string"
+        },
+        "company": {
+          "anyOf": [
+            {
+              "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Company"
         }
       },
       "required": [
@@ -3498,7 +3874,6 @@
         "created_at",
         "updated_at",
         "status",
-        "migration_review",
         "channel"
       ],
       "title": "OpportunityScope",
@@ -3518,7 +3893,7 @@
           "type": "string"
         },
         "schema_version": {
-          "const": 2,
+          "const": 3,
           "title": "Schema Version",
           "type": "integer"
         },
@@ -3557,20 +3932,6 @@
           "title": "Visibility",
           "type": "string"
         },
-        "refs": {
-          "items": {
-            "$ref": "#/$defs/InternalRef"
-          },
-          "title": "Refs",
-          "type": "array"
-        },
-        "host_refs": {
-          "items": {
-            "$ref": "#/$defs/HostRef"
-          },
-          "title": "Host Refs",
-          "type": "array"
-        },
         "title": {
           "anyOf": [
             {
@@ -3593,71 +3954,92 @@
           "title": "Status",
           "type": "string"
         },
-        "status_history": {
-          "items": {
-            "$ref": "#/$defs/StatusTransition"
-          },
-          "title": "Status History",
-          "type": "array"
-        },
         "tags": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Tags",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tags"
         },
         "aliases": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Aliases",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Aliases"
         },
         "migration_review": {
-          "enum": [
-            "not-applicable",
-            "required",
-            "completed"
+          "anyOf": [
+            {
+              "const": "required",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
           ],
-          "title": "Migration Review",
-          "type": "string"
+          "default": null,
+          "title": "Migration Review"
         },
         "legacy_fields": {
-          "additionalProperties": true,
-          "title": "Legacy Fields",
-          "type": "object"
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Legacy Fields"
         },
         "as_of": {
           "format": "date",
           "title": "As Of",
           "type": "string"
         },
-        "personal_fit": {
+        "personal_fit_gate": {
           "enum": [
             "missing",
             "partial",
             "satisfied"
           ],
-          "title": "Personal Fit",
+          "title": "Personal Fit Gate",
           "type": "string"
         },
-        "market_revealed": {
+        "market_revealed_gate": {
           "enum": [
             "missing",
             "partial",
             "satisfied"
           ],
-          "title": "Market Revealed",
+          "title": "Market Revealed Gate",
           "type": "string"
         },
-        "independent_external": {
+        "independent_external_gate": {
           "enum": [
             "missing",
             "partial",
             "satisfied"
           ],
-          "title": "Independent External",
+          "title": "Independent External Gate",
           "type": "string"
         },
         "confidence": {
@@ -3694,6 +4076,56 @@
           ],
           "default": null,
           "title": "Review Authority"
+        },
+        "personal_fit": {
+          "items": {
+            "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+            "type": "string"
+          },
+          "title": "Personal Fit",
+          "type": "array"
+        },
+        "market_revealed": {
+          "items": {
+            "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+            "type": "string"
+          },
+          "title": "Market Revealed",
+          "type": "array"
+        },
+        "independent_external": {
+          "items": {
+            "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+            "type": "string"
+          },
+          "title": "Independent External",
+          "type": "array"
+        },
+        "superseded_by": {
+          "anyOf": [
+            {
+              "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Superseded By"
+        },
+        "supersedes": {
+          "anyOf": [
+            {
+              "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Supersedes"
         }
       },
       "required": [
@@ -3703,11 +4135,10 @@
         "created_at",
         "updated_at",
         "status",
-        "migration_review",
         "as_of",
-        "personal_fit",
-        "market_revealed",
-        "independent_external",
+        "personal_fit_gate",
+        "market_revealed_gate",
+        "independent_external_gate",
         "confidence",
         "rationale",
         "invalidation_conditions"
@@ -3729,7 +4160,7 @@
           "type": "string"
         },
         "schema_version": {
-          "const": 2,
+          "const": 3,
           "title": "Schema Version",
           "type": "integer"
         },
@@ -3768,20 +4199,6 @@
           "title": "Visibility",
           "type": "string"
         },
-        "refs": {
-          "items": {
-            "$ref": "#/$defs/InternalRef"
-          },
-          "title": "Refs",
-          "type": "array"
-        },
-        "host_refs": {
-          "items": {
-            "$ref": "#/$defs/HostRef"
-          },
-          "title": "Host Refs",
-          "type": "array"
-        },
         "title": {
           "anyOf": [
             {
@@ -3804,40 +4221,61 @@
           "title": "Status",
           "type": "string"
         },
-        "status_history": {
-          "items": {
-            "$ref": "#/$defs/StatusTransition"
-          },
-          "title": "Status History",
-          "type": "array"
-        },
         "tags": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Tags",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tags"
         },
         "aliases": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Aliases",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Aliases"
         },
         "migration_review": {
-          "enum": [
-            "not-applicable",
-            "required",
-            "completed"
+          "anyOf": [
+            {
+              "const": "required",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
           ],
-          "title": "Migration Review",
-          "type": "string"
+          "default": null,
+          "title": "Migration Review"
         },
         "legacy_fields": {
-          "additionalProperties": true,
-          "title": "Legacy Fields",
-          "type": "object"
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Legacy Fields"
         },
         "source_class": {
           "enum": [
@@ -3885,7 +4323,6 @@
         "created_at",
         "updated_at",
         "status",
-        "migration_review",
         "source_class",
         "event_date",
         "published_at",
@@ -3908,7 +4345,7 @@
           "type": "string"
         },
         "schema_version": {
-          "const": 2,
+          "const": 3,
           "title": "Schema Version",
           "type": "integer"
         },
@@ -3947,20 +4384,6 @@
           "title": "Visibility",
           "type": "string"
         },
-        "refs": {
-          "items": {
-            "$ref": "#/$defs/InternalRef"
-          },
-          "title": "Refs",
-          "type": "array"
-        },
-        "host_refs": {
-          "items": {
-            "$ref": "#/$defs/HostRef"
-          },
-          "title": "Host Refs",
-          "type": "array"
-        },
         "title": {
           "anyOf": [
             {
@@ -3983,40 +4406,61 @@
           "title": "Status",
           "type": "string"
         },
-        "status_history": {
-          "items": {
-            "$ref": "#/$defs/StatusTransition"
-          },
-          "title": "Status History",
-          "type": "array"
-        },
         "tags": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Tags",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tags"
         },
         "aliases": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Aliases",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Aliases"
         },
         "migration_review": {
-          "enum": [
-            "not-applicable",
-            "required",
-            "completed"
+          "anyOf": [
+            {
+              "const": "required",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
           ],
-          "title": "Migration Review",
-          "type": "string"
+          "default": null,
+          "title": "Migration Review"
         },
         "legacy_fields": {
-          "additionalProperties": true,
-          "title": "Legacy Fields",
-          "type": "object"
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Legacy Fields"
         },
         "confidence": {
           "enum": [
@@ -4052,6 +4496,19 @@
           ],
           "default": null,
           "title": "Review Authority"
+        },
+        "derived_from_review": {
+          "anyOf": [
+            {
+              "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Derived From Review"
         }
       },
       "required": [
@@ -4061,7 +4518,6 @@
         "created_at",
         "updated_at",
         "status",
-        "migration_review",
         "confidence",
         "horizon",
         "invalidation_conditions"
@@ -4083,7 +4539,7 @@
           "type": "string"
         },
         "schema_version": {
-          "const": 2,
+          "const": 3,
           "title": "Schema Version",
           "type": "integer"
         },
@@ -4122,20 +4578,6 @@
           "title": "Visibility",
           "type": "string"
         },
-        "refs": {
-          "items": {
-            "$ref": "#/$defs/InternalRef"
-          },
-          "title": "Refs",
-          "type": "array"
-        },
-        "host_refs": {
-          "items": {
-            "$ref": "#/$defs/HostRef"
-          },
-          "title": "Host Refs",
-          "type": "array"
-        },
         "title": {
           "anyOf": [
             {
@@ -4157,40 +4599,61 @@
           "title": "Status",
           "type": "string"
         },
-        "status_history": {
-          "items": {
-            "$ref": "#/$defs/StatusTransition"
-          },
-          "title": "Status History",
-          "type": "array"
-        },
         "tags": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Tags",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tags"
         },
         "aliases": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Aliases",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Aliases"
         },
         "migration_review": {
-          "enum": [
-            "not-applicable",
-            "required",
-            "completed"
+          "anyOf": [
+            {
+              "const": "required",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
           ],
-          "title": "Migration Review",
-          "type": "string"
+          "default": null,
+          "title": "Migration Review"
         },
         "legacy_fields": {
-          "additionalProperties": true,
-          "title": "Legacy Fields",
-          "type": "object"
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Legacy Fields"
         },
         "assessment_type": {
           "enum": [
@@ -4233,7 +4696,6 @@
         "created_at",
         "updated_at",
         "status",
-        "migration_review",
         "assessment_type",
         "result",
         "reviewer_status",
@@ -4256,7 +4718,7 @@
           "type": "string"
         },
         "schema_version": {
-          "const": 2,
+          "const": 3,
           "title": "Schema Version",
           "type": "integer"
         },
@@ -4295,20 +4757,6 @@
           "title": "Visibility",
           "type": "string"
         },
-        "refs": {
-          "items": {
-            "$ref": "#/$defs/InternalRef"
-          },
-          "title": "Refs",
-          "type": "array"
-        },
-        "host_refs": {
-          "items": {
-            "$ref": "#/$defs/HostRef"
-          },
-          "title": "Host Refs",
-          "type": "array"
-        },
         "title": {
           "anyOf": [
             {
@@ -4333,40 +4781,61 @@
           "title": "Status",
           "type": "string"
         },
-        "status_history": {
-          "items": {
-            "$ref": "#/$defs/StatusTransition"
-          },
-          "title": "Status History",
-          "type": "array"
-        },
         "tags": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Tags",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tags"
         },
         "aliases": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Aliases",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Aliases"
         },
         "migration_review": {
-          "enum": [
-            "not-applicable",
-            "required",
-            "completed"
+          "anyOf": [
+            {
+              "const": "required",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
           ],
-          "title": "Migration Review",
-          "type": "string"
+          "default": null,
+          "title": "Migration Review"
         },
         "legacy_fields": {
-          "additionalProperties": true,
-          "title": "Legacy Fields",
-          "type": "object"
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Legacy Fields"
         },
         "gap_type": {
           "enum": [
@@ -4411,6 +4880,93 @@
           ],
           "default": null,
           "title": "Priority"
+        },
+        "career_lane": {
+          "anyOf": [
+            {
+              "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Career Lane"
+        },
+        "closed_by_evidence": {
+          "items": {
+            "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+            "type": "string"
+          },
+          "title": "Closed By Evidence",
+          "type": "array"
+        },
+        "closed_by_retest": {
+          "items": {
+            "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+            "type": "string"
+          },
+          "title": "Closed By Retest",
+          "type": "array"
+        },
+        "closure_evidence": {
+          "items": {
+            "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+            "type": "string"
+          },
+          "title": "Closure Evidence",
+          "type": "array"
+        },
+        "experience_story": {
+          "items": {
+            "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+            "type": "string"
+          },
+          "title": "Experience Story",
+          "type": "array"
+        },
+        "last_retest": {
+          "items": {
+            "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+            "type": "string"
+          },
+          "title": "Last Retest",
+          "type": "array"
+        },
+        "resume_audit": {
+          "anyOf": [
+            {
+              "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Resume Audit"
+        },
+        "resume_root": {
+          "items": {
+            "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+            "type": "string"
+          },
+          "title": "Resume Root",
+          "type": "array"
+        },
+        "target_jd": {
+          "anyOf": [
+            {
+              "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Jd"
         }
       },
       "required": [
@@ -4420,7 +4976,6 @@
         "created_at",
         "updated_at",
         "status",
-        "migration_review",
         "gap_type",
         "target"
       ],
@@ -4441,7 +4996,7 @@
           "type": "string"
         },
         "schema_version": {
-          "const": 2,
+          "const": 3,
           "title": "Schema Version",
           "type": "integer"
         },
@@ -4480,20 +5035,6 @@
           "title": "Visibility",
           "type": "string"
         },
-        "refs": {
-          "items": {
-            "$ref": "#/$defs/InternalRef"
-          },
-          "title": "Refs",
-          "type": "array"
-        },
-        "host_refs": {
-          "items": {
-            "$ref": "#/$defs/HostRef"
-          },
-          "title": "Host Refs",
-          "type": "array"
-        },
         "title": {
           "anyOf": [
             {
@@ -4514,40 +5055,61 @@
           "title": "Status",
           "type": "string"
         },
-        "status_history": {
-          "items": {
-            "$ref": "#/$defs/StatusTransition"
-          },
-          "title": "Status History",
-          "type": "array"
-        },
         "tags": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Tags",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tags"
         },
         "aliases": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Aliases",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Aliases"
         },
         "migration_review": {
-          "enum": [
-            "not-applicable",
-            "required",
-            "completed"
+          "anyOf": [
+            {
+              "const": "required",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
           ],
-          "title": "Migration Review",
-          "type": "string"
+          "default": null,
+          "title": "Migration Review"
         },
         "legacy_fields": {
-          "additionalProperties": true,
-          "title": "Legacy Fields",
-          "type": "object"
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Legacy Fields"
         },
         "note_type": {
           "enum": [
@@ -4570,6 +5132,14 @@
           ],
           "default": null,
           "title": "Source Title"
+        },
+        "target_gap": {
+          "items": {
+            "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+            "type": "string"
+          },
+          "title": "Target Gap",
+          "type": "array"
         }
       },
       "required": [
@@ -4579,7 +5149,6 @@
         "created_at",
         "updated_at",
         "status",
-        "migration_review",
         "note_type"
       ],
       "title": "ReadinessNote",
@@ -4599,7 +5168,7 @@
           "type": "string"
         },
         "schema_version": {
-          "const": 2,
+          "const": 3,
           "title": "Schema Version",
           "type": "integer"
         },
@@ -4638,20 +5207,6 @@
           "title": "Visibility",
           "type": "string"
         },
-        "refs": {
-          "items": {
-            "$ref": "#/$defs/InternalRef"
-          },
-          "title": "Refs",
-          "type": "array"
-        },
-        "host_refs": {
-          "items": {
-            "$ref": "#/$defs/HostRef"
-          },
-          "title": "Host Refs",
-          "type": "array"
-        },
         "title": {
           "anyOf": [
             {
@@ -4673,40 +5228,61 @@
           "title": "Status",
           "type": "string"
         },
-        "status_history": {
-          "items": {
-            "$ref": "#/$defs/StatusTransition"
-          },
-          "title": "Status History",
-          "type": "array"
-        },
         "tags": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Tags",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tags"
         },
         "aliases": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Aliases",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Aliases"
         },
         "migration_review": {
-          "enum": [
-            "not-applicable",
-            "required",
-            "completed"
+          "anyOf": [
+            {
+              "const": "required",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
           ],
-          "title": "Migration Review",
-          "type": "string"
+          "default": null,
+          "title": "Migration Review"
         },
         "legacy_fields": {
-          "additionalProperties": true,
-          "title": "Legacy Fields",
-          "type": "object"
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Legacy Fields"
         },
         "session_type": {
           "enum": [
@@ -4913,6 +5489,19 @@
           ],
           "default": null,
           "title": "Verdict"
+        },
+        "career_lane": {
+          "anyOf": [
+            {
+              "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Career Lane"
         }
       },
       "required": [
@@ -4922,53 +5511,11 @@
         "created_at",
         "updated_at",
         "status",
-        "migration_review",
         "session_type",
         "outcome",
         "reviewer_status"
       ],
       "title": "ReadinessSession",
-      "type": "object"
-    },
-    "StatusTransition": {
-      "additionalProperties": false,
-      "properties": {
-        "from_status": {
-          "minLength": 1,
-          "title": "From Status",
-          "type": "string"
-        },
-        "to_status": {
-          "minLength": 1,
-          "title": "To Status",
-          "type": "string"
-        },
-        "at": {
-          "format": "date-time",
-          "title": "At",
-          "type": "string"
-        },
-        "reason": {
-          "minLength": 1,
-          "title": "Reason",
-          "type": "string"
-        },
-        "evidence_ref_ids": {
-          "items": {
-            "format": "uuid4",
-            "type": "string"
-          },
-          "title": "Evidence Ref Ids",
-          "type": "array"
-        }
-      },
-      "required": [
-        "from_status",
-        "to_status",
-        "at",
-        "reason"
-      ],
-      "title": "StatusTransition",
       "type": "object"
     },
     "StrategyLane": {
@@ -4985,7 +5532,7 @@
           "type": "string"
         },
         "schema_version": {
-          "const": 2,
+          "const": 3,
           "title": "Schema Version",
           "type": "integer"
         },
@@ -5023,20 +5570,6 @@
           ],
           "title": "Visibility",
           "type": "string"
-        },
-        "refs": {
-          "items": {
-            "$ref": "#/$defs/InternalRef"
-          },
-          "title": "Refs",
-          "type": "array"
-        },
-        "host_refs": {
-          "items": {
-            "$ref": "#/$defs/HostRef"
-          },
-          "title": "Host Refs",
-          "type": "array"
         },
         "title": {
           "anyOf": [
@@ -5062,40 +5595,61 @@
           "title": "Status",
           "type": "string"
         },
-        "status_history": {
-          "items": {
-            "$ref": "#/$defs/StatusTransition"
-          },
-          "title": "Status History",
-          "type": "array"
-        },
         "tags": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Tags",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tags"
         },
         "aliases": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Aliases",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Aliases"
         },
         "migration_review": {
-          "enum": [
-            "not-applicable",
-            "required",
-            "completed"
+          "anyOf": [
+            {
+              "const": "required",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
           ],
-          "title": "Migration Review",
-          "type": "string"
+          "default": null,
+          "title": "Migration Review"
         },
         "legacy_fields": {
-          "additionalProperties": true,
-          "title": "Legacy Fields",
-          "type": "object"
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Legacy Fields"
         },
         "confidence": {
           "enum": [
@@ -5117,6 +5671,32 @@
           },
           "title": "Disconfirming Signals",
           "type": "array"
+        },
+        "derived_from_positioning": {
+          "anyOf": [
+            {
+              "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Derived From Positioning"
+        },
+        "outlook_input": {
+          "anyOf": [
+            {
+              "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Outlook Input"
         }
       },
       "required": [
@@ -5126,7 +5706,6 @@
         "created_at",
         "updated_at",
         "status",
-        "migration_review",
         "confidence",
         "review_on",
         "disconfirming_signals"
@@ -5148,7 +5727,7 @@
           "type": "string"
         },
         "schema_version": {
-          "const": 2,
+          "const": 3,
           "title": "Schema Version",
           "type": "integer"
         },
@@ -5186,20 +5765,6 @@
           ],
           "title": "Visibility",
           "type": "string"
-        },
-        "refs": {
-          "items": {
-            "$ref": "#/$defs/InternalRef"
-          },
-          "title": "Refs",
-          "type": "array"
-        },
-        "host_refs": {
-          "items": {
-            "$ref": "#/$defs/HostRef"
-          },
-          "title": "Host Refs",
-          "type": "array"
         },
         "title": {
           "anyOf": [
@@ -5224,40 +5789,61 @@
           "title": "Status",
           "type": "string"
         },
-        "status_history": {
-          "items": {
-            "$ref": "#/$defs/StatusTransition"
-          },
-          "title": "Status History",
-          "type": "array"
-        },
         "tags": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Tags",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tags"
         },
         "aliases": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Aliases",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Aliases"
         },
         "migration_review": {
-          "enum": [
-            "not-applicable",
-            "required",
-            "completed"
+          "anyOf": [
+            {
+              "const": "required",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
           ],
-          "title": "Migration Review",
-          "type": "string"
+          "default": null,
+          "title": "Migration Review"
         },
         "legacy_fields": {
-          "additionalProperties": true,
-          "title": "Legacy Fields",
-          "type": "object"
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Legacy Fields"
         },
         "horizon_start": {
           "format": "date",
@@ -5273,6 +5859,45 @@
           "format": "date",
           "title": "Review On",
           "type": "string"
+        },
+        "derived_from_positioning": {
+          "anyOf": [
+            {
+              "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Derived From Positioning"
+        },
+        "opportunity_baseline": {
+          "anyOf": [
+            {
+              "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Opportunity Baseline"
+        },
+        "outlook_input": {
+          "anyOf": [
+            {
+              "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Outlook Input"
         }
       },
       "required": [
@@ -5282,7 +5907,6 @@
         "created_at",
         "updated_at",
         "status",
-        "migration_review",
         "horizon_start",
         "horizon_end",
         "review_on"
@@ -5304,7 +5928,7 @@
           "type": "string"
         },
         "schema_version": {
-          "const": 2,
+          "const": 3,
           "title": "Schema Version",
           "type": "integer"
         },
@@ -5343,20 +5967,6 @@
           "title": "Visibility",
           "type": "string"
         },
-        "refs": {
-          "items": {
-            "$ref": "#/$defs/InternalRef"
-          },
-          "title": "Refs",
-          "type": "array"
-        },
-        "host_refs": {
-          "items": {
-            "$ref": "#/$defs/HostRef"
-          },
-          "title": "Host Refs",
-          "type": "array"
-        },
         "title": {
           "anyOf": [
             {
@@ -5381,40 +5991,61 @@
           "title": "Status",
           "type": "string"
         },
-        "status_history": {
-          "items": {
-            "$ref": "#/$defs/StatusTransition"
-          },
-          "title": "Status History",
-          "type": "array"
-        },
         "tags": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Tags",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tags"
         },
         "aliases": {
-          "items": {
-            "type": "string"
-          },
-          "title": "Aliases",
-          "type": "array"
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Aliases"
         },
         "migration_review": {
-          "enum": [
-            "not-applicable",
-            "required",
-            "completed"
+          "anyOf": [
+            {
+              "const": "required",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
           ],
-          "title": "Migration Review",
-          "type": "string"
+          "default": null,
+          "title": "Migration Review"
         },
         "legacy_fields": {
-          "additionalProperties": true,
-          "title": "Legacy Fields",
-          "type": "object"
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Legacy Fields"
         },
         "confidence": {
           "enum": [
@@ -5436,6 +6067,27 @@
           },
           "title": "Disconfirming Signals",
           "type": "array"
+        },
+        "defines_lane": {
+          "items": {
+            "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+            "type": "string"
+          },
+          "title": "Defines Lane",
+          "type": "array"
+        },
+        "outlook_input": {
+          "anyOf": [
+            {
+              "pattern": "^\\[\\[[^\\]\\r\\n|]+(?:#[^\\]\\r\\n|]+)?(?:\\|[^\\]\\r\\n]+)?\\]\\]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Outlook Input"
         }
       },
       "required": [
@@ -5445,7 +6097,6 @@
         "created_at",
         "updated_at",
         "status",
-        "migration_review",
         "confidence",
         "review_on",
         "disconfirming_signals"

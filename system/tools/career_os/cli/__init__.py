@@ -3,6 +3,7 @@ from typing import Annotated
 import typer
 
 from career_os import __version__
+from career_os.cli.cleanup import cleanup_command
 from career_os.cli.core import check_command, doctor_command, init_command, paths_command
 from career_os.cli.downstream import app as downstream_app
 from career_os.cli.imports import app as import_app
@@ -22,6 +23,7 @@ app.command("init")(init_command)
 app.command("paths")(paths_command)
 app.command("doctor")(doctor_command)
 app.command("check")(check_command)
+app.command("cleanup")(cleanup_command)
 app.add_typer(downstream_app, name="downstream")
 app.add_typer(import_app, name="import")
 app.add_typer(migrate_app, name="migrate")

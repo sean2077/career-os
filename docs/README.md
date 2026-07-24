@@ -1,11 +1,11 @@
 # Career OS Framework Documentation
 
 This directory documents the Career OS framework; it contains no personal
-career records. User-owned data lives in the configured data root (`career/` by
-default), while implementation and portable runtime assets live under
+career records. User-owned data lives at the fixed project-relative
+`career/` root, while implementation and portable runtime assets live under
 `system/`. Root [`Home.md`](../Home.md) and [`主页.md`](../主页.md) are the
-Git-tracked English and Chinese Workbench entry points. `career-os init` creates the data-root
-`README.md` once as a user-owned text index and never overwrites that note or
+Git-tracked English and Chinese Workbench entry points. `career-os init` creates
+`career/README.md` once as a user-owned text index and never overwrites that note or
 manages either root homepage.
 
 ## Use Career OS
@@ -15,7 +15,7 @@ manages either root homepage.
 - [Private downstream installation](private-downstream.md): the supported split topology, optional fetch-only public upstream, exact-tag updates, and Agent safety rules.
 - [Skills](skills.md): project-owned and bundled Agent Skills.
 - [Resume system](resume.md): direct XeLaTeX sources and privacy-safe exports.
-- [Legacy repository imports](importing.md): exhaustive classification, hash-bound copy/transform plans, provenance, and rollback.
+- [Legacy repository imports](importing.md): reviewed hash-bound copy/transform plans and rollback.
 
 ## Understand the Framework
 
@@ -23,7 +23,7 @@ manages either root homepage.
 - [Data model](data-model.md): records, references, visibility, and multilingual content.
 
 The seven canonical domain contracts are versioned as initialization seeds and
-copied once into a user-owned data root. System updates may change the seeds but
+copied once into user-owned `career/`. System updates may change the seeds but
 never overwrite an initialized README.
 
 | Authority | Framework contract |
@@ -40,7 +40,6 @@ never overwrite an initialized README.
 
 - [Tooling](tooling.md): development commands, command contracts, and verification depth.
 - [Tool governance](tool-governance.md): authoritative command placement and job contracts.
-- [Semantic migration audit](semantic-migration.md): completed mappings, deliberate compression, and independent acceptance gaps.
 - [Supply chain](supply-chain.md): dependency locks, SBOM, licenses, and attribution.
 
 ## Release Evidence

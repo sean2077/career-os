@@ -5,8 +5,8 @@ Career OS is an Agent-native, local-first, embeddable career development operati
 ## Ownership
 
 - `.agents/`, `system/`, root manifests, root `Home.md` and `主页.md`, tests, and English documentation are system-owned.
-- `career/` or the configured external data root is user-owned multilingual data. It is eligible for the user's Git history; system updates and initialization must not overwrite or ignore it.
-- `runtime/` is reserved local scratch space. Root `Home.md` and `主页.md`, common Obsidian views, and the paired English/Chinese Workbench Bases under `system/obsidian/bases/` are tracked system assets, not runtime or data-root copies. `career-os init` never creates, copies, renders, or overwrites either homepage or any Base. `build/` and `.career-os/` remain ignored build/install state.
+- `career/` is the fixed user-owned multilingual data root. It is eligible for the user's Git history; system updates and initialization must not overwrite or ignore it.
+- `.career-os/runtime/` is the fixed local scratch root. Root `runtime/` remains ignored only as a protected legacy boundary and has no producer. Root `Home.md` and `主页.md`, common Obsidian views, and the paired English/Chinese Workbench Bases under `system/obsidian/bases/` are tracked system assets, not runtime or data-root copies. `career-os init` never creates, copies, renders, or overwrites either homepage or any Base. `build/` and `.career-os/` remain ignored build/install state.
 - Project command implementation lives only under `system/tools/career_os/`. `.agents/tools/` is the scaffold-managed Host exception.
 
 ## Working Rules
@@ -14,21 +14,28 @@ Career OS is an Agent-native, local-first, embeddable career development operati
 - Start from the user's natural-language outcome and select or compose the seven Career Skills. Never ask the user to choose a Skill, mode, owner, worker, or validator.
 - Keep Career Evidence, Career Strategy, Role Market, Opportunity Decision, Career Outlook, Capability Readiness, and Career Communication as distinct canonical authorities. Cross-authority workflows use stable references rather than copied facts.
 - Career Skills remain workflow and record owners. Project subagents are read-only reviewers; validate their JSON contracts before use, and treat unavailable, invalid, or leaked review as fallback that cannot grant readiness, claim approval, or strategy acceptance.
-- Write record schema 2 and its kind-specific lifecycle. Plan, review, and explicitly apply migrations for older user records.
+- OpenCLI is an optional read-only acquisition transport for Opportunity Decision, never a research authority or default router. Call only configured adapter commands that the live registry also marks `access: read`; do not use its raw browser, external, plugin, write, or self-repair surfaces in company research.
+- Write record schema 3 and its kind-specific lifecycle. Git-relative validation owns lifecycle transitions; plan, review, and explicitly apply migrations for older user records.
+- `ProjectConfig` is the `career-os.toml` authority. Any field, table, default, or enum change must update its serializer, regenerate `system/schemas/project-config.schema.json`, and update related tests and documentation in the same change; never hand-edit the schema independently.
 - Prompt-time authorization is limited to external/account state changes, public or application-grade export, and irrecoverable overwrite/delete.
 - Applications, messages, uploads, account changes, offer decisions, and resignation always require a separate explicit request.
 - Never infer evidence maturity, readiness, application success, or career outcomes from successful tooling or generated artifacts.
-- Resume TeX roots under the configured data root are user-owned. Personal font filenames are configured in TeX; system updates must not rewrite them, and every font binary remains in ignored local state and must never enter Git.
+- Resume TeX roots under `career/` are user-owned. Personal font filenames are configured in `career-os.toml` and resolved by name without content pins; generated TeX remains ignored local state, and every font binary must stay under `.career-os/fonts/` and never enter Git.
 - Do not reintroduce per-resume JSON manifests, personal font-profile records, or template selectors. Handwritten TeX roots, adjacent `identity.tex`, fixed preview/application profiles, and the fixed system class are the resume configuration surface; `system/resume/fonts.json` only locks downloadable system defaults.
 - Raw `resume build` PDFs are internal. Only `resume export` may create a shareable PDF, and application export requires the explicit confirmation and evidence gates documented in `docs/resume.md`.
 - Resume roots are discovered from `\documentclass{career-os}`, use the fixed system class and adjacent `identity.tex`, and support fixed preview/application profiles by resume name. Missing named fonts fail during XeLaTeX compilation. Preview export must exclude email, phone, and avatar; never bypass the source-bundle or final-PDF projection checks.
-- In `standalone-framework`, framework work is implemented and validated without real career records, personal identity, attachments, local fonts, active `.obsidian/` state, `runtime/`, `build/`, or `.career-os/` in the tracked snapshot. In a private `split-downstream`, the configured data root is eligible for that private Git history but must never be pushed or reverse-copied to the public repository.
+- In `standalone-framework`, framework work is implemented and validated without real career records, personal identity, attachments, local fonts, active `.obsidian/` state, `runtime/`, `build/`, or `.career-os/` in the tracked snapshot. In a private `integrated-workbench` or `split-downstream`, `career/` is eligible for that private Git history but must never be pushed or reverse-copied to this public repository.
 - A personal Career Home may configure this canonical repository as optional `upstream`. When configured in that downstream, it must remain fetch-only with `remote.upstream.pushurl=DISABLED`; the public repository must never remain a pushable personal `origin`, and failed remote-safety checks must not be bypassed.
 - The recommended embedded downstream is a sibling repository projected into the Vault by a host-tracked relative directory symlink. Configure its Vault-relative POSIX path with `--vault-mount`; never replace it with an absolute link or an ignored nested copy.
-- Treat `origin` as private only after the user confirms its hosted visibility. Creating a remote or performing the first push is an external account action and requires a separate explicit request.
+- `career-os cleanup` is dry-run by default and enumerates only product-owned,
+  reproducible roots: configured build output, standard root development and
+  distribution caches, `.career-os/generated/`, `.career-os/tmp/`, and Python
+  caches under `system/tests/` and `system/tools/`. All other ignored state,
+  including `.venv/`, fonts, migrations, runtime acquisitions, and unknown
+  paths, is outside its scan; use `--apply` only after reviewing the report.
 - Exact reviewed annotated-tag synchronization applies only to an initialized `split-downstream` installation. Never reverse-copy `career/` or any other private/local path into this repository.
-- Before 1.0, do not invent backward-compatibility, prerelease-upgrade, or user-data migration promises. `v0.1.0` is clean-install-only and intentionally has no `v0.1.0-rc.*` compatibility path.
-- Any change to a guarded resume test, resume TeX fixture/template, or CI/release workflow must add its reviewed blob SHA-256 to `system/privacy/public-fixture-policy.json`; never approve a blob containing real identity or career data. Before a public push or tag, run the complete-history privacy audit both without and with the private Career Home root. The audit report must remain redacted and must fail on a shallow repository, dirty release tree, unreviewed guarded blob, or exact private-value match.
+- Before 1.0, do not invent backward-compatibility or user-data migration promises. The schema-2 project configuration and schema-3 record boundary in `v0.2.0` is intentionally fail-closed for legacy fields and requires explicit migration or reinitialization.
+- Any change to a guarded resume test, resume TeX fixture/template, or public CI/release workflow requires deliberate synthetic-fixture review and an updated blob hash in `system/privacy/public-fixture-policy.json`. Never approve a guarded blob containing real identity or career data, and never expose matched private values in audit output.
 - Read `docs/README.md` for navigation and `docs/tooling.md` for commands and validation depth.
 
 ## Development Commands

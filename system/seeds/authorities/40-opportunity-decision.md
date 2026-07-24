@@ -7,6 +7,8 @@ message, upload, account change, offer action, or resignation.
 ## Key Terms
 
 - **Company**: canonical attributable fact base with freshness and uncertainty.
+  `canonical_name` owns entity resolution; optional `display_name_zh` and
+  `display_name_en` provide short bilingual Workbench labels.
 - **Recruiting Scope**: verified or conservative team/role/location/channel boundary.
 - **Engagement**: one employment, contact, referral, application, interview, or offer relationship.
 - **Application state**: event-backed state distinct from recruiter contact.

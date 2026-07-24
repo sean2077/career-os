@@ -34,10 +34,8 @@ BASE_PAIRS = (
 
 def _write_project_config(project: Path) -> None:
     project.joinpath("career-os.toml").write_text(
-        """schema_version = 1
+        """schema_version = 2
 system_version = "0.1.0-rc.1"
-data_root = "career"
-runtime_root = "runtime"
 build_root = "build"
 preferred_language = "en"
 
@@ -74,7 +72,7 @@ def _fixture_paths(
     paths = ProjectPaths(
         project_root=project,
         data_root=data,
-        runtime_root=project / "runtime",
+        runtime_root=project / ".career-os/runtime",
         build_root=project / "build",
         local_state_root=project / ".career-os",
         vault_root=vault,
@@ -86,7 +84,6 @@ def _fixture_paths(
             mode="embedded",
             project_root=".",
             vault_root=str(vault),
-            data_root="career",
             system_version="0.1.0-rc.1",
             languages=["en", "zh-CN"],
         ),
@@ -123,7 +120,6 @@ def _external_mount_paths(tmp_path: Path) -> ProjectPaths:
             project_root=".",
             vault_root=str(vault),
             vault_mount="career-home",
-            data_root="career",
             system_version="0.1.0-rc.1",
             languages=["en", "zh-CN"],
         ),
@@ -144,9 +140,6 @@ def _git(root: Path, *args: str) -> str:
 
 def test_framework_views_are_tracked_portable_and_not_generated(tmp_path: Path) -> None:
     paths = _fixture_paths(tmp_path, host_git=False)
-    unicode_data = paths.vault_root / "职业数据"
-    initialize_data_root(unicode_data)
-    paths = ProjectPaths(**{**paths.__dict__, "data_root": unicode_data})
 
     expected = framework_view_assets(paths)
     first = build_views(paths)
@@ -161,7 +154,8 @@ def test_framework_views_are_tracked_portable_and_not_generated(tmp_path: Path) 
     base_text = base.read_text(encoding="utf-8")
     assert "name: All records" in base_text
     assert "name: Migration review" in base_text
-    assert "name: Host reference health" in base_text
+    assert "file.links" in base_text
+    assert "Host reference health" not in base_text
     assert "name: JD screening" not in base_text
     assert "name: Same-company application decision" not in base_text
     assert not paths.runtime_root.exists()
@@ -197,7 +191,7 @@ def test_localized_system_bases_are_portable_and_not_materialized(
     assert all(path.is_file() for path in bases)
     assert all("__CAREER_OS_" not in path.read_text(encoding="utf-8") for path in bases)
     assert all("file.inFolder(" not in path.read_text(encoding="utf-8") for path in bases)
-    assert all("schema_version == 2" in path.read_text(encoding="utf-8") for path in bases)
+    assert all("schema_version == 3" in path.read_text(encoding="utf-8") for path in bases)
     assert not any(paths.data_root.rglob("*.base"))
 
 
@@ -260,8 +254,8 @@ def test_root_homepage_inventory_is_fail_closed(
         ),
         (
             "en/Recruiting Channels.base",
-            "file(value.path).asLink(file(value.path).basename)",
-            "file(value.path).asLink()",
+            "value.asFile().asLink(value.asFile().basename)",
+            "value.asFile().asLink()",
             "basename-only",
         ),
         (

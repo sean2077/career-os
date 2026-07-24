@@ -1,8 +1,7 @@
-schema_version = 1
+#:schema ./system/schemas/project-config.schema.json
+schema_version = 2
 system_version = "0.1.0"
 development_topology = "standalone-framework"
-data_root = "career"
-runtime_root = "runtime"
 build_root = "build"
 preferred_language = "en"
 
@@ -12,3 +11,16 @@ quickadd_version = "2.12.3"
 
 [resume]
 engine = "xelatex"
+
+[resume.fonts]
+directory = ".career-os/fonts"
+
+[resume.fonts.roles]
+
+[research.opencli]
+enabled = false
+profile = "career-research"
+timeout_seconds = 60
+capture_subdir = "research/opencli"
+
+[research.opencli.sources]

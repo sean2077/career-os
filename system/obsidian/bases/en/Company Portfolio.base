@@ -1,17 +1,21 @@
 filters:
   and:
   - file.ext == "md"
-  - schema_version == 2
+  - schema_version == 3
   - kind == "opportunity.company"
 formulas:
   watch_rank: if(watch_state == "current", 0, if(watch_state == "target", 1, if(watch_state == "watch", 2, if(watch_state == "avoid", 3, 4))))
   risk_rank: if(risk == "critical", 0, if(risk == "high", 1, if(risk == "medium", 2, if(risk == "low", 3, 4))))
   effective_review_state: if(review_status != "reviewed" || reviewed_at.isEmpty(), "pending", if(last_researched_at > reviewed_at || assessment_status == "stale" || assessment_status == "blocked" || refresh_due < today(), "needs-review", "reviewed"))
   metadata_issues: if(id.isEmpty(), "Missing id ", "") + if(last_researched_at.isEmpty(), "Missing research date ", "") + if(refresh_due.isEmpty(), "Missing refresh date ", "") + if(review_status == "reviewed" && reviewed_at.isEmpty(), "Missing review date", "")
-  related_engagements: file.backlinks.filter(value.properties.kind == "opportunity.engagement").map(value.asLink(value.basename))
+  related_engagements: file.backlinks.filter(value.asFile() && value.asFile().properties.kind == "opportunity.engagement").map(value.asFile().asLink(value.asFile().basename))
 properties:
   file.name:
-    displayName: Company
+    displayName: Record
+  display_name_zh:
+    displayName: Chinese Name
+  display_name_en:
+    displayName: English Name
   watch_state:
     displayName: Portfolio State
   company_lifecycle:
@@ -58,6 +62,8 @@ views:
     direction: ASC
   order:
   - file.name
+  - display_name_zh
+  - display_name_en
   - company_lifecycle
   - research_level
   - assessment_status
@@ -84,6 +90,8 @@ views:
   name: Compare
   order:
   - file.name
+  - display_name_zh
+  - display_name_en
   - watch_state
   - company_lifecycle
   - strength
@@ -111,6 +119,8 @@ views:
     - '!formula.metadata_issues.isEmpty()'
   order:
   - file.name
+  - display_name_zh
+  - display_name_en
   - watch_state
   - assessment_status
   - formula.effective_review_state

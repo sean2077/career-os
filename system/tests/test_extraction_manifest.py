@@ -56,15 +56,27 @@ def test_public_extraction_manifest_is_complete_and_hash_bound() -> None:
     extraction_result_paths = {
         entry["path"] for entry in entries if entry["result_sha256"] is not None
     }
+    supplement_result_paths = {
+        entry["path"]
+        for entry in supplement_entries
+        if entry["result_sha256"] is not None
+    }
+    supplement_deleted_paths = {
+        entry["path"]
+        for entry in supplement_entries
+        if entry["result_sha256"] is None
+    }
     current_paths = tracked - {MANIFEST_PATH, SUPPLEMENT_PATH}
-    assert current_paths == extraction_result_paths | set(supplement_by_path)
+    assert current_paths == (
+        extraction_result_paths - supplement_deleted_paths
+    ) | supplement_result_paths
 
     required_supplement = {
         path
         for path in current_paths
         if path not in by_path
         or by_path[path]["result_sha256"] != _sha256(_index_bytes(path))
-    }
+    } | (extraction_result_paths - current_paths)
     assert set(supplement_by_path) == required_supplement
 
     for entry in entries:
@@ -97,6 +109,9 @@ def test_public_extraction_manifest_is_complete_and_hash_bound() -> None:
             "mvp-security-hardening",
             "release-evidence",
         }
+        if entry["result_sha256"] is None:
+            assert entry["path"] not in current_paths
+            continue
         assert entry["result_sha256"] == _sha256(_index_bytes(entry["path"]))
 
     assert manifest["source_snapshot"]["public_snapshot_sha256"] == _snapshot_digest(

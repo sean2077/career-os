@@ -28,6 +28,11 @@ not relicense bundled Skills or the Source Han and Noto font bundle.
 Career OS does not grant rights to owner-provided local fonts or redistribute
 them.
 
+The bundled `opencli-usage` Skill is an unmodified snapshot from
+jackwener/OpenCLI and retains the Apache License 2.0. The OpenCLI executable,
+Browser Bridge extension, browser profile, and login state are per-device
+optional dependencies; they are not vendored into this repository or its SBOM.
+
 The temporary resume work-experience projection is backed by the exact
 PyMuPDF4LLM/PyMuPDF/PyMuPDF Layout closure in `uv.lock`. Upstream metadata
 offers PyMuPDF4LLM and PyMuPDF under AGPL-3.0 or an Artifex commercial license,

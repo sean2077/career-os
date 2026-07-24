@@ -491,6 +491,41 @@
       ]
     },
     {
+      "type": "data",
+      "bom-ref": "skill:opencli-usage@cad35e7a6a5ff3f7d6b859bfa4c45195c0390260",
+      "name": "opencli-usage",
+      "version": "cad35e7a6a5ff3f7d6b859bfa4c45195c0390260",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "298cf3ff2939887219a3b8d5e8dd644789febd390961800409d01760bd2833b9"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "vcs",
+          "url": "https://github.com/jackwener/OpenCLI#cad35e7a6a5ff3f7d6b859bfa4c45195c0390260"
+        }
+      ],
+      "properties": [
+        {
+          "name": "career-os:source-path",
+          "value": "skills/opencli-usage"
+        },
+        {
+          "name": "career-os:attribution",
+          "value": "Copyright 2025 jackwener"
+        }
+      ]
+    },
+    {
       "type": "file",
       "bom-ref": "font:NotoSansCJKsc-Bold.otf@2.004",
       "name": "NotoSansCJKsc-Bold.otf",
@@ -698,7 +733,8 @@
         "skill:json-canvas@553ef99aa3306dd23f268e1ba9af752577684f69",
         "skill:obsidian-bases@553ef99aa3306dd23f268e1ba9af752577684f69",
         "skill:obsidian-cli@553ef99aa3306dd23f268e1ba9af752577684f69",
-        "skill:obsidian-markdown@553ef99aa3306dd23f268e1ba9af752577684f69"
+        "skill:obsidian-markdown@553ef99aa3306dd23f268e1ba9af752577684f69",
+        "skill:opencli-usage@cad35e7a6a5ff3f7d6b859bfa4c45195c0390260"
       ]
     },
     {
@@ -848,6 +884,9 @@
     },
     {
       "ref": "skill:obsidian-markdown@553ef99aa3306dd23f268e1ba9af752577684f69"
+    },
+    {
+      "ref": "skill:opencli-usage@cad35e7a6a5ff3f7d6b859bfa4c45195c0390260"
     },
     {
       "ref": "font:NotoSansCJKsc-Bold.otf@2.004"

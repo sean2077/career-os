@@ -11,6 +11,10 @@ Bundled Agent Skills retain their upstream copyright and license terms:
 - kepano/obsidian-skills — revision 553ef99aa3306dd23f268e1ba9af752577684f69
   — MIT — system/licenses/kepano-obsidian-skills-MIT.txt
   — https://github.com/kepano/obsidian-skills
+- jackwener/OpenCLI opencli-usage — revision cad35e7a6a5ff3f7d6b859bfa4c45195c0390260
+  — Apache-2.0 — system/licenses/jackwener-opencli-Apache-2.0.txt
+  — Copyright 2025 jackwener
+  — https://github.com/jackwener/OpenCLI
 
 The optional Career OS resume font bundle is licensed under the SIL Open Font License 1.1:
 

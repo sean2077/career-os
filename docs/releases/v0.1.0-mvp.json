@@ -6,6 +6,31 @@
   "self_exclusion": "docs/releases/v0.1.0-mvp.json",
   "entries": [
     {
+      "path": ".agents/skills/README.md",
+      "result_sha256": "dec32dc088a4dc48af2be4be9aea1fd54d8321bb220453dfb218d8dd0f4f4fdf",
+      "reason": "release-evidence"
+    },
+    {
+      "path": ".agents/skills/_shared/career-contract.md",
+      "result_sha256": "2d96db48b49bcb04f2fd36be48d824149cec1e977d1dad745c2832a4ebaf4074",
+      "reason": "release-evidence"
+    },
+    {
+      "path": ".agents/skills/opencli-usage/SKILL.md",
+      "result_sha256": "c15f0840b208f89b703ae9d9084137ccbd45d42740781bb45ff884ab71f75430",
+      "reason": "release-evidence"
+    },
+    {
+      "path": ".agents/skills/opportunity-decision/SKILL.md",
+      "result_sha256": "920389bf7ccc11bd670f042506fa730dea71cf6356d006f0de243fe1f954ebd0",
+      "reason": "release-evidence"
+    },
+    {
+      "path": ".claude/skills/opencli-usage",
+      "result_sha256": "30c0e98a73c072697302c83cdc12ce5e8cf96ee76b5a34b1f2e28b6eccee4a34",
+      "reason": "release-evidence"
+    },
+    {
       "path": ".github/workflows/ci.yml",
       "result_sha256": "c07aa35f461e289b1760d93624b33efeb7a1bc753682f360711cdb04c953d6e3",
       "reason": "mvp-security-hardening"
@@ -16,18 +41,68 @@
       "reason": "mvp-security-hardening"
     },
     {
+      "path": ".gitignore",
+      "result_sha256": "f293fd5c25e0f9e9c3b804c1bc1e7be2c34336a573284f3669c90e60d4c6ffe1",
+      "reason": "release-evidence"
+    },
+    {
       "path": "AGENTS.md",
-      "result_sha256": "180a8f0f089a22ef49ea2feda777634e33add5327f7aa13c6adef98869bcb561",
+      "result_sha256": "832f89360b174b0482f79e77c40b5e4bcbdcf34b8057418ae5076ad103d8ec34",
       "reason": "release-evidence"
     },
     {
       "path": "CHANGELOG.md",
-      "result_sha256": "6a1de861020a52bb7ecd3f37e2fdabf22c127dafcad739379d580afb56c176b1",
+      "result_sha256": "0221cdb8622781ab860a5938853363872742f337b2728a712bb54d1e1726496e",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "NOTICE",
+      "result_sha256": "dc2f9334ce774cfa6c5d44dfe393f9b426bde84adf257e6eaf596211d375ea5e",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "README.md",
+      "result_sha256": "f4b77b7878efa5b3e9990465fbee592630478e4661861d1f94c938962ced363b",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "career-os.toml",
+      "result_sha256": "e35b0471f1c6452654198c3132bbbbed8aca08aa3fd421bb2f2b37a9bc921e10",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "docs/README.md",
+      "result_sha256": "a8e7549a934c1df938dddbb77123240cd5d9d1db29601eb7c9999895a90e374a",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/architecture.md",
+      "result_sha256": "e459844c80a8c862364f99cf21b1173720d20207d02df65d7fc0cff49e200a88",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/data-model.md",
+      "result_sha256": "4ffbcd8fde4d1803dc5dbde31a0d0dc62a9daf372d8e802ffe1ea30a0cda2cb6",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/embedded-vault.md",
+      "result_sha256": "dae3c379c7635e6f5d8e743c520778280789bb3d1484508ff04e0602bd2354ee",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/importing.md",
+      "result_sha256": "bea3eac454c431cdfd129e88dfbed1705b40066c75141434d010e3d93a7ca02d",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/installation.md",
+      "result_sha256": "58c06cc5c5311998d90399b81844f87077773b780e0e192e07fd3723c65a4ea9",
       "reason": "release-evidence"
     },
     {
       "path": "docs/private-downstream.md",
-      "result_sha256": "45f92bd1cfb202cad9f95191bc21a2755e30ae13e084656993c65cc7f0efde23",
+      "result_sha256": "64d7adf007d9d6ddba4ffa2c5586ab812667649ee18f13050dff50cff0b2c07a",
       "reason": "downstream-adaptation"
     },
     {
@@ -41,44 +116,374 @@
       "reason": "release-evidence"
     },
     {
+      "path": "docs/resume.md",
+      "result_sha256": "fed5400c8686f276ef56dda99fc409ac601fa292c0e78725beffcb52e25441de",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/semantic-migration.md",
+      "result_sha256": null,
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/skills.md",
+      "result_sha256": "436fbab4c3afe869d646d345bfeb606c2a3ccc2acc74c3b02d695706ce499ddf",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/supply-chain.md",
+      "result_sha256": "e1455f11883e8fe4ef0072f3566eb1750bfdf0dcef2e6d2b1cf16b622ee5de3e",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/tool-governance.md",
+      "result_sha256": "3ee175f99fdf0c2210e4c42019675be8d22f9770c766a45044b5b0cb371259ee",
+      "reason": "release-evidence"
+    },
+    {
       "path": "docs/tooling.md",
-      "result_sha256": "32247dedafaba55f1dc7f763faa724162d830e0293f7773f1efa062d676d33ce",
+      "result_sha256": "16c8f44d76a9c03b48f501afd174b4e835727e9af8c30d9bab44a4e6139fc9af",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "skills-lock.json",
+      "result_sha256": "4e6257af106372acd27f9fd2d497ab55d4c998a29cf60668bb4830f5ab5eac57",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/licenses/jackwener-opencli-Apache-2.0.txt",
+      "result_sha256": "0210b8b66cf00358242cb921ba2be3a46dfe0190159b1b952388a3880ce1ff54",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/migrations/record-envelope-2-to-3.json",
+      "result_sha256": "f4a2a767a44c28963dea170e358a1ea946f0460bf020044eebccbd2a045e3f4b",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/obsidian/bases/en/Capability Readiness.base",
+      "result_sha256": "b1ec145dd19f127ff1170125f25224c4a864eb0a92c7133a19f1324fd7c9925b",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/obsidian/bases/en/Company Portfolio.base",
+      "result_sha256": "0a89c04f1942d6e94601462bce303cf42712a126a29dead972683bb03d4a551c",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/obsidian/bases/en/Engagement Decisions.base",
+      "result_sha256": "5c9accf5a24f936d041506ff6549c3c81ed4688e004c85234cb447247ee0cdd1",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/obsidian/bases/en/JD Screening.base",
+      "result_sha256": "7d9c4480b36e64261457425cd63b42e20fce3a100652e5af63b7be0572a7cfc2",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/obsidian/bases/en/Recruiting Channels.base",
+      "result_sha256": "b8a504314c8779fb53f04a9df29e8199302328a20815bfd165bc653e4affe734",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/obsidian/bases/zh-CN/JD 筛选工作台.base",
+      "result_sha256": "c28310c2aa4cf80b6939e5a3f27b52c3f331f77e13cc92474e254490df3a1065",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/obsidian/bases/zh-CN/公司组合.base",
+      "result_sha256": "14ce97dda73e6888cc11706b9cf37501b1f0910bd2c0d162ad82923139b95af8",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/obsidian/bases/zh-CN/招聘互动决策.base",
+      "result_sha256": "d7f312625219b58c73412a078dd38fe56fda199bb8726437b5240a536a7a3e2b",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/obsidian/bases/zh-CN/招聘渠道.base",
+      "result_sha256": "e0715572bf8384a48ec8d8db54dedb50f63be2658359c5ce3afa784b0c4bc328",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/obsidian/bases/zh-CN/能力准备度.base",
+      "result_sha256": "92321a8ecffc6454dc530fc0dd3429f73a11b03503e3415cff01e6c3044b13ed",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/obsidian/career-map.canvas",
+      "result_sha256": "6f4774f4df9b8d7e220ebe26e51302ae0d2dde94b1bdeeb7417b39a209ac0c1e",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/obsidian/records.base",
+      "result_sha256": "408311ba9878679e0e5e228676fe10221e5f21dbbb4a395f7929f1b52cfae182",
       "reason": "release-evidence"
     },
     {
       "path": "system/privacy/public-fixture-policy.json",
-      "result_sha256": "1e4111b0527c6c4bfa35a3e0b672c4752d4c238867bf725decf8cfaac850dbad",
+      "result_sha256": "41edeb20c86c0bfa18315df1ad48b55bf86d590d61607a19d38b60ac143f0d93",
       "reason": "mvp-security-hardening"
     },
     {
+      "path": "system/resume/career-os.cls",
+      "result_sha256": "1ae8a2c7a6c80f3a748fe961bf1fd0b60efb7ff8e2cc28fea0b4d9b54b597d99",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/resume/latexmkrc",
+      "result_sha256": "839e93677fdf7cc4453a9c3af8f71913d1032d9282664d843558af113184afb1",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/sbom.cdx.json",
+      "result_sha256": "89a07f8a0c74739472fc191437e831870d7eb770dd31867d31a75c38927d5518",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/schemas/install-state.schema.json",
+      "result_sha256": null,
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/schemas/legacy-import-manifest.schema.json",
+      "result_sha256": "0002357d883b7cad425f8ea018008369e00bcd6db00635da744e912593ecc173",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/schemas/legacy-inventory-rules.schema.json",
+      "result_sha256": null,
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/schemas/legacy-migration-inventory.schema.json",
+      "result_sha256": null,
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/schemas/migration-provenance.schema.json",
+      "result_sha256": null,
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/schemas/operation-plan.schema.json",
+      "result_sha256": "d9df1c9a5b3542584d225b9d4ddaee48981294716dff329189285789a1fa4e6e",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/schemas/project-config.schema.json",
+      "result_sha256": "5a8880a58afb346b3149dba12747410afc20a89b8a7cb3c412c74d84a0851a35",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/schemas/record-envelope.schema.json",
+      "result_sha256": "6dfd1fb79c9370db8edd7000c742b6fecaa2ac5e51678fe41dabfb0698185886",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/schemas/semantic-file-review.schema.json",
+      "result_sha256": null,
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/schemas/semantic-review-amendment.schema.json",
+      "result_sha256": null,
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/schemas/semantic-review-completion.schema.json",
+      "result_sha256": null,
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/schemas/semantic-review-supersession.schema.json",
+      "result_sha256": null,
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/schemas/skills-lock.schema.json",
+      "result_sha256": "d0e3504ccd5e545268e643d329f07ac004872a0179138316326509758b0386f5",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/schemas/vault-install.schema.json",
+      "result_sha256": null,
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/seeds/authorities/40-opportunity-decision.md",
+      "result_sha256": "8f4c4ee399327bb35283a3de59526699008390cbec7f1b7d5229b488f03e6876",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/seeds/data-root-readme.md",
+      "result_sha256": "1ea1e6d47b0d67bae2e088085dc46b6467858287d007fde52b26ca2456c10264",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tests/fixtures/records/multilingual-cross-reference/10-career-evidence/机器人数据闭环.md",
+      "result_sha256": null,
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tests/fixtures/records/multilingual-cross-reference/20-career-strategy/agent-platform-lane.md",
+      "result_sha256": null,
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tests/fixtures/semantic-review/scenario-matrix.json",
+      "result_sha256": null,
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tests/test_cleanup.py",
+      "result_sha256": "4a5122abb9c35c51193f3ac0355ece7effbf3fc1a27a94beb8769c325b27742a",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tests/test_cli_core.py",
+      "result_sha256": "3fab04188fdc77876c9af69914a2c9482d896a7e3de335cdb0923379b3732d0d",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tests/test_cli_smoke.py",
+      "result_sha256": "faf577fe21d0caa673ad915271ece404b1ea6dad003b26c71ef037ad35b2a729",
+      "reason": "release-evidence"
+    },
+    {
       "path": "system/tests/test_downstream.py",
-      "result_sha256": "5c8e55459badf51d0d08e483d1c0eecff8ccc04daf1a7c56d8094938173dc5b7",
+      "result_sha256": "f7751356961b8a8904a6afb3ace53c6524a21017d7116a04d8dddc4344b3b221",
       "reason": "downstream-adaptation"
     },
     {
       "path": "system/tests/test_extraction_manifest.py",
-      "result_sha256": "424b1aded0c81e9716eddfa60846622976aba5b3e4593f2da5e4c39090551c02",
+      "result_sha256": "7ed926dc9b8cf8661bb4b0119343e7c297b351ef10598f2b78886d7c5ad76f69",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tests/test_golden_journey.py",
+      "result_sha256": "648a6bcc76b815502f61cc7b0f8ea35dd0c4480b3e99c8839a8073dd3528481c",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tests/test_imports.py",
+      "result_sha256": "37c3eb0bd80823169b87fe60032833ed85a9a2fc80be2a0fcc014c6785255911",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tests/test_installation_docs.py",
+      "result_sha256": "c8462e5460381d80a84e96a83bc8f2f39f7642df6b4aea466a3c417e02a1a816",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tests/test_obsidian.py",
+      "result_sha256": "ef9d59192b7295d6c5de67ff60cdc049535cc38a93383c90cca6915e8614a765",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tests/test_opencli.py",
+      "result_sha256": "18df1735bf17643fb2f15e9bd6766b8f3d8151aca5f208f5e47ced845c4f046a",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tests/test_operations.py",
+      "result_sha256": "74e641c4292d88aadcb389c3703163a414ede5042bd5911283ffe499ed8f6c44",
       "reason": "release-evidence"
     },
     {
       "path": "system/tests/test_public_privacy.py",
-      "result_sha256": "552f6fc352b29dbcd46d87f569b2e16dd79085e09ac9fbe8d03aaef89d92d98e",
+      "result_sha256": "beaf32089060caa3f01a148d23898678cb55941e1c1664d34b054b459c46251d",
       "reason": "mvp-security-hardening"
+    },
+    {
+      "path": "system/tests/test_records.py",
+      "result_sha256": "ec15427d0e03566faca645a73b9436e359ebd34e1ea7824fa6081fd059aa3d35",
+      "reason": "release-evidence"
     },
     {
       "path": "system/tests/test_release.py",
-      "result_sha256": "c166f6143875af8e6d76d9bf8e31e32d8476c93d879b89363778a9acfb27f011",
+      "result_sha256": "37edb2087d4590264c3fc18a3906318f642111f3843cdcc4b9efd79d73c2e7dc",
       "reason": "mvp-security-hardening"
+    },
+    {
+      "path": "system/tests/test_resume.py",
+      "result_sha256": "b05be1b5dc44150667892892c8f7a554eae337a09a163e43d7054b083cb3f0d7",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tests/test_resume_adversarial.py",
+      "result_sha256": "889a3c4e2d78be17b112774b5d649dc4edac1dfa01156ffe2c1830e2585315e3",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tests/test_resume_fonts.py",
+      "result_sha256": "76b5d3649ac87fbaeb98a18a4560e52b0032a6c80a33a48d1d74a695313544d1",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tests/test_resume_variants.py",
+      "result_sha256": "71c5737b813da341ce818f215d77bfc256be7fab6cc8ac656bd3ad65721a39e0",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tests/test_resume_work_experience.py",
+      "result_sha256": "c3c2d58827f9dbf1e3ccee3a716d037e9af9ab574c153104b954d7aec1572d4a",
+      "reason": "release-evidence"
     },
     {
       "path": "system/tests/test_semantic_review.py",
-      "result_sha256": "110249a58585212289198d83e1be9f259ef86e1b6a7a799d63de5c77f6ff074b",
-      "reason": "downstream-adaptation"
+      "result_sha256": null,
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tests/test_skills.py",
+      "result_sha256": "517a8871598a486348215c8511b3c2cd8d278e76914b0d1ceac0095845b98316",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tests/test_supply_chain.py",
+      "result_sha256": "ed1b7f20620a3bd894436220082e96ce1daa0c6b848f83557ad57cf8eca1fb91",
+      "reason": "release-evidence"
     },
     {
       "path": "system/tools/career_os/checks.py",
-      "result_sha256": "afdb33a7392fd9ec74be48adb58a1fd2be207ff0b84dc2d0ef966cc51b8676f7",
+      "result_sha256": "c6ee9d37f3c1fa537e43043935d92408810c645a80678b5dbd629e6e763b786b",
       "reason": "mvp-security-hardening"
+    },
+    {
+      "path": "system/tools/career_os/cleanup.py",
+      "result_sha256": "e20b072a599858dca7448c1ba3796f0c06f844c1aa2175a1b7397f95d5baea13",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tools/career_os/cli/__init__.py",
+      "result_sha256": "7103aa52a2c7738137b25e2b73663672999e9362cd31868bdd08540c34b975b2",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tools/career_os/cli/cleanup.py",
+      "result_sha256": "7176ba4968f3911bd0e717852da2820d6284092ec714976dfa94bbddb891c84f",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tools/career_os/cli/core.py",
+      "result_sha256": "f4e7d09ef2791b3502372ba83311cf6a2a69875048e1a010c6cbcb71fa9f4fea",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tools/career_os/cli/downstream.py",
+      "result_sha256": "2b70bd5a86ccc1524628d83812d56219dcee3f0c5a209073f4b500ba100fbd5b",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tools/career_os/cli/imports.py",
+      "result_sha256": "132581e0f08abafbc6d569a28213c31aef93dad1d00f4399f98459ae4f8a9a75",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tools/career_os/cli/migrate.py",
+      "result_sha256": "f312beef3da475bea20f8a2092dced074226b95224b30e744bd7d32406a16424",
+      "reason": "release-evidence"
     },
     {
       "path": "system/tools/career_os/cli/release.py",
@@ -86,24 +491,94 @@
       "reason": "mvp-security-hardening"
     },
     {
+      "path": "system/tools/career_os/cli/resume.py",
+      "result_sha256": "6047597842c3fef356c129133e8d8ababf1a1029675c39d62a49d5df7ec72993",
+      "reason": "release-evidence"
+    },
+    {
       "path": "system/tools/career_os/config.py",
-      "result_sha256": "571880516468c012670f93e10337ac99d2e6fe3f006490e7d771a8ae5e7c6d19",
+      "result_sha256": "47d0bf3cf93b666e2811b89451c1cb2c0935b5875c25125550c164ff46879733",
       "reason": "downstream-adaptation"
     },
     {
       "path": "system/tools/career_os/downstream.py",
-      "result_sha256": "3c39914d2dfe9400777c4a122fe789eb798f69c2bf83c0fbbafba9e1a5f02531",
+      "result_sha256": "a9dd337435bd10381a920abb455d71be1938349b47d366d60eeb2c2912722b65",
       "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tools/career_os/imports.py",
+      "result_sha256": "12d2d4cf23b327ca7537c1acfcc4f9d9f2bc61c9faf2bd3324f8bbb10f11e77d",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tools/career_os/migrations.py",
+      "result_sha256": "0b56595a5ee11906fdc407bc9dabe7994a8a9d136de7c7f7460591ddb28b4453",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tools/career_os/opencli.py",
+      "result_sha256": "d4c3f4832e67be69f74dff45a45d09692547191c8021a3db6fd65157a11854f3",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tools/career_os/operations/__init__.py",
+      "result_sha256": "2679dd67bd0012e13d6d0b9a5816b58031b3214232836ad9141e1fafb7078292",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tools/career_os/operations/models.py",
+      "result_sha256": "18dd96e91480072b1cb1b21a47dd5a63f656a82b8eab60e7c7fbc4ff7008f0d3",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tools/career_os/operations/plans.py",
+      "result_sha256": "a9448bea7f5ac57310f827042fb6b2e9459429c2fbed0900be9e4c722c674ecb",
+      "reason": "release-evidence"
     },
     {
       "path": "system/tools/career_os/public_privacy.py",
-      "result_sha256": "8b03901ad328656a6de09d025b2150623fbb08fdda61d5711f504339da1c34e3",
+      "result_sha256": "f8def7e4f7c8b98a442909530ed30f1bead2c8df759d2a45dbf8905c44954606",
       "reason": "mvp-security-hardening"
     },
     {
+      "path": "system/tools/career_os/records/__init__.py",
+      "result_sha256": "42a10ac59eeab47ccb4d43e62e83194ea606181f7be098e7aee0e428b0c5b984",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tools/career_os/records/models.py",
+      "result_sha256": "b394ed5ae460618f85ea919c60015ac9f2bac798e02873961b6847e34a41462a",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tools/career_os/records/semantics.py",
+      "result_sha256": "72416d93c3f95167ea531e427bbd941dbea6c31c29936616f9321a629be65960",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tools/career_os/resume/__init__.py",
+      "result_sha256": "26c0fbdd697381f9c9a85e3136bc88b656629042376f8e70a0380006e45644f6",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tools/career_os/resume/fonts.py",
+      "result_sha256": "e817bd5218cda4e9acc51495834cd0c951f09868eb617849f86ddde72f94698f",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tools/career_os/resume/service.py",
+      "result_sha256": "eea29096e44fe9863ac0366fdfcd326117f0ff0920cc7605d3ce53b3b3cab7fc",
+      "reason": "release-evidence"
+    },
+    {
       "path": "system/tools/career_os/semantic_review.py",
-      "result_sha256": "d8bc8fd60af336ed7ed36ce4924a4f6b922425432fc007413636439b04ded604",
-      "reason": "downstream-adaptation"
+      "result_sha256": null,
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tools/career_os/skills.py",
+      "result_sha256": "14d13cb441cb0f02d928972684c3590a72a1992e4731625005ebf178b54090cd",
+      "reason": "release-evidence"
     }
   ]
 }

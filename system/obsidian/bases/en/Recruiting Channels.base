@@ -1,11 +1,11 @@
 filters:
   and:
   - file.ext == "md"
-  - schema_version == 2
+  - schema_version == 3
   - kind == "market.channel"
   - status == "active"
 formulas:
-  career_lanes: if(host_refs, host_refs.filter(value.relation == "career-lane").map(file(value.path).asLink(file(value.path).basename)), "")
+  career_lanes: if(career_lane, list(career_lane).filter(value.asFile()).map(value.asFile().asLink(value.asFile().basename)), "")
 properties:
   file.name:
     displayName: Channel

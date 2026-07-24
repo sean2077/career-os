@@ -336,9 +336,11 @@ def validate_downstream_sync_plan(
         )
 
     output = output_path.resolve()
-    data_root = paths.data_root.resolve()
-    if not output.is_relative_to(data_root) or output.suffix.lower() != ".json":
-        raise ValueError("synchronization validation output must be a JSON file under data_root")
+    state_root = (paths.local_state_root / "downstream").resolve()
+    if not output.is_relative_to(state_root) or output.suffix.lower() != ".json":
+        raise ValueError(
+            "synchronization validation output must be JSON under .career-os/downstream"
+        )
     output.parent.mkdir(parents=True, exist_ok=True)
     if output.exists():
         raise ValueError(f"synchronization validation output already exists: {output}")
@@ -608,10 +610,9 @@ def _adapt_source_config(
         {
             **source_config.model_dump(),
             "development_topology": "split-downstream",
-            "data_root": target_config.data_root,
-            "runtime_root": target_config.runtime_root,
             "build_root": target_config.build_root,
             "preferred_language": target_config.preferred_language,
+            "research": target_config.research.model_dump(),
         }
     )
     object_id = _git(

@@ -1,27 +1,25 @@
 filters:
   and:
   - file.ext == "md"
-  - schema_version == 2
+  - schema_version == 3
   - kind == "opportunity.engagement"
 formulas:
-  company_path: if(host_refs, host_refs.filter(value.relation == "company").map(value.path).join(""), "")
-  company: if(!formula.company_path.isEmpty() && file(formula.company_path), file(formula.company_path).asLink(file(formula.company_path).basename), "")
-  target_jd_path: if(host_refs, host_refs.filter(value.relation == "target-jd").map(value.path).join(""), "")
-  target_jd: if(!formula.target_jd_path.isEmpty() && file(formula.target_jd_path), file(formula.target_jd_path).asLink(file(formula.target_jd_path).basename), "")
   effective_review_state: if(review_status != "reviewed" || reviewed_at.isEmpty(), "pending", if(date(updated_at) > date(reviewed_at), "needs-review", "reviewed"))
-  company_business_outlook: if(!formula.company_path.isEmpty() && file(formula.company_path), file(formula.company_path).properties.business_outlook, "")
-  company_employer_quality: if(!formula.company_path.isEmpty() && file(formula.company_path), file(formula.company_path).properties.employer_quality, "")
-  company_risk: if(!formula.company_path.isEmpty() && file(formula.company_path), file(formula.company_path).properties.risk, "")
-  company_confidence: if(!formula.company_path.isEmpty() && file(formula.company_path), file(formula.company_path).properties.confidence, "")
-  company_attention: if(formula.company_path.isEmpty() || !file(formula.company_path), "", if(file(formula.company_path).properties.assessment_status == "blocked", "blocked", if(file(formula.company_path).properties.assessment_status == "stale" || file(formula.company_path).properties.refresh_due < today(), "stale/overdue", "")))
+  company_link: if(company && company.asFile(), company.asFile().asLink(company.asFile().basename), "")
+  target_jd_link: if(target_jd && target_jd.asFile(), target_jd.asFile().asLink(target_jd.asFile().basename), "")
+  company_business_outlook: if(company && company.asFile(), company.asFile().properties.business_outlook, "")
+  company_employer_quality: if(company && company.asFile(), company.asFile().properties.employer_quality, "")
+  company_risk: if(company && company.asFile(), company.asFile().properties.risk, "")
+  company_confidence: if(company && company.asFile(), company.asFile().properties.confidence, "")
+  company_attention: if(!company || !company.asFile(), "", if(company.asFile().properties.assessment_status == "blocked", "blocked", if(company.asFile().properties.assessment_status == "stale" || company.asFile().properties.refresh_due < today(), "stale/overdue", "")))
   metadata_issues: if(id.isEmpty(), "Missing id ", "") + if(updated_at.isEmpty(), "Missing updated date ", "") + if(review_status == "reviewed" && reviewed_at.isEmpty(), "Missing review date", "")
-  relationship_issues: if(formula.company_path.isEmpty(), "Missing company link ", if(!file(formula.company_path), "Broken company link ", if(file(formula.company_path).properties.kind != "opportunity.company", "Source is not Company ", ""))) + if(!formula.target_jd_path.isEmpty() && (!file(formula.target_jd_path) || file(formula.target_jd_path).properties.kind != "market.jd"), "Broken JD source", "")
+  relationship_issues: if(!company, "Missing company link ", if(!company.asFile() || company.asFile().properties.kind != "opportunity.company", "Broken company link ", "")) + if(target_jd && (!target_jd.asFile() || target_jd.asFile().properties.kind != "market.jd"), "Broken JD source ", "") + if(company && !file.links.contains(company), "Company missing from outgoing links", "")
 properties:
   file.name:
     displayName: Engagement
-  formula.company:
+  formula.company_link:
     displayName: Company
-  formula.target_jd:
+  formula.target_jd_link:
     displayName: JD Source
   engagement_type:
     displayName: Type
@@ -77,7 +75,7 @@ views:
     direction: ASC
   order:
   - file.name
-  - formula.company
+  - formula.company_link
   - engagement_type
   - stage
   - role
@@ -110,8 +108,8 @@ views:
     - '!formula.company_attention.isEmpty()'
   order:
   - file.name
-  - formula.company
-  - formula.target_jd
+  - formula.company_link
+  - formula.target_jd_link
   - engagement_type
   - started_on
   - review_on
@@ -136,7 +134,7 @@ views:
     - application_state != "not-applied"
   order:
   - file.name
-  - formula.company
+  - formula.company_link
   - status
   - engagement_type
   - stage

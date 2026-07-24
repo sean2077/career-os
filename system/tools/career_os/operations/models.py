@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Literal
+from typing import Any, Literal
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
@@ -58,3 +58,11 @@ class OperationPlan(BaseModel):
     plan_sha256: str
     applied_at: datetime | None = None
     rolled_back_at: datetime | None = None
+
+
+def operation_plan_json_schema() -> dict[str, Any]:
+    schema = OperationPlan.model_json_schema()
+    schema["$schema"] = "https://json-schema.org/draft/2020-12/schema"
+    schema["$id"] = "https://career-os.dev/schemas/operation-plan.schema.json"
+    schema["title"] = "Career OS Operation Plan"
+    return schema

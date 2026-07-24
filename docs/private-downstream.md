@@ -157,8 +157,8 @@ uv run career-os skills verify
 uv run career-os check --fast
 uv run career-os check
 uv run career-os check --host
-uv run career-os downstream validate --plan <emitted-plan.json> --output career/.provenance/downstream-sync-vX.Y.Z.json
-git add -- <reviewed-system-paths> career/.provenance/downstream-sync-vX.Y.Z.json
+uv run career-os downstream validate --plan <emitted-plan.json> --output .career-os/downstream/downstream-sync-vX.Y.Z.json
+git add -- <reviewed-system-paths>
 git commit -m "chore(framework): sync Career OS vX.Y.Z"
 git switch main
 git merge --ff-only sync/vX.Y.Z

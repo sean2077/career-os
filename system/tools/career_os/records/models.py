@@ -3,9 +3,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 from datetime import date, datetime
-from pathlib import PurePosixPath
 from typing import Annotated, Any, Literal
-from uuid import UUID
 
 from pydantic import (
     UUID4,
@@ -24,6 +22,8 @@ _BCP47 = re.compile(_BCP47_PATTERN, re.ASCII)
 _SHA256_PATTERN = r"^[0-9a-f]{64}$"
 _PREFIXED_SHA256_PATTERN = r"^sha256:[0-9a-f]{64}$"
 _PROFILE_ID_PATTERN = r"^[a-z0-9]+(?:-[a-z0-9]+)*$"
+_WIKILINK_PATTERN = r"^\[\[[^\]\r\n|]+(?:#[^\]\r\n|]+)?(?:\|[^\]\r\n]+)?\]\]$"
+Wikilink = Annotated[str, Field(pattern=_WIKILINK_PATTERN)]
 
 
 @dataclass(frozen=True)
@@ -234,93 +234,22 @@ KIND_LIFECYCLES: dict[str, LifecycleContract] = {
 RECORD_KINDS = frozenset(KIND_LIFECYCLES)
 
 
-class InternalRef(BaseModel):
-    model_config = ConfigDict(extra="forbid")
-
-    relation: str = Field(min_length=1, pattern=r"^[a-z][a-z0-9-]*$")
-    target_id: UUID4
-    required: bool
-
-
-class HostRef(BaseModel):
-    model_config = ConfigDict(extra="forbid")
-
-    relation: str = Field(min_length=1, pattern=r"^[a-z][a-z0-9-]*$")
-    path: str
-    target_id: UUID4 | None = None
-    anchor: str | None = None
-    required: bool
-
-    @field_validator("path")
-    @classmethod
-    def validate_host_path(cls, value: str) -> str:
-        if "\\" in value:
-            raise ValueError("host path must use POSIX separators")
-        parsed = PurePosixPath(value)
-        if (
-            not value
-            or value.endswith("/")
-            or parsed == PurePosixPath(".")
-            or parsed.is_absolute()
-            or ".." in parsed.parts
-        ):
-            raise ValueError("host path must remain relative to the Vault root")
-        return value
-
-    @field_validator("anchor")
-    @classmethod
-    def validate_anchor(cls, value: str | None) -> str | None:
-        if value is not None:
-            if not value.startswith("#") or len(value) == 1:
-                raise ValueError("host anchor must start with '#' and contain a target")
-            if "\n" in value or "\r" in value:
-                raise ValueError("host anchor must remain on one line")
-        return value
-
-
-class StatusTransition(BaseModel):
-    model_config = ConfigDict(extra="forbid")
-
-    from_status: str = Field(min_length=1)
-    to_status: str = Field(min_length=1)
-    at: datetime
-    reason: str = Field(min_length=1)
-    evidence_ref_ids: list[UUID4] = Field(default_factory=list)
-
-    @field_validator("at")
-    @classmethod
-    def require_timezone(cls, value: datetime) -> datetime:
-        if value.tzinfo is None:
-            raise ValueError("transition timestamps must include a timezone")
-        return value
-
-    @field_validator("evidence_ref_ids")
-    @classmethod
-    def unique_evidence_refs(cls, value: list[UUID]) -> list[UUID]:
-        if len(value) != len(set(value)):
-            raise ValueError("transition evidence_ref_ids must not contain duplicates")
-        return value
-
-
 class RecordEnvelopeBase(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     id: UUID4
     kind: str
-    schema_version: Literal[2]
+    schema_version: Literal[3]
     created_at: datetime
     updated_at: datetime
     languages: list[str] | None = None
     visibility: Visibility = "private"
-    refs: list[InternalRef] = Field(default_factory=list)
-    host_refs: list[HostRef] = Field(default_factory=list)
     title: str | None = None
     status: str
-    status_history: list[StatusTransition] = Field(default_factory=list)
-    tags: list[str] = Field(default_factory=list)
-    aliases: list[str] = Field(default_factory=list)
-    migration_review: Literal["not-applicable", "required", "completed"]
-    legacy_fields: dict[str, Any] = Field(default_factory=dict)
+    tags: list[str] | None = None
+    aliases: list[str] | None = None
+    migration_review: Literal["required"] | None = None
+    legacy_fields: dict[str, Any] | None = None
 
     @field_validator("created_at", "updated_at")
     @classmethod
@@ -343,50 +272,51 @@ class RecordEnvelopeBase(BaseModel):
             raise ValueError("languages must not contain duplicates")
         return value
 
+    @field_validator("tags", "aliases")
+    @classmethod
+    def validate_optional_unique_text(
+        cls, value: list[str] | None
+    ) -> list[str] | None:
+        if value is None:
+            return None
+        if not value or any(not item.strip() for item in value):
+            raise ValueError("tags and aliases must be omitted or contain non-empty values")
+        if len(value) != len(set(value)):
+            raise ValueError("tags and aliases must not contain duplicates")
+        return value
+
     @model_validator(mode="after")
     def validate_common_contract(self) -> RecordEnvelopeBase:
         if self.updated_at < self.created_at:
             raise ValueError("updated_at must not precede created_at")
-        if len({(ref.relation, ref.target_id) for ref in self.refs}) != len(self.refs):
-            raise ValueError("internal references must not contain duplicates")
-        host_keys = {(ref.relation, ref.path, ref.anchor, ref.target_id) for ref in self.host_refs}
-        if len(host_keys) != len(self.host_refs):
-            raise ValueError("host references must not contain duplicates")
-        if self.migration_review != "required" and self.legacy_fields:
+        if self.migration_review != "required" and self.legacy_fields is not None:
             raise ValueError("legacy_fields require migration_review: required")
-        self._validate_status_history()
         return self
 
-    def _validate_status_history(self) -> None:
-        lifecycle = KIND_LIFECYCLES.get(self.kind)
-        if lifecycle is None:
-            raise ValueError(f"unsupported record kind: {self.kind}")
-        if not self.status_history:
-            if self.status not in lifecycle.initial:
-                raise ValueError(
-                    f"{self.kind} status {self.status!r} requires a complete status_history"
-                )
-            return
-        previous: str | None = None
-        previous_at: datetime | None = None
-        for index, transition in enumerate(self.status_history):
-            if index == 0 and transition.from_status not in lifecycle.initial:
-                raise ValueError("status_history must start from an initial status")
-            if previous is not None and transition.from_status != previous:
-                raise ValueError("status_history contains a broken status chain")
-            if (transition.from_status, transition.to_status) not in lifecycle.transitions:
-                raise ValueError(
-                    f"forbidden {self.kind} transition: "
-                    f"{transition.from_status} -> {transition.to_status}"
-                )
-            if not self.created_at <= transition.at <= self.updated_at:
-                raise ValueError("status transition falls outside record timestamps")
-            if previous_at is not None and transition.at < previous_at:
-                raise ValueError("status_history timestamps must be monotonic")
-            previous = transition.to_status
-            previous_at = transition.at
-        if previous != self.status:
-            raise ValueError("status must equal the final status_history transition")
+
+def validate_record_transition(
+    previous: RecordEnvelopeBase | None,
+    current: RecordEnvelopeBase,
+) -> None:
+    """Validate lifecycle state against the previous Git version of one record."""
+    lifecycle = KIND_LIFECYCLES[current.kind]
+    if previous is None:
+        if current.status not in lifecycle.initial:
+            raise ValueError(
+                f"new {current.kind} record must start in one of: "
+                + ", ".join(sorted(lifecycle.initial))
+            )
+        return
+    if previous.id != current.id or previous.kind != current.kind:
+        raise ValueError("record identity and kind cannot change")
+    if previous.status == current.status:
+        return
+    if (previous.status, current.status) not in lifecycle.transitions:
+        raise ValueError(
+            f"forbidden {current.kind} transition: {previous.status} -> {current.status}"
+        )
+    if current.updated_at <= previous.updated_at:
+        raise ValueError("status changes must advance updated_at")
 
 
 class EvidenceCapture(RecordEnvelopeBase):
@@ -397,6 +327,7 @@ class EvidenceCapture(RecordEnvelopeBase):
     provenance: str = Field(min_length=1)
     attribution: Literal["user", "team", "third-party", "mixed", "unknown"]
     sensitivity: Literal["none", "internal", "private-sensitive", "third-party", "unknown"]
+    represented_by: list[Wikilink] = Field(default_factory=list)
 
     @field_validator("captured_at")
     @classmethod
@@ -412,6 +343,9 @@ class EvidenceWork(RecordEnvelopeBase):
     contribution_scope: Literal["individual", "shared", "team", "unknown"]
     evidence_strength: Literal["weak", "medium", "strong"]
     evidence_summary: str = Field(min_length=1)
+    company: Wikilink | None = None
+    company_context: Wikilink | None = None
+    work_context: list[Wikilink] = Field(default_factory=list)
 
 
 class EvidenceStory(RecordEnvelopeBase):
@@ -420,6 +354,8 @@ class EvidenceStory(RecordEnvelopeBase):
     sensitive_boundary: str = Field(min_length=1)
     story_role: Literal["primary", "supporting", "candidate"] | None = None
     readiness_state: Literal["content-ready", "ready", "needs-work", "blocked"] | None = None
+    career_lane: Wikilink | None = None
+    derived_from: Wikilink | None = None
 
 
 class EvidenceClaim(RecordEnvelopeBase):
@@ -427,6 +363,8 @@ class EvidenceClaim(RecordEnvelopeBase):
     status: Literal["draft", "reviewed", "approved", "rejected", "withdrawn"]
     allowed_uses: list[Literal["internal", "resume", "recruiter", "application", "public"]]
     claim_risk: Literal["low", "medium", "high"]
+    context: list[Wikilink] = Field(default_factory=list)
+    supported_by: list[Wikilink] = Field(default_factory=list)
 
     @field_validator("allowed_uses")
     @classmethod
@@ -442,6 +380,8 @@ class StrategyPositioning(RecordEnvelopeBase):
     confidence: Literal["low", "medium", "high"]
     review_on: date
     disconfirming_signals: list[str]
+    defines_lane: list[Wikilink] = Field(default_factory=list)
+    outlook_input: Wikilink | None = None
 
 
 class StrategyLane(RecordEnvelopeBase):
@@ -450,6 +390,8 @@ class StrategyLane(RecordEnvelopeBase):
     confidence: Literal["low", "medium", "high"]
     review_on: date
     disconfirming_signals: list[str]
+    derived_from_positioning: Wikilink | None = None
+    outlook_input: Wikilink | None = None
 
 
 class StrategyPlan(RecordEnvelopeBase):
@@ -458,6 +400,9 @@ class StrategyPlan(RecordEnvelopeBase):
     horizon_start: date
     horizon_end: date
     review_on: date
+    derived_from_positioning: Wikilink | None = None
+    opportunity_baseline: Wikilink | None = None
+    outlook_input: Wikilink | None = None
 
     @model_validator(mode="after")
     def validate_horizon(self) -> StrategyPlan:
@@ -480,13 +425,14 @@ class MarketChannel(RecordEnvelopeBase):
     role: str = Field(min_length=1)
     url: str | None = Field(default=None, min_length=1)
     last_verified_at: date
+    career_lane: list[Wikilink] = Field(default_factory=list)
 
 
 class MarketJD(RecordEnvelopeBase):
     kind: Literal["market.jd"]
     status: Literal["captured", "screened", "reviewed", "skipped"]
     source_status: Literal["full", "partial", "summary-only", "unavailable"]
-    source_channel: str = Field(min_length=1)
+    source_channel_name: str = Field(min_length=1)
     source_origin: str | None = Field(default=None, min_length=1)
     source_url: str | None = None
     captured_at: datetime
@@ -514,6 +460,12 @@ class MarketJD(RecordEnvelopeBase):
     case_target: Literal["positive", "boundary", "observe", "negative"] | None = None
     review_note: str | None = Field(default=None, min_length=1)
     reviewed_at: date | None = None
+    career_lane: Wikilink | None = None
+    company: Wikilink | None = None
+    engagement: Wikilink | None = None
+    market_direction: Wikilink | None = None
+    recruiting_scope: Wikilink | None = None
+    source_channel: Wikilink | None = None
 
     @field_validator("captured_at")
     @classmethod
@@ -553,6 +505,8 @@ class OpportunityCompany(RecordEnvelopeBase):
     kind: Literal["opportunity.company"]
     status: Literal["pending-review", "reviewed", "stale"]
     canonical_name: str = Field(min_length=1)
+    display_name_zh: str | None = Field(default=None, min_length=1)
+    display_name_en: str | None = Field(default=None, min_length=1)
     fact_state: Literal["fact", "inference", "unknown", "mixed"]
     refreshed_at: date
     freshness_days: int = Field(ge=1)
@@ -589,6 +543,7 @@ class OpportunityScope(RecordEnvelopeBase):
     role: str | None = None
     location: str | None = None
     channel: str = Field(min_length=1)
+    company: Wikilink | None = None
 
 
 EngagementEventType = Literal[
@@ -689,6 +644,10 @@ class OpportunityEngagement(RecordEnvelopeBase):
     review_status: Literal["pending", "reviewed"] | None = None
     reviewed_at: date | None = None
     next_action: str | None = Field(default=None, min_length=1)
+    company: Wikilink | None = None
+    recruiting_scope: Wikilink | None = None
+    source_work: list[Wikilink] = Field(default_factory=list)
+    target_jd: Wikilink | None = None
 
     @model_validator(mode="after")
     def validate_engagement_events(self) -> OpportunityEngagement:
@@ -806,6 +765,7 @@ class OpportunityDecision(RecordEnvelopeBase):
     rationale: str = Field(min_length=1)
     review_on: date
     triggers: list[str]
+    engagement: Wikilink | None = None
 
 
 class OutlookSignal(RecordEnvelopeBase):
@@ -825,6 +785,7 @@ class OutlookThesis(RecordEnvelopeBase):
     horizon: str = Field(min_length=1)
     invalidation_conditions: list[str] = Field(min_length=1)
     review_authority: Literal["user"] | None = None
+    derived_from_review: Wikilink | None = None
 
     @model_validator(mode="after")
     def validate_review_authority(self) -> OutlookThesis:
@@ -837,17 +798,26 @@ class OutlookReview(RecordEnvelopeBase):
     kind: Literal["outlook.review"]
     status: Literal["pending", "reviewed", "rejected", "superseded"]
     as_of: date
-    personal_fit: Literal["missing", "partial", "satisfied"]
-    market_revealed: Literal["missing", "partial", "satisfied"]
-    independent_external: Literal["missing", "partial", "satisfied"]
+    personal_fit_gate: Literal["missing", "partial", "satisfied"]
+    market_revealed_gate: Literal["missing", "partial", "satisfied"]
+    independent_external_gate: Literal["missing", "partial", "satisfied"]
     confidence: Literal["low", "medium", "high"]
     rationale: str = Field(min_length=1)
     invalidation_conditions: list[str] = Field(min_length=1)
     review_authority: Literal["user"] | None = None
+    personal_fit: list[Wikilink] = Field(default_factory=list)
+    market_revealed: list[Wikilink] = Field(default_factory=list)
+    independent_external: list[Wikilink] = Field(default_factory=list)
+    superseded_by: Wikilink | None = None
+    supersedes: Wikilink | None = None
 
     @model_validator(mode="after")
     def validate_review_gate(self) -> OutlookReview:
-        gates = {self.personal_fit, self.market_revealed, self.independent_external}
+        gates = {
+            self.personal_fit_gate,
+            self.market_revealed_gate,
+            self.independent_external_gate,
+        }
         if self.status == "reviewed" and gates != {"satisfied"}:
             raise ValueError("a reviewed outlook requires all three signal gates")
         if self.status == "reviewed" and self.review_authority != "user":
@@ -862,6 +832,15 @@ class ReadinessGap(RecordEnvelopeBase):
     target: str = Field(min_length=1)
     closure_note: str | None = None
     priority: Literal["p0", "p1", "p2"] | None = None
+    career_lane: Wikilink | None = None
+    closed_by_evidence: list[Wikilink] = Field(default_factory=list)
+    closed_by_retest: list[Wikilink] = Field(default_factory=list)
+    closure_evidence: list[Wikilink] = Field(default_factory=list)
+    experience_story: list[Wikilink] = Field(default_factory=list)
+    last_retest: list[Wikilink] = Field(default_factory=list)
+    resume_audit: Wikilink | None = None
+    resume_root: list[Wikilink] = Field(default_factory=list)
+    target_jd: Wikilink | None = None
 
 
 class ReadinessNote(RecordEnvelopeBase):
@@ -869,6 +848,7 @@ class ReadinessNote(RecordEnvelopeBase):
     status: Literal["draft", "reviewed"]
     note_type: Literal["learning", "paper", "practice", "unknown"]
     source_title: str | None = None
+    target_gap: list[Wikilink] = Field(default_factory=list)
 
 
 class ReadinessSession(RecordEnvelopeBase):
@@ -890,6 +870,7 @@ class ReadinessSession(RecordEnvelopeBase):
     verdict: Literal["unscored", "not-ready", "ready", "blocked", "stale", "historical"] | None = (
         None
     )
+    career_lane: Wikilink | None = None
 
     @model_validator(mode="after")
     def validate_session_evidence(self) -> ReadinessSession:
@@ -916,6 +897,8 @@ class CommunicationProfile(RecordEnvelopeBase):
     status: Literal["draft", "approved", "superseded"]
     audience: str = Field(min_length=1)
     identity_policy: Literal["anonymous", "preview", "application", "public"]
+    claim_evidence: list[Wikilink] = Field(default_factory=list)
+    current_employment: Wikilink | None = None
 
 
 class CommunicationAudit(RecordEnvelopeBase):
@@ -931,6 +914,7 @@ class CommunicationAudit(RecordEnvelopeBase):
     confirmation_count: int = Field(ge=0)
     reviewer_status: Literal["complete", "fallback", "missing"]
     user_confirmed: bool
+    resume_root: Wikilink | None = None
 
     @model_validator(mode="after")
     def validate_audit_state(self) -> CommunicationAudit:
@@ -945,6 +929,9 @@ class CommunicationResume(RecordEnvelopeBase):
     root_name: str = Field(min_length=1, pattern=r"^[A-Za-z0-9][A-Za-z0-9._-]*$")
     audience: str = Field(min_length=1)
     export_policy: Literal["preview", "application"]
+    identity_profile: Wikilink | None = None
+    target_jd: Wikilink | None = None
+    uses_claim: list[Wikilink] = Field(default_factory=list)
 
 
 class CommunicationExport(RecordEnvelopeBase):
@@ -954,6 +941,8 @@ class CommunicationExport(RecordEnvelopeBase):
     authorization: Literal["missing", "explicit"]
     artifact_sha256: str | None = Field(default=None, pattern=_SHA256_PATTERN)
     destination: str | None = None
+    export_of: Wikilink | None = None
+    target_jd: Wikilink | None = None
 
     @model_validator(mode="after")
     def validate_export_state(self) -> CommunicationExport:

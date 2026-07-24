@@ -72,7 +72,7 @@ def load_plan(path: Path) -> OperationPlan:
 
 def apply_plan(plan_path: Path, state_root: Path) -> OperationPlan:
     plan = load_plan(plan_path)
-    if plan.applied_at is not None:
+    if plan.applied_at is not None and plan.rolled_back_at is None:
         return plan
     backup_root = state_root / "backups" / str(plan.id)
     roots = {key: Path(value).resolve() for key, value in plan.roots.items()}
@@ -118,7 +118,9 @@ def apply_plan(plan_path: Path, state_root: Path) -> OperationPlan:
         _restore_preapply(plan, roots, backup_root)
         raise
 
-    updated = plan.model_copy(update={"applied_at": datetime.now(UTC)})
+    updated = plan.model_copy(
+        update={"applied_at": datetime.now(UTC), "rolled_back_at": None}
+    )
     updated = _rehash(updated)
     write_plan(updated, plan_path)
     return updated
@@ -157,6 +159,26 @@ def rollback_plan(plan_path: Path, state_root: Path) -> OperationPlan:
     updated = _rehash(updated)
     write_plan(updated, plan_path)
     return updated
+
+
+def verify_plan_state(plan: OperationPlan) -> None:
+    """Verify the plan's source and target hashes for its current lifecycle state."""
+    roots = {key: Path(value).resolve() for key, value in plan.roots.items()}
+    applied = plan.applied_at is not None and plan.rolled_back_at is None
+    for operation in plan.operations:
+        target = _resolve_operation_path(roots, operation)
+        expected = operation.result_sha256 if applied else operation.expected_sha256
+        if operation.op == "mkdir":
+            if applied and not target.is_dir():
+                raise ValueError(f"planned directory is missing: {target}")
+            continue
+        if sha256_file(target) != expected:
+            state = "applied result" if applied else "pre-apply state"
+            raise ValueError(f"operation plan {state} differs: {target}")
+        if operation.op == "copy_file":
+            source = _resolve_copy_source(roots, operation)
+            if sha256_file(source) != operation.source_sha256:
+                raise ValueError(f"operation plan source differs: {source}")
 
 
 def _resolve_operation_path(roots: dict[str, Path], operation: FileOperation) -> Path:

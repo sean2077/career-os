@@ -8,7 +8,7 @@ Career OS keeps career evidence, strategy, market sensing, opportunity decisions
 
 - **Work with your career data:** open the root
   [Career Home](Home.md) in Obsidian, choose the language at the top, describe the outcome to an Agent, and use
-  the five live Workbenches. The configured data-root `README.md`,
+  the five live Workbenches. The fixed `career/README.md`,
   [dashboard](system/obsidian/dashboard.md), and
   [all-records Base](system/obsidian/records.base) remain lightweight text and
   inventory fallbacks.
@@ -19,9 +19,9 @@ Career OS keeps career evidence, strategy, market sensing, opportunity decisions
 ## Design
 
 - **Agent-native:** describe the outcome; the Agent selects and composes Skills.
-- **Local-first:** canonical data is Markdown and open files under a user-owned data root.
+- **Local-first:** canonical data is Markdown and open files under user-owned `career/`.
 - **Embeddable:** use Career OS as its own Vault or nest it inside an existing Vault.
-- **System/data separation:** versioned implementation lives in `system/`; user data lives in `career/` or another configured data root.
+- **System/data separation:** versioned implementation lives in `system/`; user data has one fixed project-relative authority at `career/`.
 - **Multilingual data:** framework text is English while user content supports Unicode and BCP 47 language tags.
 - **Bilingual Workbenches:** the five operational Bases ship as system-owned English and Chinese presentation pairs over identical record queries.
 - **Evidence-led:** mechanism health, evidence maturity, readiness, applications, and outcomes remain separate states.
@@ -138,8 +138,7 @@ Workbench Bases under `system/obsidian/`, are Git-tracked framework assets. The
 English homepage embeds the five English Bases; the Chinese homepage embeds the
 five Chinese counterparts. `career-os init` never creates or overwrites either
 homepage or any Base. `uv run career-os views build` validates and lists all
-sixteen framework assets without
-creating data-root or `runtime/` copies.
+sixteen framework assets without creating `career/` or runtime copies.
 
 Create a user-owned direct XeLaTeX resume with
 `uv run career-os resume new my-resume`. Internal builds remain under `build/`;
@@ -147,18 +146,24 @@ only `resume export` writes a shareable PDF. Personal roots remain handwritten
 TeX, are discovered recursively by name, and use the one system-owned,
 legacy-calibrated class plus adjacent `identity.tex`. Preview and application
 are fixed output profiles; Git owns source versions and export receipts compute
-hashes automatically. Personal font filenames may be set before the class in
-TeX, while binaries remain in ignored `.career-os/fonts/` state. See
+hashes automatically. Project-wide personal font filenames live in
+`career-os.toml`, while binaries remain in ignored `.career-os/fonts/` state
+and are resolved by filename before XeLaTeX. See
 [the resume guide](docs/resume.md).
 
 ## Agent Skills
 
-Career OS ships seven project-owned career workflow Skills, plus locked snapshots of selected Skills from [sean2077/skills](https://github.com/sean2077/skills) and [kepano/obsidian-skills](https://github.com/kepano/obsidian-skills). See [the Skill catalog](docs/skills.md) for ownership and attribution.
+Career OS ships seven project-owned career workflow Skills, plus locked
+snapshots of selected Skills from
+[sean2077/skills](https://github.com/sean2077/skills),
+[kepano/obsidian-skills](https://github.com/kepano/obsidian-skills), and
+[jackwener/OpenCLI](https://github.com/jackwener/OpenCLI). See
+[the Skill catalog](docs/skills.md) for ownership and attribution.
 
 ## Status
 
-The current stable line is `v0.1.0`; see its
-[verification evidence](docs/releases/v0.1.0.md). Before `v1.0`, only the
+The current stable line is `v0.2.0`; see its
+[verification evidence](docs/releases/v0.2.0.md). Before `v1.0`, only the
 interfaces explicitly documented by a release are supported.
 
 ## License

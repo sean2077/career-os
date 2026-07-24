@@ -8,6 +8,7 @@ End-user runtime setup:
 uv sync --locked
 uv run career-os doctor --json
 uv run career-os check
+uv run career-os cleanup
 ```
 
 Contributor and release setup:
@@ -17,18 +18,25 @@ uv sync --locked --all-groups
 uv run career-os doctor --json
 uv run career-os check --fast
 uv run career-os check
+uv run career-os cleanup --json
+# Review the dry-run report before:
+uv run career-os cleanup --apply
 uv run career-os skills verify
 uv run career-os skills validate-reviewer <evidence|probe> [PATH|-]
 uv run career-os views build
 uv run career-os release privacy --root . --ref HEAD --history
 uv run career-os release privacy --root . --ref HEAD --history --private-root <private-career-home>
 uv run career-os release notes --tag vX.Y.Z --output .career-os/release-notes.md
-uv run career-os import inventory --source-root <legacy-repository> --rules <rules.json> --output <data-root>/.provenance/migration-inventory.json
-uv run career-os import verify-inventory --source-root <legacy-repository> --rules <rules.json> --inventory <data-root>/.provenance/migration-inventory.json
-uv run career-os import verify-review --source-root <legacy-repository> --rules <rules.json> --inventory <data-root>/.provenance/migration-inventory.json --review <data-root>/.provenance/semantic-file-review.json --public-root .
 uv run career-os import plan --source-root <legacy-repository> --manifest <manifest.json>
-uv run career-os migrate plan --to 2
+uv run career-os import apply --plan <plan.json>
+uv run career-os import verify --plan <plan.json>
+uv run career-os import rollback --plan <plan.json>
+uv run career-os migrate plan --to 3
+uv run career-os migrate apply --plan <plan.json>
+uv run career-os migrate verify --plan <plan.json>
+uv run career-os migrate rollback --plan <plan.json>
 uv run career-os resume fonts fetch
+uv run career-os resume fonts verify
 uv run career-os resume doctor --json
 uv run pytest
 uv run ruff check .
@@ -40,6 +48,10 @@ uv run mypy system/tools/career_os
 `career-os.toml` declares `development_topology`. The public repository uses
 `standalone-framework`: it contains framework code, synthetic fixtures, and
 release evidence, but no personal Career Home data.
+
+`integrated-workbench` is available to private Career Home repositories that
+implement system-owned OS work and user-owned career practice in one private
+Git history. The public repository itself remains `standalone-framework`.
 
 `career-os downstream plan/apply/validate/rollback` is available for an
 initialized `split-downstream` installation. Only that topology requires an
@@ -66,8 +78,11 @@ profile; worktree and trunk-guard governance are intentionally disabled.
 
 - `check --fast` validates configuration, schemas, static structure, Skill
   inventory, and generated subagent projection drift.
-- `check` also validates kind-specific lifecycles, cross-record semantic gates, references, tracked Obsidian assets, discovered resume TeX roots, and dependency locks.
-- `check --host` additionally resolves typed host references against the mounted Obsidian Vault.
+- `check` also validates Git-relative kind lifecycles, top-level Wikilink
+  relations, cross-record semantic gates, tracked Obsidian assets, discovered
+  resume TeX roots, and dependency locks.
+- `check --host` retains the same full validation surface for compatibility;
+  record Wikilinks are resolved by the full check.
 - `paths --json` reports `vault_mount_root` when an external sibling project is projected through a configured Vault-relative symlink.
 
 Both check depths validate the deterministic CycloneDX SBOM, notices, real
@@ -103,8 +118,9 @@ hosted visibility cannot be proven offline. See the
 ## Command ownership
 
 One `career-os` executable owns initialization, path discovery, diagnosis,
-checking, framework-view verification, Vault plan/apply, legacy import
-plan/apply/rollback, in-place schema migration plan/apply/rollback, Skill
+checking, conservative ignored-state cleanup, framework-view verification, Vault plan/apply, legacy import
+plan/apply/verify/rollback, in-place schema migration
+plan/apply/verify/rollback, Skill
 verification, reviewer-contract validation, and resume jobs. Operation plans
 never select a mutating default for unknown input. Product implementation
 helpers remain private under `system/tools/career_os/`.
@@ -132,14 +148,24 @@ The two Markdown homepages add no third image. Maintainers may drive Obsidian's 
 exporter through `obsidian eval`; Career OS intentionally ships no parallel
 renderer. See `docs/assets/README.md` for the export contract.
 
-`import inventory` first accounts for every tracked regular file, symlink, or
-gitlink at a clean commit through ordered explicit rules; `verify-inventory`
-requires the committed control file to match that source and rules exactly.
-`import plan` consumes reviewed import batches and is read-only. `import apply`
-copies only hash-pinned exact or prepared files
-into the configured data root and writes a provenance map; `import rollback`
-uses the same operation-plan backups. It never guesses a record kind or state.
+`import plan` consumes one operator-reviewed manifest and is read-only.
+`import apply` copies only hash-pinned exact or prepared files into the
+fixed `career/` root; `verify` checks the current plan state and `rollback`
+uses the same ignored operation-plan backups. It never guesses a record kind
+or state and never writes a tracked provenance ledger.
 See `docs/importing.md`.
+
+`cleanup` gives Git an allowlist of known reproducible roots instead of scanning
+the whole ignored tree. The list contains configured build output, standard
+root development/distribution caches, `.career-os/generated/`,
+`.career-os/tmp/`, and Python caches under `system/tests/` and
+`system/tools/`. It does not inspect `.venv/`, `career/`, fonts, migrations,
+runtime acquisitions, editor state, or unknown ignored paths.
+
+The command does not write unless `--apply` is present. Apply uses the dry-run
+selection, then batch-checks Git state and verifies candidate fingerprints
+before unlinking. Links, junctions, nested repositories, drift, locks, and
+deletion errors are preserved or reported nonzero; a retry is safe.
 
 `release notes` is a hidden contributor command consumed by the tag-triggered
 GitHub Release workflow. It requires the exact configured `v`-prefixed tag and
@@ -156,15 +182,20 @@ the root, adjacent `identity.tex`, and an optional application avatar. Preview
 exports exclude contact details and avatars, and every export receives an ID
 plus a receipt with hashes computed from the inputs actually built. `resume
 work-experience` writes only an ignored temporary Markdown copy aid. The class
-owns default fonts; a personal TeX root may name local font files stored only
-under ignored `.career-os/fonts/`.
+owns default fonts; optional project-wide filenames live in `career-os.toml`
+and resolve without content pins, generated macros live under
+`.career-os/generated/`, and font binaries remain under ignored
+`.career-os/fonts/`.
 
 `doctor` performs only non-mutating prerequisite checks. It verifies live
 Obsidian version and CLI response only when the executable is registered and an
 Obsidian process is already running, so diagnosis never launches the app. A
 missing or stopped optional Obsidian CLI is `attention`; filesystem checks still
-run. It also reports the same local downstream remote-safety state as `check`,
-including a clean pass when no public update remote is configured.
+run. When OpenCLI research is enabled, doctor validates Node.js, the OpenCLI
+version response, the configured allowlist against `opencli list -f json`, and
+an already-running loopback bridge. It never launches the bridge, browser, or a
+research command. It also reports the same local downstream remote-safety state
+as `check`, including a clean pass when no public update remote is configured.
 
 `skills verify` always validates inventory, projections, locks, and the isolated
 selection prompt/oracle fixtures. A true blind behavioral run additionally

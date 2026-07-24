@@ -24,14 +24,14 @@ class MigrationDefinition(BaseModel):
     id: str = Field(pattern=r"^[a-z][a-z0-9-]*$")
     source_record_schema: int = Field(ge=1)
     target_record_schema: int = Field(ge=1)
-    transform: Literal["record-envelope-v1-to-v2"]
+    transform: Literal["record-envelope-v1-to-v2", "record-envelope-v2-to-v3"]
 
 
 def create_record_migration_plan(paths: ProjectPaths, target: int) -> OperationPlan:
     definition_path = (
         paths.project_root
         / "system/migrations"
-        / f"record-envelope-1-to-{target}.json"
+        / f"record-envelope-{target - 1}-to-{target}.json"
     )
     definition = _load_definition(definition_path)
     if definition.target_record_schema != target:
@@ -39,6 +39,7 @@ def create_record_migration_plan(paths: ProjectPaths, target: int) -> OperationP
 
     operations, customized_readmes = _authority_readme_operations(paths)
     observed_versions: set[int] = set()
+    record_link_targets = _record_link_targets(paths)
     for path in _record_paths(paths.data_root):
         text = path.read_text(encoding="utf-8-sig")
         frontmatter_text, body = split_frontmatter(text)
@@ -57,8 +58,14 @@ def create_record_migration_plan(paths: ProjectPaths, target: int) -> OperationP
                 f"record {path} uses unsupported schema {version}; "
                 f"expected {definition.source_record_schema} or {target}"
             )
-        migrated = _migrate_v1_to_v2(raw, body)
-        content = _serialize_record(migrated, body)
+        if definition.transform == "record-envelope-v1-to-v2":
+            migrated = _migrate_v1_to_v2(raw, body)
+            migrated_body = body
+        else:
+            migrated, migrated_body = _migrate_v2_to_v3(
+                raw, body, record_link_targets
+            )
+        content = _serialize_record(migrated, migrated_body)
         operations.append(
             FileOperation(
                 op="write_text",
@@ -189,8 +196,152 @@ def _migrate_v1_to_v2(raw: dict[str, Any], body: str) -> dict[str, Any]:
         key: value for key, value in raw.items() if key not in common_keys
     }
     migrated.update(_safe_defaults(kind, raw, body))
+    return migrated
+
+
+_LIST_RELATIONS = {
+    ("evidence.capture", "represented_by"),
+    ("evidence.work", "work_context"),
+    ("evidence.claim", "context"),
+    ("evidence.claim", "supported_by"),
+    ("strategy.positioning", "defines_lane"),
+    ("market.channel", "career_lane"),
+    ("opportunity.engagement", "source_work"),
+    ("outlook.review", "personal_fit"),
+    ("outlook.review", "market_revealed"),
+    ("outlook.review", "independent_external"),
+    ("readiness.gap", "closed_by_evidence"),
+    ("readiness.gap", "closed_by_retest"),
+    ("readiness.gap", "closure_evidence"),
+    ("readiness.gap", "experience_story"),
+    ("readiness.gap", "last_retest"),
+    ("readiness.gap", "resume_root"),
+    ("readiness.note", "target_gap"),
+    ("communication.profile", "claim_evidence"),
+    ("communication.resume", "uses_claim"),
+}
+
+
+def _migrate_v2_to_v3(
+    raw: dict[str, Any],
+    body: str,
+    record_link_targets: dict[str, str],
+) -> tuple[dict[str, Any], str]:
+    migrated = dict(raw)
+    kind = migrated.get("kind")
+    if not isinstance(kind, str):
+        raise ValueError("schema-2 record kind must be a string")
+    if kind == "market.jd":
+        migrated["source_channel_name"] = migrated.pop("source_channel")
+    if kind == "outlook.review":
+        migrated["personal_fit_gate"] = migrated.pop("personal_fit")
+        migrated["market_revealed_gate"] = migrated.pop("market_revealed")
+        migrated["independent_external_gate"] = migrated.pop("independent_external")
+
+    refs = migrated.pop("refs", [])
+    host_refs = migrated.pop("host_refs", [])
+    migrated.pop("status_history", None)
+    relation_links: dict[str, list[str]] = {}
+    linked_ref_keys: set[tuple[str, str]] = set()
+    for host_ref in host_refs:
+        if not isinstance(host_ref, dict):
+            raise ValueError("schema-2 host_refs entries must be mappings")
+        relation = host_ref.get("relation")
+        path = host_ref.get("path")
+        target_id = host_ref.get("target_id")
+        if not isinstance(relation, str) or not isinstance(path, str):
+            raise ValueError("schema-2 host_ref relation and path must be strings")
+        field = relation.replace("-", "_")
+        link_target = path[:-3] if path.lower().endswith(".md") else path
+        anchor = host_ref.get("anchor") or ""
+        link = f"[[{link_target}{anchor}]]"
+        relation_links.setdefault(field, []).append(link)
+        if target_id is not None:
+            linked_ref_keys.add((relation, str(target_id)))
+    for ref in refs:
+        if not isinstance(ref, dict):
+            raise ValueError("schema-2 refs entries must be mappings")
+        key = (str(ref.get("relation")), str(ref.get("target_id")))
+        if key not in linked_ref_keys:
+            target = record_link_targets.get(key[1])
+            if target is None:
+                raise ValueError(
+                    "schema-2 internal reference target is missing: "
+                    f"{key[0]} -> {key[1]}"
+                )
+            relation_links.setdefault(key[0].replace("-", "_"), []).append(
+                f"[[{target}]]"
+            )
+    for field, links in relation_links.items():
+        unique = list(dict.fromkeys(links))
+        if (kind, field) in _LIST_RELATIONS:
+            migrated[field] = unique
+        elif len(unique) == 1:
+            migrated[field] = unique[0]
+        else:
+            raise ValueError(f"relation {field!r} requires exactly one Wikilink")
+
+    migrated["schema_version"] = 3
+    review = migrated.get("migration_review")
+    if review != "required":
+        migrated.pop("migration_review", None)
+        migrated.pop("legacy_fields", None)
+    elif not migrated.get("legacy_fields"):
+        migrated.pop("legacy_fields", None)
+    if not migrated.get("tags"):
+        migrated.pop("tags", None)
+    if not migrated.get("aliases"):
+        migrated.pop("aliases", None)
     validated = validate_record_envelope(migrated)
-    return validated.model_dump(mode="json", exclude_none=True)
+    return (
+        validated.model_dump(mode="json", exclude_none=True),
+        _remove_authority_links_section(body),
+    )
+
+
+def _remove_authority_links_section(body: str) -> str:
+    lines = body.splitlines(keepends=True)
+    start: int | None = None
+    end = len(lines)
+    for index, line in enumerate(lines):
+        if line.rstrip("\r\n") == "## Authority links":
+            start = index
+            continue
+        if start is not None and line.startswith("## "):
+            end = index
+            break
+    if start is None:
+        return body
+    while start > 0 and not lines[start - 1].strip():
+        start -= 1
+    remaining = lines[:start] + lines[end:]
+    return "".join(remaining).rstrip() + "\n"
+
+
+def _record_link_targets(paths: ProjectPaths) -> dict[str, str]:
+    targets: dict[str, str] = {}
+    vault_root = paths.vault_root.resolve()
+    for path in _record_paths(paths.data_root):
+        frontmatter, _body = split_frontmatter(path.read_text(encoding="utf-8-sig"))
+        raw = _safe_yaml.load(frontmatter)
+        if not isinstance(raw, dict) or not isinstance(raw.get("id"), str):
+            continue
+        resolved = path.resolve()
+        if resolved.is_relative_to(vault_root):
+            relative = resolved.relative_to(vault_root)
+        elif paths.vault_mount_root is not None and resolved.is_relative_to(
+            paths.project_root.resolve()
+        ):
+            relative = paths.vault_mount_root.relative_to(vault_root) / resolved.relative_to(
+                paths.project_root.resolve()
+            )
+        else:
+            raise ValueError(f"record is not reachable from the configured Vault: {path}")
+        link = relative.as_posix()
+        if link.lower().endswith(".md"):
+            link = link[:-3]
+        targets[str(raw["id"])] = link
+    return targets
 
 
 def _safe_defaults(kind: str, raw: dict[str, Any], body: str) -> dict[str, Any]:

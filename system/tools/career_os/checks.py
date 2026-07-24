@@ -15,20 +15,26 @@ from ruamel.yaml import YAML
 from ruamel.yaml.error import YAMLError
 
 from career_os import __version__
-from career_os.config import INSTALL_STATE, ProjectPaths, load_project_config
+from career_os.config import (
+    INSTALL_STATE,
+    ProjectPaths,
+    load_project_config,
+    project_config_json_schema,
+)
 from career_os.downstream import downstream_sync_validation_json_schema
 from career_os.git_safety import inspect_downstream_git_safety
 from career_os.imports import (
     import_manifest_json_schema,
-    inventory_rules_json_schema,
-    migration_inventory_json_schema,
-    migration_provenance_json_schema,
 )
+from career_os.operations import operation_plan_json_schema
 from career_os.public_privacy import PublicPrivacyError, audit_public_repository
 from career_os.records import (
     ParsedRecord,
     load_record,
     record_json_schema,
+    split_frontmatter,
+    validate_record_envelope,
+    validate_record_transition,
 )
 from career_os.records.models import authority_directory
 from career_os.records.semantics import check_record_semantics
@@ -43,18 +49,7 @@ from career_os.reviewer_contracts import (
     interview_probe_json_schema,
 )
 from career_os.sbom import verify_sbom
-from career_os.semantic_review import (
-    load_semantic_file_review,
-    semantic_file_review_json_schema,
-    semantic_review_amendment_json_schema,
-    semantic_review_completion_json_schema,
-    semantic_review_supersession_json_schema,
-    verify_semantic_file_review,
-    verify_semantic_review_amendment,
-    verify_semantic_review_completion,
-    verify_semantic_review_supersession,
-)
-from career_os.skills import verify_skills
+from career_os.skills import skill_lock_json_schema, verify_skills
 
 _yaml = YAML(typ="safe")
 
@@ -92,22 +87,13 @@ _BASE_CONTRACTS: dict[str, dict[str, Any]] = {
             'kind.startsWith("readiness.")',
             'kind.startsWith("communication.")',
         ),
-        "formula_tokens": {
-            "required_internal_refs": ("refs", "value.required == true", ".length"),
-            "required_host_refs": ("host_refs", "value.required == true", ".length"),
-            "host_reference_state": (
-                "formula.required_internal_refs",
-                "formula.required_host_refs",
-            ),
-        },
+        "formula_tokens": {},
         "properties": {
             "kind",
             "status",
             "visibility",
             "migration_review",
-            "refs",
-            "host_refs",
-            "formula.host_reference_state",
+            "file.links",
             "updated_at",
         },
         "views": {
@@ -126,29 +112,13 @@ _BASE_CONTRACTS: dict[str, dict[str, Any]] = {
                 "columns": {"file.name", "kind", "migration_review", "updated_at"},
                 "sort": (("kind", "ASC"), ("updated_at", "DESC")),
             },
-            "Host reference health": {
-                "filters": (
-                    "formula.required_internal_refs > 0",
-                    "formula.required_host_refs > 0",
-                ),
-                "columns": {
-                    "file.name",
-                    "kind",
-                    "formula.host_reference_state",
-                    "refs",
-                    "host_refs",
-                },
-                "sort": (
-                    ("formula.host_reference_state", "ASC"),
-                    ("kind", "ASC"),
-                ),
-            },
         },
     },
     "data/30-role-market/JD 筛选工作台.base": {
         "global_filters": (
             'file.inFolder("__CAREER_OS_DATA_ROOT__/30-role-market/jds")',
             'file.ext == "md"',
+            "schema_version == 3",
             'kind == "market.jd"',
         ),
         "exact_global_filters": True,
@@ -389,13 +359,14 @@ _BASE_CONTRACTS: dict[str, dict[str, Any]] = {
         "global_filters": (
             'file.inFolder("__CAREER_OS_DATA_ROOT__/30-role-market/channels")',
             'file.ext == "md"',
+            "schema_version == 3",
             'kind == "market.channel"',
             'status == "active"',
         ),
         "formula_tokens": {
             "career_lanes": (
-                'value.relation == "career-lane"',
-                "file(value.path).asLink(file(value.path).basename)",
+                "list(career_lane)",
+                "value.asFile().asLink(value.asFile().basename)",
             )
         },
         "properties": {
@@ -424,6 +395,7 @@ _BASE_CONTRACTS: dict[str, dict[str, Any]] = {
         "global_filters": (
             'file.inFolder("__CAREER_OS_DATA_ROOT__/40-opportunity-decision/companies")',
             'file.ext == "md"',
+            "schema_version == 3",
             'kind == "opportunity.company"',
         ),
         "formula_tokens": {
@@ -436,11 +408,13 @@ _BASE_CONTRACTS: dict[str, dict[str, Any]] = {
             "metadata_issues": ("last_researched_at", "refresh_due", "reviewed_at"),
             "related_engagements": (
                 "file.backlinks",
-                "career/40-opportunity-decision/engagements",
-                "value.asLink(value.basename)",
+                'value.asFile().properties.kind == "opportunity.engagement"',
+                "value.asFile().asLink(value.asFile().basename)",
             ),
         },
         "properties": {
+            "display_name_zh",
+            "display_name_en",
             "watch_state",
             "company_lifecycle",
             "research_level",
@@ -464,6 +438,8 @@ _BASE_CONTRACTS: dict[str, dict[str, Any]] = {
                 "group_by": ("watch_state", "ASC"),
                 "columns": {
                     "file.name",
+                    "display_name_zh",
+                    "display_name_en",
                     "company_lifecycle",
                     "research_level",
                     "assessment_status",
@@ -489,6 +465,8 @@ _BASE_CONTRACTS: dict[str, dict[str, Any]] = {
             "比较": {
                 "columns": {
                     "file.name",
+                    "display_name_zh",
+                    "display_name_en",
                     "watch_state",
                     "strength",
                     "business_outlook",
@@ -514,6 +492,8 @@ _BASE_CONTRACTS: dict[str, dict[str, Any]] = {
                 ),
                 "columns": {
                     "file.name",
+                    "display_name_zh",
+                    "display_name_en",
                     "watch_state",
                     "assessment_status",
                     "formula.effective_review_state",
@@ -537,29 +517,32 @@ _BASE_CONTRACTS: dict[str, dict[str, Any]] = {
         "global_filters": (
             'file.inFolder("__CAREER_OS_DATA_ROOT__/40-opportunity-decision/engagements")',
             'file.ext == "md"',
+            "schema_version == 3",
             'kind == "opportunity.engagement"',
         ),
         "formula_tokens": {
-            "company_path": ("host_refs", 'value.relation == "company"', "value.path"),
-            "company": (
-                "file(formula.company_path)",
-                ".asLink(file(formula.company_path).basename)",
+            "company_link": (
+                "company.asFile()",
+                "company.asFile().asLink(company.asFile().basename)",
             ),
-            "target_jd_path": ('value.relation == "target-jd"', "value.path"),
-            "target_jd": (
-                "file(formula.target_jd_path)",
-                ".asLink(file(formula.target_jd_path).basename)",
+            "target_jd_link": (
+                "target_jd.asFile()",
+                "target_jd.asFile().asLink(target_jd.asFile().basename)",
             ),
+            "company_business_outlook": ("company.asFile()", "business_outlook"),
+            "company_employer_quality": ("company.asFile()", "employer_quality"),
+            "company_risk": ("company.asFile()", "properties.risk"),
+            "company_confidence": ("company.asFile()", "properties.confidence"),
             "effective_review_state": ("review_status", "reviewed_at", "updated_at"),
             "relationship_issues": (
-                "formula.company_path",
+                "file.links",
                 'properties.kind != "opportunity.company"',
                 'properties.kind != "market.jd"',
             ),
         },
         "properties": {
-            "formula.company",
-            "formula.target_jd",
+            "formula.company_link",
+            "formula.target_jd_link",
             "engagement_type",
             "stage",
             "application_state",
@@ -581,7 +564,7 @@ _BASE_CONTRACTS: dict[str, dict[str, Any]] = {
                 "group_by": ("decision_state", "ASC"),
                 "columns": {
                     "file.name",
-                    "formula.company",
+                    "formula.company_link",
                     "engagement_type",
                     "stage",
                     "role",
@@ -610,8 +593,8 @@ _BASE_CONTRACTS: dict[str, dict[str, Any]] = {
                 ),
                 "columns": {
                     "file.name",
-                    "formula.company",
-                    "formula.target_jd",
+                    "formula.company_link",
+                    "formula.target_jd_link",
                     "decision_state",
                     "formula.effective_review_state",
                     "review_status",
@@ -631,7 +614,7 @@ _BASE_CONTRACTS: dict[str, dict[str, Any]] = {
                 "filters": ('application_state != "not-applied"',),
                 "columns": {
                     "file.name",
-                    "formula.company",
+                    "formula.company_link",
                     "status",
                     "engagement_type",
                     "stage",
@@ -648,6 +631,7 @@ _BASE_CONTRACTS: dict[str, dict[str, Any]] = {
     "data/60-capability-readiness/Capability Readiness.base": {
         "global_filters": (
             'file.ext == "md"',
+            "schema_version == 3",
             'kind.startsWith("readiness.")',
             'kind == "evidence.story"',
             'kind == "communication.audit"',
@@ -660,35 +644,33 @@ _BASE_CONTRACTS: dict[str, dict[str, Any]] = {
                 'kind == "readiness.gap"',
                 'kind == "evidence.story"',
             ),
-            "target_jd_path": ('value.relation == "target-jd"', "value.path"),
-            "target_jd": (
-                "file(formula.target_jd_path)",
-                ".asLink(file(formula.target_jd_path).basename)",
+            "target_jd_link": (
+                "list(target_jd)",
+                "value.asFile().asLink(value.asFile().basename)",
             ),
             "career_lanes": (
-                'value.relation == "career-lane"',
-                "file(value.path).asLink(file(value.path).basename)",
+                "list(career_lane)",
+                "value.asFile().asLink(value.asFile().basename)",
             ),
             "experience_stories": (
-                'value.relation == "experience-story"',
-                "file(value.path).asLink(file(value.path).basename)",
+                "list(experience_story)",
+                "value.asFile().asLink(value.asFile().basename)",
             ),
-            "resume_audit_path": ('value.relation == "resume-audit"', "value.path"),
-            "resume_audit": (
-                "file(formula.resume_audit_path)",
-                ".asLink(file(formula.resume_audit_path).basename)",
+            "resume_audit_link": (
+                "list(resume_audit)",
+                "value.asFile().asLink(value.asFile().basename)",
             ),
-            "last_retest": (
-                'value.relation == "last-retest"',
-                "file(value.path).asLink(file(value.path).basename)",
+            "last_retest_links": (
+                "list(last_retest)",
+                "value.asFile().asLink(value.asFile().basename)",
             ),
-            "closure_evidence": (
-                'value.relation == "closure-evidence"',
-                "file(value.path).asLink(file(value.path).basename)",
+            "closure_evidence_links": (
+                "list(closure_evidence)",
+                "value.asFile().asLink(value.asFile().basename)",
             ),
             "resume_roots": (
-                'value.relation == "resume-root"',
-                "file(value.path).asLink(file(value.path).basename)",
+                "list(resume_root)",
+                "value.asFile().asLink(value.asFile().basename)",
             ),
         },
         "properties": {
@@ -697,9 +679,9 @@ _BASE_CONTRACTS: dict[str, dict[str, Any]] = {
             "formula.session_age_days",
             "formula.career_lanes",
             "target",
-            "formula.target_jd",
+            "formula.target_jd_link",
             "formula.experience_stories",
-            "formula.resume_audit",
+            "formula.resume_audit_link",
             "session_type",
             "scope",
             "fact_boundary",
@@ -712,8 +694,8 @@ _BASE_CONTRACTS: dict[str, dict[str, Any]] = {
             "gap_type",
             "status",
             "priority",
-            "formula.last_retest",
-            "formula.closure_evidence",
+            "formula.last_retest_links",
+            "formula.closure_evidence_links",
             "story_role",
             "readiness_state",
             "audit_date",
@@ -737,9 +719,9 @@ _BASE_CONTRACTS: dict[str, dict[str, Any]] = {
                     "formula.session_age_days",
                     "formula.career_lanes",
                     "target",
-                    "formula.target_jd",
+                    "formula.target_jd_link",
                     "formula.experience_stories",
-                    "formula.resume_audit",
+                    "formula.resume_audit_link",
                     "scope",
                     "verdict",
                     "fact_boundary",
@@ -755,7 +737,7 @@ _BASE_CONTRACTS: dict[str, dict[str, Any]] = {
                 "columns": {
                     "file.name",
                     "formula.readiness_kind",
-                    "formula.target_jd",
+                    "formula.target_jd_link",
                     "formula.career_lanes",
                     "session_type",
                     "verdict",
@@ -780,9 +762,9 @@ _BASE_CONTRACTS: dict[str, dict[str, Any]] = {
                     "priority",
                     "gap_type",
                     "status",
-                    "formula.target_jd",
-                    "formula.last_retest",
-                    "formula.closure_evidence",
+                    "formula.target_jd_link",
+                    "formula.last_retest_links",
+                    "formula.closure_evidence_links",
                 },
                 "sort": (("priority", "ASC"), ("updated_at", "DESC")),
             },
@@ -797,7 +779,7 @@ _BASE_CONTRACTS: dict[str, dict[str, Any]] = {
                     "formula.career_lanes",
                     "scope",
                     "attempt",
-                    "formula.last_retest",
+                    "formula.last_retest_links",
                     "gap_type",
                     "status",
                     "updated_at",
@@ -868,7 +850,7 @@ _WORKBENCH_BASE_PAIRS = (
         (("当前渠道", "Current Channels", "当前渠道"),),
         (
             'file.ext == "md"',
-            "schema_version == 2",
+            "schema_version == 3",
             'kind == "market.channel"',
             'status == "active"',
         ),
@@ -888,7 +870,7 @@ _WORKBENCH_BASE_PAIRS = (
             ("暂不推进", "On Hold", "暂不推进"),
             ("全部", "All", "全部"),
         ),
-        ('file.ext == "md"', "schema_version == 2", 'kind == "market.jd"'),
+        ('file.ext == "md"', "schema_version == 3", 'kind == "market.jd"'),
     ),
     (
         "data/40-opportunity-decision/Company Portfolio.base",
@@ -901,7 +883,7 @@ _WORKBENCH_BASE_PAIRS = (
         ),
         (
             'file.ext == "md"',
-            "schema_version == 2",
+            "schema_version == 3",
             'kind == "opportunity.company"',
         ),
     ),
@@ -916,7 +898,7 @@ _WORKBENCH_BASE_PAIRS = (
         ),
         (
             'file.ext == "md"',
-            "schema_version == 2",
+            "schema_version == 3",
             'kind == "opportunity.engagement"',
         ),
     ),
@@ -944,7 +926,7 @@ _WORKBENCH_BASE_PAIRS = (
         ),
         (
             'file.ext == "md"',
-            "schema_version == 2",
+            "schema_version == 3",
             'kind.startsWith("readiness.")',
             'kind == "evidence.story"',
             'kind == "communication.audit"',
@@ -981,8 +963,8 @@ for (
     if _english_path.endswith("Company Portfolio.base"):
         _english_contract["formula_tokens"]["related_engagements"] = (
             "file.backlinks",
-            'value.properties.kind == "opportunity.engagement"',
-            "value.asLink(value.basename)",
+            'value.asFile().properties.kind == "opportunity.engagement"',
+            "value.asFile().asLink(value.asFile().basename)",
         )
     _BASE_CONTRACTS[_english_path] = _english_contract
 
@@ -1274,7 +1256,6 @@ def run_checks(paths: ProjectPaths, *, fast: bool, host: bool) -> list[CheckIssu
     issues.extend(_check_public_privacy_policy(paths))
     issues.extend(_check_resume_assets(paths))
     issues.extend(_check_supply_chain(paths))
-    issues.extend(_check_semantic_review_controls(paths))
     issues.extend(
         CheckIssue(item.id, item.status, item.path, item.detail)
         for item in verify_skills(paths.project_root)
@@ -1282,11 +1263,8 @@ def run_checks(paths: ProjectPaths, *, fast: bool, host: bool) -> list[CheckIssu
     if not fast:
         records, record_issues = _check_records(paths)
         issues.extend(record_issues)
-        issues.extend(_check_internal_refs(records))
-        issues.extend(_check_record_semantics(records))
-        issues.extend(_check_host_ref_wikilinks(records))
-        if host:
-            issues.extend(_check_host_refs(paths, records))
+        issues.extend(_check_record_transitions(paths, records))
+        issues.extend(_check_record_semantics(paths, records))
         issues.extend(_check_obsidian_sources(paths))
     return issues
 
@@ -1453,26 +1431,37 @@ def _check_schemas(paths: ProjectPaths) -> list[CheckIssue]:
     issues: list[CheckIssue] = []
     runtime_schemas = {
         "downstream-sync-validation.schema.json": downstream_sync_validation_json_schema,
+        "font-manifest.schema.json": font_manifest_json_schema,
         "legacy-import-manifest.schema.json": import_manifest_json_schema,
-        "legacy-inventory-rules.schema.json": inventory_rules_json_schema,
-        "legacy-migration-inventory.schema.json": migration_inventory_json_schema,
-        "migration-provenance.schema.json": migration_provenance_json_schema,
-        "semantic-file-review.schema.json": semantic_file_review_json_schema,
-        "semantic-review-amendment.schema.json": semantic_review_amendment_json_schema,
-        "semantic-review-completion.schema.json": semantic_review_completion_json_schema,
-        "semantic-review-supersession.schema.json": semantic_review_supersession_json_schema,
+        "operation-plan.schema.json": operation_plan_json_schema,
+        "project-config.schema.json": project_config_json_schema,
+        "record-envelope.schema.json": record_json_schema,
         "reviewer-evidence-audit.schema.json": evidence_audit_json_schema,
         "reviewer-interview-probe.schema.json": interview_probe_json_schema,
-        "record-envelope.schema.json": record_json_schema,
-        "font-manifest.schema.json": font_manifest_json_schema,
+        "skills-lock.schema.json": skill_lock_json_schema,
     }
+    actual = {path.name for path in schema_root.glob("*.json")}
+    expected = set(runtime_schemas)
+    if actual != expected:
+        missing = sorted(expected - actual)
+        orphaned = sorted(actual - expected)
+        detail: list[str] = []
+        if missing:
+            detail.append("missing: " + ", ".join(missing))
+        if orphaned:
+            detail.append("orphaned: " + ", ".join(orphaned))
+        issues.append(
+            CheckIssue("schema.inventory", "fail", str(schema_root), "; ".join(detail))
+        )
     for path in sorted(schema_root.glob("*.json")):
         try:
             loaded = json.loads(path.read_text(encoding="utf-8"))
             if not isinstance(loaded, dict) or "$schema" not in loaded:
                 raise ValueError("schema must be a JSON object with $schema")
             runtime_schema = runtime_schemas.get(path.name)
-            if runtime_schema is not None and loaded != runtime_schema():
+            if runtime_schema is None:
+                continue
+            if loaded != runtime_schema():
                 raise ValueError(f"committed {path.name} does not match the runtime model")
             issues.append(CheckIssue("schema.json", "pass", str(path), "valid JSON Schema"))
         except (OSError, ValueError, json.JSONDecodeError) as error:
@@ -1480,219 +1469,6 @@ def _check_schemas(paths: ProjectPaths) -> list[CheckIssue]:
     if not issues:
         issues.append(CheckIssue("schema.inventory", "fail", str(schema_root), "no schemas found"))
     return issues
-
-
-def _check_semantic_review_controls(paths: ProjectPaths) -> list[CheckIssue]:
-    provenance_root = paths.data_root / ".provenance"
-    review_path = provenance_root / "semantic-file-review.json"
-    completion_path = provenance_root / "semantic-review-completion.json"
-    supersession_path = provenance_root / "semantic-review-supersession.json"
-    amendment_path = provenance_root / "semantic-review-subagent-amendment.json"
-    if not review_path.exists():
-        orphan = next(
-            (
-                path
-                for path in (completion_path, supersession_path, amendment_path)
-                if path.exists()
-            ),
-            None,
-        )
-        if orphan is not None:
-            return [
-                CheckIssue(
-                    "migration.semantic-review",
-                    "fail",
-                    str(orphan),
-                    f"{orphan.name} exists without semantic-file-review.json",
-                )
-            ]
-        return [
-            CheckIssue(
-                "migration.semantic-review",
-                "pass",
-                None,
-                "not configured for this installation",
-            )
-        ]
-    framework_root = (
-        paths.project_root
-        if paths.development_topology == "integrated-workbench"
-        else None
-    )
-    try:
-        issues: list[CheckIssue] = []
-        tracking_paths: list[Path]
-        if supersession_path.exists():
-            supersession = verify_semantic_review_supersession(
-                paths,
-                supersession_path=supersession_path,
-                public_root=framework_root,
-            )
-            tracking_paths = [
-                review_path,
-                completion_path,
-                supersession_path,
-                paths.data_root.joinpath(
-                    *PurePosixPath(supersession.correction_manifest_path).parts
-                ),
-                paths.data_root.joinpath(
-                    *PurePosixPath(supersession.correction_provenance_path).parts
-                ),
-            ]
-            issues.extend(
-                [
-                    CheckIssue(
-                        "migration.semantic-review",
-                        "pass",
-                        str(review_path),
-                        (
-                            "historical review preserved byte-for-byte after a "
-                            "schema-2 correction"
-                        ),
-                    ),
-                    CheckIssue(
-                        "migration.semantic-review-completion",
-                        "pass",
-                        str(completion_path),
-                        (
-                            "historical completion retained; superseded by correction "
-                            f"{supersession.correction_manifest_id}"
-                        ),
-                    ),
-                ]
-            )
-        else:
-            control = load_semantic_file_review(review_path)
-            inventory_path = paths.data_root.joinpath(
-                *PurePosixPath(control.inventory_path).parts
-            )
-            verified = verify_semantic_file_review(
-                paths,
-                inventory_path=inventory_path,
-                review_path=review_path,
-                public_root=framework_root,
-            )
-            issues.append(
-                CheckIssue(
-                    "migration.semantic-review",
-                    "pass",
-                    str(review_path),
-                    f"{len(control.entries)} source files closed; "
-                    f"target tree {verified.target_tree_sha256}",
-                )
-            )
-            tracking_paths = [review_path]
-            if completion_path.exists():
-                completion = verify_semantic_review_completion(
-                    paths,
-                    completion_path=completion_path,
-                    public_root=framework_root,
-                )
-                issues.append(
-                    CheckIssue(
-                        "migration.semantic-review-completion",
-                        "pass",
-                        str(completion_path),
-                        f"{completion.status} ({completion.development_topology})",
-                    )
-                )
-                tracking_paths.append(completion_path)
-            else:
-                issues.append(
-                    CheckIssue(
-                        "migration.semantic-review-completion",
-                        "attention",
-                        str(completion_path),
-                        "review is valid but no completion control is present",
-                    )
-                )
-
-        uncommitted = [
-            path for path in tracking_paths if not _path_matches_head(paths.project_root, path)
-        ]
-        if supersession_path.exists():
-            tracking_detail = (
-                "semantic supersession controls are not committed at HEAD: "
-                + ", ".join(str(path) for path in uncommitted)
-                if uncommitted
-                else "semantic supersession controls are committed"
-            )
-        else:
-            tracking_detail = (
-                "review controls are not committed at HEAD: "
-                + ", ".join(path.name for path in uncommitted)
-                if uncommitted
-                else "review controls match HEAD"
-            )
-        issues.append(
-            CheckIssue(
-                "migration.semantic-review-tracking",
-                "attention" if uncommitted else "pass",
-                str(provenance_root),
-                tracking_detail,
-            )
-        )
-
-        if amendment_path.exists():
-            amendment = verify_semantic_review_amendment(
-                paths,
-                amendment_path=amendment_path,
-                public_root=framework_root,
-            )
-            issues.append(
-                CheckIssue(
-                    "migration.semantic-review-amendment",
-                    "pass",
-                    str(amendment_path),
-                    (
-                        f"{len(amendment.entries)} source mappings corrected by "
-                        f"{amendment.issue_id}"
-                    ),
-                )
-            )
-        else:
-            issues.append(
-                CheckIssue(
-                    "migration.semantic-review-amendment",
-                    "pass",
-                    None,
-                    "no additive semantic-review amendment configured",
-                )
-            )
-        return issues
-    except (OSError, ValueError, ValidationError) as error:
-        return [
-            CheckIssue(
-                "migration.semantic-review",
-                "fail",
-                str(review_path),
-                str(error),
-            )
-        ]
-
-
-def _path_matches_head(project_root: Path, path: Path) -> bool:
-    root = project_root.resolve()
-    resolved = path.resolve()
-    if not resolved.is_relative_to(root):
-        return False
-    relative = resolved.relative_to(root).as_posix()
-    try:
-        exists = subprocess.run(
-            ["git", "-C", str(root), "cat-file", "-e", f"HEAD:{relative}"],
-            check=False,
-            capture_output=True,
-        )
-        if exists.returncode != 0:
-            return False
-        clean = subprocess.run(
-            ["git", "-C", str(root), "diff", "--quiet", "HEAD", "--", relative],
-            check=False,
-            capture_output=True,
-        )
-        return clean.returncode == 0
-    except OSError:
-        return False
 
 
 def _check_repository_structure(paths: ProjectPaths) -> list[CheckIssue]:
@@ -1767,49 +1543,38 @@ def _check_repository_structure(paths: ProjectPaths) -> list[CheckIssue]:
             else "font binaries are confined to ignored local state",
         ),
     ]
-    try:
-        data_relative = paths.data_root.relative_to(paths.project_root).as_posix()
-    except ValueError:
-        issues.append(
-            CheckIssue(
-                "layout.data-git-boundary",
-                "pass",
-                str(paths.data_root),
-                "external data root remains under its host repository policy",
-            )
+    data_relative = paths.data_root.relative_to(paths.project_root).as_posix()
+    ignored = subprocess.run(
+        [
+            "git",
+            "-C",
+            str(paths.project_root),
+            "check-ignore",
+            "--no-index",
+            "--quiet",
+            "--",
+            data_relative,
+        ],
+        check=False,
+        capture_output=True,
+    )
+    git_check_failed = ignored.returncode not in {0, 1}
+    issues.append(
+        CheckIssue(
+            "layout.data-git-boundary",
+            "fail" if ignored.returncode == 0 or git_check_failed else "pass",
+            data_relative,
+            (
+                "fixed user data root is ignored by Git"
+                if ignored.returncode == 0
+                else (
+                    ignored.stderr.decode("utf-8", errors="replace").strip()
+                    if git_check_failed
+                    else "fixed user data root is eligible for Git tracking"
+                )
+            ),
         )
-    else:
-        ignored = subprocess.run(
-            [
-                "git",
-                "-C",
-                str(paths.project_root),
-                "check-ignore",
-                "--no-index",
-                "--quiet",
-                "--",
-                data_relative,
-            ],
-            check=False,
-            capture_output=True,
-        )
-        git_check_failed = ignored.returncode not in {0, 1}
-        issues.append(
-            CheckIssue(
-                "layout.data-git-boundary",
-                "fail" if ignored.returncode == 0 or git_check_failed else "pass",
-                data_relative,
-                (
-                    "configured user data is ignored by Git"
-                    if ignored.returncode == 0
-                    else (
-                        ignored.stderr.decode("utf-8", errors="replace").strip()
-                        if git_check_failed
-                        else "configured user data is eligible for Git tracking"
-                    )
-                ),
-            )
-        )
+    )
     return issues
 
 
@@ -1853,8 +1618,10 @@ def _check_supply_chain(paths: ProjectPaths) -> list[CheckIssue]:
         required = {
             "93667c5a5eec5f68cd1097574e27c29994b6c3f2",
             "553ef99aa3306dd23f268e1ba9af752577684f69",
+            "cad35e7a6a5ff3f7d6b859bfa4c45195c0390260",
             "system/licenses/sean2077-skills-MIT.txt",
             "system/licenses/kepano-obsidian-skills-MIT.txt",
+            "system/licenses/jackwener-opencli-Apache-2.0.txt",
         }
         font_manifest = load_font_manifest(paths.project_root)
         required.update(package.license_path for package in font_manifest.packages)
@@ -1989,133 +1756,54 @@ def _check_records(paths: ProjectPaths) -> tuple[list[ParsedRecord], list[CheckI
     return records, issues
 
 
-def _check_internal_refs(records: list[ParsedRecord]) -> list[CheckIssue]:
+def _check_record_transitions(
+    paths: ProjectPaths, records: list[ParsedRecord]
+) -> list[CheckIssue]:
     issues: list[CheckIssue] = []
-    by_id: dict[object, ParsedRecord] = {}
     for record in records:
-        if record.envelope.id in by_id:
+        relative = record.path.resolve().relative_to(paths.project_root.resolve()).as_posix()
+        completed = subprocess.run(
+            ["git", "-C", str(paths.project_root), "show", f"HEAD:{relative}"],
+            check=False,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+        )
+        previous = None
+        if completed.returncode == 0:
+            try:
+                frontmatter, _body = split_frontmatter(completed.stdout)
+                raw = _yaml.load(frontmatter)
+                if isinstance(raw, dict) and raw.get("schema_version") == 3:
+                    previous = validate_record_envelope(raw)
+            except (ValueError, ValidationError, YAMLError):
+                previous = None
+        try:
+            if completed.returncode != 0 or previous is not None:
+                validate_record_transition(previous, record.envelope)
             issues.append(
                 CheckIssue(
-                    "records.duplicate-id",
-                    "fail",
+                    "records.lifecycle",
+                    "pass",
                     str(record.path),
-                    f"duplicate id also used by {by_id[record.envelope.id].path}",
+                    "status matches its Git-relative lifecycle contract",
                 )
             )
-        by_id[record.envelope.id] = record
-    for record in records:
-        for reference in record.envelope.refs:
-            status = "pass" if reference.target_id in by_id or not reference.required else "fail"
+        except ValueError as error:
             issues.append(
-                CheckIssue(
-                    "records.internal-ref",
-                    status,
-                    str(record.path),
-                    f"{reference.relation} -> {reference.target_id}",
-                )
+                CheckIssue("records.lifecycle", "fail", str(record.path), str(error))
             )
     return issues
 
 
-def _check_record_semantics(records: list[ParsedRecord]) -> list[CheckIssue]:
+def _check_record_semantics(
+    paths: ProjectPaths, records: list[ParsedRecord]
+) -> list[CheckIssue]:
     return [
         CheckIssue("records.semantic", issue.status, str(issue.path), issue.detail)
-        for issue in check_record_semantics(records)
+        for issue in check_record_semantics(records, paths)
     ]
-
-
-def _check_host_ref_wikilinks(records: list[ParsedRecord]) -> list[CheckIssue]:
-    issues: list[CheckIssue] = []
-    for record in records:
-        links = {
-            match.group(1).split("|", maxsplit=1)[0].strip()
-            for match in _WIKILINK.finditer(record.body)
-        }
-        for reference in record.envelope.host_refs:
-            anchor = reference.anchor or ""
-            path_without_extension = (
-                reference.path[:-3] if reference.path.lower().endswith(".md") else reference.path
-            )
-            expected = f"{path_without_extension}{anchor}"
-            accepted = {expected, f"{reference.path}{anchor}"}
-            status = "pass" if links & accepted else "fail"
-            issues.append(
-                CheckIssue(
-                    "records.host-ref-wikilink",
-                    status,
-                    str(record.path),
-                    f"{reference.relation}: [[{expected}]]"
-                    if status == "pass"
-                    else f"typed host_ref requires matching native wikilink [[{expected}]]",
-                )
-            )
-    return issues
-
-
-def _check_host_refs(paths: ProjectPaths, records: list[ParsedRecord]) -> list[CheckIssue]:
-    issues: list[CheckIssue] = []
-    for record in records:
-        for reference in record.envelope.host_refs:
-            target = paths.vault_root.joinpath(*PurePosixPath(reference.path).parts).resolve()
-            if not target.is_relative_to(paths.vault_root):
-                issues.append(
-                    CheckIssue(
-                        "records.host-ref",
-                        "fail",
-                        str(record.path),
-                        f"{reference.path}: escapes the Vault root",
-                    )
-                )
-                continue
-            exists = target.is_file()
-            status = "pass" if exists or not reference.required else "fail"
-            detail = f"{reference.path}: {'resolved' if exists else 'missing'}"
-            if exists and reference.anchor and not _host_anchor_exists(target, reference.anchor):
-                status = "fail"
-                detail = f"{reference.path}{reference.anchor}: anchor is missing"
-            if exists and reference.target_id and not _host_id_matches(target, reference.target_id):
-                status = "fail"
-                detail = f"{reference.path}: target id does not match"
-            issues.append(
-                CheckIssue(
-                    "records.host-ref",
-                    status,
-                    str(record.path),
-                    detail,
-                )
-            )
-    return issues
-
-
-def _host_anchor_exists(path: Path, anchor: str) -> bool:
-    if path.suffix.lower() != ".md":
-        return False
-    text = path.read_text(encoding="utf-8-sig")
-    target = anchor[1:]
-    if target.startswith("^"):
-        block = target[1:]
-        return any(line.rstrip().endswith(f" ^{block}") for line in text.splitlines())
-    heading = target.rsplit("#", maxsplit=1)[-1]
-    return any(
-        line.lstrip().startswith("#") and line.lstrip("# ").strip() == heading
-        for line in text.splitlines()
-    )
-
-
-def _host_id_matches(path: Path, expected: object) -> bool:
-    if path.suffix.lower() != ".md":
-        return False
-    try:
-        text = path.read_text(encoding="utf-8-sig")
-        if not text.startswith("---\n"):
-            return False
-        end = text.find("\n---\n", 4)
-        if end < 0:
-            return False
-        frontmatter = _yaml.load(text[4:end])
-        return isinstance(frontmatter, dict) and str(frontmatter.get("id")) == str(expected)
-    except (OSError, ValueError):
-        return False
 
 
 def _check_obsidian_sources(paths: ProjectPaths) -> list[CheckIssue]:
@@ -2314,8 +2002,9 @@ def _validate_base(name: str, base: Any, *, data_root: str | None = None) -> Non
 
     formulas = base.get("formulas")
     formula_contract = contract.get("formula_tokens", {})
-    if not isinstance(formulas, dict):
+    if formula_contract and not isinstance(formulas, dict):
         raise ValueError(f"{name} must define formulas")
+    formulas = formulas if isinstance(formulas, dict) else {}
     for formula_name, tokens in formula_contract.items():
         expression = formulas.get(formula_name)
         if not isinstance(expression, str):

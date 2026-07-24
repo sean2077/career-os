@@ -11,12 +11,48 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, HttpUrl, field_validator, model_validator
 
-from career_os.config import ProjectPaths
+from career_os.config import ProjectPaths, load_project_config
 
 FontRole = Literal["body-regular", "body-bold", "display-regular", "display-bold"]
 
 _PROFILE_ID = r"^[a-z0-9]+(?:-[a-z0-9]+)*$"
 _SHA256 = r"^[0-9a-f]{64}$"
+_ROLE_MACROS = {
+    "latin_body_regular": "CareerOSLatinBodyRegularFont",
+    "latin_body_bold": "CareerOSLatinBodyBoldFont",
+    "latin_body_italic": "CareerOSLatinBodyItalicFont",
+    "latin_body_bold_italic": "CareerOSLatinBodyBoldItalicFont",
+    "latin_display_regular": "CareerOSLatinDisplayRegularFont",
+    "latin_display_bold": "CareerOSLatinDisplayBoldFont",
+    "latin_display_italic": "CareerOSLatinDisplayItalicFont",
+    "latin_display_bold_italic": "CareerOSLatinDisplayBoldItalicFont",
+    "cjk_body_regular": "CareerOSCJKBodyRegularFont",
+    "cjk_body_bold": "CareerOSCJKBodyBoldFont",
+    "cjk_body_italic": "CareerOSCJKBodyItalicFont",
+    "cjk_body_bold_italic": "CareerOSCJKBodyBoldItalicFont",
+    "cjk_display_regular": "CareerOSCJKDisplayRegularFont",
+    "cjk_display_bold": "CareerOSCJKDisplayBoldFont",
+    "cjk_display_italic": "CareerOSCJKDisplayItalicFont",
+    "cjk_display_bold_italic": "CareerOSCJKDisplayBoldItalicFont",
+    "cjk_mono_regular": "CareerOSCJKMonoRegularFont",
+    "cjk_mono_bold": "CareerOSCJKMonoBoldFont",
+    "cjk_mono_italic": "CareerOSCJKMonoItalicFont",
+    "cjk_mono_bold_italic": "CareerOSCJKMonoBoldItalicFont",
+}
+_DEFAULT_BUNDLE_ROLES: dict[str, FontRole] = {
+    "cjk_body_regular": "body-regular",
+    "cjk_body_bold": "body-bold",
+    "cjk_body_italic": "body-regular",
+    "cjk_body_bold_italic": "body-bold",
+    "cjk_display_regular": "display-regular",
+    "cjk_display_bold": "display-bold",
+    "cjk_display_italic": "display-regular",
+    "cjk_display_bold_italic": "display-bold",
+    "cjk_mono_regular": "display-regular",
+    "cjk_mono_bold": "display-bold",
+    "cjk_mono_italic": "display-regular",
+    "cjk_mono_bold_italic": "display-bold",
+}
 
 
 class FontAsset(BaseModel):
@@ -126,6 +162,48 @@ def font_names_by_role(paths: ProjectPaths) -> dict[FontRole, str]:
 
 
 def verify_fonts(paths: ProjectPaths) -> list[FontStatus]:
+    """Verify the font files selected by project configuration."""
+    config = load_project_config(paths.project_root).resume.fonts
+    overrides = config.roles.configured()
+    statuses: list[FontStatus] = []
+    custom_root = paths.project_root.joinpath(*PurePosixPath(config.directory).parts)
+    if custom_root.is_symlink():
+        return [
+            FontStatus(
+                "project override",
+                "configured",
+                "font-root",
+                "fail",
+                str(custom_root),
+                "configured font root must not be a symlink",
+            )
+        ]
+    for name in sorted(set(overrides.values())):
+        statuses.append(
+            _verify_configured_font(
+                custom_root / name,
+                family="project override",
+                name=name,
+            )
+        )
+
+    default_role_names = load_font_manifest(paths.project_root).names_by_role()
+    required_default_names = {
+        default_role_names[bundle_role]
+        for role, bundle_role in _DEFAULT_BUNDLE_ROLES.items()
+        if role not in overrides
+    }
+    if required_default_names:
+        statuses.extend(
+            status
+            for status in verify_system_fonts(paths)
+            if status.name in required_default_names
+        )
+    return statuses
+
+
+def verify_system_fonts(paths: ProjectPaths) -> list[FontStatus]:
+    """Verify the downloadable system-default bundle independently of overrides."""
     manifest = load_font_manifest(paths.project_root)
     root = font_install_root(paths, manifest)
     if root.is_symlink():
@@ -161,7 +239,9 @@ def fetch_fonts(paths: ProjectPaths) -> list[FontStatus]:
     for _package, asset in manifest.iter_assets():
         target = root / asset.name
         if target.exists():
-            status = next(item for item in verify_fonts(paths) if item.name == asset.name)
+            status = next(
+                item for item in verify_system_fonts(paths) if item.name == asset.name
+            )
             if status.status != "pass":
                 raise ValueError(
                     f"refusing to overwrite unverified font file: {target} ({status.detail})"
@@ -200,7 +280,7 @@ def fetch_fonts(paths: ProjectPaths) -> list[FontStatus]:
         finally:
             if temporary is not None:
                 temporary.unlink(missing_ok=True)
-    statuses = verify_fonts(paths)
+    statuses = verify_system_fonts(paths)
     if any(item.status != "pass" for item in statuses):
         raise ValueError("font installation did not pass verification")
     (root / "install.json").write_text(
@@ -230,6 +310,31 @@ def fetch_fonts(paths: ProjectPaths) -> list[FontStatus]:
     return statuses
 
 
+def prepare_resume_fonts(paths: ProjectPaths) -> tuple[Path, list[FontStatus]]:
+    """Verify selected fonts and materialize the single generated TeX projection."""
+    statuses = verify_fonts(paths)
+    failures = [item for item in statuses if item.status != "pass"]
+    if failures:
+        details = "; ".join(f"{item.name}: {item.detail}" for item in failures)
+        raise ValueError(f"resume font verification failed: {details}")
+    configured = load_project_config(paths.project_root).resume.fonts.roles.configured()
+    lines = [
+        "% Generated by career-os from career-os.toml. Do not edit.",
+        *[
+            f"\\newcommand{{\\{_ROLE_MACROS[role]}}}{{{filename}}}"
+            for role, filename in sorted(configured.items())
+        ],
+        "",
+    ]
+    target = paths.local_state_root / "generated" / "resume-fonts.tex"
+    target.parent.mkdir(parents=True, exist_ok=True)
+    content = "\n".join(lines)
+    temporary = target.with_name(f".{target.name}.tmp")
+    temporary.write_text(content, encoding="utf-8", newline="\n")
+    temporary.replace(target)
+    return target, statuses
+
+
 def _verify_font_asset(
     path: Path,
     *,
@@ -253,6 +358,17 @@ def _verify_font_asset(
         detail = digest
         status = "pass"
     return FontStatus(family, version, name, status, str(path), detail)
+
+
+def _verify_configured_font(
+    path: Path,
+    *,
+    family: str,
+    name: str,
+) -> FontStatus:
+    if not path.is_file():
+        return FontStatus(family, "configured", name, "fail", str(path), "missing")
+    return FontStatus(family, "configured", name, "pass", str(path), "present")
 
 
 def _sha256_file(path: Path) -> str:

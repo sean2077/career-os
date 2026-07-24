@@ -310,14 +310,11 @@ def _private_candidates(
 ) -> dict[str, set[str]]:
     config_path = private_root / "career-os.toml"
     try:
-        config = tomllib.loads(config_path.read_text(encoding="utf-8"))
-        configured_data_root = config.get("data_root", "career")
+        tomllib.loads(config_path.read_text(encoding="utf-8"))
     except (OSError, tomllib.TOMLDecodeError) as error:
         raise PublicPrivacyError(f"private root has invalid career-os.toml: {error}") from error
-    if not isinstance(configured_data_root, str) or not configured_data_root:
-        raise PublicPrivacyError("private root has invalid data_root")
 
-    data_root = (private_root / configured_data_root).resolve()
+    data_root = (private_root / "career").resolve()
     if not data_root.is_relative_to(private_root) or not data_root.is_dir():
         raise PublicPrivacyError("private data_root is missing or escapes the private root")
 

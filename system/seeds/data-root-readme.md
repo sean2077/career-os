@@ -45,5 +45,5 @@ attachments, or private judgments stored in this data root. An item is
 redistributable only when its owner grants a separate explicit license or
 publication authorization for that item.
 
-Machine-readable source inventories and provenance maps belong under
-`.provenance/`. They are control data, not Markdown career records.
+Generated plans, backups, receipts, and migration verification state belong
+under ignored `.career-os/`, not in the user-owned record tree.

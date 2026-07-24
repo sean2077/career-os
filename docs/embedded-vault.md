@@ -13,20 +13,21 @@ repository to a real Vault.
 
 ## Supported layouts
 
-| Layout | Repository behavior | Typical data root |
+| Layout | Repository behavior | Data root |
 | --- | --- | --- |
 | Standalone | Career OS root is the Vault root | `career/` |
 | Independent sibling downstream (recommended) | Outer Git tracks one relative directory symlink as mode `120000`; the target repository remains private, with an optional fetch-only public `upstream` | `career/` inside the sibling repository |
 | Independent nested downstream | Outer Git receives one exact ignore entry through an attach plan | `career/` inside the nested repository |
-| Standard submodule | Existing `.gitmodules` and gitlink are preserved | A sibling directory inside the Vault for a public framework submodule; an internal `career/` is also allowed for a user-controlled fork |
-| Non-Git host | No Git configuration is created | Any configured directory inside the Vault |
+| Standard submodule | Existing `.gitmodules` and gitlink are preserved | Fixed `career/` inside the project; keep real records out of a public framework checkout |
+| Non-Git host | No Git configuration is created | Fixed `career/` inside the project |
 
 A gitlink without a matching `.gitmodules` entry is reported as an unsupported
 bare gitlink. Career OS does not repair it or silently convert it into another
 layout.
 
-The project root and data root must either resolve physically inside the selected
-Vault or project through one configured `vault_mount`. A mount is a
+The project root must either resolve physically inside the selected Vault or
+project through one configured `vault_mount`; `career/` always remains inside
+that project. A mount is a
 Vault-relative POSIX path whose final component is a directory symlink resolving
 to the external Career OS project root. Paths stored in host references remain
 Vault-relative POSIX paths. User data remains a normal, Git-eligible directory;
@@ -104,7 +105,7 @@ authority records remain canonical.
 
 The homepages, dashboard, and explanatory Canvas files use filename-only
 wikilinks for navigation; each homepage adds only its selected Base view fragment.
-They do not bake in the repository's mount directory or configured data root.
+They do not bake in the repository's mount directory or physical `career/` path.
 Keep these framework and dedicated-Base filenames unique within the surrounding
 Vault; host notes may use the full actual Vault-relative path when linking an
 asset. See the

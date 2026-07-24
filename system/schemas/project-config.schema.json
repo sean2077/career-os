@@ -1,0 +1,443 @@
+{
+  "$defs": {
+    "ObsidianConfig": {
+      "additionalProperties": false,
+      "description": "Obsidian integration version requirements.",
+      "properties": {
+        "minimum_version": {
+          "default": "1.12.7",
+          "description": "Minimum supported Obsidian version.",
+          "title": "Minimum Version",
+          "type": "string"
+        },
+        "quickadd_version": {
+          "default": "2.12.3",
+          "description": "QuickAdd version expected by the optional Obsidian integration.",
+          "title": "Quickadd Version",
+          "type": "string"
+        }
+      },
+      "title": "ObsidianConfig",
+      "type": "object"
+    },
+    "OpenCLIConfig": {
+      "additionalProperties": false,
+      "description": "Allowlisted OpenCLI research integration settings.",
+      "properties": {
+        "enabled": {
+          "default": false,
+          "description": "Whether read-only OpenCLI research commands are enabled.",
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "profile": {
+          "default": "career-research",
+          "description": "Portable OpenCLI profile alias used for research commands.",
+          "title": "Profile",
+          "type": "string"
+        },
+        "timeout_seconds": {
+          "default": 60,
+          "description": "Maximum execution time for one OpenCLI command, in seconds.",
+          "maximum": 300,
+          "minimum": 1,
+          "title": "Timeout Seconds",
+          "type": "integer"
+        },
+        "capture_subdir": {
+          "default": "research/opencli",
+          "description": "Portable POSIX subdirectory under the fixed local runtime root for captured research.",
+          "title": "Capture Subdir",
+          "type": "string"
+        },
+        "sources": {
+          "additionalProperties": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "description": "Allowlist mapping each OpenCLI site name to its permitted read commands.",
+          "title": "Sources",
+          "type": "object"
+        }
+      },
+      "title": "OpenCLIConfig",
+      "type": "object"
+    },
+    "ResearchConfig": {
+      "additionalProperties": false,
+      "description": "Optional external research integration settings.",
+      "properties": {
+        "opencli": {
+          "$ref": "#/$defs/OpenCLIConfig",
+          "description": "Read-only OpenCLI research integration."
+        }
+      },
+      "title": "ResearchConfig",
+      "type": "object"
+    },
+    "ResumeConfig": {
+      "additionalProperties": false,
+      "description": "Resume build configuration.",
+      "properties": {
+        "engine": {
+          "default": "xelatex",
+          "description": "TeX engine used to build Career OS resumes.",
+          "title": "Engine",
+          "type": "string"
+        },
+        "fonts": {
+          "$ref": "#/$defs/ResumeFontsConfig",
+          "description": "Project-wide local resume font overrides."
+        }
+      },
+      "title": "ResumeConfig",
+      "type": "object"
+    },
+    "ResumeFontRoles": {
+      "additionalProperties": false,
+      "description": "Optional project-wide overrides for the fixed resume font roles.",
+      "properties": {
+        "latin_body_regular": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Latin body regular font filename.",
+          "title": "Latin Body Regular"
+        },
+        "latin_body_bold": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Latin body bold font filename.",
+          "title": "Latin Body Bold"
+        },
+        "latin_body_italic": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Latin body italic font filename.",
+          "title": "Latin Body Italic"
+        },
+        "latin_body_bold_italic": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Latin body bold italic font filename.",
+          "title": "Latin Body Bold Italic"
+        },
+        "latin_display_regular": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Latin display regular font filename.",
+          "title": "Latin Display Regular"
+        },
+        "latin_display_bold": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Latin display bold font filename.",
+          "title": "Latin Display Bold"
+        },
+        "latin_display_italic": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Latin display italic font filename.",
+          "title": "Latin Display Italic"
+        },
+        "latin_display_bold_italic": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Latin display bold italic font filename.",
+          "title": "Latin Display Bold Italic"
+        },
+        "cjk_body_regular": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "CJK body regular font filename.",
+          "title": "Cjk Body Regular"
+        },
+        "cjk_body_bold": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "CJK body bold font filename.",
+          "title": "Cjk Body Bold"
+        },
+        "cjk_body_italic": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "CJK body italic font filename.",
+          "title": "Cjk Body Italic"
+        },
+        "cjk_body_bold_italic": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "CJK body bold italic font filename.",
+          "title": "Cjk Body Bold Italic"
+        },
+        "cjk_display_regular": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "CJK display regular font filename.",
+          "title": "Cjk Display Regular"
+        },
+        "cjk_display_bold": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "CJK display bold font filename.",
+          "title": "Cjk Display Bold"
+        },
+        "cjk_display_italic": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "CJK display italic font filename.",
+          "title": "Cjk Display Italic"
+        },
+        "cjk_display_bold_italic": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "CJK display bold italic font filename.",
+          "title": "Cjk Display Bold Italic"
+        },
+        "cjk_mono_regular": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "CJK monospace regular font filename.",
+          "title": "Cjk Mono Regular"
+        },
+        "cjk_mono_bold": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "CJK monospace bold font filename.",
+          "title": "Cjk Mono Bold"
+        },
+        "cjk_mono_italic": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "CJK monospace italic font filename.",
+          "title": "Cjk Mono Italic"
+        },
+        "cjk_mono_bold_italic": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "CJK monospace bold italic font filename.",
+          "title": "Cjk Mono Bold Italic"
+        }
+      },
+      "title": "ResumeFontRoles",
+      "type": "object"
+    },
+    "ResumeFontsConfig": {
+      "additionalProperties": false,
+      "description": "Project-wide local font directory and role overrides.",
+      "properties": {
+        "directory": {
+          "default": ".career-os/fonts",
+          "description": "Portable project-relative directory containing local resume fonts.",
+          "title": "Directory",
+          "type": "string"
+        },
+        "roles": {
+          "$ref": "#/$defs/ResumeFontRoles",
+          "description": "Optional fixed resume font role overrides."
+        }
+      },
+      "title": "ResumeFontsConfig",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Career OS project configuration stored in career-os.toml.",
+  "properties": {
+    "schema_version": {
+      "const": 2,
+      "description": "Version of the Career OS project configuration schema.",
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "system_version": {
+      "description": "Career OS system version expected by this project.",
+      "title": "System Version",
+      "type": "string"
+    },
+    "development_topology": {
+      "default": "standalone-framework",
+      "description": "Repository topology: a public standalone framework, an integrated private workbench, or a split downstream.",
+      "enum": [
+        "standalone-framework",
+        "integrated-workbench",
+        "split-downstream"
+      ],
+      "title": "Development Topology",
+      "type": "string"
+    },
+    "build_root": {
+      "default": "build",
+      "description": "Path for generated build artifacts.",
+      "title": "Build Root",
+      "type": "string"
+    },
+    "preferred_language": {
+      "default": "en",
+      "description": "Preferred language code for Career OS content and output.",
+      "title": "Preferred Language",
+      "type": "string"
+    },
+    "obsidian": {
+      "$ref": "#/$defs/ObsidianConfig",
+      "description": "Obsidian integration settings."
+    },
+    "resume": {
+      "$ref": "#/$defs/ResumeConfig",
+      "description": "Resume build settings."
+    },
+    "research": {
+      "$ref": "#/$defs/ResearchConfig",
+      "description": "Optional external research integrations."
+    }
+  },
+  "required": [
+    "schema_version",
+    "system_version"
+  ],
+  "title": "Career OS Project Configuration",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://career-os.dev/schemas/project-config.schema.json"
+}

@@ -2,6 +2,7 @@
 
 # Career OS local and generated state
 /.career-os/
+/career/.provenance/
 /.oma/
 /.obsidian/
 /runtime/

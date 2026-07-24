@@ -12,7 +12,7 @@ import tempfile
 import zlib
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Literal
 from uuid import UUID, uuid4
 
@@ -25,7 +25,7 @@ from career_os.records.models import (
     EvidenceClaim,
     MarketJD,
 )
-from career_os.resume.fonts import verify_fonts
+from career_os.resume.fonts import prepare_resume_fonts
 from career_os.resume.privacy import (
     PrivacyReport,
     audit_pdf,
@@ -139,6 +139,10 @@ class _BuiltResume:
 _DOCUMENT_CLASS = re.compile(
     r"\\documentclass(?:\s*\[[^\]]*\])?\s*\{career-os\}", re.IGNORECASE
 )
+_FONT_DEFINITION = re.compile(
+    r"\\(?:newcommand|renewcommand|providecommand)\s*"
+    r"\{\\CareerOS(?:Latin|CJK)[A-Za-z]+Font\}"
+)
 _SAFE_NAME = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*$")
 _CLAIM = re.compile(r"\\CareerClaim\s*\{([^{}]+)\}")
 _CLAIMS = re.compile(r"\\CareerClaims\s*\{([^{}]+)\}")
@@ -200,7 +204,13 @@ def resume_doctor(paths: ProjectPaths) -> list[ResumeDoctorCheck]:
     ]
     for command in ("pdftoppm", "pdfinfo", "pdftotext", "pdftohtml"):
         checks.append(_probe_poppler(command))
-    for status in verify_fonts(paths):
+    try:
+        _generated, font_statuses = prepare_resume_fonts(paths)
+    except ValueError:
+        from career_os.resume.fonts import verify_fonts
+
+        font_statuses = verify_fonts(paths)
+    for status in font_statuses:
         checks.append(
             ResumeDoctorCheck(
                 id=f"font.{status.name}",
@@ -639,6 +649,10 @@ def _resolve_resume_source(paths: ProjectPaths, source: Path) -> ResolvedResumeR
     source_text = source.read_text(encoding="utf-8-sig")
     if not _DOCUMENT_CLASS.search(_strip_tex_comments(source_text)):
         raise ValueError(f"resume source must use \\documentclass{{career-os}}: {source}")
+    if _FONT_DEFINITION.search(_strip_tex_comments(source_text)):
+        raise ValueError(
+            "resume font roles must be configured in career-os.toml, not a TeX root"
+        )
     identity = source.parent / "identity.tex"
     if not identity.is_file() or identity.is_symlink():
         raise ValueError(f"resume identity is missing: {identity}")
@@ -875,6 +889,7 @@ def _build_resume_root(
     latexmk = _resolve_latexmk_command(paths.project_root)
     if shutil.which("xelatex") is None:
         raise ValueError("resume build requires latexmk and XeLaTeX")
+    generated_fonts, _font_statuses = prepare_resume_fonts(paths)
 
     source_sha256 = _sha256_file(root.source)
     identity_sha256 = _sha256_file(root.identity)
@@ -908,7 +923,12 @@ def _build_resume_root(
     )
     environment = _tool_environment()
     texinputs = os.pathsep.join(
-        (str(isolated_root), str(paths.project_root / "system/resume"), "")
+        (
+            str(generated_fonts.parent),
+            str(isolated_root),
+            str(paths.project_root / "system/resume"),
+            "",
+        )
     )
     if environment.get("TEXINPUTS"):
         texinputs += environment["TEXINPUTS"]
@@ -1145,9 +1165,10 @@ def _validate_claim_boundary(
         envelope = resume_record.envelope
         assert isinstance(envelope, CommunicationResume)
         approved = {
-            reference.target_id
-            for reference in envelope.refs
-            if reference.required and reference.relation == "uses-claim"
+            target.envelope.id
+            for target in _linked_record_targets(
+                paths, records, envelope.uses_claim
+            )
         }
         unsupported = used - approved
         unused = approved - used
@@ -1184,22 +1205,21 @@ def _validate_claim_boundary(
         )
         if not required_uses.intersection(claim.envelope.allowed_uses):
             raise ValueError(f"claim is not approved for the {profile} export profile: {claim_id}")
-        supporting = [
-            reference
-            for reference in claim.envelope.refs
-            if reference.required and reference.relation == "supported-by"
-        ]
+        supporting = _linked_record_targets(
+            paths, records, claim.envelope.supported_by
+        )
         if not supporting:
             raise ValueError(f"claim has no required supported-by evidence: {claim_id}")
-        for reference in supporting:
-            evidence = records.get(reference.target_id)
-            if evidence is None or not (
+        for evidence in supporting:
+            if not (
                 evidence.envelope.kind == "evidence.work"
                 and evidence.envelope.status in {"grounded", "verified"}
                 or evidence.envelope.kind == "evidence.story"
                 and evidence.envelope.status == "reviewed"
             ):
-                raise ValueError(f"claim support is missing or invalid: {reference.target_id}")
+                raise ValueError(
+                    f"claim support is missing or invalid: {evidence.envelope.id}"
+                )
 
     if profile == "application":
         if not confirm_application:
@@ -1215,8 +1235,12 @@ def _validate_claim_boundary(
         _validate_application_bullets(searchable)
         if not claimed:
             raise ValueError("application export requires at least one approved claim")
-        target_jd_id = _one_required_ref(envelope, "target-jd")
-        identity_profile_id = _one_required_ref(envelope, "identity-profile")
+        target_jd_id = _one_linked_record_id(
+            paths, records, envelope.target_jd, "target_jd"
+        )
+        identity_profile_id = _one_linked_record_id(
+            paths, records, envelope.identity_profile, "identity_profile"
+        )
         jd = _require_record_kind(records, target_jd_id, "market.jd")
         if not isinstance(jd.envelope, MarketJD) or jd.envelope.status != "reviewed":
             raise ValueError("application export requires a reviewed target JD")
@@ -1252,15 +1276,38 @@ def _find_resume_record(
     return matches[0] if matches else None
 
 
-def _one_required_ref(envelope: CommunicationResume, relation: str) -> UUID:
-    values = {
-        reference.target_id
-        for reference in envelope.refs
-        if reference.required and reference.relation == relation
-    }
-    if len(values) != 1:
-        raise ValueError(f"application resume requires exactly one required {relation} reference")
-    return next(iter(values))
+def _one_linked_record_id(
+    paths: ProjectPaths,
+    records: dict[UUID, ParsedRecord],
+    link: str | None,
+    relation: str,
+) -> UUID:
+    targets = _linked_record_targets(paths, records, [] if link is None else [link])
+    if len(targets) != 1:
+        raise ValueError(
+            f"application resume requires exactly one {relation} Wikilink"
+        )
+    return targets[0].envelope.id
+
+
+def _linked_record_targets(
+    paths: ProjectPaths,
+    records: dict[UUID, ParsedRecord],
+    links: list[str],
+) -> list[ParsedRecord]:
+    by_path = {record.path.resolve(): record for record in records.values()}
+    targets: list[ParsedRecord] = []
+    for link in links:
+        target = link[2:-2].split("|", maxsplit=1)[0].split("#", maxsplit=1)[0]
+        relative = PurePosixPath(target)
+        path = paths.vault_root.joinpath(*relative.parts)
+        if path.suffix.lower() != ".md":
+            path = Path(str(path) + ".md")
+        record = by_path.get(path.resolve())
+        if record is None:
+            raise ValueError(f"record Wikilink target is missing: {link}")
+        targets.append(record)
+    return targets
 
 
 def _record_index(paths: ProjectPaths) -> dict[UUID, ParsedRecord]:

@@ -13,6 +13,7 @@ toolchain is ready.
 | --- | --- | --- |
 | Core records, Skills, schemas, plans, and filesystem checks | Git, `uv`, and Python 3.12 or newer | `uv run career-os doctor --json` |
 | Live Obsidian CLI operations | Core plus Obsidian 1.12.7 or newer, CLI enabled, and the application running | `uv run career-os doctor --json` |
+| Optional OpenCLI company-research sources | Core plus Node.js 20+, OpenCLI, and Browser Bridge/login state for browser-backed configured adapters | `opencli doctor` then `uv run career-os doctor --json` |
 | Resume build and export | Core plus `latexmk`, XeLaTeX, the required TeX packages, and the default or TeX-named local fonts | `uv run career-os resume doctor --json` |
 | Optional high-fidelity PDF inspection | Resume stack plus `pdftoppm`, `pdfinfo`, and `pdftotext` from Poppler | `uv run career-os resume doctor --json` |
 
@@ -56,14 +57,65 @@ uv run career-os doctor --json
 uv run career-os check
 ```
 
-Initialization creates a missing data-root `README.md` from the system-owned
+Initialization creates a missing `career/README.md` from the system-owned
 Career Home seed. It does not create, copy, render, or overwrite any Base.
+Project configuration and install state use schema 2; legacy `data_root` or
+`runtime_root` fields are rejected rather than treated as aliases. Reinitialize
+legacy local state, or remove those obsolete fields after reviewing the fixed
+`career/` and `.career-os/runtime/` locations.
 Paired English/Chinese Workbench Bases are tracked system assets under
 `system/obsidian/bases/` and query schema-2 records by `kind`; `career-os check`
 reports inventory, localization-parity, or semantic drift for review.
 
 Missing optional Obsidian, LaTeX, or PDF commands appear as `attention` in the
 core doctor. They do not block filesystem-only career workflows.
+
+## Optional OpenCLI company research
+
+OpenCLI is an optional acquisition transport for `opportunity-decision`, not a
+Career OS research authority or universal search backend. Portable, non-secret
+allowlists live in `career-os.toml`; browser cookies, login state, extension
+state, and device paths remain local to each machine.
+
+Install the current stable OpenCLI runtime on every device that will use the
+configured sources:
+
+```text
+node --version
+npm install -g @jackwener/opencli@latest
+opencli --version
+opencli list -f json
+```
+
+The OpenCLI v1.8.6 package manifest declares Node.js 20 or newer. Its bundled
+`opencli-usage` prose still says Node.js 21; Career OS follows the package
+manifest and checks the actual executable rather than editing the locked
+upstream Skill.
+
+Install the signed
+[OpenCLI Browser Bridge extension](https://chromewebstore.google.com/detail/opencli/ildkmabpimmkaediidaifkhjpohdnifk)
+from the Chrome Web Store. Use a dedicated, low-privilege research Chrome
+profile and assign the portable alias configured by the project:
+
+```text
+opencli profile list
+opencli profile rename <contextId> career-research
+opencli profile use career-research
+opencli doctor
+uv run career-os doctor --json
+```
+
+Complete website login manually. Stop at CAPTCHA, rate limiting, or risk
+control. The bridge must remain loopback-only; do not expose its unauthenticated
+WebSocket through a LAN listener, WSL forwarding, container port, or tunnel.
+Career OS doctor probes an already-running loopback port but never starts the
+daemon, Chrome, the extension, or a search.
+
+For each configured command, doctor requires both the project allowlist and a
+matching live registry entry declaring `access: read`. Missing installations
+and a stopped bridge are `attention`; invalid configuration, an unreadable live
+registry, a missing adapter, or a non-read command is `fail`. Raw captures
+belong only under `.career-os/runtime/` and are preserved by project cleanup.
 
 ## XeLaTeX resume toolchain
 
@@ -130,12 +182,14 @@ fetch.
 use the core system, but it cannot build a resume until the verified font files
 are available.
 
-For owner-provided fonts, place the binaries below ignored
-`.career-os/fonts/` and name them in the handwritten TeX root before
-`\documentclass{career-os}`. The CLI and project `latexmkrc` search that
-directory recursively. Do not commit or redistribute the files. A missing
-filename fails during XeLaTeX compilation; Career OS has no personal font
-descriptor or fallback layer.
+For owner-provided fonts, place the binaries in the directory below ignored
+`.career-os/fonts/` configured by `[resume.fonts]` and declare optional role
+filenames under `[resume.fonts.roles]`. The CLI and project `latexmkrc` use the
+same filename-based resolver, so a same-name replacement takes effect without a
+configuration change. Do not commit or redistribute the files. Missing files
+fail before XeLaTeX, while invalid or incompatible files fail during
+compilation; Career OS has no per-resume descriptor or silent fallback layer.
+The downloaded system-default bundle remains size- and SHA-256-verified.
 
 The release fixtures cover English, Simplified Chinese, and one mixed-language
 resume. User data remains Unicode and BCP-47 capable, but the fixed Source Han
@@ -149,15 +203,21 @@ For a checkout that will use every local capability:
 ```text
 git --version
 uv --version
-uv sync --locked
+uv sync --locked --all-groups
+"C:\\Program Files\\Git\\bin\\bash.exe" .agents/relink-skills.sh
+"C:\\Program Files\\Git\\bin\\bash.exe" .agents/skills/agent-scaffold/agent-scaffold.sh verify --profile light --json
 uv run career-os doctor --json
 uv run career-os check
 uv run career-os resume fonts fetch
+uv run career-os resume fonts verify
 uv run career-os resume doctor --json
+uv run career-os resume list --json
 ```
 
-Run `resume fonts fetch` only after network access is available. A passing
-`career-os check` validates the tracked default font manifest and confirms that
-font binaries did not leak into Git. `career-os resume doctor` proves the
-default font bundle and TeX commands are ready; compiling a personal root is
-the definitive check for any font filenames configured by that root.
+Run `resume fonts fetch` only when an unoverridden role needs the downloadable
+default bundle. For a private Home, copy each configured local font into the
+configured directory before `resume fonts verify`. A passing `career-os check`
+validates the tracked config and default font manifest and confirms that font
+binaries did not leak into Git. `career-os resume doctor` proves the selected
+font files and TeX commands are ready; building every handwritten root is the
+definitive visual check on a new machine.

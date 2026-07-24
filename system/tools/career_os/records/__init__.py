@@ -3,20 +3,17 @@ from career_os.records.models import (
     KIND_LIFECYCLES,
     RECORD_KINDS,
     EngagementEvent,
-    HostRef,
-    InternalRef,
     OpportunityEngagement,
     ReadinessAssessment,
     ReadinessGap,
     RecordEnvelope,
     record_json_schema,
     validate_record_envelope,
+    validate_record_transition,
 )
 
 __all__ = [
     "EngagementEvent",
-    "HostRef",
-    "InternalRef",
     "KIND_LIFECYCLES",
     "OpportunityEngagement",
     "ParsedRecord",
@@ -28,4 +25,5 @@ __all__ = [
     "record_json_schema",
     "split_frontmatter",
     "validate_record_envelope",
+    "validate_record_transition",
 ]

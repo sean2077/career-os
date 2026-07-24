@@ -1,40 +1,215 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://career-os.dev/schemas/operation-plan.schema.json",
+  "$defs": {
+    "FileOperation": {
+      "additionalProperties": false,
+      "properties": {
+        "op": {
+          "enum": [
+            "mkdir",
+            "write_text",
+            "copy_file",
+            "delete"
+          ],
+          "title": "Op",
+          "type": "string"
+        },
+        "root": {
+          "enum": [
+            "project",
+            "vault",
+            "data",
+            "runtime",
+            "host_repo"
+          ],
+          "title": "Root",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "expected_sha256": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Expected Sha256"
+        },
+        "result_sha256": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Result Sha256"
+        },
+        "content": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Content"
+        },
+        "source_root": {
+          "anyOf": [
+            {
+              "enum": [
+                "project",
+                "vault",
+                "data",
+                "runtime",
+                "host_repo",
+                "source"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Root"
+        },
+        "source_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Path"
+        },
+        "source_sha256": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Sha256"
+        }
+      },
+      "required": [
+        "op",
+        "root",
+        "path"
+      ],
+      "title": "FileOperation",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "id": {
+      "format": "uuid",
+      "title": "Id",
+      "type": "string"
+    },
+    "action": {
+      "title": "Action",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "source_version": {
+      "title": "Source Version",
+      "type": "string"
+    },
+    "target_version": {
+      "title": "Target Version",
+      "type": "string"
+    },
+    "roots": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Roots",
+      "type": "object"
+    },
+    "metadata": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Metadata",
+      "type": "object"
+    },
+    "operations": {
+      "items": {
+        "$ref": "#/$defs/FileOperation"
+      },
+      "title": "Operations",
+      "type": "array"
+    },
+    "plan_sha256": {
+      "title": "Plan Sha256",
+      "type": "string"
+    },
+    "applied_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Applied At"
+    },
+    "rolled_back_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Rolled Back At"
+    }
+  },
+  "required": [
+    "id",
+    "action",
+    "created_at",
+    "source_version",
+    "target_version",
+    "roots",
+    "plan_sha256"
+  ],
   "title": "Career OS Operation Plan",
   "type": "object",
-  "additionalProperties": false,
-  "required": ["schema_version", "id", "action", "created_at", "source_version", "target_version", "roots", "metadata", "operations", "plan_sha256"],
-  "properties": {
-    "schema_version": {"const": 1},
-    "id": {"type": "string", "format": "uuid"},
-    "action": {"type": "string", "minLength": 1},
-    "created_at": {"type": "string", "format": "date-time"},
-    "source_version": {"type": "string"},
-    "target_version": {"type": "string"},
-    "roots": {"type": "object", "additionalProperties": {"type": "string"}},
-    "metadata": {"type": "object", "additionalProperties": {"type": "string"}},
-    "operations": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": ["op", "root", "path"],
-        "properties": {
-          "op": {"enum": ["mkdir", "write_text", "copy_file", "delete"]},
-          "root": {"enum": ["project", "vault", "data", "runtime", "host_repo"]},
-          "path": {"type": "string"},
-          "expected_sha256": {"type": ["string", "null"]},
-          "result_sha256": {"type": ["string", "null"]},
-          "content": {"type": ["string", "null"]},
-          "source_root": {"type": ["string", "null"], "enum": ["project", "vault", "data", "runtime", "host_repo", "source", null]},
-          "source_path": {"type": ["string", "null"]},
-          "source_sha256": {"type": ["string", "null"]}
-        }
-      }
-    },
-    "plan_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
-    "applied_at": {"type": ["string", "null"], "format": "date-time"},
-    "rolled_back_at": {"type": ["string", "null"], "format": "date-time"}
-  }
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://career-os.dev/schemas/operation-plan.schema.json"
 }

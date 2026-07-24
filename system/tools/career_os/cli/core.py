@@ -15,8 +15,10 @@ from pydantic import ValidationError
 from career_os import __version__
 from career_os.checks import has_failures, run_checks
 from career_os.config import (
+    DATA_ROOT,
     INSTALL_STATE,
     InstallState,
+    ProjectConfig,
     discover_project_root,
     load_install_state,
     load_project_config,
@@ -27,6 +29,7 @@ from career_os.config import (
     write_install_state,
 )
 from career_os.git_safety import inspect_downstream_git_safety
+from career_os.opencli import opencli_doctor_checks
 from career_os.records.models import StrategyPositioning
 from career_os.seed import initialize_data_root
 
@@ -41,7 +44,6 @@ def init_command(
             help="Vault-relative POSIX path of a directory symlink to an external project root."
         ),
     ] = None,
-    data_root: Annotated[Path | None, typer.Option(help="User-owned data root.")] = None,
     languages: Annotated[str, typer.Option(help="Comma-separated BCP 47 language tags.")] = "en",
 ) -> None:
     """Initialize user-owned data without overwriting existing records."""
@@ -77,22 +79,24 @@ def init_command(
             param_hint="--vault-mount",
         )
 
-    selected_data = data_root or Path(config.data_root)
-    if not selected_data.is_absolute():
-        selected_data = root / selected_data
-    selected_data = selected_data.resolve()
+    selected_data = root / DATA_ROOT
+    if selected_data.resolve() != selected_data:
+        raise typer.BadParameter(
+            "fixed career root must not be a symlink, junction, or external alias",
+            param_hint="--root",
+        )
     parsed_languages = [item.strip() for item in languages.split(",") if item.strip()]
     try:
         StrategyPositioning.model_validate(
             {
                 "id": "00000000-0000-4000-8000-000000000000",
                 "kind": "strategy.positioning",
-                "schema_version": 2,
+                "schema_version": 3,
                 "created_at": "2000-01-01T00:00:00Z",
                 "updated_at": "2000-01-01T00:00:00Z",
                 "languages": parsed_languages,
+                "visibility": "private",
                 "status": "candidate",
-                "migration_review": "not-applicable",
                 "confidence": "low",
                 "review_on": "2000-01-01",
                 "disconfirming_signals": [],
@@ -107,7 +111,6 @@ def init_command(
         project_root=".",
         vault_root=portable_path(root, selected_vault),
         vault_mount=selected_mount,
-        data_root=portable_path(root, selected_data),
         system_version=config.system_version,
         languages=parsed_languages,
     )
@@ -161,6 +164,21 @@ def doctor_command(
     except FileNotFoundError as error:
         _emit_doctor([{"id": "project", "status": "fail", "detail": str(error)}], json_output)
         raise typer.Exit(1) from error
+    try:
+        project_config = load_project_config(project_root)
+    except (OSError, ValueError, ValidationError) as error:
+        _emit_doctor(
+            [
+                {
+                    "id": "config.project",
+                    "status": "fail",
+                    "path": "career-os.toml",
+                    "detail": str(error),
+                }
+            ],
+            json_output,
+        )
+        raise typer.Exit(1) from error
 
     commands = {
         "git": "required",
@@ -175,6 +193,12 @@ def doctor_command(
             "status": "pass",
             "path": str(project_root),
             "detail": "career-os.toml found",
+        },
+        {
+            "id": "config.project",
+            "status": "pass",
+            "path": "career-os.toml",
+            "detail": "valid",
         },
         {
             "id": "python",
@@ -206,7 +230,8 @@ def doctor_command(
             initialized=(project_root / INSTALL_STATE).is_file(),
         )
     )
-    checks.extend(_obsidian_doctor_checks(project_root))
+    checks.extend(opencli_doctor_checks(project_root, project_config))
+    checks.extend(_obsidian_doctor_checks(project_root, project_config))
     try:
         git_root = subprocess.run(
             ["git", "-C", str(project_root), "rev-parse", "--show-toplevel"],
@@ -284,8 +309,10 @@ def _emit_doctor(checks: list[dict[str, str | None]], json_output: bool) -> None
         typer.echo(f"{status:9} {check['id']}: {check['detail']}")
 
 
-def _obsidian_doctor_checks(project_root: Path) -> list[dict[str, str | None]]:
-    config = load_project_config(project_root)
+def _obsidian_doctor_checks(
+    project_root: Path, config: ProjectConfig | None = None
+) -> list[dict[str, str | None]]:
+    project_config = config if config is not None else load_project_config(project_root)
     executable = shutil.which("obsidian")
     running = _obsidian_process_running()
     checks: list[dict[str, str | None]] = [
@@ -308,7 +335,10 @@ def _obsidian_doctor_checks(project_root: Path) -> list[dict[str, str | None]]:
                 "id": "obsidian.version",
                 "status": "attention",
                 "path": executable,
-                "detail": f"requires Obsidian {config.obsidian.minimum_version}+ with CLI enabled",
+                "detail": (
+                    f"requires Obsidian {project_config.obsidian.minimum_version}+ "
+                    "with CLI enabled"
+                ),
             }
         )
         return checks
@@ -324,7 +354,7 @@ def _obsidian_doctor_checks(project_root: Path) -> list[dict[str, str | None]]:
         output = (completed.stdout or completed.stderr).strip()
         version = _parse_version(output)
         supported = version is not None and _version_at_least(
-            version, config.obsidian.minimum_version
+            version, project_config.obsidian.minimum_version
         )
         checks.extend(
             [
@@ -341,7 +371,10 @@ def _obsidian_doctor_checks(project_root: Path) -> list[dict[str, str | None]]:
                     "detail": (
                         version
                         if supported
-                        else f"expected {config.obsidian.minimum_version}+; output was {output!r}"
+                        else (
+                            f"expected {project_config.obsidian.minimum_version}+; "
+                            f"output was {output!r}"
+                        )
                     ),
                 },
             ]
@@ -359,7 +392,9 @@ def _obsidian_doctor_checks(project_root: Path) -> list[dict[str, str | None]]:
                     "id": "obsidian.version",
                     "status": "attention",
                     "path": executable,
-                    "detail": f"requires Obsidian {config.obsidian.minimum_version}+",
+                    "detail": (
+                        f"requires Obsidian {project_config.obsidian.minimum_version}+"
+                    ),
                 },
             ]
         )

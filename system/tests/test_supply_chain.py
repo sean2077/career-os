@@ -14,11 +14,12 @@ def test_sbom_matches_all_runtime_locks_and_external_assets() -> None:
     sbom = build_sbom(PROJECT_ROOT)
 
     assert valid, detail
-    assert len(sbom["components"]) == 38
+    assert len(sbom["components"]) == 39
     references = {component["bom-ref"] for component in sbom["components"]}
     assert "pkg:pypi/pydantic@2.13.4" in references
     assert "pkg:pypi/pymupdf4llm@1.28.0" in references
     assert any(str(item).startswith("skill:agent-scaffold@") for item in references)
+    assert any(str(item).startswith("skill:opencli-usage@") for item in references)
     assert "font:NotoSansCJKsc-Regular.otf@2.004" in references
     assert "font:SourceHanSerifSC-Regular.otf@2.003" in references
 

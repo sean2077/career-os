@@ -1,22 +1,24 @@
 # Shared Career Workflow Contract
 
-Use `career-os paths --json` to resolve the project, data, Vault, runtime, and
-build roots. Never assume `career/` or a machine-specific absolute path.
+Canonical user data is fixed at project-relative `career/`, and local runtime
+state is fixed at `.career-os/runtime/`. Use `career-os paths --json` to
+discover the physical project, fixed roots, build root, and Vault mount; never
+assume a machine-specific absolute path or derive the Vault-relative mount.
 
 Canonical user records are UTF-8 Obsidian Markdown. Preserve Unicode filenames
 and content, stable record IDs, BCP 47 language metadata, visibility, and typed
 references. Framework authority contracts live under `system/seeds/authorities`;
-initialized user copies live in the corresponding data-root README. Read both
+initialized user copies live in the corresponding `career/` README. Read both
 `docs/data-model.md` and the relevant authority contract before a write.
 Cross-authority work links stable IDs; it does not copy or silently move facts
 between authorities.
 
-Write record schema 2 only. Preserve a complete `status_history` whenever a
-record has left its initial state, and use only the declared kind lifecycle. If
-schema-1 records exist, create and review a `career-os migrate plan --to 2`
-before applying it. A migrated record stays `migration_review: required` until
-the user has confirmed its conservative defaults and preserved legacy fields.
-Every typed `host_ref` must have a matching native wikilink in the Markdown body.
+Write record schema 3 only and use the declared kind lifecycle. New records
+start in an initial state; changes to an existing record follow the Git-relative
+transition graph and advance `updated_at`. Store cross-authority relations in
+kind-specific top-level Wikilink properties. A migrated record may keep
+`migration_review: required` and `legacy_fields` only until the user confirms
+the mapping.
 
 Routine local reads, drafts, checks, and reversible edits can proceed directly.
 Stop for explicit authorization before:
@@ -47,6 +49,5 @@ reviewer, invalid output, or leaked packet triggers the owning Skill's
 documented fallback. Fallback work may continue, but it cannot grant readiness,
 claim approval, or strategy acceptance.
 
-After an authorized write, run `career-os check`; add `--host` only when the
-actual surrounding Vault must resolve host references. Report changed canonical
-records and any unresolved evidence, authorization, or reference boundary.
+After an authorized write, run `career-os check`. Report changed canonical
+records and any unresolved evidence, authorization, or relation boundary.

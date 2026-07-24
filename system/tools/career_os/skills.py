@@ -4,7 +4,7 @@ import hashlib
 import json
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Literal
+from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 from ruamel.yaml import YAML
@@ -24,7 +24,8 @@ SEAN_SKILLS = frozenset({"agent-scaffold", "conventional-commit"})
 OBSIDIAN_SKILLS = frozenset(
     {"obsidian-markdown", "obsidian-bases", "json-canvas", "obsidian-cli", "defuddle"}
 )
-BUNDLED_SKILLS = SEAN_SKILLS | OBSIDIAN_SKILLS
+OPENCLI_SKILLS = frozenset({"opencli-usage"})
+BUNDLED_SKILLS = SEAN_SKILLS | OBSIDIAN_SKILLS | OPENCLI_SKILLS
 EXPECTED_SKILLS = PROJECT_SKILLS | BUNDLED_SKILLS
 MODE_MATRIX = {
     "career-evidence": {"capture", "debrief", "consolidate"},
@@ -63,6 +64,14 @@ class SkillLockFile(BaseModel):
 
     schema_version: int = Field(ge=1)
     skills: list[SkillLock]
+
+
+def skill_lock_json_schema() -> dict[str, Any]:
+    schema = SkillLockFile.model_json_schema()
+    schema["$schema"] = "https://json-schema.org/draft/2020-12/schema"
+    schema["$id"] = "https://career-os.dev/schemas/skills-lock.schema.json"
+    schema["title"] = "Career OS Skills Lock"
+    return schema
 
 
 class SkillSelection(BaseModel):
@@ -368,5 +377,5 @@ def _inventory_detail(actual: set[str]) -> str:
     missing = sorted(EXPECTED_SKILLS - actual)
     extra = sorted(actual - EXPECTED_SKILLS)
     if not missing and not extra:
-        return "exactly 7 Career, 2 Sean, and 5 Obsidian Skills"
+        return "exactly 7 Career, 2 Sean, 5 Obsidian, and 1 OpenCLI Skill"
     return json.dumps({"missing": missing, "extra": extra}, sort_keys=True)

@@ -14,12 +14,13 @@ from career_os.resume import (
     fetch_fonts,
     list_resumes,
     new_resume,
+    prepare_resume_fonts,
     resume_doctor,
     write_work_experience,
 )
 
 app = typer.Typer(help="Create, build, inspect, and safely export direct XeLaTeX resumes.")
-fonts_app = typer.Typer(help="Manage checksum-pinned local resume fonts.")
+fonts_app = typer.Typer(help="Manage local resume fonts.")
 app.add_typer(fonts_app, name="fonts")
 
 
@@ -205,6 +206,40 @@ def fonts_fetch_command(
                 ensure_ascii=False,
             )
         )
+    except (OSError, ValueError, ValidationError) as error:
+        _fail(error)
+
+
+@fonts_app.command("verify")
+def fonts_verify_command(
+    root: Annotated[Path, typer.Option(help="Path inside the Career OS project.")] = Path("."),
+) -> None:
+    """Verify configured fonts and refresh the generated TeX projection."""
+    try:
+        generated, statuses = prepare_resume_fonts(resolve_paths(root))
+        typer.echo(
+            json.dumps(
+                {
+                    "ok": True,
+                    "generated": str(generated),
+                    "fonts": [item.as_dict() for item in statuses],
+                },
+                indent=2,
+                ensure_ascii=False,
+            )
+        )
+    except (OSError, ValueError, ValidationError) as error:
+        _fail(error)
+
+
+@fonts_app.command("prepare", hidden=True)
+def fonts_prepare_command(
+    root: Annotated[Path, typer.Option(help="Path inside the Career OS project.")] = Path("."),
+) -> None:
+    """Internal editor hook for refreshing the generated TeX projection."""
+    try:
+        generated, _statuses = prepare_resume_fonts(resolve_paths(root))
+        typer.echo(str(generated))
     except (OSError, ValueError, ValidationError) as error:
         _fail(error)
 

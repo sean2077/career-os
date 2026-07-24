@@ -1,7 +1,7 @@
 filters:
   and:
   - file.ext == "md"
-  - schema_version == 2
+  - schema_version == 3
   - or:
     - kind.startsWith("readiness.")
     - kind == "evidence.story"
@@ -9,15 +9,13 @@ filters:
 formulas:
   session_age_days: if(session_date, (today() - date(session_date)).days, "")
   readiness_kind: if(kind == "communication.audit", "audit", if(kind == "readiness.session", "session", if(kind == "readiness.gap", "gap", if(kind == "evidence.story", "story", kind))))
-  target_jd_path: if(host_refs, host_refs.filter(value.relation == "target-jd").map(value.path).join(""), "")
-  target_jd: if(!formula.target_jd_path.isEmpty() && file(formula.target_jd_path), file(formula.target_jd_path).asLink(file(formula.target_jd_path).basename), "")
-  career_lanes: if(host_refs, host_refs.filter(value.relation == "career-lane").map(file(value.path).asLink(file(value.path).basename)), "")
-  experience_stories: if(host_refs, host_refs.filter(value.relation == "experience-story").map(file(value.path).asLink(file(value.path).basename)), "")
-  resume_audit_path: if(host_refs, host_refs.filter(value.relation == "resume-audit").map(value.path).join(""), "")
-  resume_audit: if(!formula.resume_audit_path.isEmpty() && file(formula.resume_audit_path), file(formula.resume_audit_path).asLink(file(formula.resume_audit_path).basename), "")
-  last_retest: if(host_refs, host_refs.filter(value.relation == "last-retest").map(file(value.path).asLink(file(value.path).basename)), "")
-  closure_evidence: if(host_refs, host_refs.filter(value.relation == "closure-evidence").map(file(value.path).asLink(file(value.path).basename)), "")
-  resume_roots: if(host_refs, host_refs.filter(value.relation == "resume-root").map(file(value.path).asLink(file(value.path).basename)), "")
+  target_jd_link: if(target_jd, list(target_jd).filter(value.asFile()).map(value.asFile().asLink(value.asFile().basename)), "")
+  career_lanes: if(career_lane, list(career_lane).filter(value.asFile()).map(value.asFile().asLink(value.asFile().basename)), "")
+  experience_stories: if(experience_story, list(experience_story).filter(value.asFile()).map(value.asFile().asLink(value.asFile().basename)), "")
+  resume_audit_link: if(resume_audit, list(resume_audit).filter(value.asFile()).map(value.asFile().asLink(value.asFile().basename)), "")
+  last_retest_links: if(last_retest, list(last_retest).filter(value.asFile()).map(value.asFile().asLink(value.asFile().basename)), "")
+  closure_evidence_links: if(closure_evidence, list(closure_evidence).filter(value.asFile()).map(value.asFile().asLink(value.asFile().basename)), "")
+  resume_roots: if(resume_root, list(resume_root).filter(value.asFile()).map(value.asFile().asLink(value.asFile().basename)), "")
 properties:
   file.name:
     displayName: Record
@@ -31,11 +29,11 @@ properties:
     displayName: Career Lane
   target:
     displayName: Target
-  formula.target_jd:
+  formula.target_jd_link:
     displayName: JD
   formula.experience_stories:
     displayName: Story References
-  formula.resume_audit:
+  formula.resume_audit_link:
     displayName: Resume Audit
   session_type:
     displayName: Mode
@@ -61,9 +59,9 @@ properties:
     displayName: Status
   priority:
     displayName: Priority
-  formula.last_retest:
+  formula.last_retest_links:
     displayName: Last Retest
-  formula.closure_evidence:
+  formula.closure_evidence_links:
     displayName: Closure Evidence
   story_role:
     displayName: Story Role
@@ -97,9 +95,9 @@ views:
   - formula.session_age_days
   - formula.career_lanes
   - target
-  - formula.target_jd
+  - formula.target_jd_link
   - formula.experience_stories
-  - formula.resume_audit
+  - formula.resume_audit_link
   - scope
   - verdict
   - fact_boundary
@@ -119,7 +117,7 @@ views:
   order:
   - file.name
   - formula.readiness_kind
-  - formula.target_jd
+  - formula.target_jd_link
   - formula.career_lanes
   - session_type
   - verdict
@@ -143,9 +141,9 @@ views:
   - priority
   - gap_type
   - status
-  - formula.target_jd
-  - formula.last_retest
-  - formula.closure_evidence
+  - formula.target_jd_link
+  - formula.last_retest_links
+  - formula.closure_evidence_links
   sort:
   - property: priority
     direction: ASC
@@ -163,7 +161,7 @@ views:
   - formula.career_lanes
   - scope
   - attempt
-  - formula.last_retest
+  - formula.last_retest_links
   - gap_type
   - status
   - updated_at

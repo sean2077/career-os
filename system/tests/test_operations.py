@@ -59,6 +59,11 @@ def test_plan_apply_and_rollback(tmp_path: Path) -> None:
     assert rolled_back.rolled_back_at is not None
     assert not (tmp_path / "nested/file.txt").exists()
 
+    reapplied = apply_plan(plan_path, tmp_path / ".state")
+    assert reapplied.applied_at is not None
+    assert reapplied.rolled_back_at is None
+    assert (tmp_path / "nested/file.txt").read_text(encoding="utf-8") == content
+
 
 def test_apply_rejects_stale_target(tmp_path: Path) -> None:
     target = tmp_path / "file.txt"
@@ -157,8 +162,8 @@ def test_delete_rollback_rejects_recreated_target(tmp_path: Path) -> None:
     assert target.read_text(encoding="utf-8") == "user-created replacement\n"
 
 
-def test_record_migration_plans_conservative_v2_and_rolls_back(tmp_path: Path) -> None:
-    definition = tmp_path / "system/migrations/record-envelope-1-to-2.json"
+def test_record_migration_plans_conservative_v3_and_rolls_back(tmp_path: Path) -> None:
+    definition = tmp_path / "system/migrations/record-envelope-2-to-3.json"
     definition.parent.mkdir(parents=True)
     definition.write_text(
         (Path(__file__).resolve().parents[1] / "migrations" / definition.name).read_text(
@@ -167,90 +172,97 @@ def test_record_migration_plans_conservative_v2_and_rolls_back(tmp_path: Path) -
         encoding="utf-8",
     )
     data_root = tmp_path / "career"
-    data_root.mkdir()
-    authority_readme = data_root / "10-career-evidence/README.md"
-    authority_readme.parent.mkdir()
-    authority_seed = tmp_path / "system/seeds/authorities/10-career-evidence.md"
-    authority_seed.parent.mkdir(parents=True)
-    authority_seed.write_text(
-        (
-            Path(__file__).resolve().parents[1]
-            / "seeds/authorities/10-career-evidence.md"
-        ).read_text(encoding="utf-8"),
-        encoding="utf-8",
-    )
-    legacy_readme = """# Career Evidence
-
-This directory contains user-owned canonical records for this authority. Record
-bodies may use any language; schema keys and enum values remain English.
+    evidence_root = data_root / "10-career-evidence"
+    evidence_root.mkdir(parents=True)
+    target_path = evidence_root / "target.md"
+    original_target = """---
+id: 88888888-8888-4888-8888-888888888888
+kind: evidence.work
+schema_version: 2
+created_at: 2026-07-20T00:00:00Z
+updated_at: 2026-07-20T00:00:00Z
+visibility: private
+status: draft
+tags: []
+aliases: []
+refs: []
+host_refs: []
+status_history:
+  - from: null
+    to: draft
+    at: 2026-07-20T00:00:00Z
+contribution_scope: individual
+evidence_strength: strong
+evidence_summary: Synthetic target evidence.
+---
+# Target
 """
-    authority_readme.write_text(legacy_readme, encoding="utf-8")
-    record_path = data_root / "旧记录.md"
+    target_path.write_text(original_target, encoding="utf-8")
+    record_path = evidence_root / "source.md"
     original = """---
 id: 77777777-7777-4777-8777-777777777777
 kind: evidence.work
-schema_version: 1
+schema_version: 2
 created_at: 2026-07-20T00:00:00Z
-updated_at: 2026-07-21T00:00:00Z
-status: verified
-private_note: preserve me
+updated_at: 2026-07-20T00:00:00Z
+visibility: private
+status: draft
+tags: []
+aliases: []
+refs:
+  - relation: work-context
+    target_id: 88888888-8888-4888-8888-888888888888
+host_refs:
+  - relation: work-context
+    target_id: 88888888-8888-4888-8888-888888888888
+    path: career/10-career-evidence/target.md
+status_history:
+  - from: null
+    to: draft
+    at: 2026-07-20T00:00:00Z
+contribution_scope: individual
+evidence_strength: strong
+evidence_summary: Synthetic source evidence.
 ---
-# 旧记录
+# Source
 
 The body remains byte-for-byte meaningful.
+
+## Authority links
+
+- [[career/10-career-evidence/target]]
 """
     record_path.write_text(original, encoding="utf-8")
-    jd_path = data_root / "旧岗位.md"
-    original_jd = """---
-id: 88888888-8888-4888-8888-888888888888
-kind: market.jd
-schema_version: 1
-created_at: 2026-07-20T00:00:00Z
-updated_at: 2026-07-21T00:00:00Z
-status: reviewed
----
-# Synthetic role
-
-## JD 原文
-
-Synthetic preserved JD source.
-"""
-    jd_path.write_text(original_jd, encoding="utf-8")
     paths = ProjectPaths(
         project_root=tmp_path,
         data_root=data_root,
-        runtime_root=tmp_path / "runtime",
+        runtime_root=tmp_path / ".career-os/runtime",
         build_root=tmp_path / "build",
         local_state_root=tmp_path / ".career-os",
         vault_root=tmp_path,
         mode="standalone",
     )
 
-    plan = create_record_migration_plan(paths, 2)
+    plan = create_record_migration_plan(paths, 3)
 
-    assert len(plan.operations) == 3
-    assert plan.metadata["authority_readme_updates"] == "1"
+    assert len(plan.operations) == 2
+    assert plan.metadata["authority_readme_updates"] == "0"
     verify_migration_definition(plan)
-    plan_path = write_plan(plan, tmp_path / ".career-os/plans/migration.json")
+    plan_path = write_plan(plan, tmp_path / ".career-os/migrations/plans/migration.json")
     apply_plan(plan_path, paths.local_state_root)
     migrated = load_record(record_path)
-    assert migrated.envelope.schema_version == 2
+    assert migrated.envelope.schema_version == 3
     assert migrated.envelope.status == "draft"
-    assert migrated.envelope.migration_review == "required"
-    assert migrated.envelope.legacy_fields == {
-        "status": "verified",
-        "private_note": "preserve me",
-    }
+    assert migrated.envelope.work_context == [
+        "[[career/10-career-evidence/target]]"
+    ]
+    assert "refs" not in migrated.raw_frontmatter
+    assert "host_refs" not in migrated.raw_frontmatter
+    assert "status_history" not in migrated.raw_frontmatter
     assert "The body remains byte-for-byte meaningful." in migrated.body
-    migrated_jd = load_record(jd_path)
-    assert migrated_jd.envelope.source_body_sha256 == sha256_text(
-        "Synthetic preserved JD source.\n"
-    )
-    migrated_readme = authority_readme.read_text(encoding="utf-8")
-    assert "## Key Terms" in migrated_readme
-    assert "## Completion Gate" in migrated_readme
+    assert "Authority links" not in migrated.body
+    assert load_record(target_path).envelope.schema_version == 3
 
     rollback_plan(plan_path, paths.local_state_root)
     assert record_path.read_text(encoding="utf-8") == original
-    assert jd_path.read_text(encoding="utf-8") == original_jd
-    assert authority_readme.read_text(encoding="utf-8") == legacy_readme
+    assert target_path.read_text(encoding="utf-8") == original_target

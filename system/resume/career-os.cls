@@ -19,6 +19,8 @@
 \urlstyle{same}
 \RequirePackage{fontspec}
 
+\InputIfFileExists{resume-fonts.tex}{}{}
+
 \providecommand{\CareerOSLatinBodyFontPath}{}
 \providecommand{\CareerOSLatinBodyRegularFont}{texgyretermes-regular.otf}
 \providecommand{\CareerOSLatinBodyBoldFont}{texgyretermes-bold.otf}

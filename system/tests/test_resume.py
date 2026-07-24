@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 from career_os.config import ProjectPaths
-from career_os.resume.fonts import fetch_fonts, verify_fonts
+from career_os.resume.fonts import fetch_fonts, verify_system_fonts
 from career_os.resume.privacy import (
     audit_pdf,
     audit_tex_bundle,
@@ -31,7 +31,7 @@ def _paths(root: Path) -> ProjectPaths:
     return ProjectPaths(
         project_root=root,
         data_root=root / "career",
-        runtime_root=root / "runtime",
+        runtime_root=root / ".career-os/runtime",
         build_root=root / "build",
         local_state_root=root / ".career-os",
         vault_root=root,
@@ -155,7 +155,7 @@ def test_font_fetch_verifies_hash_and_refuses_changed_existing_file(
 
     monkeypatch.setattr(urllib.request, "urlopen", fake_urlopen)
     assert all(item.status == "pass" for item in fetch_fonts(paths))
-    target = Path(verify_fonts(paths)[0].path)
+    target = Path(verify_system_fonts(paths)[0].path)
     target.write_bytes(b"changed")
     with pytest.raises(ValueError, match="refusing to overwrite"):
         fetch_fonts(paths)
@@ -272,7 +272,7 @@ def test_application_policy_comes_from_communication_resume_record(tmp_path: Pat
         kind="evidence.claim",
         visibility="shareable",
         status="approved",
-        refs=[{"relation": "supported-by", "target_id": work_id, "required": True}],
+        relations={"supported_by": ["[[career/10-career-evidence/work]]"]},
     )
     _write_record(
         paths.data_root / "30-role-market/jd.md",
@@ -294,11 +294,11 @@ def test_application_policy_comes_from_communication_resume_record(tmp_path: Pat
         kind="communication.resume",
         visibility="private",
         status="application-ready",
-        refs=[
-            {"relation": "target-jd", "target_id": jd_id, "required": True},
-            {"relation": "identity-profile", "target_id": profile_id, "required": True},
-            {"relation": "uses-claim", "target_id": claim_id, "required": True},
-        ],
+        relations={
+            "target_jd": "[[career/30-role-market/jd]]",
+            "identity_profile": "[[career/70-career-communication/profile]]",
+            "uses_claim": ["[[career/10-career-evidence/claim]]"],
+        },
     )
     source = (
         "\\begin{itemize}\n"
@@ -379,7 +379,7 @@ def _write_minimal_application_records(
         kind="evidence.claim",
         visibility="shareable",
         status="approved",
-        refs=[{"relation": "supported-by", "target_id": work_id, "required": True}],
+        relations={"supported_by": ["[[career/10-career-evidence/work]]"]},
     )
     _write_record(
         paths.data_root / "30-role-market/jd.md",
@@ -401,11 +401,11 @@ def _write_minimal_application_records(
         kind="communication.resume",
         visibility="private",
         status="application-ready",
-        refs=[
-            {"relation": "target-jd", "target_id": jd_id, "required": True},
-            {"relation": "identity-profile", "target_id": profile_id, "required": True},
-            {"relation": "uses-claim", "target_id": claim_id, "required": True},
-        ],
+        relations={
+            "target_jd": "[[career/30-role-market/jd]]",
+            "identity_profile": "[[career/70-career-communication/profile]]",
+            "uses_claim": ["[[career/10-career-evidence/claim]]"],
+        },
     )
 
 
@@ -416,7 +416,7 @@ def _write_record(
     kind: str,
     visibility: str,
     status: str,
-    refs: list[dict[str, object]] | None = None,
+    relations: dict[str, object] | None = None,
 ) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     jd_body = (
@@ -438,7 +438,7 @@ def _write_record(
         },
         "market.jd": {
             "source_status": "full",
-            "source_channel": "synthetic-fixture",
+            "source_channel_name": "synthetic-fixture",
             "captured_at": "2026-07-21T00:00:00Z",
             "missing_sections": [],
             "source_body_sha256": hashlib.sha256(b"Synthetic record.\n").hexdigest(),
@@ -458,53 +458,19 @@ def _write_record(
             "export_policy": "application",
         },
     }[kind]
-    histories: dict[tuple[str, str], list[dict[str, object]]] = {
-        ("evidence.work", "verified"): [
-            _transition("draft", "grounded", "2026-07-21T00:10:00Z"),
-            _transition("grounded", "verified", "2026-07-21T00:20:00Z"),
-        ],
-        ("evidence.claim", "approved"): [
-            _transition("draft", "reviewed", "2026-07-21T00:10:00Z"),
-            _transition("reviewed", "approved", "2026-07-21T00:20:00Z"),
-        ],
-        ("market.jd", "reviewed"): [
-            _transition("captured", "screened", "2026-07-21T00:10:00Z"),
-            _transition("screened", "reviewed", "2026-07-21T00:20:00Z"),
-        ],
-        ("communication.profile", "approved"): [
-            _transition("draft", "approved", "2026-07-21T00:10:00Z")
-        ],
-        ("communication.resume", "application-ready"): [
-            _transition("draft", "validated", "2026-07-21T00:10:00Z"),
-            _transition("validated", "application-ready", "2026-07-21T00:20:00Z"),
-        ],
-    }
     envelope = {
         "id": record_id,
         "kind": kind,
-        "schema_version": 2,
+        "schema_version": 3,
         "created_at": "2026-07-21T00:00:00Z",
         "updated_at": "2026-07-21T01:00:00Z",
         "visibility": visibility,
         "status": status,
-        "status_history": histories.get((kind, status), []),
-        "refs": refs or [],
-        "host_refs": [],
-        "migration_review": "not-applicable",
         **fields,
+        **(relations or {}),
     }
     body = jd_body if kind == "market.jd" else "Synthetic record.\n"
     path.write_text(
         "---\n" + json.dumps(envelope, indent=2) + "\n---\n" + body,
         encoding="utf-8",
     )
-
-
-def _transition(from_status: str, to_status: str, at: str) -> dict[str, object]:
-    return {
-        "from_status": from_status,
-        "to_status": to_status,
-        "at": at,
-        "reason": "Synthetic fixture transition.",
-        "evidence_ref_ids": [],
-    }

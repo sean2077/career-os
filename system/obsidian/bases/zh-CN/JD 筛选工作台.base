@@ -1,7 +1,7 @@
 filters:
   and:
   - file.ext == "md"
-  - schema_version == 2
+  - schema_version == 3
   - kind == "market.jd"
 formulas:
   priority_rank: if(priority == "p0", 0, if(priority == "p1", 1, if(priority == "p2", 2, if(priority == "p3", 3, 9))))

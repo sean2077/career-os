@@ -33,28 +33,38 @@
     ],
     "system/tests/test_public_privacy.py": [
       "a44e61c55246539c812f2d0d0ab8eff8c4a525af11e25cb2a7666bdb86161334",
-      "552f6fc352b29dbcd46d87f569b2e16dd79085e09ac9fbe8d03aaef89d92d98e"
+      "552f6fc352b29dbcd46d87f569b2e16dd79085e09ac9fbe8d03aaef89d92d98e",
+      "beaf32089060caa3f01a148d23898678cb55941e1c1664d34b054b459c46251d"
     ],
     "system/tests/test_resume.py": [
-      "9503c3ebde780a75c0c97782403438069f8ebac3886581cea80d3e68a38f5bfe"
+      "9503c3ebde780a75c0c97782403438069f8ebac3886581cea80d3e68a38f5bfe",
+      "d26f2a79385ee6940e8b093b7966de0010d5d075cdda5ac6f52a87467df40d79",
+      "b05be1b5dc44150667892892c8f7a554eae337a09a163e43d7054b083cb3f0d7"
     ],
     "system/tests/test_resume_adversarial.py": [
-      "34bc84ff740ea04b171cf6e589921a75f48247004924329d331eb1b8b897cb1c"
+      "34bc84ff740ea04b171cf6e589921a75f48247004924329d331eb1b8b897cb1c",
+      "889a3c4e2d78be17b112774b5d649dc4edac1dfa01156ffe2c1830e2585315e3"
     ],
     "system/tests/test_resume_fonts.py": [
-      "06d3469b12375f18e9c7ecbbd1220973a40d4fd69cacbc000b26c29b77829dda"
+      "06d3469b12375f18e9c7ecbbd1220973a40d4fd69cacbc000b26c29b77829dda",
+      "295a4cc4a9a24d5c555d51d3947ba77baf4a561a595fbc16494d9a39c1b7ca6e",
+      "380aaffbd59dd396704a8c5754921fd38ddb46ae97f3f9a2d099717b0f9db66b",
+      "76b5d3649ac87fbaeb98a18a4560e52b0032a6c80a33a48d1d74a695313544d1"
     ],
     "system/tests/test_resume_variants.py": [
-      "6a2b78961b842b408dc79207f9a10258fb394c2ba35a3065de58a177eca41234"
+      "6a2b78961b842b408dc79207f9a10258fb394c2ba35a3065de58a177eca41234",
+      "71c5737b813da341ce818f215d77bfc256be7fab6cc8ac656bd3ad65721a39e0"
     ],
     "system/tests/test_resume_work_experience.py": [
-      "6532fb61d3c6eae014eb0a9e327deb8e7e6960dd3289e0625815932402b5d528"
+      "6532fb61d3c6eae014eb0a9e327deb8e7e6960dd3289e0625815932402b5d528",
+      "c3c2d58827f9dbf1e3ccee3a716d037e9af9ab574c153104b954d7aec1572d4a"
     ],
     "system/tools/career_os/cli/release.py": [
       "173581f6314c6fb727e68ba0ceb9d77858f083cefff75532fc8e3c35c9a58247"
     ],
     "system/tools/career_os/public_privacy.py": [
-        "8b03901ad328656a6de09d025b2150623fbb08fdda61d5711f504339da1c34e3"
+      "8b03901ad328656a6de09d025b2150623fbb08fdda61d5711f504339da1c34e3",
+      "f8def7e4f7c8b98a442909530ed30f1bead2c8df759d2a45dbf8905c44954606"
     ]
   }
 }

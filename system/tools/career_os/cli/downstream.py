@@ -156,7 +156,7 @@ def validate_sync(
     ],
     output: Annotated[
         Path,
-        typer.Option(help="New validation JSON under the private data root."),
+        typer.Option(help="New validation JSON under .career-os/downstream/."),
     ],
     root: Annotated[
         Path,

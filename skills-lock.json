@@ -38,6 +38,15 @@
       "attribution": "Copyright (c) 2026 Steph Ango (@kepano)"
     },
     {
+      "name": "opencli-usage",
+      "source_repository": "https://github.com/jackwener/OpenCLI",
+      "revision": "cad35e7a6a5ff3f7d6b859bfa4c45195c0390260",
+      "source_path": "skills/opencli-usage",
+      "tree_sha256": "298cf3ff2939887219a3b8d5e8dd644789febd390961800409d01760bd2833b9",
+      "license": "Apache-2.0",
+      "attribution": "Copyright 2025 jackwener"
+    },
+    {
       "name": "obsidian-bases",
       "source_repository": "https://github.com/kepano/obsidian-skills",
       "revision": "553ef99aa3306dd23f268e1ba9af752577684f69",

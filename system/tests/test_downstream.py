@@ -31,11 +31,10 @@ def _write_source(root: Path) -> str:
     _git(root, "config", "user.email", "career-os@example.invalid")
     _git(root, "config", "core.autocrlf", "false")
     root.joinpath("career-os.toml").write_text(
-        """schema_version = 1
+        """#:schema ./system/schemas/project-config.schema.json
+schema_version = 2
 system_version = "1.0.0"
 development_topology = "standalone-framework"
-data_root = "career"
-runtime_root = "runtime"
 build_root = "build"
 preferred_language = "en"
 
@@ -218,10 +217,19 @@ def test_sync_adapts_standalone_source_config_to_downstream_installation(
     target_config = target / "career-os.toml"
     target_config.write_text(
         target_config.read_text(encoding="utf-8")
-        .replace('data_root = "career"', 'data_root = "private-career"')
-        .replace('runtime_root = "runtime"', 'runtime_root = "local-runtime"')
         .replace('build_root = "build"', 'build_root = "local-build"')
-        .replace('preferred_language = "en"', 'preferred_language = "zh-CN"'),
+        .replace('preferred_language = "en"', 'preferred_language = "zh-CN"')
+        + """
+
+[research.opencli]
+enabled = true
+profile = "career-research"
+timeout_seconds = 45
+capture_subdir = "research/opencli"
+
+[research.opencli.sources]
+weixin = ["search"]
+""",
         encoding="utf-8",
         newline="\n",
     )
@@ -252,16 +260,20 @@ def test_sync_adapts_standalone_source_config_to_downstream_installation(
     adapted = load_project_config(target)
     assert adapted.system_version == "1.1.0"
     assert adapted.development_topology == "split-downstream"
-    assert adapted.data_root == "private-career"
-    assert adapted.runtime_root == "local-runtime"
     assert adapted.build_root == "local-build"
     assert adapted.preferred_language == "zh-CN"
+    assert adapted.research.opencli.enabled is True
+    assert adapted.research.opencli.timeout_seconds == 45
+    assert adapted.research.opencli.sources == {"weixin": ["search"]}
     assert adapted.obsidian.minimum_version == "1.13.0"
     assert adapted.resume.engine == "xelatex"
+    assert target_config.read_text(encoding="utf-8").startswith(
+        "#:schema ./system/schemas/project-config.schema.json\n"
+    )
 
     validation = validate_downstream_sync_plan(
         plan_path,
-        target / "private-career/.provenance/downstream-sync.json",
+        target / ".career-os/downstream/downstream-sync.json",
         resolve_paths(target),
     )
     assert plan.target_system_version == "1.0.0"
@@ -287,6 +299,7 @@ def test_local_commit_plan_apply_and_rollback_preserve_private_data(
     assert plan.source_commit == source_commit
     assert set(plan.changed_paths) == {
         "README.md",
+        "career-os.toml",
         "system/new.txt",
         "system/tools/career_os/marker.py",
     }
@@ -300,6 +313,7 @@ def test_local_commit_plan_apply_and_rollback_preserve_private_data(
     assert target.joinpath("career/private.md").read_text(encoding="utf-8") == "private\n"
     assert set(_git(target, "diff", "--name-only").splitlines()) == {
         "README.md",
+        "career-os.toml",
         "system/tools/career_os/marker.py",
     }
     assert _git(target, "ls-files", "--others", "--exclude-standard") == "system/new.txt"
@@ -370,37 +384,6 @@ def test_source_commit_rejects_every_reserved_private_or_local_root(
     private.write_text("must not sync\n", encoding="utf-8")
     _git(source, "add", "-f", protected_path)
     _git(source, "commit", "-m", "bad: add private data")
-
-    with pytest.raises(ValueError, match="tracks protected private or local state"):
-        create_downstream_sync_plan(
-            resolve_paths(target),
-            source_kind="local",
-            source_root=source,
-            commit=_git(source, "rev-parse", "HEAD"),
-            tag=None,
-        )
-
-
-def test_source_commit_rejects_a_custom_configured_data_root(
-    repositories: tuple[Path, Path],
-) -> None:
-    source, target = repositories
-    config = target / "career-os.toml"
-    config.write_text(
-        config.read_text(encoding="utf-8").replace(
-            'data_root = "career"', 'data_root = "private-career"'
-        ),
-        encoding="utf-8",
-        newline="\n",
-    )
-    _git(target, "add", "career-os.toml")
-    _git(target, "commit", "-m", "test: configure custom private data root")
-
-    private = source / "private-career/private.md"
-    private.parent.mkdir()
-    private.write_text("must not sync\n", encoding="utf-8")
-    _git(source, "add", "private-career/private.md")
-    _git(source, "commit", "-m", "bad: add configured private data")
 
     with pytest.raises(ValueError, match="tracks protected private or local state"):
         create_downstream_sync_plan(
@@ -597,7 +580,7 @@ def test_validate_archives_applied_annotated_tag_evidence(
         tag="v1.0.0",
     )
     apply_downstream_sync_plan(plan_path, resolve_paths(target))
-    output = target / "career/.provenance/downstream-sync.json"
+    output = target / ".career-os/downstream/downstream-sync.json"
 
     validation = validate_downstream_sync_plan(plan_path, output, resolve_paths(target))
 
@@ -632,7 +615,7 @@ def test_validate_rejects_commit_plan_unapplied_plan_and_external_output(
     with pytest.raises(ValueError, match="annotated-tag plan"):
         validate_downstream_sync_plan(
             commit_plan_path,
-            target / "career/.provenance/commit.json",
+            target / ".career-os/downstream/commit.json",
             resolve_paths(target),
         )
 
@@ -647,12 +630,12 @@ def test_validate_rejects_commit_plan_unapplied_plan_and_external_output(
     with pytest.raises(ValueError, match="has not been applied"):
         validate_downstream_sync_plan(
             tag_plan_path,
-            target / "career/.provenance/unapplied.json",
+            target / ".career-os/downstream/unapplied.json",
             resolve_paths(target),
         )
 
     apply_downstream_sync_plan(tag_plan_path, resolve_paths(target))
-    with pytest.raises(ValueError, match="under data_root"):
+    with pytest.raises(ValueError, match=r"under \.career-os/downstream"):
         validate_downstream_sync_plan(
             tag_plan_path,
             target / "outside.json",

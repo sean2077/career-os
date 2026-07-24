@@ -5,6 +5,7 @@ from pathlib import Path
 
 from career_os.skills import (
     MODE_MATRIX,
+    OPENCLI_SKILLS,
     PROJECT_SKILLS,
     canonical_tree_sha256,
     evaluate_skill_selection_report,
@@ -33,6 +34,29 @@ def test_repository_skill_inventory_and_locks_are_valid() -> None:
     failures = [item for item in verify_skills(project_root) if item.status == "fail"]
 
     assert not failures
+
+
+def test_only_minimal_opencli_skill_is_installed() -> None:
+    project_root = Path(__file__).resolve().parents[2]
+    assert {"opencli-usage"} == OPENCLI_SKILLS
+    assert project_root.joinpath(".agents/skills/opencli-usage/SKILL.md").is_file()
+    assert not any(
+        project_root.joinpath(".agents/skills", name).exists()
+        for name in (
+            "smart-search",
+            "opencli-browser",
+            "opencli-browser-sitemap",
+            "opencli-sitemap-author",
+            "opencli-adapter-author",
+            "opencli-autofix",
+        )
+    )
+    opportunity = project_root.joinpath(
+        ".agents/skills/opportunity-decision/SKILL.md"
+    ).read_text(encoding="utf-8")
+    normalized = " ".join(opportunity.split())
+    assert "OpenCLI is only one optional acquisition path" in normalized
+    assert "matching `access: read` entry" in opportunity
 
 
 def test_selection_packet_is_isolated_from_oracle_and_covers_contract() -> None:

@@ -4,6 +4,24 @@ All notable changes to Career OS are documented here.
 
 ## [Unreleased]
 
+### Added
+
+- Added top-level `career-os cleanup`, a dry-run-first command that enumerates
+  only known reproducible build, distribution, cache, generated, and temporary
+  roots, with human and JSON reports, explicit `--apply`, and content-drift
+  protection.
+
+### Changed
+
+- Fixed user data at project-relative `career/` and local runtime state at
+  `.career-os/runtime/`; `paths --json` retains both stable output keys.
+- Upgraded project configuration and installation state to schema 2 without
+  root aliases, and unified initialization, imports, migrations, privacy,
+  downstream, resume, and Obsidian adapters on the fixed roots.
+- Owner-provided resume font overrides are now resolved by filename without
+  configured checksums, so replacing a same-name file requires no configuration
+  update. Downloaded system-default fonts remain integrity-verified.
+
 ### Fixed
 
 - Made public-only snapshot tests topology-aware and documented the
@@ -14,6 +32,12 @@ All notable changes to Career OS are documented here.
   hash-bound evidence.
 - Removed obsolete `v0.1.0-rc.*` release notes now that the clean-install-only
   stable MVP is the sole published release line.
+
+### Removed
+
+- Removed `ProjectConfig.data_root`, `ProjectConfig.runtime_root`,
+  `InstallState.data_root`, and `init --data-root`; legacy fields fail closed
+  and require reinitialization or an explicit local-state rewrite.
 
 ## [v0.1.0] — 2026-07-24
 

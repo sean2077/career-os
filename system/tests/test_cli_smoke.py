@@ -21,8 +21,17 @@ def test_import_help() -> None:
     result = CliRunner().invoke(app, ["import", "--help"])
 
     assert result.exit_code == 0
-    assert "hash-bound legacy repository imports" in result.stdout
-    assert "verify-review" in result.stdout
+    assert "hash-bound legacy imports" in result.stdout
+    assert all(command in result.stdout for command in ("plan", "apply", "verify", "rollback"))
+    assert "verify-review" not in result.stdout
+    assert "inventory" not in result.stdout
+
+
+def test_migrate_help() -> None:
+    result = CliRunner().invoke(app, ["migrate", "--help"])
+
+    assert result.exit_code == 0
+    assert all(command in result.stdout for command in ("plan", "apply", "verify", "rollback"))
 
 
 def test_reviewer_validator_help_is_available() -> None:
@@ -48,8 +57,9 @@ def test_resume_font_commands_are_discoverable() -> None:
 
     assert result.exit_code == 0
     assert "fetch" in result.stdout
+    assert "verify" in result.stdout
     assert CliRunner().invoke(app, ["resume", "fonts", "import", "--help"]).exit_code != 0
-    assert CliRunner().invoke(app, ["resume", "fonts", "verify", "--help"]).exit_code != 0
+    assert CliRunner().invoke(app, ["resume", "fonts", "verify", "--help"]).exit_code == 0
 
 
 def test_resume_doctor_needs_no_manifest_selection() -> None:

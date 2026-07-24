@@ -15,16 +15,25 @@ my $career_os_windows =
 my $career_os_separator = $career_os_windows ? ';' : ':';
 
 my $career_os_tex_root = File::Spec->catdir($career_os_project_root, 'system', 'resume');
+my $career_os_generated_root =
+  File::Spec->catdir($career_os_project_root, '.career-os', 'generated');
 my $career_os_font_root = File::Spec->catdir($career_os_project_root, '.career-os', 'fonts');
 my $career_os_build_root = File::Spec->catdir($career_os_project_root, 'build', 'vscode');
 $career_os_tex_root =~ s{\\}{/}g;
+$career_os_generated_root =~ s{\\}{/}g;
 $career_os_font_root =~ s{\\}{/}g;
 $career_os_build_root =~ s{\\}{/}g;
+
+system(
+  'uv', 'run', 'career-os', 'resume', 'fonts', 'prepare',
+  '--root', $career_os_project_root
+) == 0 or die "Career OS resume font preparation failed\n";
 
 # Keep resume-local inputs (especially identity.tex) ahead of shared assets.
 # The shared root is intentionally non-recursive so fixtures cannot shadow them.
 $ENV{'TEXINPUTS'} =
-  '.' . $career_os_separator
+  $career_os_generated_root . $career_os_separator
+  . '.' . $career_os_separator
   . $career_os_tex_root . $career_os_separator
   . ($ENV{'TEXINPUTS'} || '');
 $ENV{'OPENTYPEFONTS'} =

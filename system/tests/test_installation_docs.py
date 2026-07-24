@@ -28,3 +28,21 @@ def test_recommended_installation_links_requirements_and_resume_bootstrap() -> N
     assert "docs/installation.md" in readme
     assert "career-os resume fonts fetch" in readme
     assert "career-os resume doctor --json" in readme
+
+
+def test_opencli_installation_is_optional_local_and_read_only() -> None:
+    text = " ".join(
+        REPOSITORY_ROOT.joinpath("docs/installation.md")
+        .read_text(encoding="utf-8")
+        .split()
+    )
+
+    required_contracts = (
+        "OpenCLI is an optional acquisition transport",
+        "npm install -g @jackwener/opencli@latest",
+        "career-research",
+        "access: read",
+        "loopback-only",
+        "never starts the daemon",
+    )
+    assert all(contract in text for contract in required_contracts)

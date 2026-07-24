@@ -1,28 +1,73 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://career-os.dev/schemas/skills-lock.schema.json",
-  "title": "Career OS Skill Lock",
-  "type": "object",
-  "required": ["schema_version", "skills"],
+  "$defs": {
+    "SkillLock": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "source_repository": {
+          "title": "Source Repository",
+          "type": "string"
+        },
+        "revision": {
+          "pattern": "^[0-9a-f]{40}$",
+          "title": "Revision",
+          "type": "string"
+        },
+        "source_path": {
+          "title": "Source Path",
+          "type": "string"
+        },
+        "tree_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Tree Sha256",
+          "type": "string"
+        },
+        "license": {
+          "title": "License",
+          "type": "string"
+        },
+        "attribution": {
+          "title": "Attribution",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "source_repository",
+        "revision",
+        "source_path",
+        "tree_sha256",
+        "license",
+        "attribution"
+      ],
+      "title": "SkillLock",
+      "type": "object"
+    }
+  },
   "additionalProperties": false,
   "properties": {
-    "schema_version": {"const": 1},
+    "schema_version": {
+      "minimum": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
     "skills": {
-      "type": "array",
       "items": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": ["name", "source_repository", "revision", "source_path", "tree_sha256", "license", "attribution"],
-        "properties": {
-          "name": {"type": "string"},
-          "source_repository": {"type": "string", "format": "uri"},
-          "revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
-          "source_path": {"type": "string"},
-          "tree_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
-          "license": {"type": "string"},
-          "attribution": {"type": "string"}
-        }
-      }
+        "$ref": "#/$defs/SkillLock"
+      },
+      "title": "Skills",
+      "type": "array"
     }
-  }
+  },
+  "required": [
+    "schema_version",
+    "skills"
+  ],
+  "title": "Career OS Skills Lock",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://career-os.dev/schemas/skills-lock.schema.json"
 }
