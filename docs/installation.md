@@ -1,8 +1,10 @@
 # Installation Requirements
 
-> **v0.2.0 boundary:** install from a clean public checkout. Existing `v0.1.0`
-> records require the explicit schema-2-to-3 migration, while legacy project
-> root aliases fail closed and require reinitialization or a reviewed local-state
+> **v0.3.0 boundary:** install from a clean public checkout. Defuddle and
+> OpenCLI integrations are no longer shipped, and legacy `[research.opencli]`
+> configuration fails closed. The v0.2.0 schema boundary remains: existing
+> v0.1.0 records require the explicit schema-2-to-3 migration, while legacy
+> project-root aliases require reinitialization or a reviewed local-state
 > rewrite.
 
 Career OS separates core, live Obsidian, and resume readiness. A successful

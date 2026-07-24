@@ -1,0 +1,322 @@
+{
+  "schema_version": 1,
+  "release": "v0.3.0",
+  "base_extraction_manifest": "docs/releases/v0.1.0-extraction.json",
+  "previous_supplement": "docs/releases/v0.1.0-mvp.json",
+  "history_shape": "home-roundtrip",
+  "home_freeze": "15628ed54661b26d16fb083f5f8bc74ff5671017",
+  "public_base": "d0bfb1fa5bf8e139b2ec5f9d2417a3344151da92",
+  "self_exclusion": "docs/releases/v0.3.0-extraction.json",
+  "entries": [
+    {
+      "path": ".agents/skills/defuddle/SKILL.md",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/opencli-usage/SKILL.md",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/opportunity-decision/SKILL.md",
+      "result_sha256": "77ebb0c248232768087d18d5dc8c8f80e82e3f7c05f9facf93b9cb1fd4f33683",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/role-market/SKILL.md",
+      "result_sha256": "4ea002ccc85529ea2e6daf2ffc67175b5dc42d5e985ecb0ad09e84a5e86e3007",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".claude/skills/defuddle",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".claude/skills/opencli-usage",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".gitattributes",
+      "result_sha256": "6fec0f554621992b22a9dbb73403db49f9131ea91d402849abcced27e1f35491",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "result_sha256": "5af8a010d4fc548e1281c9d601a6c69b3587afdb747978947b1482fa78d69447",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "AGENTS.md",
+      "result_sha256": "1f57a489557e4b67097706ee2842d6c8e747542bfdd76c962f7c2dd66cef1820",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "result_sha256": "22d234c6cfb8aafb33415053cc729e6884c4722936b47de88c5129b2c9bf518e",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "Home.md",
+      "result_sha256": "38fd55b9c8efc216ae103fe23151ae64fc583ca85933161337ea1fdcc55fc0e6",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "NOTICE",
+      "result_sha256": "b53a075c2671e7944ef41886e5a954fbaa002ae88c7865550ce26d618b411581",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "README.md",
+      "result_sha256": "0fc986d62c1e2647b956cdb83adb16638a6beec07f4d674bf3011b1fca4d7087",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "career-os.toml",
+      "result_sha256": "b561b37cc98b7540d3ea4f00923ff49232e44b5b7acbee3b2ae1cc05c2cca7ea",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/architecture.md",
+      "result_sha256": "3537818d704bdf84374dc7c4c6fbafa30a7ca8ccce0acb580211cd58a7d5f0b1",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "docs/embedded-vault.md",
+      "result_sha256": "03f165ea6a938d43ed349e84cdf500264fd712c228ecefc4114d1b950a490730",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "docs/installation.md",
+      "result_sha256": "7ed48f75fdb9b0426cbde6f5ae191b1fe35c3b2a9767dffa3ae02bddf36aeedf",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/releases/README.md",
+      "result_sha256": "d8b41c3224ef6af6d3c600edba75355334e66d1f3e87fa19600c5fd0cd667756",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/releases/v0.3.0.md",
+      "result_sha256": "6d2936ba8d5ad047c45f684f6d071eb8442549923b21943e17f15c6321de5d2f",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/skills.md",
+      "result_sha256": "f4e7dd71212e24cb565593cff384e8197f683054546cf3e5ff7308e41a636ad9",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "docs/supply-chain.md",
+      "result_sha256": "6697d58a65d56de7a9c5469a1ba6107da957a051ce7658c3e244b4def1178c29",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "docs/tool-governance.md",
+      "result_sha256": "f63bca5c429f5dcc58a1d7a297f5ab2dba8fe707e192bdb2fb625b0bc4b0fa5c",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "docs/tooling.md",
+      "result_sha256": "ddc21b3eb0384624ed190fd7d5a9fbae504b3bc48180da0f92ed40d8f5a2f8ee",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "pyproject.toml",
+      "result_sha256": "ade528ef5ac3de691a676fb83f5fa0a24bedf9f62b7163a9b7d2238dd713c87e",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "skills-lock.json",
+      "result_sha256": "757af4ba4aba817251e7c95077ef3ca61148d0290777311b31e829a1b092a066",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/licenses/jackwener-opencli-Apache-2.0.txt",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/obsidian/README.md",
+      "result_sha256": "1cd9bba13bed5e71e422a0744dae72494f9c517636023afe0c20148f306fb3fb",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/obsidian/bases/en/Capability Readiness.base",
+      "result_sha256": "92fb7619192eadd446cad6a545e8cf9caaaab6cdd0202e09dc0790a31102c188",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/obsidian/bases/en/Company Portfolio.base",
+      "result_sha256": "f82624733e8fe808cf81b8a11b75ce88b51eaec0c2b10e5fdd875da1e40c1c73",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/obsidian/bases/en/Engagement Decisions.base",
+      "result_sha256": "8c0da9c7679d0242d60a22730568b8a431d8966997d231a875c41b7e49cb12a5",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/obsidian/bases/en/JD Screening.base",
+      "result_sha256": "5e2bd6dc51a6ec0cab050e208693cbec8eb7e5997a2b36b09a76648c153cd4c2",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/obsidian/bases/en/Recent Changes.base",
+      "result_sha256": "643a7946f0d025818950281c2634e88aab0d7374cc977620251f6708a1261210",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/obsidian/bases/zh-CN/JD 筛选工作台.base",
+      "result_sha256": "9e0c695bfa120b86acfaa801cc26dff1e085c6dcd5fc8b3b7c08dc285150a984",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/obsidian/bases/zh-CN/公司组合.base",
+      "result_sha256": "7f58e0defc0182e9fce72b59d0e3b29d3d834c42df963421d9fd603ccb97aeb4",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/obsidian/bases/zh-CN/最近改动.base",
+      "result_sha256": "1d74b07ee4c1b45cd48f7d76cd1b00d87e1de7238a531bc26b69df9a00011e01",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/obsidian/bases/zh-CN/能力准备度.base",
+      "result_sha256": "2ad3b482a31721e36c7df56bb2af68aa2daf7f64d542caf7de86ec31a9993cb2",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/privacy/public-fixture-policy.json",
+      "result_sha256": "ffb2a737129f0ab051dc6a836c1d5d2d0d0435bb71cb784ad23415da0d1127fa",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/sbom.cdx.json",
+      "result_sha256": "171080d82a3561111ac51a2985bfceb9fc6543cceff97b1a265401c700aa9f88",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/schemas/project-config.schema.json",
+      "result_sha256": "ef6d9321a6c166a2804b2f8609248a752029993de4342da0f6e0f0151feb883c",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/seeds/authorities/30-role-market.md",
+      "result_sha256": "28ac869846ac1b258fbcbda95ec7e734e98c918369409d7bd000cf7324753a50",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/seeds/authorities/40-opportunity-decision.md",
+      "result_sha256": "d04b0b22d25f5bd07dc3b21c8c96c79de6df8eec85fc1ca9ed4359f7171db593",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tests/test_cli_core.py",
+      "result_sha256": "0ca3fe7c2905bd09474c7cd2d8f55d599b92b6a4ed60558c4fa22318bca13701",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tests/test_cli_smoke.py",
+      "result_sha256": "a931269092826cf2eab8c88896845a8bcba48704043458e225cc70987938f293",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tests/test_downstream.py",
+      "result_sha256": "59f12aae1966cc360467b2aa4ca1021fd44ddbdbfc32fc220d6a2b183745e70d",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tests/test_extraction_manifest.py",
+      "result_sha256": "2204d39eb0f05840bb943b426b379564f2af0145a6695992548bc5fdf20e5fe2",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tests/test_golden_journey.py",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tests/test_homepage.py",
+      "result_sha256": "de164e4615a658fff7d6f054711c2656f44442dfc09469bc9535ae15f62c7885",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tests/test_installation_docs.py",
+      "result_sha256": "c406d13a439b3199a393e40c25cb94c4f032ad9e0e47dd56ee2c5e1d0bfa4940",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tests/test_obsidian.py",
+      "result_sha256": "f97abb62c83ce4e552637e0f4bbee33928108a5a4a35c080be9e5f34b626ef33",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tests/test_opencli.py",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tests/test_skills.py",
+      "result_sha256": "7c6cf894674965b252146e404a77919a7bd08535747cbca57d5e6b0e4143e2c3",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tests/test_supply_chain.py",
+      "result_sha256": "ad8d3cccf1a6ab8ea243ae36d408dacdc144a809c4a27c75440adcbe98f02975",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tools/career_os/__init__.py",
+      "result_sha256": "36239cd991962112b030e03e52e7cd1d8646444f5f39d1043d4fdb1ed2f25eac",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tools/career_os/adapters/obsidian.py",
+      "result_sha256": "f985acaf436132c209ef07eadaf4dda3ddb18d885dcbfd9cada0293f3a618e05",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tools/career_os/checks.py",
+      "result_sha256": "e454537e0f069be01fbe0ca5d447c4beba13f6366886f789717e6ab5308e819d",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tools/career_os/cli/core.py",
+      "result_sha256": "9dfb97d553ef56f2e7a26aa02703a55bc1991aaf128efcaacd50c81f3b450eff",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tools/career_os/config.py",
+      "result_sha256": "745c82d6e44f23f2dc20e9bd53a9bfa13a22ab54460619ae1c6d255bd771d1d2",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tools/career_os/downstream.py",
+      "result_sha256": "e3ae4d57068eb27fdd5dd362fe485ee8d4b7d5ca38099e34d25fb46c3b9c07b6",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tools/career_os/opencli.py",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tools/career_os/skills.py",
+      "result_sha256": "33db63305fb7af6a0de8c3ccd290ad9891504111df7eec2101d45cc3ce8baa73",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "uv.lock",
+      "result_sha256": "7cbc65f954ce3e4ef4a1e2f66bc071726bc872cb33bc7d5b38653b9089d72fd1",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "主页.md",
+      "result_sha256": "fd02ab58b02ea1a58de99c90d6801a6c7947266e92b569b4537f6a3513159564",
+      "reason": "downstream-adaptation"
+    }
+  ]
+}

@@ -4,6 +4,45 @@ All notable changes to Career OS are documented here.
 
 ## [Unreleased]
 
+## [v0.3.0] — 2026-07-24
+
+### Added
+
+- Added localized Recent Changes Bases to both root homepages. They show the
+  ten most recently modified Markdown notes inside the current project without
+  treating filesystem timestamps as career evidence or Git history.
+- Linked identified-employer JD screening to canonical Company research through
+  explicit Role Market and Opportunity Decision composition.
+
+### Changed
+
+- Normalized the paired Obsidian Base YAML while preserving presentation-only
+  localization parity and canonical record authority.
+- Consolidated redundant downstream tests and documented a maintained test-cost
+  budget without weakening project, privacy, resume, or release gates.
+- Extended public extraction evidence as an immutable cumulative supplement
+  over the original v0.1.0 manifest.
+
+### Removed
+
+- Removed the Defuddle and OpenCLI Skills, configuration, transport, tests,
+  licenses, supply-chain entries, and documentation. Career research now uses
+  the seven canonical Career Skills and separately attributable sources.
+
+### Security
+
+- Re-reviewed the changed public CI workflow as synthetic-only and appended its
+  exact blob hash to the guarded fixture policy.
+- Re-ran the complete public-history audit and redacted comparison against the
+  private Career Home before publication.
+
+### Boundaries
+
+- This is a breaking pre-1.0 release. Existing `[research.opencli]`
+  configuration is no longer accepted and must be removed before validation.
+- Recent Changes is a local navigation view only; it does not grant evidence
+  maturity, readiness, application, outreach, or account authority.
+
 ## [v0.2.0] — 2026-07-24
 
 ### Added

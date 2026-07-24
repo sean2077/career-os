@@ -133,12 +133,13 @@ uv run career-os vault apply --plan .career-os\plans\vault-attach-<id>.json
 
 Review [the documentation map](docs/README.md) before applying a generated plan.
 The root [English Career Home](Home.md) and [中文职业主页](主页.md), plus the
-generic public Base, architecture Canvas, workflow-guide Canvas, dashboard, and ten paired English/Chinese
-Workbench Bases under `system/obsidian/`, are Git-tracked framework assets. The
-English homepage embeds the five English Bases; the Chinese homepage embeds the
-five Chinese counterparts. `career-os init` never creates or overwrites either
-homepage or any Base. `uv run career-os views build` validates and lists all
-sixteen framework assets without creating `career/` or runtime copies.
+generic public Base, architecture Canvas, workflow-guide Canvas, dashboard, ten
+paired authority Workbench Bases, and two localized Recent Changes Bases under
+`system/obsidian/`, are Git-tracked framework assets. Each homepage embeds its
+localized Recent Changes view plus five authority Bases. `career-os init` never
+creates or overwrites either homepage or any Base. `uv run career-os views
+build` validates and lists all eighteen framework assets without creating
+`career/` or runtime copies.
 
 Create a user-owned direct XeLaTeX resume with
 `uv run career-os resume new my-resume`. Internal builds remain under `build/`;
@@ -161,8 +162,8 @@ snapshots of selected Skills from
 
 ## Status
 
-The current stable line is `v0.2.0`; see its
-[verification evidence](docs/releases/v0.2.0.md). Before `v1.0`, only the
+The current stable line is `v0.3.0`; see its
+[verification evidence](docs/releases/v0.3.0.md). Before `v1.0`, only the
 interfaces explicitly documented by a release are supported.
 
 ## License

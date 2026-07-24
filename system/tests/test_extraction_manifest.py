@@ -10,7 +10,10 @@ import pytest
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 MANIFEST_PATH = "docs/releases/v0.1.0-extraction.json"
-SUPPLEMENT_PATH = "docs/releases/v0.1.0-mvp.json"
+SUPPLEMENT_PATHS = (
+    "docs/releases/v0.1.0-mvp.json",
+    "docs/releases/v0.3.0-extraction.json",
+)
 
 
 def test_public_extraction_manifest_is_complete_and_hash_bound() -> None:
@@ -25,23 +28,31 @@ def test_public_extraction_manifest_is_complete_and_hash_bound() -> None:
     )
     entries = manifest["entries"]
     by_path = {entry["path"]: entry for entry in entries}
-    supplement = json.loads(
-        REPOSITORY_ROOT.joinpath(SUPPLEMENT_PATH).read_text(encoding="utf-8")
-    )
-    supplement_entries = supplement["entries"]
-    supplement_by_path = {entry["path"]: entry for entry in supplement_entries}
+    supplements = [
+        json.loads(REPOSITORY_ROOT.joinpath(path).read_text(encoding="utf-8"))
+        for path in SUPPLEMENT_PATHS
+    ]
 
     assert len(by_path) == len(entries)
-    assert len(supplement_by_path) == len(supplement_entries)
     assert MANIFEST_PATH not in by_path
-    assert SUPPLEMENT_PATH not in supplement_by_path
-    assert supplement == {
+    assert supplements[0] == {
         "schema_version": 1,
         "release": "v0.1.0",
         "base_extraction_manifest": MANIFEST_PATH,
         "history_shape": "single-root-mvp",
-        "self_exclusion": SUPPLEMENT_PATH,
-        "entries": supplement_entries,
+        "self_exclusion": SUPPLEMENT_PATHS[0],
+        "entries": supplements[0]["entries"],
+    }
+    assert supplements[1] == {
+        "schema_version": 1,
+        "release": "v0.3.0",
+        "base_extraction_manifest": MANIFEST_PATH,
+        "previous_supplement": SUPPLEMENT_PATHS[0],
+        "history_shape": "home-roundtrip",
+        "home_freeze": "15628ed54661b26d16fb083f5f8bc74ff5671017",
+        "public_base": "d0bfb1fa5bf8e139b2ec5f9d2417a3344151da92",
+        "self_exclusion": SUPPLEMENT_PATHS[1],
+        "entries": supplements[1]["entries"],
     }
     assert not [
         entry
@@ -53,31 +64,53 @@ def test_public_extraction_manifest_is_complete_and_hash_bound() -> None:
     ]
 
     tracked = _tracked_public_paths(manifest["allowed_roots"])
-    extraction_result_paths = {
-        entry["path"] for entry in entries if entry["result_sha256"] is not None
-    }
-    supplement_result_paths = {
-        entry["path"]
-        for entry in supplement_entries
+    effective = {
+        entry["path"]: entry["result_sha256"]
+        for entry in entries
         if entry["result_sha256"] is not None
     }
-    supplement_deleted_paths = {
-        entry["path"]
-        for entry in supplement_entries
-        if entry["result_sha256"] is None
-    }
-    current_paths = tracked - {MANIFEST_PATH, SUPPLEMENT_PATH}
-    assert current_paths == (
-        extraction_result_paths - supplement_deleted_paths
-    ) | supplement_result_paths
+    latest_previous_effective: dict[str, str] | None = None
+    latest_by_path: dict[str, dict[str, str | None]] = {}
+    for index, (supplement_path, supplement) in enumerate(
+        zip(SUPPLEMENT_PATHS, supplements, strict=True)
+    ):
+        supplement_entries = supplement["entries"]
+        supplement_by_path = {
+            entry["path"]: entry for entry in supplement_entries
+        }
+        assert len(supplement_by_path) == len(supplement_entries)
+        assert supplement_path not in supplement_by_path
+        previous_effective = dict(effective)
+        for entry in supplement_entries:
+            assert set(entry) == {"path", "result_sha256", "reason"}
+            assert entry["reason"] in {
+                "downstream-adaptation",
+                "mvp-security-hardening",
+                "release-evidence",
+            }
+            result = entry["result_sha256"]
+            if result is None:
+                effective.pop(entry["path"], None)
+            else:
+                assert len(result) == 64
+                assert set(result) <= set("0123456789abcdef")
+                effective[entry["path"]] = result
+        if index == len(supplements) - 1:
+            latest_previous_effective = previous_effective
+            latest_by_path = supplement_by_path
 
-    required_supplement = {
+    current_paths = tracked - {MANIFEST_PATH, *SUPPLEMENT_PATHS}
+    assert set(effective) == current_paths
+    for path in current_paths:
+        assert effective[path] == _sha256(_index_bytes(path)), path
+
+    assert latest_previous_effective is not None
+    required_latest = {
         path
         for path in current_paths
-        if path not in by_path
-        or by_path[path]["result_sha256"] != _sha256(_index_bytes(path))
-    } | (extraction_result_paths - current_paths)
-    assert set(supplement_by_path) == required_supplement
+        if latest_previous_effective.get(path) != _sha256(_index_bytes(path))
+    } | (set(latest_previous_effective) - current_paths)
+    assert set(latest_by_path) == required_latest
 
     for entry in entries:
         result = entry["result_sha256"]
@@ -86,8 +119,6 @@ def test_public_extraction_manifest_is_complete_and_hash_bound() -> None:
             assert result is None
             continue
 
-        if entry["path"] not in supplement_by_path:
-            assert result == _sha256(_index_bytes(entry["path"])), entry["path"]
         if disposition == "exact-copy":
             assert result == entry["source_sha256"]
         elif disposition == "retain-target":
@@ -101,18 +132,6 @@ def test_public_extraction_manifest_is_complete_and_hash_bound() -> None:
                 and entry["target_sha256"] is not None
                 and result == entry["target_sha256"]
             )
-
-    for entry in supplement_entries:
-        assert set(entry) == {"path", "result_sha256", "reason"}
-        assert entry["reason"] in {
-            "downstream-adaptation",
-            "mvp-security-hardening",
-            "release-evidence",
-        }
-        if entry["result_sha256"] is None:
-            assert entry["path"] not in current_paths
-            continue
-        assert entry["result_sha256"] == _sha256(_index_bytes(entry["path"]))
 
     assert manifest["source_snapshot"]["public_snapshot_sha256"] == _snapshot_digest(
         entries, "source_sha256"

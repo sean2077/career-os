@@ -17,5 +17,6 @@ release.
 
 ## Release evidence
 
+- [v0.3.0](v0.3.0.md): removes Defuddle/OpenCLI, adds localized Recent Changes views and JD-to-Company composition, consolidates test cost, and records an immutable Home-to-public extraction supplement.
 - [v0.2.0](v0.2.0.md): fixed state roots, schema-3 records, deterministic cleanup, optional read-only OpenCLI acquisition, filename-based resume fonts, and reviewed Home-to-public extraction.
 - [v0.1.0](v0.1.0.md): clean-install MVP, Home-led public extraction, seven-authority golden journey, handwritten TeX resumes, bilingual Workbenches, and stable privacy/release gates.
