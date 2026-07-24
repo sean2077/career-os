@@ -7,7 +7,7 @@ tags: [career-os, framework-view]
 > This Git-tracked framework dashboard is a view, not canonical career data.
 > Use it as a lightweight overview when the five dedicated Workbenches are not needed.
 
-[[Home.md|Open Career Home]]
+[[Career Home.md|Open Career Home]]
 
 ## Records
 

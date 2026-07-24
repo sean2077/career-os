@@ -83,8 +83,8 @@ def effective_vault_paths(paths: ProjectPaths, vault_root: Path) -> ProjectPaths
 
 
 def framework_view_assets(paths: ProjectPaths) -> tuple[Path, ...]:
-    homepage = paths.project_root / "Home.md"
-    chinese_homepage = paths.project_root / "主页.md"
+    homepage = paths.project_root / "Career Home.md"
+    chinese_homepage = paths.project_root / "职业主页.md"
     source_root = paths.project_root / "system/obsidian"
     _vault_relative(paths, homepage, "framework homepage")
     _vault_relative(paths, chinese_homepage, "framework Chinese homepage")

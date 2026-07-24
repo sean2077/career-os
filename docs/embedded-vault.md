@@ -75,7 +75,7 @@ after detach.
 
 ## Shared Obsidian framework views
 
-Root `Home.md`, `主页.md`, and portable assets under `system/obsidian/` are versioned
+Root `Career Home.md`, `职业主页.md`, and portable assets under `system/obsidian/` are versioned
 directly:
 
 - paired native Markdown Workbench homepages, each with one Recent Changes view,
@@ -96,7 +96,7 @@ directly:
 
 The generic Base and all ten authority Workbench Bases discover notes through
 stable `schema_version`, `kind`, and kind-specific properties. The Recent
-Changes pair anchors the project folder to the unique root `Home.md`,
+Changes pair anchors the project folder to the unique root `Career Home.md`,
 filters Markdown notes, sorts by `file.mtime`, and limits the result to ten. Paired files
 differ only in filename, view names, and column display names. Initialization
 never creates, copies, renders, or overwrites either root homepage or any Base.

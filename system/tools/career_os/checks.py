@@ -61,7 +61,7 @@ _CANVAS_SIDES = {"top", "right", "bottom", "left"}
 _CANVAS_ENDS = {"none", "arrow"}
 _WIKILINK = re.compile(r"!?\[\[([^\]\n]+)\]\]")
 _MARKDOWN_WIKILINK = re.compile(r"(?P<embed>!)?\[\[(?P<content>[^\]\n]+)\]\]")
-_HOMEPAGE_MARKDOWNS = {"en": "Home.md", "zh-CN": "主页.md"}
+_HOMEPAGE_MARKDOWNS = {"en": "Career Home.md", "zh-CN": "职业主页.md"}
 _REQUIRED_CANVAS_ASSETS = {
     "career-map.canvas": "Agent-native architecture overview",
     "career-guide.canvas": "outcome-first workflow guide",
@@ -938,7 +938,7 @@ _RECENT_BASE_PAIR = (
     "system/obsidian/bases/zh-CN/最近改动.base",
 )
 _RECENT_BASE_PROJECT_FILTER = (
-    'file.inFolder(file("Home.md").folder)'
+    'file.inFolder(file("Career Home.md").folder)'
 )
 
 for (
@@ -1064,14 +1064,14 @@ _HOMEPAGE_CHINESE_WORKBENCH_LINKS = (
     ("能力准备度.base#最新严格评估", "打开能力准备度"),
 )
 _HOMEPAGE_FRAMEWORK_LINKS = (
-    ("主页.md", "Open Chinese Home"),
+    ("职业主页.md", "Open Chinese Home"),
     ("records.base", "Open All Records"),
     ("dashboard.md", "Open Text Dashboard"),
     ("career-map.canvas", "Open Architecture Map"),
     ("career-guide.canvas", "Open Workflow Guide"),
 )
 _HOMEPAGE_CHINESE_FRAMEWORK_LINKS = (
-    ("Home.md", "English Home"),
+    ("Career Home.md", "English Home"),
     ("records.base", "全部记录"),
     ("dashboard.md", "文本仪表盘"),
     ("career-map.canvas", "架构图"),
@@ -1141,7 +1141,7 @@ tags: [career-os, framework-view]
 > Tell an Agent the outcome you want. Then open the workbench that owns the next decision.
 > Views navigate canonical records; they do not own career facts.
 >
-> [[主页.md|Open Chinese Home]]
+> [[职业主页.md|Open Chinese Home]]
 >
 > """
     "[[records.base|Open All Records]] · "
@@ -1224,7 +1224,7 @@ tags: [career-os, framework-view]
 > 告诉 Agent 你想达成的结果，再打开负责下一项决策的工作台。
 > 视图用于导航规范记录，不拥有职业事实。
 >
-> [[Home.md|English Home]]
+> [[Career Home.md|English Home]]
 >
 > [[records.base|全部记录]] · [[dashboard.md|文本仪表盘]] · """
     """[[career-map.canvas|架构图]] · [[career-guide.canvas|工作流指南]]
@@ -1393,7 +1393,7 @@ def _check_layout(paths: ProjectPaths) -> list[CheckIssue]:
     issues: list[CheckIssue] = []
     required = [
         "AGENTS.md",
-        "Home.md",
+        "Career Home.md",
         ".agents",
         "system/tools/career_os",
         "system/tools/career_os/adapters",
@@ -2673,10 +2673,10 @@ def _validate_homepage_markdown(text: str, *, locale: str = "en") -> None:
     visible_prose = _MARKDOWN_WIKILINK.sub("", body)
     if locale == "en" and _CJK_TEXT.search(visible_prose):
         raise ValueError(
-            "Home.md must keep visible framework prose and link aliases in English"
+            "Career Home.md must keep visible framework prose and link aliases in English"
         )
     if locale == "zh-CN" and not _CJK_TEXT.search(visible_prose):
-        raise ValueError("主页.md must keep visible framework prose in Chinese")
+        raise ValueError("职业主页.md must keep visible framework prose in Chinese")
     if (
         "__CAREER_OS_" in visible_prose
         or "/" in visible_prose
@@ -2694,9 +2694,12 @@ def _validate_homepage_markdown(text: str, *, locale: str = "en") -> None:
 
 def _validate_dashboard_markdown(text: str) -> None:
     normalized = text.replace("\r\n", "\n").replace("\r", "\n")
-    if normalized.count("[[Home.md|Open Career Home]]") != 1 or "Home.canvas" in normalized:
+    if (
+        normalized.count("[[Career Home.md|Open Career Home]]") != 1
+        or "Home.canvas" in normalized
+    ):
         raise ValueError("dashboard.md must link exactly once to the root Markdown homepage")
-    if "[[主页.md" in normalized:
+    if "[[职业主页.md" in normalized:
         raise ValueError("dashboard.md must leave language switching to the homepage")
     for match in _MARKDOWN_WIKILINK.finditer(normalized):
         if match.group("embed") is None:

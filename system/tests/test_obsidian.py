@@ -56,8 +56,8 @@ engine = "xelatex"
 
 
 def _copy_framework_assets(project: Path) -> None:
-    shutil.copy2(REPOSITORY_ROOT / "Home.md", project / "Home.md")
-    shutil.copy2(REPOSITORY_ROOT / "主页.md", project / "主页.md")
+    shutil.copy2(REPOSITORY_ROOT / "Career Home.md", project / "Career Home.md")
+    shutil.copy2(REPOSITORY_ROOT / "职业主页.md", project / "职业主页.md")
     shutil.copytree(
         REPOSITORY_ROOT / "system/obsidian",
         project / "system/obsidian",
@@ -151,8 +151,8 @@ def test_framework_views_are_tracked_portable_and_not_generated(tmp_path: Path) 
     second = build_views(paths)
     assert first == second == list(expected)
     assert len(expected) == 18
-    assert expected[0] == paths.project_root / "Home.md"
-    assert expected[1] == paths.project_root / "主页.md"
+    assert expected[0] == paths.project_root / "Career Home.md"
+    assert expected[1] == paths.project_root / "职业主页.md"
     assert all(path.is_file() for path in first)
     assert all("__CAREER_OS_" not in path.read_text(encoding="utf-8") for path in first)
     base = paths.project_root / "system/obsidian/records.base"
@@ -177,10 +177,10 @@ def test_views_build_reports_root_homepage_and_no_generated_assets(tmp_path: Pat
     assert result.exit_code == 0, result.stdout
     payload = json.loads(result.stdout)
     assert payload["asset_root"] == str(paths.project_root / "system/obsidian")
-    assert payload["homepage"] == str(paths.project_root / "Home.md")
+    assert payload["homepage"] == str(paths.project_root / "Career Home.md")
     assert payload["homepages"] == [
-        str(paths.project_root / "Home.md"),
-        str(paths.project_root / "主页.md"),
+        str(paths.project_root / "Career Home.md"),
+        str(paths.project_root / "职业主页.md"),
     ]
     assert payload["assets"] == [str(path) for path in framework_view_assets(paths)]
     assert payload["generated"] == []
@@ -213,7 +213,7 @@ def test_localized_system_bases_are_portable_and_not_materialized(
         for path in recent_bases
     )
     assert all(
-        'file.inFolder(file("Home.md").folder)'
+        'file.inFolder(file("Career Home.md").folder)'
         in path.read_text(encoding="utf-8")
         for path in recent_bases
     )
@@ -254,7 +254,7 @@ def test_dedicated_base_inventory_is_fail_closed(
     assert any("missing required localized Base" in issue.detail for issue in failures)
 
 
-@pytest.mark.parametrize("filename", ["Home.md", "主页.md"])
+@pytest.mark.parametrize("filename", ["Career Home.md", "职业主页.md"])
 def test_root_homepage_inventory_is_fail_closed(
     tmp_path: Path, filename: str
 ) -> None:

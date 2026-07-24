@@ -10,7 +10,7 @@ records here for review in Obsidian.
 
 ## Start Here
 
-- [[Home.md|Career OS Home]]: use the language switch at the top of the homepage.
+- [[Career Home.md|Career OS Home]]: use the language switch at the top of the homepage.
 - [[dashboard|Career OS dashboard]]: review the framework overview and workflow guide.
 - [[records.base|All records]]: inspect records across the seven authorities.
 

@@ -26,10 +26,10 @@ def build_command(
             {
                 "ok": True,
                 "asset_root": str(paths.project_root / "system/obsidian"),
-                "homepage": str(paths.project_root / "Home.md"),
+                "homepage": str(paths.project_root / "Career Home.md"),
                 "homepages": [
-                    str(paths.project_root / "Home.md"),
-                    str(paths.project_root / "主页.md"),
+                    str(paths.project_root / "Career Home.md"),
+                    str(paths.project_root / "职业主页.md"),
                 ],
                 "assets": [str(path) for path in assets],
                 "generated": [],

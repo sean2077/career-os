@@ -15,13 +15,13 @@ private Career Home, including that data root, may itself be an external sibling
 repository projected into the Vault; the mount moves the project, not the data
 authority within it.
 
-Root `Home.md` and `主页.md`, the generic Obsidian Base and dashboard, two
+Root `Career Home.md` and `职业主页.md`, the generic Obsidian Base and dashboard, two
 explanatory Canvas files, ten authority Workbench Bases, and two localized
 Recent Changes Bases are system-owned, Git-tracked assets. Each homepage is a
 native Markdown live panel: its localized Recent Changes view appears first,
 followed by five localized authority Workbench views. The authority views query
 schema-3 records by `kind`; the recent-files pair anchors its project folder to
-the unique root `Home.md` and sorts Markdown notes by local modification
+the unique root `Career Home.md` and sorts Markdown notes by local modification
 time. Paired files differ only in filename, view
 name, and column display names. Initialization never creates or overwrites
 either homepage or any Base. Bases remain projections over stable record or
@@ -40,7 +40,7 @@ repository owns its system and private data history.
 
 There is no root `src/`, product `tools/`, or product `scripts/` directory.
 `pyproject.toml` treats `system/tools` as the package root and exposes only the
-`career-os` command. Schemas, migrations, root `Home.md` and `主页.md`, other Obsidian
+`career-os` command. Schemas, migrations, root `Career Home.md` and `职业主页.md`, other Obsidian
 assets, resume assets, blank seeds, and their tests remain visibly system-owned
 beside that private implementation.
 

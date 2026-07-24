@@ -7,7 +7,7 @@ Career OS keeps career evidence, strategy, market sensing, opportunity decisions
 ## Start here
 
 - **Work with your career data:** open the root
-  [Career Home](Home.md) in Obsidian, choose the language at the top, describe the outcome to an Agent, and use
+  [Career Home](<Career Home.md>) in Obsidian, choose the language at the top, describe the outcome to an Agent, and use
   the five live Workbenches. The fixed `career/README.md`,
   [dashboard](system/obsidian/dashboard.md), and
   [all-records Base](system/obsidian/records.base) remain lightweight text and
@@ -132,7 +132,7 @@ uv run career-os vault apply --plan .career-os\plans\vault-attach-<id>.json
 ```
 
 Review [the documentation map](docs/README.md) before applying a generated plan.
-The root [English Career Home](Home.md) and [中文职业主页](主页.md), plus the
+The root [English Career Home](<Career Home.md>) and [中文职业主页](职业主页.md), plus the
 generic public Base, architecture Canvas, workflow-guide Canvas, dashboard, ten
 paired authority Workbench Bases, and two localized Recent Changes Bases under
 `system/obsidian/`, are Git-tracked framework assets. Each homepage embeds its

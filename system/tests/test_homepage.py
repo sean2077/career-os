@@ -24,14 +24,14 @@ CHINESE_WORKBENCH_LINKS = (
     ("能力准备度.base#最新严格评估", "打开能力准备度"),
 )
 FRAMEWORK_LINKS = (
-    ("主页.md", "Open Chinese Home"),
+    ("职业主页.md", "Open Chinese Home"),
     ("records.base", "Open All Records"),
     ("dashboard.md", "Open Text Dashboard"),
     ("career-map.canvas", "Open Architecture Map"),
     ("career-guide.canvas", "Open Workflow Guide"),
 )
 CHINESE_FRAMEWORK_LINKS = (
-    ("Home.md", "English Home"),
+    ("Career Home.md", "English Home"),
     ("records.base", "全部记录"),
     ("dashboard.md", "文本仪表盘"),
     ("career-map.canvas", "架构图"),
@@ -58,7 +58,7 @@ CHINESE_AUTHORITY_LINKS = (
 
 
 def _homepage(locale: str = "en") -> str:
-    filename = "Home.md" if locale == "en" else "主页.md"
+    filename = "Career Home.md" if locale == "en" else "职业主页.md"
     return REPOSITORY_ROOT.joinpath(filename).read_text(encoding="utf-8")
 
 
@@ -222,8 +222,8 @@ def test_dashboard_remains_a_lightweight_markdown_fallback() -> None:
 
     _validate_dashboard_markdown(dashboard)
 
-    assert dashboard.count("[[Home.md|Open Career Home]]") == 1
-    assert "[[主页.md" not in dashboard
+    assert dashboard.count("[[Career Home.md|Open Career Home]]") == 1
+    assert "[[职业主页.md" not in dashboard
     assert "Home.canvas" not in dashboard
     for target, _alias in (*WORKBENCH_LINKS, *CHINESE_WORKBENCH_LINKS):
         filename = target.split("#", maxsplit=1)[0]

@@ -168,7 +168,7 @@ sets `blocks_readiness` to true. The pure contract implementation and schemas
 remain private under `system/tools/career_os/` and `system/schemas/`; no retired
 Skill-local validator script is retained.
 
-`views build` remains a read-only verifier for root `Home.md` and `主页.md`, the four generic
+`views build` remains a read-only verifier for root `Career Home.md` and `职业主页.md`, the four generic
 assets, ten English/Chinese authority Workbench Bases, and two localized Recent
 Changes Bases under
 `system/obsidian/`. Its JSON retains `asset_root`, reports the root file

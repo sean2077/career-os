@@ -93,9 +93,9 @@ uv run career-os resume export application
 uv run career-os resume export application --resume agent-platform --recipient <company> --purpose <role>
 ```
 
-The no-argument command exports the `general` resume with the safer `preview`
-profile. The explicit `application` argument is the CLI confirmation for an
-application-grade export. Output defaults to a unique ID-bearing PDF under
+The no-argument command selects the resume named `general` and exports it with
+the safer `preview` profile. The explicit `application` argument is the CLI
+confirmation for an application-grade export. Output defaults to a unique ID-bearing PDF under
 `build/share/`; `--output` selects another new path when needed. Automatic
 filenames use
 `<Name>-<Track>-<HC|AP>-<Lang>-<YYYYMMDD>-<RandomID>.pdf`, where `HC` is the

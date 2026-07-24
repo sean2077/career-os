@@ -129,7 +129,7 @@ def test_schema_check_rejects_stale_project_config_schema(tmp_path: Path) -> Non
 def test_init_is_idempotent_and_multilingual(tmp_path: Path) -> None:
     _write_config(tmp_path)
     repository_root = Path(__file__).resolve().parents[2]
-    framework_homes = [tmp_path / "Home.md", tmp_path / "主页.md"]
+    framework_homes = [tmp_path / "Career Home.md", tmp_path / "职业主页.md"]
     for framework_home in framework_homes:
         shutil.copy2(repository_root / framework_home.name, framework_home)
     framework_homes_before = {
@@ -193,8 +193,8 @@ def test_init_does_not_materialize_the_system_owned_root_homepage(tmp_path: Path
     )
 
     assert result.exit_code == 0, result.stdout
-    assert not (tmp_path / "Home.md").exists()
-    assert not (tmp_path / "主页.md").exists()
+    assert not (tmp_path / "Career Home.md").exists()
+    assert not (tmp_path / "职业主页.md").exists()
 
 
 def test_init_supports_external_project_through_relative_vault_mount(
@@ -205,8 +205,8 @@ def test_init_supports_external_project_through_relative_vault_mount(
     project.mkdir()
     vault.mkdir()
     _write_config(project)
-    homepage = project / "Home.md"
-    shutil.copy2(Path(__file__).resolve().parents[2] / "Home.md", homepage)
+    homepage = project / "Career Home.md"
+    shutil.copy2(Path(__file__).resolve().parents[2] / "Career Home.md", homepage)
     homepage_before = homepage.read_bytes()
     mount = vault / "career-home"
     try:

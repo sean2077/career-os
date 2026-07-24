@@ -7,7 +7,7 @@ tags: [career-os, framework-view]
 > Tell an Agent the outcome you want. Then open the workbench that owns the next decision.
 > Views navigate canonical records; they do not own career facts.
 >
-> [[主页.md|Open Chinese Home]]
+> [[职业主页.md|Open Chinese Home]]
 >
 > [[records.base|Open All Records]] · [[dashboard.md|Open Text Dashboard]] · [[career-map.canvas|Open Architecture Map]] · [[career-guide.canvas|Open Workflow Guide]]
 

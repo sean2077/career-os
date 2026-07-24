@@ -1,6 +1,6 @@
 # Obsidian Framework Assets
 
-The root `Home.md` and `主页.md`, plus the generic Base, lightweight dashboard, two
+The root `Career Home.md` and `职业主页.md`, plus the generic Base, lightweight dashboard, two
 explanatory Canvas files, ten authority Workbench Bases, and two localized
 Recent Changes Bases under `bases/`, are public, Git-tracked framework assets.
 Each pair has an English and Chinese presentation over the same query. Only

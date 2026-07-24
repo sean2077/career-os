@@ -4,9 +4,9 @@ Career OS is an Agent-native, local-first, embeddable career development operati
 
 ## Ownership
 
-- `.agents/`, `system/`, root manifests, root `Home.md` and `主页.md`, tests, and English documentation are system-owned.
+- `.agents/`, `system/`, root manifests, root `Career Home.md` and `职业主页.md`, tests, and English documentation are system-owned.
 - `career/` is the fixed user-owned multilingual data root. It is eligible for the user's Git history; system updates and initialization must not overwrite or ignore it.
-- `.career-os/runtime/` is the fixed local scratch root. Root `runtime/` remains ignored only as a protected legacy boundary and has no producer. Root `Home.md` and `主页.md`, common Obsidian views, and the paired English/Chinese Workbench Bases under `system/obsidian/bases/` are tracked system assets, not runtime or data-root copies. `career-os init` never creates, copies, renders, or overwrites either homepage or any Base. `build/` and `.career-os/` remain ignored build/install state.
+- `.career-os/runtime/` is the fixed local scratch root. Root `runtime/` remains ignored only as a protected legacy boundary and has no producer. Root `Career Home.md` and `职业主页.md`, common Obsidian views, and the paired English/Chinese Workbench Bases under `system/obsidian/bases/` are tracked system assets, not runtime or data-root copies. `career-os init` never creates, copies, renders, or overwrites either homepage or any Base. `build/` and `.career-os/` remain ignored build/install state.
 - Project command implementation lives only under `system/tools/career_os/`. `.agents/tools/` is the scaffold-managed Host exception.
 
 ## Working Rules
@@ -23,7 +23,7 @@ Career OS is an Agent-native, local-first, embeddable career development operati
 - Never infer evidence maturity, readiness, application success, or career outcomes from successful tooling or generated artifacts.
 - Resume TeX roots under `career/` are user-owned. Personal font filenames are configured in `career-os.toml` and resolved by name without content pins; generated TeX remains ignored local state, and every font binary must stay under `.career-os/fonts/` and never enter Git.
 - Do not reintroduce per-resume JSON manifests, personal font-profile records, or template selectors. Handwritten TeX roots, adjacent `identity.tex`, fixed preview/application profiles, and the fixed system class are the resume configuration surface; `system/resume/fonts.json` only locks downloadable system defaults.
-- Raw `resume build` PDFs are internal. Only `resume export` may create a shareable PDF. It defaults to `general` preview with an automatic `build/share/` destination; `resume export application` is the explicit CLI confirmation for application-grade export and may run only after prompt-time authorization and the evidence gates documented in `docs/resume.md`.
+- Raw `resume build` PDFs are internal. Only `resume export` may create a shareable PDF. With no arguments it selects the resume named `general` and the `preview` profile, using an automatic `build/share/` destination; `resume export application` is the explicit CLI confirmation for application-grade export and may run only after prompt-time authorization and the evidence gates documented in `docs/resume.md`.
 - Resume roots are discovered from `\documentclass{career-os}`, use the fixed system class and adjacent `identity.tex`, and support fixed preview/application profiles by resume name. Missing named fonts fail during XeLaTeX compilation. Preview export must exclude email, phone, and avatar; never bypass the source-bundle or final-PDF projection checks.
 - Shareable resume exports preserve reviewed HTTPS, profile-appropriate `mailto:`, and internal PDF links; final-PDF checks reject attachments, additional actions, and unsafe link actions rather than stripping all links.
 - Each resume root owns one BCP 47 language through the optional `language` document-class setting, defaulting to `en`; automatic exports derive their language segment from that source declaration rather than a CLI override, and the filename, PDF, and receipt share one four-character uppercase hexadecimal random segment.

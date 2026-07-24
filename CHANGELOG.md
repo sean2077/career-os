@@ -4,6 +4,13 @@ All notable changes to Career OS are documented here.
 
 ## [Unreleased]
 
+### Changed
+
+- Renamed the root Obsidian entry points to `Career Home.md` and `职业主页.md`
+  so they are not mistaken for the surrounding Vault's own homepage.
+- Clarified that no-argument `resume export` selects the resume named
+  `general` and exports it with the `preview` profile.
+
 ## [v0.4.0] — 2026-07-25
 
 ### Added

@@ -3,7 +3,8 @@
 This directory documents the Career OS framework; it contains no personal
 career records. User-owned data lives at the fixed project-relative
 `career/` root, while implementation and portable runtime assets live under
-`system/`. Root [`Home.md`](../Home.md) and [`主页.md`](../主页.md) are the
+`system/`. Root [`Career Home.md`](<../Career Home.md>) and
+[`职业主页.md`](../职业主页.md) are the
 Git-tracked English and Chinese Workbench entry points. `career-os init` creates
 `career/README.md` once as a user-owned text index and never overwrites that note or
 manages either root homepage.
