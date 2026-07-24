@@ -55,7 +55,7 @@
     },
     {
       "path": "CHANGELOG.md",
-      "result_sha256": "22d234c6cfb8aafb33415053cc729e6884c4722936b47de88c5129b2c9bf518e",
+      "result_sha256": "3065ab76ea5b947927b872aba667fbafee5f15131e547b6e6a2f841e41a5eb83",
       "reason": "release-evidence"
     },
     {
@@ -84,6 +84,11 @@
       "reason": "downstream-adaptation"
     },
     {
+      "path": "docs/data-model.md",
+      "result_sha256": "783caf8c95b563c2026a9b403ef87bcd8665f86225be163ac9d2f5b4ac732a8f",
+      "reason": "downstream-adaptation"
+    },
+    {
       "path": "docs/embedded-vault.md",
       "result_sha256": "03f165ea6a938d43ed349e84cdf500264fd712c228ecefc4114d1b950a490730",
       "reason": "downstream-adaptation"
@@ -100,7 +105,7 @@
     },
     {
       "path": "docs/releases/v0.3.0.md",
-      "result_sha256": "6d2936ba8d5ad047c45f684f6d071eb8442549923b21943e17f15c6321de5d2f",
+      "result_sha256": "5bbfc5e0ec17468b0f483b5780208dbb320de70f95a897881a08d6ae46a007f8",
       "reason": "release-evidence"
     },
     {
@@ -259,6 +264,16 @@
       "reason": "downstream-adaptation"
     },
     {
+      "path": "system/tests/test_operations.py",
+      "result_sha256": "3d28cb46d2cf534831d09851934710e76e5a1e4310ec58f2c4f303bb4cdf7bad",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tests/test_records.py",
+      "result_sha256": "f6e398e56b1da3097053978e1b355910ab9d1ca5aef0dd603bbe32ccee14342d",
+      "reason": "downstream-adaptation"
+    },
+    {
       "path": "system/tests/test_skills.py",
       "result_sha256": "7c6cf894674965b252146e404a77919a7bd08535747cbca57d5e6b0e4143e2c3",
       "reason": "downstream-adaptation"
@@ -299,8 +314,18 @@
       "reason": "downstream-adaptation"
     },
     {
+      "path": "system/tools/career_os/migrations.py",
+      "result_sha256": "ab882c3a11aaee1c7524f10afc8974febb760ee58d36d4d211209c782874be48",
+      "reason": "downstream-adaptation"
+    },
+    {
       "path": "system/tools/career_os/opencli.py",
       "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tools/career_os/records/semantics.py",
+      "result_sha256": "cbf5cc5a1a9540b9da44ef2f9f23b87e48afe54658e0a61c2c184c93f64e2c19",
       "reason": "downstream-adaptation"
     },
     {

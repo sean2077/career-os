@@ -23,6 +23,12 @@ All notable changes to Career OS are documented here.
 - Extended public extraction evidence as an immutable cumulative supplement
   over the original v0.1.0 manifest.
 
+### Fixed
+
+- Preserved schema-2 relationship semantics when field names changed in schema
+  3, retired obsolete machine relations without deleting narrative Wikilinks,
+  and allowed Market Channel records to omit the optional Career Lane relation.
+
 ### Removed
 
 - Removed the Defuddle and OpenCLI Skills, configuration, transport, tests,
