@@ -1,11 +1,11 @@
 filters:
   and:
-  - file.ext == "md"
-  - schema_version == 3
-  - or:
-    - kind.startsWith("readiness.")
-    - kind == "evidence.story"
-    - kind == "communication.audit"
+    - file.ext == "md"
+    - schema_version == 3
+    - or:
+        - kind.startsWith("readiness.")
+        - kind == "evidence.story"
+        - kind == "communication.audit"
 formulas:
   session_age_days: if(session_date, (today() - date(session_date)).days, "")
   readiness_kind: if(kind == "communication.audit", "audit", if(kind == "readiness.session", "session", if(kind == "readiness.gap", "gap", if(kind == "evidence.story", "story", kind))))
@@ -82,154 +82,154 @@ properties:
   user_confirmed:
     displayName: 用户已确认
 views:
-- type: table
-  name: 最新严格评估
-  filters:
-    and:
-    - kind == "readiness.session"
-    - session_type == "strict"
-    - verdict != "historical"
-  order:
-  - file.name
-  - session_date
-  - formula.session_age_days
-  - formula.career_lanes
-  - target
-  - formula.target_jd_link
-  - formula.experience_stories
-  - formula.resume_audit_link
-  - scope
-  - verdict
-  - fact_boundary
-  - technical_depth
-  - answer_structure
-  - tradeoff_resilience
-  - blocking_red_flag
-  sort:
-  - property: session_date
-    direction: DESC
-- type: table
-  name: JD 准备输入
-  filters:
-    or:
-    - target == "jd"
-    - kind == "readiness.gap"
-  order:
-  - file.name
-  - formula.readiness_kind
-  - formula.target_jd_link
-  - formula.career_lanes
-  - session_type
-  - verdict
-  - session_date
-  - attempt
-  - priority
-  - gap_type
-  - status
-  sort:
-  - property: session_date
-    direction: DESC
-- type: table
-  name: 待补或阻塞差距
-  filters:
-    and:
-    - kind == "readiness.gap"
-    - (status == "open" || status == "learning" || status == "practice" || status == "retest" || status == "blocked")
-  order:
-  - file.name
-  - formula.career_lanes
-  - priority
-  - gap_type
-  - status
-  - formula.target_jd_link
-  - formula.last_retest_links
-  - formula.closure_evidence_links
-  sort:
-  - property: priority
-    direction: ASC
-  - property: updated_at
-    direction: DESC
-- type: table
-  name: 复测队列
-  filters:
-    or:
-    - kind == "readiness.gap" && status == "retest"
-    - kind == "readiness.session" && verdict == "not-ready"
-  order:
-  - file.name
-  - formula.readiness_kind
-  - formula.career_lanes
-  - scope
-  - attempt
-  - formula.last_retest_links
-  - gap_type
-  - status
-  - updated_at
-  sort:
-  - property: updated_at
-    direction: DESC
-- type: table
-  name: 主要经历故事
-  filters:
-    and:
-    - kind == "evidence.story"
-    - story_role == "primary"
-  order:
-  - file.name
-  - formula.career_lanes
-  - story_role
-  - readiness_state
-  - updated_at
-  sort:
-  - property: file.name
-    direction: ASC
-- type: table
-  name: 当前简历审核
-  filters:
-    and:
-    - kind == "communication.audit"
-  order:
-  - file.name
-  - audit_date
-  - scope
-  - career_lane
-  - formula.resume_roots
-  - source_fingerprint
-  - status
-  - blocking_findings
-  - confirmation_count
-  - user_confirmed
-  sort:
-  - property: audit_date
-    direction: DESC
-- type: table
-  name: 主张确认队列
-  filters:
-    and:
-    - kind == "communication.audit"
-    - confirmation_count > 0
-  order:
-  - file.name
-  - career_lane
-  - status
-  - confirmation_count
-  - updated_at
-  sort:
-  - property: updated_at
-    direction: DESC
-- type: table
-  name: 经历故事压测队列
-  filters:
-    and:
-    - kind == "evidence.story"
-    - story_role == "primary"
-    - readiness_state != "ready"
-  order:
-  - file.name
-  - formula.career_lanes
-  - story_role
-  - readiness_state
-  - updated_at
-  sort:
-  - property: file.name
-    direction: ASC
+  - type: table
+    name: 最新严格评估
+    filters:
+      and:
+        - kind == "readiness.session"
+        - session_type == "strict"
+        - verdict != "historical"
+    order:
+      - file.name
+      - session_date
+      - formula.session_age_days
+      - formula.career_lanes
+      - target
+      - formula.target_jd_link
+      - formula.experience_stories
+      - formula.resume_audit_link
+      - scope
+      - verdict
+      - fact_boundary
+      - technical_depth
+      - answer_structure
+      - tradeoff_resilience
+      - blocking_red_flag
+    sort:
+      - property: session_date
+        direction: DESC
+  - type: table
+    name: JD 准备输入
+    filters:
+      or:
+        - target == "jd"
+        - kind == "readiness.gap"
+    order:
+      - file.name
+      - formula.readiness_kind
+      - formula.target_jd_link
+      - formula.career_lanes
+      - session_type
+      - verdict
+      - session_date
+      - attempt
+      - priority
+      - gap_type
+      - status
+    sort:
+      - property: session_date
+        direction: DESC
+  - type: table
+    name: 待补或阻塞差距
+    filters:
+      and:
+        - kind == "readiness.gap"
+        - (status == "open" || status == "learning" || status == "practice" || status == "retest" || status == "blocked")
+    order:
+      - file.name
+      - formula.career_lanes
+      - priority
+      - gap_type
+      - status
+      - formula.target_jd_link
+      - formula.last_retest_links
+      - formula.closure_evidence_links
+    sort:
+      - property: priority
+        direction: ASC
+      - property: updated_at
+        direction: DESC
+  - type: table
+    name: 复测队列
+    filters:
+      or:
+        - kind == "readiness.gap" && status == "retest"
+        - kind == "readiness.session" && verdict == "not-ready"
+    order:
+      - file.name
+      - formula.readiness_kind
+      - formula.career_lanes
+      - scope
+      - attempt
+      - formula.last_retest_links
+      - gap_type
+      - status
+      - updated_at
+    sort:
+      - property: updated_at
+        direction: DESC
+  - type: table
+    name: 主要经历故事
+    filters:
+      and:
+        - kind == "evidence.story"
+        - story_role == "primary"
+    order:
+      - file.name
+      - formula.career_lanes
+      - story_role
+      - readiness_state
+      - updated_at
+    sort:
+      - property: file.name
+        direction: ASC
+  - type: table
+    name: 当前简历审核
+    filters:
+      and:
+        - kind == "communication.audit"
+    order:
+      - file.name
+      - audit_date
+      - scope
+      - career_lane
+      - formula.resume_roots
+      - source_fingerprint
+      - status
+      - blocking_findings
+      - confirmation_count
+      - user_confirmed
+    sort:
+      - property: audit_date
+        direction: DESC
+  - type: table
+    name: 主张确认队列
+    filters:
+      and:
+        - kind == "communication.audit"
+        - confirmation_count > 0
+    order:
+      - file.name
+      - career_lane
+      - status
+      - confirmation_count
+      - updated_at
+    sort:
+      - property: updated_at
+        direction: DESC
+  - type: table
+    name: 经历故事压测队列
+    filters:
+      and:
+        - kind == "evidence.story"
+        - story_role == "primary"
+        - readiness_state != "ready"
+    order:
+      - file.name
+      - formula.career_lanes
+      - story_role
+      - readiness_state
+      - updated_at
+    sort:
+      - property: file.name
+        direction: ASC

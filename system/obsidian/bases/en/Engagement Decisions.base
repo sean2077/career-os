@@ -1,8 +1,8 @@
 filters:
   and:
-  - file.ext == "md"
-  - schema_version == 3
-  - kind == "opportunity.engagement"
+    - file.ext == "md"
+    - schema_version == 3
+    - kind == "opportunity.engagement"
 formulas:
   effective_review_state: if(review_status != "reviewed" || reviewed_at.isEmpty(), "pending", if(date(updated_at) > date(reviewed_at), "needs-review", "reviewed"))
   company_link: if(company && company.asFile(), company.asFile().asLink(company.asFile().basename), "")
@@ -68,82 +68,82 @@ properties:
   updated_at:
     displayName: Updated
 views:
-- type: table
-  name: Decision Overview
-  groupBy:
-    property: decision_state
-    direction: ASC
-  order:
-  - file.name
-  - formula.company_link
-  - engagement_type
-  - stage
-  - role
-  - team
-  - started_on
-  - review_on
-  - formula.effective_review_state
-  - strategy_fit
-  - opportunity_quality
-  - confidence
-  - formula.company_business_outlook
-  - formula.company_employer_quality
-  - formula.company_risk
-  - formula.company_confidence
-  - formula.company_attention
-  - next_action
-  - updated_at
-  sort:
-  - property: updated_at
-    direction: DESC
-  - property: file.name
-    direction: ASC
-- type: table
-  name: Review
-  filters:
-    or:
-    - formula.effective_review_state != "reviewed"
-    - '!formula.metadata_issues.isEmpty()'
-    - '!formula.relationship_issues.isEmpty()'
-    - '!formula.company_attention.isEmpty()'
-  order:
-  - file.name
-  - formula.company_link
-  - formula.target_jd_link
-  - engagement_type
-  - started_on
-  - review_on
-  - decision_state
-  - formula.effective_review_state
-  - review_status
-  - reviewed_at
-  - updated_at
-  - formula.relationship_issues
-  - formula.metadata_issues
-  - formula.company_attention
-  - next_action
-  sort:
-  - property: formula.effective_review_state
-    direction: ASC
-  - property: updated_at
-    direction: DESC
-- type: table
-  name: Application Tracking
-  filters:
-    and:
-    - application_state != "not-applied"
-  order:
-  - file.name
-  - formula.company_link
-  - status
-  - engagement_type
-  - stage
-  - application_state
-  - role
-  - team
-  - review_on
-  - next_action
-  - updated_at
-  sort:
-  - property: updated_at
-    direction: DESC
+  - type: table
+    name: Decision Overview
+    groupBy:
+      property: decision_state
+      direction: ASC
+    order:
+      - file.name
+      - formula.company_link
+      - engagement_type
+      - stage
+      - role
+      - team
+      - started_on
+      - review_on
+      - formula.effective_review_state
+      - strategy_fit
+      - opportunity_quality
+      - confidence
+      - formula.company_business_outlook
+      - formula.company_employer_quality
+      - formula.company_risk
+      - formula.company_confidence
+      - formula.company_attention
+      - next_action
+      - updated_at
+    sort:
+      - property: updated_at
+        direction: DESC
+      - property: file.name
+        direction: ASC
+  - type: table
+    name: Review
+    filters:
+      or:
+        - formula.effective_review_state != "reviewed"
+        - "!formula.metadata_issues.isEmpty()"
+        - "!formula.relationship_issues.isEmpty()"
+        - "!formula.company_attention.isEmpty()"
+    order:
+      - file.name
+      - formula.company_link
+      - formula.target_jd_link
+      - engagement_type
+      - started_on
+      - review_on
+      - decision_state
+      - formula.effective_review_state
+      - review_status
+      - reviewed_at
+      - updated_at
+      - formula.relationship_issues
+      - formula.metadata_issues
+      - formula.company_attention
+      - next_action
+    sort:
+      - property: formula.effective_review_state
+        direction: ASC
+      - property: updated_at
+        direction: DESC
+  - type: table
+    name: Application Tracking
+    filters:
+      and:
+        - application_state != "not-applied"
+    order:
+      - file.name
+      - formula.company_link
+      - status
+      - engagement_type
+      - stage
+      - application_state
+      - role
+      - team
+      - review_on
+      - next_action
+      - updated_at
+    sort:
+      - property: updated_at
+        direction: DESC
