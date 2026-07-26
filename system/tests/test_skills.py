@@ -35,12 +35,15 @@ def test_repository_skill_inventory_and_locks_are_valid() -> None:
     assert not failures
 
 
-def test_retired_web_transport_skills_are_absent() -> None:
+def test_retired_research_skills_are_absent() -> None:
     project_root = Path(__file__).resolve().parents[2]
-    assert not any(
-        project_root.joinpath(".agents/skills", name).exists()
-        for name in ("defuddle", "opencli-usage")
-    )
+    opencli_skills = {
+        path.name
+        for path in project_root.joinpath(".agents/skills").glob("opencli-*")
+        if path.is_dir()
+    }
+    assert not opencli_skills
+    assert not project_root.joinpath(".agents/skills/defuddle").exists()
     opportunity = project_root.joinpath(
         ".agents/skills/opportunity-decision/SKILL.md"
     ).read_text(encoding="utf-8")

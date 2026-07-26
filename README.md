@@ -141,6 +141,12 @@ creates or overwrites either homepage or any Base. `uv run career-os views
 build` validates and lists all eighteen framework assets without creating
 `career/` or runtime copies.
 
+QuickAdd is an optional host-owned adapter for local record capture, active
+JD/Company/Engagement review, and explicit Engagement-event recording. Career
+OS generates reviewable choice JSON and ships the scripts, but it never edits
+the Vault's `.obsidian` choices or hotkeys. See the
+[embedded-Vault guide](docs/embedded-vault.md#optional-quickadd-adapter).
+
 Create a user-owned direct XeLaTeX resume with
 `uv run career-os resume new my-resume`. Internal builds remain under `build/`;
 only `resume export` writes a shareable PDF. Personal roots remain handwritten

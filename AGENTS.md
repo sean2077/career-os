@@ -36,6 +36,16 @@ Career OS is an Agent-native, local-first, embeddable career development operati
   caches under `system/tests/` and `system/tools/`. All other ignored state,
   including `.venv/`, fonts, migrations, runtime acquisitions, and unknown
   paths, is outside its scan; use `--apply` only after reviewing the report.
+- BOSS search and signed-in browsing are user-operated. Accept user-provided job
+  URLs and use anonymously accessible content when available; otherwise ask for
+  pasted JD text or screenshots. Never control a signed-in BOSS page, use
+  OpenCLI or another browser automation transport, replay page-signed requests,
+  or handle account/session material.
+- QuickAdd is an optional host-owned adapter. Follow
+  `docs/embedded-vault.md#optional-quickadd-adapter` for capture, active-record
+  review, and Engagement-event choices. Never overwrite `.obsidian` choices or
+  hotkeys, choose an A-F review signal, or assert an external event without an
+  explicit user request; QuickAdd writes local records only.
 - Exact reviewed annotated-tag synchronization applies only to an initialized `split-downstream` installation. Never reverse-copy `career/` or any other private/local path into this repository.
 - Before 1.0, do not invent backward-compatibility or user-data migration promises. The schema-2 project configuration and schema-3 record boundary in `v0.2.0` is intentionally fail-closed for legacy fields and requires explicit migration or reinitialization.
 - Any change to a guarded resume test, resume TeX fixture/template, or public CI/release workflow requires deliberate synthetic-fixture review and an updated blob hash in `system/privacy/public-fixture-policy.json`. Never approve a guarded blob containing real identity or career data, and never expose matched private values in audit output.

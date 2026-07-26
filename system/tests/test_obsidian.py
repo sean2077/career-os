@@ -16,7 +16,13 @@ from career_os.adapters.obsidian import (
 )
 from career_os.checks import _check_obsidian_sources
 from career_os.cli import app
-from career_os.config import InstallState, ProjectPaths, resolve_paths, write_install_state
+from career_os.config import (
+    InstallState,
+    ProjectPaths,
+    resolve_paths,
+    resolve_vault_path,
+    write_install_state,
+)
 from career_os.operations import apply_plan
 from career_os.seed import initialize_data_root
 from typer.testing import CliRunner
@@ -466,6 +472,51 @@ def test_external_sibling_symlink_mount_is_portable_and_reversible(tmp_path: Pat
     assert not (paths.project_root / ".career-os/vault-install.json").exists()
 
 
+def test_linked_worktree_inherits_install_context_and_projects_current_files(
+    tmp_path: Path,
+) -> None:
+    primary = _external_mount_paths(tmp_path)
+    _git(
+        primary.project_root,
+        "add",
+        "career-os.toml",
+        "Career Home.md",
+        "职业主页.md",
+        "career",
+        "system",
+    )
+    _git(
+        primary.project_root,
+        "-c",
+        "user.name=Career OS Test",
+        "-c",
+        "user.email=test@example.invalid",
+        "commit",
+        "-m",
+        "fixture",
+    )
+    worktree = tmp_path / "career-home-worktree"
+    _git(
+        primary.project_root,
+        "worktree",
+        "add",
+        "-b",
+        "test-worktree",
+        str(worktree),
+    )
+
+    assert not (worktree / ".career-os/install.toml").exists()
+    paths = resolve_paths(worktree)
+    assert paths.project_root == worktree.resolve()
+    assert paths.vault_root == primary.vault_root
+    assert paths.vault_mount_root == primary.vault_mount_root
+    assert paths.mode == "embedded"
+    assert resolve_vault_path(
+        paths, "career-home/career/README.md"
+    ) == worktree.joinpath("career/README.md").resolve()
+    assert detect_repository_context(paths).mode == "independent-sibling-symlink"
+
+
 def test_attach_plan_rejects_stale_host_configuration(tmp_path: Path) -> None:
     paths = _fixture_paths(tmp_path)
     attach = plan_vault_operation(
@@ -530,10 +581,68 @@ def test_quickadd_version_and_choice_conflicts_are_fail_closed(tmp_path: Path) -
         operation.path == ".career-os/obsidian/quickadd/capture-choice.json"
         for operation in quickadd_plan.plan.operations
     )
-    assert PurePosixPath(".career-os/obsidian/quickadd/capture-choice.json") in (
-        render_quickadd_assets(paths)
+    assert any(
+        operation.path == ".career-os/obsidian/quickadd/jd-review-choice.json"
+        for operation in quickadd_plan.plan.operations
     )
+    assert any(
+        operation.path == ".career-os/obsidian/quickadd/engagement-event-choice.json"
+        for operation in quickadd_plan.plan.operations
+    )
+    assets = render_quickadd_assets(paths)
+    assert PurePosixPath(".career-os/obsidian/quickadd/capture-choice.json") in assets
+    review_choice = json.loads(
+        assets[PurePosixPath(".career-os/obsidian/quickadd/jd-review-choice.json")]
+    )
+    assert review_choice["name"] == "Career OS: Review active record"
+    assert review_choice["macro"]["commands"] == [
+        {
+            "id": "21328192-ce35-457e-adbb-536d01edb11b",
+            "name": "review-jd",
+            "type": "UserScript",
+            "path": "career-os/system/obsidian/quickadd/review-jd.js",
+            "settings": {},
+        }
+    ]
+    event_choice = json.loads(
+        assets[
+            PurePosixPath(
+                ".career-os/obsidian/quickadd/engagement-event-choice.json"
+            )
+        ]
+    )
+    assert event_choice["id"] == "ef9c05a5-0143-4c84-8a45-2d3f85618849"
+    assert event_choice["name"] == "Career OS: Record engagement event"
+    assert event_choice["macro"]["commands"] == [
+        {
+            "id": "49638cc3-c3d2-447e-a56d-637724b53fb8",
+            "name": "record-engagement-event",
+            "type": "UserScript",
+            "path": (
+                "career-os/system/obsidian/quickadd/"
+                "record-engagement-event.js"
+            ),
+            "settings": {},
+        }
+    ]
     assert not plugin.joinpath("data.json").exists()
+
+    plugin.joinpath("data.json").write_text(
+        json.dumps({"choices": [review_choice]}),
+        encoding="utf-8",
+    )
+    assert validate_quickadd(paths) == (
+        "QuickAdd choice 'Career OS: Review active record' is already configured.",
+    )
+
+    stale_review_choice = dict(review_choice)
+    stale_review_choice["name"] = "Career OS: Review active JD"
+    plugin.joinpath("data.json").write_text(
+        json.dumps({"choices": [stale_review_choice]}),
+        encoding="utf-8",
+    )
+    with pytest.raises(ValueError, match="choice id conflicts"):
+        validate_quickadd(paths)
 
     plugin.joinpath("data.json").write_text(
         json.dumps(

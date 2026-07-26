@@ -4,6 +4,31 @@ All notable changes to Career OS are documented here.
 
 ## [Unreleased]
 
+### Added
+
+- Added optional QuickAdd choices for reviewing the active JD, Company, or
+  Engagement and for recording one explicit Engagement event. The scripts
+  preview the complete write, detect concurrent changes, fail closed on missing
+  prerequisites, and never send an application, message, upload, account
+  change, Offer decision, or resignation.
+- Added localized interview-pipeline views for open applied, interviewing, and
+  Offer-stage Engagements.
+
+### Changed
+
+- Split the monolithic checker into focused internal modules while preserving
+  the public CLI, added project-relative paths to reported issues, and reduced
+  full-check Git reads from one process per record to two batched calls.
+- Replaced duplicated homepage prose in the checker with fail-closed SHA-256
+  locks under `system/homepage-lock.json`.
+- Let linked Git worktrees inherit the primary checkout's read-only Vault
+  install context while mapping project-mounted paths back to the current
+  worktree.
+- Made signed-in BOSS browsing explicitly user-operated. Role Market accepts a
+  user-selected URL, anonymously accessible content, pasted JD text, or
+  screenshots; it does not control the signed-in page or handle session
+  material.
+
 ## [v0.5.0] — 2026-07-25
 
 ### Changed

@@ -6,6 +6,7 @@ import shutil
 import subprocess
 import tomllib
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 import typer
@@ -90,7 +91,7 @@ def test_project_config_rejects_retired_research_integrations() -> None:
             {
                 "schema_version": 2,
                 "system_version": "0.1.0",
-                "research": {"opencli": {"enabled": False}},
+                "research": {"opencli": {"enabled": True}},
             }
         )
 
@@ -369,7 +370,10 @@ def test_paths_rejects_linked_fixed_roots(tmp_path: Path, relative: str) -> None
 def test_check_reports_nonfatal_attention_without_claiming_pass(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, json_output: bool
 ) -> None:
-    monkeypatch.setattr("career_os.cli.core.resolve_paths", lambda _root: object())
+    monkeypatch.setattr(
+        "career_os.cli.core.resolve_paths",
+        lambda root: SimpleNamespace(project_root=Path(root)),
+    )
     monkeypatch.setattr(
         "career_os.cli.core.run_checks",
         lambda _paths, *, fast, host: [
@@ -393,6 +397,7 @@ def test_check_reports_nonfatal_attention_without_claiming_pass(
         assert payload["ok"] is True
         assert payload["status"] == "attention"
     else:
+        assert "records.semantic: career/example.md: source-migrated" in result.stdout
         assert result.stdout.endswith("Career OS check: ATTENTION\n")
 
 

@@ -66,7 +66,7 @@ Project configuration and install state use schema 2; legacy `data_root` or
 legacy local state, or remove those obsolete fields after reviewing the fixed
 `career/` and `.career-os/runtime/` locations.
 Paired English/Chinese Workbench Bases are tracked system assets under
-`system/obsidian/bases/` and query schema-2 records by `kind`; `career-os check`
+`system/obsidian/bases/` and query schema-3 records by `kind`; `career-os check`
 reports inventory, localization-parity, or semantic drift for review.
 
 Missing optional Obsidian, LaTeX, or PDF commands appear as `attention` in the

@@ -43,16 +43,18 @@ The two Canvas files have distinct explanatory jobs:
   single-authority workflows and four cross-authority compositions.
 
 All of these files are views and navigation, not career authority. Initialized
-user records remain under the configured data root. The explanatory Canvas
+user records remain under fixed `career/`. The explanatory Canvas
 layouts stay landscape-oriented and keep every edge explicitly anchored.
 
 `career-os views build` verifies and lists all eighteen framework assets but does
-not write data-root or `runtime/` copies. The two README previews under `docs/assets/`
+not write `career/` or `.career-os/runtime/` copies. The two README previews under `docs/assets/`
 remain reviewed native Obsidian Full canvas PNG exports of the explanatory
 Canvas files; the Markdown homepages add no third README PNG. The Canvas files
 remain canonical for those two diagrams, and the repository check validates the
 existing PNG projections and README links. The only install-specific Obsidian
-output is an optional QuickAdd import file under ignored
+output is an optional QuickAdd adapter bundle under ignored
 `.career-os/obsidian/quickadd/`, produced only after QuickAdd `2.12.3` is
-detected. Career OS never installs the plugin or tracks a personal `.obsidian`
+detected. The bundle contains an Evidence inbox Capture choice and an active-JD
+manual-review Macro choice backed by the tracked `quickadd/review-jd.js`
+script. Career OS never installs the plugin or tracks a personal `.obsidian`
 directory.

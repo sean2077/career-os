@@ -15,6 +15,7 @@ def test_root_help() -> None:
     assert result.exit_code == 0
     assert "Maintain and validate a local Career OS installation" in result.stdout
     assert "import" in result.stdout
+    assert all(command not in result.stdout for command in ("boss", "browser", "opencli"))
 
 
 def test_import_help() -> None:

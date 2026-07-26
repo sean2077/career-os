@@ -5,7 +5,7 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
 
-from career_os.config import ProjectPaths
+from career_os.config import ProjectPaths, resolve_vault_path
 from career_os.records.frontmatter import ParsedRecord
 from career_os.records.markdown import extract_markdown_section
 from career_os.records.models import (
@@ -222,7 +222,7 @@ def _resolve_relation_targets(
             targets: list[ParsedRecord] = []
             for link in links:
                 try:
-                    target_path = _resolve_wikilink(paths.vault_root, link)
+                    target_path = _resolve_wikilink(paths, link)
                 except ValueError as error:
                     _fail(issues, record, f"{relation}: {error}")
                     continue
@@ -247,7 +247,7 @@ def _resolve_relation_targets(
     return resolved
 
 
-def _resolve_wikilink(vault_root: Path, link: str) -> Path:
+def _resolve_wikilink(paths: ProjectPaths, link: str) -> Path:
     if not (link.startswith("[[") and link.endswith("]]")):
         raise ValueError(f"invalid Wikilink: {link!r}")
     target = link[2:-2].split("|", maxsplit=1)[0].split("#", maxsplit=1)[0]
@@ -261,13 +261,12 @@ def _resolve_wikilink(vault_root: Path, link: str) -> Path:
         or relative == PurePosixPath(".")
     ):
         raise ValueError("Wikilink target must remain relative to the Vault root")
-    candidate = vault_root.joinpath(*relative.parts)
-    if candidate.suffix.lower() != ".md":
-        candidate = Path(str(candidate) + ".md")
-    root = vault_root.resolve()
-    if not candidate.absolute().is_relative_to(root):
-        raise ValueError("Wikilink target escapes the Vault root")
-    return candidate.resolve()
+    if relative.suffix.lower() != ".md":
+        relative = PurePosixPath(relative.as_posix() + ".md")
+    try:
+        return resolve_vault_path(paths, relative.as_posix())
+    except ValueError as error:
+        raise ValueError("Wikilink target escapes the Vault root") from error
 
 
 def _links(record: ParsedRecord, relation: str) -> list[str]:
@@ -519,8 +518,9 @@ def _all_targets(
     record: ParsedRecord,
     resolved: dict[tuple[Path, str], list[ParsedRecord]],
 ) -> Iterable[ParsedRecord]:
+    source = record.path.resolve()
     for (path, _relation), targets in resolved.items():
-        if path == record.path.resolve():
+        if path == source:
             yield from targets
 
 

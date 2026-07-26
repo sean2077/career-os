@@ -53,6 +53,8 @@ Review bounded recruiting scopes, contacts, processes, and decisions.
 
 [[Engagement Decisions.base#Decision Overview|Open Engagement Decisions]]
 
+[[Engagement Decisions.base#Interview Pipeline|Open Interview Pipeline]]
+
 ![[Engagement Decisions.base#Decision Overview]]
 
 ## Prepare

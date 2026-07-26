@@ -290,11 +290,27 @@ def check_command(
     if json_output:
         typer.echo(json.dumps(payload, indent=2))
     else:
+        project_root = paths.project_root.resolve()
         for issue in issues:
-            typer.echo(f"{issue.status.upper():9} {issue.id}: {issue.detail}")
+            location = _issue_location(issue.path, project_root)
+            prefix = f"{location}: " if location else ""
+            typer.echo(f"{issue.status.upper():9} {issue.id}: {prefix}{issue.detail}")
         typer.echo(f"Career OS check: {status.upper()}")
     if not payload["ok"]:
         raise typer.Exit(1)
+
+
+def _issue_location(raw: str | None, project_root: Path) -> str:
+    """Render one check path as a project-relative POSIX location."""
+    if not raw:
+        return ""
+    candidate = Path(raw)
+    if not candidate.is_absolute():
+        return candidate.as_posix()
+    try:
+        return candidate.resolve().relative_to(project_root).as_posix()
+    except ValueError:
+        return candidate.as_posix()
 
 
 def _emit_doctor(checks: list[dict[str, str | None]], json_output: bool) -> None:

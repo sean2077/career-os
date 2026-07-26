@@ -57,6 +57,11 @@ Git history. The public repository itself remains `standalone-framework`.
 initialized `split-downstream` installation. Only that topology requires an
 exact reviewed annotated tag for a complete synchronization proof.
 
+When a linked Git worktree has no local install state, Career OS inherits only
+the primary checkout's read-only Vault configuration and maps a configured
+project mount back to files in the current worktree. Mutable `.career-os/`,
+generated output, and runtime scratch remain worktree-local.
+
 System-package, Obsidian CLI, XeLaTeX, Poppler, font-download, offline, and
 platform-support boundaries are defined in the
 [installation requirements](installation.md). The core doctor and resume doctor
@@ -160,6 +165,11 @@ verification, reviewer-contract validation, and resume jobs. Operation plans
 never select a mutating default for unknown input. Product implementation
 helpers remain private under `system/tools/career_os/`.
 
+BOSS acquisition is not a project command. The user searches and browses the
+signed-in site, then supplies a job URL, pasted JD text, or screenshots to Role
+Market. Career OS provides no OpenCLI adapter, browser bridge, page-signed
+relay, authenticated HTTP client, session handling, or browser-control fallback.
+
 `skills validate-reviewer` is the only reviewer-output command. It reads one
 `evidence` or `probe` JSON object from a file or stdin, performs no writes, and
 always emits `{"valid","blocks_readiness","errors"}`. A structurally valid
@@ -179,7 +189,14 @@ section order, canonical copy, filename-only navigation, six expanded
 language-matched views per homepage, and absence of custom presentation
 dependencies, plus the Recent Changes project scope and limit, schema/kind
 portability, Markdown-only filter, and presentation-only parity for each Base
-pair. The two README previews remain
+pair.
+
+Structural homepage rules live in code, while the prose between them is frozen
+by the SHA-256 digests in `system/homepage-lock.json`. A deliberate homepage
+edit refreshes the corresponding digest in the same commit; a missing or stale
+digest fails `check`.
+
+The two README previews remain
 reviewed native Obsidian Full canvas PNG exports under `docs/assets/`;
 The two Markdown homepages add no third image. Maintainers may drive Obsidian's built-in
 exporter through `obsidian eval`; Career OS intentionally ships no parallel

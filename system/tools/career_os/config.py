@@ -251,7 +251,7 @@ def load_install_state(root: Path) -> InstallState | None:
 def resolve_paths(root: Path | None = None) -> ProjectPaths:
     project_root = discover_project_root(root)
     config = load_project_config(project_root)
-    state = load_install_state(project_root)
+    state, install_root = _load_install_context(project_root)
     data_root = _fixed_project_path(project_root, DATA_ROOT)
     runtime_root = _fixed_project_path(project_root, RUNTIME_ROOT)
 
@@ -259,14 +259,14 @@ def resolve_paths(root: Path | None = None) -> ProjectPaths:
         vault_root = project_root
         mode = "standalone"
     else:
-        vault_root = _resolve_configured_path(project_root, state.vault_root)
+        vault_root = _resolve_configured_path(install_root, state.vault_root)
         mode = state.mode
 
     vault_mount_root: Path | None = None
     if state is not None and mode == "embedded":
         if state.vault_mount is not None:
             vault_mount_root = resolve_vault_mount(
-                project_root, vault_root, state.vault_mount
+                install_root, vault_root, state.vault_mount
             )
         elif not project_root.is_relative_to(vault_root):
             raise ValueError(
@@ -284,6 +284,47 @@ def resolve_paths(root: Path | None = None) -> ProjectPaths:
         vault_mount_root=vault_mount_root,
         development_topology=config.development_topology,
     )
+
+
+def _load_install_context(project_root: Path) -> tuple[InstallState | None, Path]:
+    state = load_install_state(project_root)
+    if state is not None:
+        return state, project_root
+
+    primary_root = _linked_worktree_primary_root(project_root)
+    if primary_root is None:
+        return None, project_root
+    inherited = load_install_state(primary_root)
+    if inherited is None:
+        return None, project_root
+    return inherited, primary_root
+
+
+def _linked_worktree_primary_root(project_root: Path) -> Path | None:
+    git_file = project_root / ".git"
+    if not git_file.is_file():
+        return None
+    try:
+        marker = git_file.read_text(encoding="utf-8").strip()
+        if not marker.startswith("gitdir:"):
+            return None
+        git_dir = Path(marker.removeprefix("gitdir:").strip())
+        if not git_dir.is_absolute():
+            git_dir = project_root / git_dir
+        common_dir_file = git_dir / "commondir"
+        if not common_dir_file.is_file():
+            return None
+        common_dir = Path(common_dir_file.read_text(encoding="utf-8").strip())
+        if not common_dir.is_absolute():
+            common_dir = git_dir / common_dir
+        common_dir = common_dir.resolve()
+    except (OSError, UnicodeError):
+        return None
+
+    primary_root = common_dir.parent
+    if common_dir.name != ".git" or not (primary_root / CONFIG_NAME).is_file():
+        return None
+    return primary_root.resolve()
 
 
 def _fixed_project_path(project_root: Path, relative: Path) -> Path:
@@ -369,6 +410,30 @@ def normalize_portable_subdir(configured: str, *, field_name: str) -> str:
     if relative.is_absolute() or not relative.parts or ".." in relative.parts:
         raise ValueError(f"{field_name} must be a non-traversing relative POSIX path")
     return relative.as_posix()
+
+
+def resolve_vault_path(paths: ProjectPaths, configured: str) -> Path:
+    """Resolve a Vault-relative path against the current project checkout."""
+    relative = PurePosixPath(
+        normalize_portable_subdir(configured, field_name="Vault-relative path")
+    )
+    mount = paths.vault_mount_root
+    if mount is not None:
+        try:
+            mount_relative = PurePosixPath(
+                mount.relative_to(paths.vault_root).as_posix()
+            )
+            project_relative = relative.relative_to(mount_relative)
+        except ValueError:
+            pass
+        else:
+            return paths.project_root.joinpath(*project_relative.parts).resolve()
+
+    candidate = paths.vault_root.joinpath(*relative.parts)
+    root = paths.vault_root.resolve()
+    if not candidate.absolute().is_relative_to(root):
+        raise ValueError("Vault-relative path escapes the Vault root")
+    return candidate.resolve()
 
 
 def resolve_vault_mount(project_root: Path, vault_root: Path, configured: str) -> Path:
