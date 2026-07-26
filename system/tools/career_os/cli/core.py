@@ -294,7 +294,8 @@ def check_command(
         for issue in issues:
             location = _issue_location(issue.path, project_root)
             prefix = f"{location}: " if location else ""
-            typer.echo(f"{issue.status.upper():9} {issue.id}: {prefix}{issue.detail}")
+            message = f"{issue.status.upper():9} {issue.id}: {prefix}{issue.detail}"
+            typer.echo(_console_safe_text(message, sys.stdout.encoding))
         typer.echo(f"Career OS check: {status.upper()}")
     if not payload["ok"]:
         raise typer.Exit(1)
@@ -311,6 +312,16 @@ def _issue_location(raw: str | None, project_root: Path) -> str:
         return candidate.resolve().relative_to(project_root).as_posix()
     except ValueError:
         return candidate.as_posix()
+
+
+def _console_safe_text(value: str, encoding: str | None) -> str:
+    """Preserve Unicode when possible and escape it for restricted consoles."""
+    if not encoding:
+        return value
+    try:
+        return value.encode(encoding, errors="backslashreplace").decode(encoding)
+    except LookupError:
+        return value
 
 
 def _emit_doctor(checks: list[dict[str, str | None]], json_output: bool) -> None:

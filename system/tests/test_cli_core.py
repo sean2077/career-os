@@ -13,6 +13,7 @@ import typer
 from career_os.checks import CheckIssue, _check_schemas
 from career_os.cli import app
 from career_os.cli.core import (
+    _console_safe_text,
     _obsidian_doctor_checks,
     _parse_version,
     _version_at_least,
@@ -399,6 +400,17 @@ def test_check_reports_nonfatal_attention_without_claiming_pass(
     else:
         assert "records.semantic: career/example.md: source-migrated" in result.stdout
         assert result.stdout.endswith("Career OS check: ATTENTION\n")
+
+
+def test_check_output_escapes_unicode_for_restricted_consoles() -> None:
+    message = "PASS obsidian.source: 职业主页.md: valid"
+
+    assert _console_safe_text(message, "utf-8") == message
+    escaped = _console_safe_text(message, "cp1252")
+    assert escaped == (
+        r"PASS obsidian.source: \u804c\u4e1a\u4e3b\u9875.md: valid"
+    )
+    escaped.encode("cp1252")
 
 
 def test_obsidian_version_parsing_and_minimum() -> None:

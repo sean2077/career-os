@@ -25,7 +25,7 @@
     },
     {
       "path": "CHANGELOG.md",
-      "result_sha256": "711cfac779772fbfa10e6f72eaa9cc1fc088571ec3c3da5551088f8c3e72cc37",
+      "result_sha256": "d6e4bc5205c40feba41f00e90306405e3c0cee68fe7e376fe5c07a4269e6164a",
       "reason": "release-evidence"
     },
     {
@@ -70,7 +70,7 @@
     },
     {
       "path": "docs/releases/v0.6.0.md",
-      "result_sha256": "179e923030dfc6a7eaef1bb285831351e20cb5af872d169d2216793a45ade7d0",
+      "result_sha256": "d3a362c9ac594a8a2e1f50372409fa9f3c27f0e8a407a7d1e4250c2c75684983",
       "reason": "release-evidence"
     },
     {
@@ -145,7 +145,7 @@
     },
     {
       "path": "system/tests/test_cli_core.py",
-      "result_sha256": "7f9151e6881a01bb547eb506ecbfe64983a843e8d89f148fd7242bfc36f1a0ce",
+      "result_sha256": "9a50df7ac89726d1f190d11f2a8b5c4b68d652e1ad345c00dfdba919a9af8d97",
       "reason": "downstream-adaptation"
     },
     {
@@ -240,7 +240,7 @@
     },
     {
       "path": "system/tools/career_os/cli/core.py",
-      "result_sha256": "acc44204edda799275a3e34ba007e3f70df1354eb9b151e39fbffdf4ed45bdd2",
+      "result_sha256": "e2e5c2e9b82f91d225e0f318216840ed6b6c6bc33c7e129dcb48e35717ddb15a",
       "reason": "downstream-adaptation"
     },
     {

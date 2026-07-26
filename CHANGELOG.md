@@ -30,6 +30,8 @@ All notable changes to Career OS are documented here.
   user-selected URL, anonymously accessible content, pasted JD text, or
   screenshots; it does not control the signed-in page or handle session
   material.
+- Made human-readable check output escape unrepresentable Unicode paths instead
+  of failing on restricted Windows console encodings.
 
 ## [v0.5.0] — 2026-07-25
 
