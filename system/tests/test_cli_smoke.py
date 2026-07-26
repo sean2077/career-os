@@ -6,7 +6,7 @@ def test_version() -> None:
     result = CliRunner().invoke(app, ["--version"])
 
     assert result.exit_code == 0
-    assert result.stdout.strip() == "0.5.0"
+    assert result.stdout.strip() == "0.6.0"
 
 
 def test_root_help() -> None:
@@ -15,6 +15,7 @@ def test_root_help() -> None:
     assert result.exit_code == 0
     assert "Maintain and validate a local Career OS installation" in result.stdout
     assert "import" in result.stdout
+    assert all(command not in result.stdout for command in ("boss", "browser", "opencli"))
 
 
 def test_import_help() -> None:

@@ -16,7 +16,7 @@ from pathlib import Path, PurePosixPath
 from typing import Literal
 from uuid import UUID, uuid4
 
-from career_os.config import ProjectPaths
+from career_os.config import ProjectPaths, resolve_vault_path
 from career_os.records import ParsedRecord, load_record
 from career_os.records.markdown import extract_markdown_section
 from career_os.records.models import (
@@ -1381,10 +1381,10 @@ def _linked_record_targets(
     for link in links:
         target = link[2:-2].split("|", maxsplit=1)[0].split("#", maxsplit=1)[0]
         relative = PurePosixPath(target)
-        path = paths.vault_root.joinpath(*relative.parts)
-        if path.suffix.lower() != ".md":
-            path = Path(str(path) + ".md")
-        record = by_path.get(path.resolve())
+        if relative.suffix.lower() != ".md":
+            relative = PurePosixPath(relative.as_posix() + ".md")
+        path = resolve_vault_path(paths, relative.as_posix())
+        record = by_path.get(path)
         if record is None:
             raise ValueError(f"record Wikilink target is missing: {link}")
         targets.append(record)

@@ -6,12 +6,14 @@ import shutil
 import subprocess
 import tomllib
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 import typer
 from career_os.checks import CheckIssue, _check_schemas
 from career_os.cli import app
 from career_os.cli.core import (
+    _console_safe_text,
     _obsidian_doctor_checks,
     _parse_version,
     _version_at_least,
@@ -90,7 +92,7 @@ def test_project_config_rejects_retired_research_integrations() -> None:
             {
                 "schema_version": 2,
                 "system_version": "0.1.0",
-                "research": {"opencli": {"enabled": False}},
+                "research": {"opencli": {"enabled": True}},
             }
         )
 
@@ -369,7 +371,10 @@ def test_paths_rejects_linked_fixed_roots(tmp_path: Path, relative: str) -> None
 def test_check_reports_nonfatal_attention_without_claiming_pass(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, json_output: bool
 ) -> None:
-    monkeypatch.setattr("career_os.cli.core.resolve_paths", lambda _root: object())
+    monkeypatch.setattr(
+        "career_os.cli.core.resolve_paths",
+        lambda root: SimpleNamespace(project_root=Path(root)),
+    )
     monkeypatch.setattr(
         "career_os.cli.core.run_checks",
         lambda _paths, *, fast, host: [
@@ -393,7 +398,19 @@ def test_check_reports_nonfatal_attention_without_claiming_pass(
         assert payload["ok"] is True
         assert payload["status"] == "attention"
     else:
+        assert "records.semantic: career/example.md: source-migrated" in result.stdout
         assert result.stdout.endswith("Career OS check: ATTENTION\n")
+
+
+def test_check_output_escapes_unicode_for_restricted_consoles() -> None:
+    message = "PASS obsidian.source: 职业主页.md: valid"
+
+    assert _console_safe_text(message, "utf-8") == message
+    escaped = _console_safe_text(message, "cp1252")
+    assert escaped == (
+        r"PASS obsidian.source: \u804c\u4e1a\u4e3b\u9875.md: valid"
+    )
+    escaped.encode("cp1252")
 
 
 def test_obsidian_version_parsing_and_minimum() -> None:

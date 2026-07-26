@@ -4,7 +4,7 @@
 
 - `tools/career_os/` implements the single `career-os` CLI.
 - `schemas/` owns public data and plan schemas.
-- `obsidian/` owns portable Obsidian assets; host-specific generated state goes to `runtime/`.
+- `obsidian/` owns portable Obsidian assets; host-specific generated state stays under ignored `.career-os/`.
 - `resume/` owns XeLaTeX templates, styles, and font metadata.
 - `seeds/` owns blank initialization material, never user records.
 - `migrations/` owns explicit schema migrations.

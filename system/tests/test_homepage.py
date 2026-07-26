@@ -4,7 +4,11 @@ from collections.abc import Callable
 from pathlib import Path
 
 import pytest
-from career_os.checks import _validate_dashboard_markdown, _validate_homepage_markdown
+from career_os.checks import (
+    _text_digest,
+    _validate_dashboard_markdown,
+    _validate_homepage_markdown,
+)
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 WORKBENCH_LINKS = (
@@ -176,9 +180,12 @@ def test_homepage_rejects_misordered_sections_paths_placeholders_and_personal_co
     with pytest.raises(ValueError, match="placeholders or configured paths"):
         _validate_homepage_markdown(placeholder)
 
+    # Appended personal copy clears every structural rule, so only the canonical
+    # digest can reject it. Derive it from the unmutated page: whether the
+    # committed lock still matches is `career-os check`'s gate, not this test's.
     personal = homepage + "\nCandidate: Ada\n"
     with pytest.raises(ValueError, match="personal facts and custom presentation"):
-        _validate_homepage_markdown(personal)
+        _validate_homepage_markdown(personal, canonical_digest=_text_digest(homepage))
 
     translated = homepage + "\n个人首页\n"
     with pytest.raises(ValueError, match="visible framework prose"):

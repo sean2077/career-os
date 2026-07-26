@@ -12,6 +12,9 @@ formulas:
   company_risk: if(company && company.asFile(), company.asFile().properties.risk, "")
   company_confidence: if(company && company.asFile(), company.asFile().properties.confidence, "")
   company_attention: if(!company || !company.asFile(), "", if(company.asFile().properties.assessment_status == "blocked", "blocked", if(company.asFile().properties.assessment_status == "stale" || company.asFile().properties.refresh_due < today(), "stale/overdue", "")))
+  interview_phase: if(stage == "applied", "Awaiting interview", if(stage == "interviewing", "Interviewing", if(stage == "offer", "Offer", "")))
+  interview_phase_rank: if(stage == "applied", 0, if(stage == "interviewing", 1, if(stage == "offer", 2, 3)))
+  checkpoint_rank: if(review_on.isEmpty(), 1, 0)
   metadata_issues: if(id.isEmpty(), "Missing id ", "") + if(updated_at.isEmpty(), "Missing updated date ", "") + if(review_status == "reviewed" && reviewed_at.isEmpty(), "Missing review date", "")
   relationship_issues: if(!company, "Missing company link ", if(!company.asFile() || company.asFile().properties.kind != "opportunity.company", "Broken company link ", "")) + if(target_jd && (!target_jd.asFile() || target_jd.asFile().properties.kind != "market.jd"), "Broken JD source ", "") + if(company && !file.links.contains(company), "Company missing from outgoing links", "")
 properties:
@@ -53,6 +56,8 @@ properties:
     displayName: Company Confidence
   formula.company_attention:
     displayName: Company Freshness
+  formula.interview_phase:
+    displayName: Interview Phase
   review_status:
     displayName: Human Review
   reviewed_at:
@@ -147,3 +152,37 @@ views:
     sort:
       - property: updated_at
         direction: DESC
+  - type: table
+    name: Interview Pipeline
+    filters:
+      and:
+        - status != "closed"
+        - or:
+            - stage == "applied"
+            - stage == "interviewing"
+            - stage == "offer"
+    order:
+      - file.name
+      - formula.company_link
+      - formula.target_jd_link
+      - formula.interview_phase
+      - status
+      - application_state
+      - engagement_type
+      - role
+      - team
+      - review_on
+      - next_action
+      - formula.effective_review_state
+      - updated_at
+    sort:
+      - property: formula.interview_phase_rank
+        direction: ASC
+      - property: formula.checkpoint_rank
+        direction: ASC
+      - property: review_on
+        direction: ASC
+      - property: updated_at
+        direction: DESC
+      - property: file.name
+        direction: ASC

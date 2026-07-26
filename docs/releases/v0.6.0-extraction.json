@@ -1,0 +1,272 @@
+{
+  "schema_version": 1,
+  "release": "v0.6.0",
+  "base_extraction_manifest": "docs/releases/v0.1.0-extraction.json",
+  "previous_supplement": "docs/releases/v0.5.0-extraction.json",
+  "history_shape": "home-roundtrip",
+  "home_freeze": "55fc0e0edc00b3b4b3accc797e86efeb23abc255",
+  "public_base": "6644e74686c912607810e3f6ee2ae67de69db007",
+  "self_exclusion": "docs/releases/v0.6.0-extraction.json",
+  "entries": [
+    {
+      "path": ".agents/skills/role-market/SKILL.md",
+      "result_sha256": "c424aa3112b60d06a530d1b361ed74a232c6a94f356833e47e22d8dc7254ae93",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".gitattributes",
+      "result_sha256": "ed4371537311723c84c3d5a5b8bacd2b745ff4cd205d557d9af6433521441dbd",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "AGENTS.md",
+      "result_sha256": "5517bb20d8605c18496888cae94a452f827a672910b41a1b46c151fbb96a3f40",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "result_sha256": "d6e4bc5205c40feba41f00e90306405e3c0cee68fe7e376fe5c07a4269e6164a",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "Career Home.md",
+      "result_sha256": "3a3d5e717aa2da1c802ee362a897a97c711acef2fa12ac7430c0add438e77d94",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "README.md",
+      "result_sha256": "2efff6d092ba992cd9eba97ec1ef6e8713f7605bb93b0e71bfabfadd6a96abeb",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "career-os.toml",
+      "result_sha256": "e261f79f599a3490edae37ba18223a06bc0d41169aed00e7fa639238e3f2347f",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/architecture.md",
+      "result_sha256": "25ee9b8f9c0153d9c749904fa2bfeaea7ce48d97295a12985a9d1ac204c79412",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "docs/embedded-vault.md",
+      "result_sha256": "fb94fdf3a42fbc8fa56c356b0291894822cfdf58652ea954ab21a5eeea85766f",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "docs/installation.md",
+      "result_sha256": "a8070b91a39c241e16de640df7f4311d6088fc3f77eddcca76c98092d77b1982",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/private-downstream.md",
+      "result_sha256": "eb8f0ba5ecb0bef538d7477358a342b68aba4a49b626ad21bf6cc3d530170d12",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "docs/releases/README.md",
+      "result_sha256": "5bb4f82da7171c477437d0714fa0f466d1f827f50e9297e873e077f11c8b0cb8",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/releases/v0.6.0.md",
+      "result_sha256": "d3a362c9ac594a8a2e1f50372409fa9f3c27f0e8a407a7d1e4250c2c75684983",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/tooling.md",
+      "result_sha256": "5bcb9e95058f7bad9180635eff0dbd92b74e234a638c601f618770b8814137f3",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "pyproject.toml",
+      "result_sha256": "0880748449125dbe75c756a3391b578278035d98657c48e556c3d19e465fdd48",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/README.md",
+      "result_sha256": "927ee04e4479cdcc39acd8e71ee7f9e8c3cd2d6f64379db847cfe4d19ee09214",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/homepage-lock.json",
+      "result_sha256": "bc92f7ab10314e3e754fc62ac5ae6ba274e9ca0828c76fc29874c66793616a37",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/obsidian/README.md",
+      "result_sha256": "1fa84aee1d38c49e9c5b4dd0bf260b3cb0b7e8736fb73a63b903cb2a517cbddd",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/obsidian/bases/en/Engagement Decisions.base",
+      "result_sha256": "112ab91fce678afa5f46c6c28a3f75990eb74f44e2304d041349156a319c05a5",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/obsidian/bases/zh-CN/招聘互动决策.base",
+      "result_sha256": "5bf628d9f13d745e28d0f4f21b967a4c447ed14eae55b7980610776e5445d450",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/obsidian/quickadd/README.md",
+      "result_sha256": "08452d2404f423dbb3768f264b286ba681eb24734f2e9ffba658ae35a2f6078c",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/obsidian/quickadd/engagement-event-choice.json",
+      "result_sha256": "677a4b99aacc3181b873bfe80fa8825fd50cbfbf38dc38daa2b2218e27c74f02",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/obsidian/quickadd/jd-review-choice.json",
+      "result_sha256": "3a52336a507acb1af54fcbacd5f57a729dfda0a58b035e79a536aec8201949a9",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/obsidian/quickadd/record-engagement-event.js",
+      "result_sha256": "de3591cbdda711092d0ef17a5ef5371ae5519a5c9b5e342bedb64574b5ee1104",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/obsidian/quickadd/review-jd.js",
+      "result_sha256": "cf15371221261648d52cb15014af54c240dae5397568285e1b0eb9b62131eba2",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/sbom.cdx.json",
+      "result_sha256": "99fe15c0cd78967bbd33f536621e8173ae65bcd348b77dbcacf938fa524643df",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tests/conftest.py",
+      "result_sha256": "d32db91b47f7725c67f96246508989c07989647416910fd622f2e226f3c52eb2",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tests/test_cli_core.py",
+      "result_sha256": "9a50df7ac89726d1f190d11f2a8b5c4b68d652e1ad345c00dfdba919a9af8d97",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tests/test_cli_smoke.py",
+      "result_sha256": "68f0fe729a1f20a8206f64eebd58157d398a4193471375db1fb4aae40232ce44",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tests/test_extraction_manifest.py",
+      "result_sha256": "670924ee1af1a6c79b6328228fab459d48aa477432d047a653f23ad6349a2305",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tests/test_homepage.py",
+      "result_sha256": "f3169fbb9b83a28ad404c97c6026cdf1e049d4023efe8594ced165192f1e93c6",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tests/test_obsidian.py",
+      "result_sha256": "cc830ec1af8522bce4e274d692fddc8537ad397aaa9b88bd6bc92795d315833d",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tests/test_records.py",
+      "result_sha256": "2bb643b5f9ac95b0ba4e228b5cc1927c483a2557c02366f2b2c805a70ded86b5",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tests/test_skills.py",
+      "result_sha256": "7e0e69b9fa906cc112ce822e4bd75653037545f463227fed9d88f889c857eaae",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tools/career_os/__init__.py",
+      "result_sha256": "a07cf6ea85ca6c3250156fbf8b646313e8bda0cf85d1940c6001fd6cbc90257a",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tools/career_os/adapters/obsidian.py",
+      "result_sha256": "bb6feaaf6f06aa189aaedea3edce99e66174f804bcb0a6045d2a70b22e8e4d17",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tools/career_os/checks.py",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tools/career_os/checks/__init__.py",
+      "result_sha256": "86c0802ac4a718061222cf2d3adb87fd26c526bd351145bdf8aaa72a38303e5e",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tools/career_os/checks/_contracts.py",
+      "result_sha256": "e7ebeaf7363d2a8880c4a85482fc91f837db12aa344a372aebcee337adf3eb06",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tools/career_os/checks/_issue.py",
+      "result_sha256": "8847ccdb3c862686b7dc314f28e9f42af450820e7983f4278bf5af0f7db17bdb",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tools/career_os/checks/bases.py",
+      "result_sha256": "248f23af730face2dbd5915a66f9a7911a087446f446a2ec7f08629c3cfb3922",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tools/career_os/checks/canvas.py",
+      "result_sha256": "82172b1d6bf2056331837d5a6e38c4eb204492d96a0b6e982e71750943a3c940",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tools/career_os/checks/records.py",
+      "result_sha256": "48d4f718a644100df57e22a60497cc1427662bc3592cb4c72491687bcf786a63",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tools/career_os/checks/resume.py",
+      "result_sha256": "e6c7350cc804dbc43d91d0c9676c531752836b5c16af72d078c625af008a4bbd",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tools/career_os/checks/structure.py",
+      "result_sha256": "601ca5664d858b6deba95c765438db0a4ee64a972c1451471277d184cd1e294c",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tools/career_os/checks/views.py",
+      "result_sha256": "1b3385e6762b222c240d2a257e53905fc457ec39c68b26aac386975579eb9990",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tools/career_os/cli/core.py",
+      "result_sha256": "e2e5c2e9b82f91d225e0f318216840ed6b6c6bc33c7e129dcb48e35717ddb15a",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tools/career_os/config.py",
+      "result_sha256": "c82843d01aa35e501d9acb82f516de5775ae5cf8907b00e71af75903d75480c0",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tools/career_os/records/semantics.py",
+      "result_sha256": "184317a6645abdb0e30444f79449430db78133c187b2f490584b85066b6b3d3b",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tools/career_os/resume/service.py",
+      "result_sha256": "2619017fff0a0f8d690b1f726ec5ea80e635e66279716a9efab99c56cbeca7de",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "uv.lock",
+      "result_sha256": "d3370bf17003452503a7149c19e3a521154236cd45e3d6a6d55e7255831f8a0e",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "职业主页.md",
+      "result_sha256": "1c1f4bb1ed515393ccb19d00471ade6aa152b95f220e8038cd6b8c3cac3048b1",
+      "reason": "downstream-adaptation"
+    }
+  ]
+}

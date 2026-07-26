@@ -125,8 +125,78 @@ live access. See the
 ## Optional QuickAdd adapter
 
 `--with-quickadd` requires an installed QuickAdd manifest at exactly `2.12.3`.
-Career OS validates ID, version, and existing choice conflicts, then generates a
-reviewable Capture choice under `.career-os/obsidian/quickadd/`. It does not install
-the plugin or edit QuickAdd's `data.json`, which may contain host-owned settings.
-The choice captures raw text into the Career Evidence inbox; it never creates an
-approved claim automatically.
+Career OS validates ID, version, and existing choice conflicts, then generates
+three reviewable choices under `.career-os/obsidian/quickadd/`:
+
+- `capture-choice.json` captures raw text into the Career Evidence inbox; it
+  never creates an approved claim automatically.
+- `jd-review-choice.json` invokes the tracked
+  `system/obsidian/quickadd/review-jd.js` User Script for the active schema-3
+  JD, Company, or Engagement.
+- `engagement-event-choice.json` invokes the tracked
+  `system/obsidian/quickadd/record-engagement-event.js` User Script for the
+  active Engagement.
+
+Generate the bundle during a new attachment:
+
+```text
+career-os vault plan --action attach --root . --vault-root <vault> --with-quickadd
+career-os vault apply --root . --plan <emitted-plan.json>
+```
+
+Review the generated JSON before reproducing or importing the choices in
+QuickAdd. Career OS does not install the plugin or edit QuickAdd's
+`.obsidian/plugins/quickadd/data.json` or `.obsidian/hotkeys.json`; those files
+may contain unrelated host-owned choices and shortcuts. On an already attached
+installation, configure the Macros directly from the tracked scripts rather
+than detaching solely to change the optional QuickAdd setting:
+
+1. Open **Settings → QuickAdd** and create a Macro choice named
+   `Career OS: Review active record`.
+2. Enable the choice as a command.
+3. In the Macro, add the Vault-visible
+   `system/obsidian/quickadd/review-jd.js` User Script. For an embedded sibling,
+   its path starts with the configured Vault mount.
+4. Create `Career OS: Record engagement event`, enable it as a command, and add
+   `system/obsidian/quickadd/record-engagement-event.js`.
+5. In **Settings → Hotkeys**, check for conflicts, then assign `Alt+J` to the
+   review command and `Alt+I` to the event command. Keep `Alt+E` unchanged; the
+   recommended mapping reserves it for Templater.
+
+For an existing JD-only installation, retain choice ID
+`8d0e6c70-b092-4e56-a18c-f631ca6b87f2` and its nested macro/command IDs, rename
+the choice and macro from `Career OS: Review active JD` to
+`Career OS: Review active record`, and keep its `Alt+J` binding. Add the event
+choice with the IDs in the generated JSON rather than recreating arbitrary IDs.
+
+Open a canonical record before invoking review. JD review preserves the A-F
+semantics; Company review refuses blocked, stale, overdue, or incomplete
+assessments; Engagement review checks Company/JD relationships and the event
+ledger. The command shows the complete proposed write, checks for concurrent
+changes, and can rescan the same record type after success to continue without
+persisting a queue.
+
+Open an Engagement before invoking the event command. It records one explicit
+user-reported contact, referral, application, interview, Offer, or closure
+event; proposes editable summary states; and optionally updates a full-date
+`review_on` checkpoint plus `next_action`. The event and projection are one
+transaction and reset `review_status` to `pending`. Missing prerequisites,
+chronological regressions, cancellation, invalid projections, and concurrent
+changes write nothing.
+
+The Engagement Decisions Bases provide `Interview Pipeline` / `面试进度` views
+for open `applied`, `interviewing`, and `offer` Engagements. They show Company,
+JD, localized phase, factual states, role/team, checkpoint, next action, review
+state, and update time. `review_on` is a date-level checkpoint, not an exact
+appointment. Keep round details, interviewers, and feedback in the event note
+or a Capability Readiness Session.
+
+Neither command submits an application, sends a message, uploads a file,
+changes an account, accepts/declines an Offer externally, or resigns. Run
+`career-os check` after a review/event batch before committing user-owned Career
+records.
+
+Agents should validate the generated choice path and ID/name conflicts. They
+must not overwrite a user's QuickAdd settings, choose an A-F review signal, or
+invent an external event; editing the host configuration requires an explicit
+user request, and record assertions remain the user's decision.

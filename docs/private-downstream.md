@@ -2,10 +2,14 @@
 
 This guide describes the supported `split-downstream` topology for a private
 Career Home that consumes the public `standalone-framework` repository.
-`v0.2.0` requires explicit record migration from schema 2 to schema 3 and does
-not accept legacy project-root aliases. An `upstream` remote is optional for
-local OS work. If one is configured, keep it fetch-only; do not treat an
-upstream sync as a prerequisite for local work.
+It does not describe Home-first `integrated-workbench` development, and
+`career-os downstream` is not the return mechanism for that workflow.
+
+Current releases require record schema 3 and do not accept legacy project-root
+aliases. A split installation with schema-2 records must review and explicitly
+apply the schema-2-to-3 migration. An `upstream` remote is optional for local OS
+work. If one is configured, keep it fetch-only; do not treat an upstream sync
+as a prerequisite for local work.
 
 In split mode, the recommended real-world installation is a private downstream
 repository. Its optional remote roles are:

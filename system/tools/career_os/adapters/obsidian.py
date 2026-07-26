@@ -16,14 +16,19 @@ from career_os.config import (
     load_install_state,
     load_project_config,
     portable_path,
+    resolve_vault_path,
     serialize_install_state,
 )
 from career_os.operations import FileOperation, OperationPlan, create_plan
 from career_os.operations.plans import sha256_file, sha256_text, write_plan
 
 VAULT_STATE = Path(".career-os/vault-install.json")
-QUICKADD_CHOICE_ID = "ca2ee657-1ec2-46b4-9d35-1ab0a58d68f8"
-QUICKADD_CHOICE_NAME = "Career OS: Capture evidence"
+QUICKADD_CAPTURE_CHOICE_ID = "ca2ee657-1ec2-46b4-9d35-1ab0a58d68f8"
+QUICKADD_CAPTURE_CHOICE_NAME = "Career OS: Capture evidence"
+QUICKADD_JD_REVIEW_CHOICE_ID = "8d0e6c70-b092-4e56-a18c-f631ca6b87f2"
+QUICKADD_JD_REVIEW_CHOICE_NAME = "Career OS: Review active record"
+QUICKADD_ENGAGEMENT_EVENT_CHOICE_ID = "ef9c05a5-0143-4c84-8a45-2d3f85618849"
+QUICKADD_ENGAGEMENT_EVENT_CHOICE_NAME = "Career OS: Record engagement event"
 
 RootName = Literal["project", "vault", "data", "runtime", "host_repo"]
 
@@ -128,10 +133,18 @@ def build_views(paths: ProjectPaths) -> list[Path]:
 
 def render_quickadd_assets(paths: ProjectPaths) -> dict[PurePosixPath, str]:
     source_root = paths.project_root / "system/obsidian/quickadd"
-    choice = _render_quickadd_choice(paths)
+    capture_choice = _render_quickadd_capture_choice(paths)
+    jd_review_choice = _render_quickadd_jd_review_choice(paths)
+    engagement_event_choice = _render_quickadd_engagement_event_choice(paths)
     return {
         PurePosixPath(".career-os/obsidian/quickadd/capture-choice.json"): (
-            json.dumps(choice, indent=2, ensure_ascii=False) + "\n"
+            json.dumps(capture_choice, indent=2, ensure_ascii=False) + "\n"
+        ),
+        PurePosixPath(".career-os/obsidian/quickadd/jd-review-choice.json"): (
+            json.dumps(jd_review_choice, indent=2, ensure_ascii=False) + "\n"
+        ),
+        PurePosixPath(".career-os/obsidian/quickadd/engagement-event-choice.json"): (
+            json.dumps(engagement_event_choice, indent=2, ensure_ascii=False) + "\n"
         ),
         PurePosixPath(".career-os/obsidian/quickadd/README.md"): source_root.joinpath(
             "README.md"
@@ -161,16 +174,27 @@ def validate_quickadd(paths: ProjectPaths) -> tuple[str, ...]:
     choices = data.get("choices", [])
     if not isinstance(choices, list):
         raise ValueError("QuickAdd data.json has an invalid choices list")
-    expected = _render_quickadd_choice(paths)
+    expected_choices = (
+        _render_quickadd_capture_choice(paths),
+        _render_quickadd_jd_review_choice(paths),
+        _render_quickadd_engagement_event_choice(paths),
+    )
+    expected_by_id = {choice["id"]: choice for choice in expected_choices}
+    expected_by_name = {choice["name"]: choice for choice in expected_choices}
     warnings: list[str] = []
     for choice in choices:
         if not isinstance(choice, dict):
             raise ValueError("QuickAdd data.json contains a non-object choice")
-        if choice.get("id") == QUICKADD_CHOICE_ID:
+        choice_id = choice.get("id")
+        choice_name = choice.get("name")
+        if not isinstance(choice_id, str) or not isinstance(choice_name, str):
+            raise ValueError("QuickAdd data.json contains a choice without string id/name")
+        if choice_id in expected_by_id:
+            expected = expected_by_id[choice_id]
             if not _contains_mapping(choice, expected):
                 raise ValueError("QuickAdd choice id conflicts with the Career OS adapter")
-            warnings.append("The Career OS QuickAdd choice is already configured.")
-        elif choice.get("name") == QUICKADD_CHOICE_NAME:
+            warnings.append(f"QuickAdd choice {choice_name!r} is already configured.")
+        elif choice_name in expected_by_name:
             raise ValueError("QuickAdd choice name conflicts with the Career OS adapter")
     return tuple(warnings)
 
@@ -492,7 +516,7 @@ def _new_file_operation(
     )
 
 
-def _render_quickadd_choice(paths: ProjectPaths) -> dict[str, object]:
+def _render_quickadd_capture_choice(paths: ProjectPaths) -> dict[str, object]:
     capture_path = _vault_relative(
         paths,
         paths.data_root / "10-career-evidence/_inbox/quickadd.md",
@@ -505,7 +529,71 @@ def _render_quickadd_choice(paths: ProjectPaths) -> dict[str, object]:
     loaded = json.loads(rendered)
     if not isinstance(loaded, dict):
         raise ValueError("QuickAdd adapter source must be a JSON object")
+    _validate_quickadd_choice_identity(
+        loaded,
+        QUICKADD_CAPTURE_CHOICE_ID,
+        QUICKADD_CAPTURE_CHOICE_NAME,
+    )
     return loaded
+
+
+def _render_quickadd_jd_review_choice(paths: ProjectPaths) -> dict[str, object]:
+    source_root = paths.project_root / "system/obsidian/quickadd"
+    script = source_root / "review-jd.js"
+    if not script.is_file():
+        raise ValueError(f"QuickAdd JD review script is missing: {script}")
+    script_path = _vault_relative(
+        paths,
+        script,
+        "QuickAdd JD review script",
+    ).as_posix()
+    source = source_root / "jd-review-choice.json"
+    rendered = source.read_text(encoding="utf-8").replace(
+        "__CAREER_OS_JD_REVIEW_SCRIPT_PATH__", script_path
+    )
+    loaded = json.loads(rendered)
+    if not isinstance(loaded, dict):
+        raise ValueError("QuickAdd JD review choice source must be a JSON object")
+    _validate_quickadd_choice_identity(
+        loaded,
+        QUICKADD_JD_REVIEW_CHOICE_ID,
+        QUICKADD_JD_REVIEW_CHOICE_NAME,
+    )
+    return loaded
+
+
+def _render_quickadd_engagement_event_choice(
+    paths: ProjectPaths,
+) -> dict[str, object]:
+    source_root = paths.project_root / "system/obsidian/quickadd"
+    script = source_root / "record-engagement-event.js"
+    if not script.is_file():
+        raise ValueError(f"QuickAdd engagement event script is missing: {script}")
+    script_path = _vault_relative(
+        paths,
+        script,
+        "QuickAdd engagement event script",
+    ).as_posix()
+    source = source_root / "engagement-event-choice.json"
+    rendered = source.read_text(encoding="utf-8").replace(
+        "__CAREER_OS_ENGAGEMENT_EVENT_SCRIPT_PATH__", script_path
+    )
+    loaded = json.loads(rendered)
+    if not isinstance(loaded, dict):
+        raise ValueError("QuickAdd engagement event choice source must be a JSON object")
+    _validate_quickadd_choice_identity(
+        loaded,
+        QUICKADD_ENGAGEMENT_EVENT_CHOICE_ID,
+        QUICKADD_ENGAGEMENT_EVENT_CHOICE_NAME,
+    )
+    return loaded
+
+
+def _validate_quickadd_choice_identity(
+    choice: dict[str, object], expected_id: str, expected_name: str
+) -> None:
+    if choice.get("id") != expected_id or choice.get("name") != expected_name:
+        raise ValueError("QuickAdd adapter choice identity does not match its contract")
 
 
 def _contains_mapping(actual: dict[str, object], expected: dict[str, object]) -> bool:
@@ -542,7 +630,8 @@ def _vault_projection(paths: ProjectPaths, target: Path, label: str) -> Path:
             f"{target}"
         ) from error
     projected = mount.joinpath(*project_relative.parts)
-    if projected.resolve() != target:
+    vault_relative = projected.relative_to(paths.vault_root).as_posix()
+    if resolve_vault_path(paths, vault_relative) != target:
         raise ValueError(f"{label} does not resolve through the configured Vault mount: {target}")
     try:
         projected.relative_to(vault_root)

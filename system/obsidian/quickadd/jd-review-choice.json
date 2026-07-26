@@ -1,0 +1,20 @@
+{
+  "id": "8d0e6c70-b092-4e56-a18c-f631ca6b87f2",
+  "name": "Career OS: Review active record",
+  "type": "Macro",
+  "command": true,
+  "runOnStartup": false,
+  "macro": {
+    "id": "7a375152-04a6-4cfc-a4a3-d074bae62b14",
+    "name": "Career OS: Review active record",
+    "commands": [
+      {
+        "id": "21328192-ce35-457e-adbb-536d01edb11b",
+        "name": "review-jd",
+        "type": "UserScript",
+        "path": "__CAREER_OS_JD_REVIEW_SCRIPT_PATH__",
+        "settings": {}
+      }
+    ]
+  }
+}

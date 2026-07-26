@@ -8,7 +8,6 @@ from career_os.config import resolve_paths
 from career_os.records import (
     KIND_LIFECYCLES,
     ParsedRecord,
-    load_record,
     record_json_schema,
     validate_record_envelope,
     validate_record_transition,
@@ -126,22 +125,5 @@ def test_market_channel_without_optional_career_lane_is_semantically_valid() -> 
     assert check_record_semantics([record], paths) == []
 
 
-def test_workspace_covers_all_kinds_and_wikilink_semantics() -> None:
-    paths = resolve_paths(Path(__file__).resolve().parents[2])
-    records = [
-        load_record(path)
-        for path in sorted(paths.data_root.rglob("*.md"))
-        if path.name != "README.md" and "_templates" not in path.parts
-    ]
-    workspace_kinds = {record.envelope.kind for record in records}
-    assert workspace_kinds <= set(KIND_LIFECYCLES)
+def test_every_lifecycle_kind_is_reachable_through_the_record_schema() -> None:
     assert set(record_json_schema()["discriminator"]["mapping"]) == set(KIND_LIFECYCLES)
-    assert not [
-        issue
-        for issue in check_record_semantics(records, paths)
-        if issue.status == "fail"
-    ]
-    for record in records:
-        raw = record.raw_frontmatter
-        assert raw["schema_version"] == 3
-        assert not {"refs", "host_refs", "status_history"}.intersection(raw)

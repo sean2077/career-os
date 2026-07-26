@@ -1,0 +1,20 @@
+{
+  "id": "ef9c05a5-0143-4c84-8a45-2d3f85618849",
+  "name": "Career OS: Record engagement event",
+  "type": "Macro",
+  "command": true,
+  "runOnStartup": false,
+  "macro": {
+    "id": "1711900d-2f6d-4c14-9bab-cee22ebf2f50",
+    "name": "Career OS: Record engagement event",
+    "commands": [
+      {
+        "id": "49638cc3-c3d2-447e-a56d-637724b53fb8",
+        "name": "record-engagement-event",
+        "type": "UserScript",
+        "path": "__CAREER_OS_ENGAGEMENT_EVENT_SCRIPT_PATH__",
+        "settings": {}
+      }
+    ]
+  }
+}

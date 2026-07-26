@@ -1,10 +1,10 @@
 # Installation Requirements
 
-> **v0.5.0 boundary:** install from a clean public checkout. The root Obsidian
-> entry points are now `Career Home.md` and `职业主页.md`; update external links
-> or embeds that target the former filenames. The v0.4.0 resume-export
-> behavior remains unchanged, and the v0.2.0 schema boundary still requires
-> explicit schema-2-to-3 migration for v0.1.0 records.
+> **v0.6.0 boundary:** install from a clean public checkout. The optional
+> QuickAdd adapter adds guarded local review and Engagement-event scripts but
+> never edits host-owned `.obsidian` choices or hotkeys. The v0.5.0 homepage
+> filenames and v0.4.0 resume-export behavior remain unchanged, and schema-2
+> records still require an explicit schema-2-to-3 migration.
 
 Career OS separates core, live Obsidian, and resume readiness. A successful
 core check does not imply that the optional Obsidian CLI or XeLaTeX resume
@@ -66,7 +66,7 @@ Project configuration and install state use schema 2; legacy `data_root` or
 legacy local state, or remove those obsolete fields after reviewing the fixed
 `career/` and `.career-os/runtime/` locations.
 Paired English/Chinese Workbench Bases are tracked system assets under
-`system/obsidian/bases/` and query schema-2 records by `kind`; `career-os check`
+`system/obsidian/bases/` and query schema-3 records by `kind`; `career-os check`
 reports inventory, localization-parity, or semantic drift for review.
 
 Missing optional Obsidian, LaTeX, or PDF commands appear as `attention` in the

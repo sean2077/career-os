@@ -41,6 +41,10 @@ cannot advance application or readiness state.
    may inform JD priority, preference, and risk, but never JD evidence fit,
    application state, resume tailoring, or interview readiness.
 
-Signed-in or fragile channels require user-prepared access and read-only work.
-Stop at login, security, redirect, blank, stale, refresh, or ambiguous state.
-Never apply, message, or mutate an account through this Skill.
+Signed-in recruiting channels are user-operated. For BOSS Zhipin, the user
+searches and supplies a job URL; use anonymously accessible page content when
+available, otherwise ask for the pasted JD text or screenshots and preserve the
+result as partial until the missing sections are supplied. Do not control a
+signed-in BOSS page or use browser automation, OpenCLI, page-signed relays,
+direct authenticated requests, or session material. Never apply, message, or
+mutate an account through this Skill.
