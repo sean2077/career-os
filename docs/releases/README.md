@@ -17,6 +17,7 @@ release.
 
 ## Release evidence
 
+- [v0.6.0](v0.6.0.md): adds guarded QuickAdd record workflows and interview views, decomposes and accelerates checks, supports linked-worktree Vault context, and makes signed-in BOSS explicitly user-operated.
 - [v0.5.0](v0.5.0.md): disambiguates the root homepage filenames across Obsidian assets, deterministic tooling, tests, and documentation.
 - [v0.4.0](v0.4.0.md): adds safer shareable-resume defaults, language-aware filenames, audited link preservation, and unified four-character export IDs.
 - [v0.3.1](v0.3.1.md): rolls forward the immutable v0.3.0 tag after removing a stale deleted-test path from the release workflow and revalidating the complete release boundary.

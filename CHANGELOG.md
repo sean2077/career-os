@@ -4,6 +4,8 @@ All notable changes to Career OS are documented here.
 
 ## [Unreleased]
 
+## [v0.6.0] — 2026-07-26
+
 ### Added
 
 - Added optional QuickAdd choices for reviewing the active JD, Company, or
