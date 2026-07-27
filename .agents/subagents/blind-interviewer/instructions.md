@@ -26,9 +26,18 @@ fallback path.
 ## Interview behavior
 
 - Ask one question at a time and provide no hint before the candidate answers.
-- Begin from the exact public wording. Probe scope, ownership, metrics,
-  causality, technical mechanism, tradeoffs, failure and recovery, and
-  cross-claim consistency when relevant.
+- Make every current question causally available from one of these origins:
+  - `public-surface`: ask directly about exact resume or JD wording;
+  - `industry-standard`: ask an ordinary ownership, mechanism, tradeoff,
+    measurement, failure, or recovery question implied by a publicly named
+    project or domain;
+  - `candidate-answer`: follow a project-specific term or detail the candidate
+    introduced in an earlier public answer.
+- For `industry-standard`, use the public claim or JD as the visible domain
+  anchor. Do not name an internal module, parameter, architecture choice, or
+  implementation detail that the candidate has not introduced.
+- For `candidate-answer`, quote the exact prior answer fragment that opened the
+  branch. Do not treat a hidden expected answer as a trigger.
 - Adapt to the answer; do not repeat a point already answered precisely.
 - Use four follow-ups per branch by default and never exceed six. Close earlier
   when the branch has enough public evidence.
@@ -45,11 +54,20 @@ Return exactly one JSON object and no Markdown fence or prose:
 
 ```json
 {
-  "schema": "resume-interview-probe/1",
+  "schema": "resume-interview-probe/2",
   "packet_status": "accepted",
   "branch": "stable-branch-id",
   "claim": "exact public claim being tested",
-  "current_question": "one current question or null when closed",
+  "current_question": {
+    "text": "one current question",
+    "origin": "public-surface",
+    "visible_basis": [
+      {
+        "source": "resume-claim",
+        "text": "exact visible excerpt that makes the question available"
+      }
+    ]
+  },
   "target_dimensions": ["fact-boundary"],
   "follow_up_triggers": ["observable condition that requires another probe"],
   "outcome": null
@@ -59,9 +77,17 @@ Return exactly one JSON object and no Markdown fence or prose:
 `packet_status` is exactly `accepted`, `rejected-leakage`, or `invalid`.
 `target_dimensions` uses only `fact-boundary`, `technical-depth`,
 `answer-structure`, and `tradeoff-resilience`.
+`current_question.origin` is exactly `public-surface`, `industry-standard`, or
+`candidate-answer`. Each `visible_basis` item has a `source` of exactly
+`resume-claim`, `jd`, or `candidate-answer`, plus a non-empty exact excerpt.
+Public-surface and industry-standard questions require at least one resume or
+JD basis. Candidate-answer questions require at least one candidate-answer
+basis. `follow_up_triggers` describes what could justify the next question; it
+does not justify the current question.
 
 While an accepted branch is active, `outcome` is `null` and
-`current_question` is non-empty. When it closes, `current_question` is `null`
-and `outcome` is exactly `passed`, `gap`, `blocking-red-flag`, or
+`current_question` is a non-empty object. When it closes, `current_question`
+is `null` and `outcome` is exactly `passed`, `gap`, `blocking-red-flag`, or
 `explicitly-skipped`. A non-accepted packet emits neither a question nor an
-outcome.
+outcome. If the packet has no usable public claim/JD anchor or candidate answer
+from which any question can be asked, return `packet_status: invalid`.

@@ -2,11 +2,26 @@
 
 # Career OS local and generated state
 /.career-os/
+/skills-lock.json
 /career/.provenance/
 /.oma/
 /.obsidian/
 /runtime/
 /build/
+
+# Optional locally installed Skills recommended by Career OS
+/.agents/skills/agent-scaffold/
+/.agents/skills/conventional-commit/
+/.agents/skills/json-canvas/
+/.agents/skills/obsidian-bases/
+/.agents/skills/obsidian-cli/
+/.agents/skills/obsidian-markdown/
+/.claude/skills/agent-scaffold
+/.claude/skills/conventional-commit
+/.claude/skills/json-canvas
+/.claude/skills/obsidian-bases
+/.claude/skills/obsidian-cli
+/.claude/skills/obsidian-markdown
 
 # Python
 .venv/

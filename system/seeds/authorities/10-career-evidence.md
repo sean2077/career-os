@@ -28,6 +28,12 @@ Collection and project `README.md` files are navigation only. Importers must not
 classify them as Work merely because they live below `work/`; only an attributable
 account with contribution and support satisfies the Work interface.
 
+For one independent system project, its existing `README.md` is the single
+cross-authority entry linking Work, Story, Readiness, Communication, and Materials.
+It does not copy facts from those owners. Create companion files only when they
+have independent content and lifecycle; keep Captures, Claims, and independently
+changing Work or Story records atomic.
+
 ## Lifecycle
 
 ```text

@@ -18,7 +18,7 @@ entries are the only non-agent children allowed here.
 
 | Name | Packet or evidence boundary | Output |
 | --- | --- | --- |
-| `blind-interviewer` | Public Interview Packet only; no tools or internal evidence | `resume-interview-probe/1` |
+| `blind-interviewer` | Public Interview Packet only; every question carries a causal visible basis | `resume-interview-probe/2` |
 | `evidence-auditor` | Internal Evidence Packet and its explicit references only | `resume-evidence-audit/1` |
 | `career-strategy-advisor` | Dated authority references and attributable external sources | Source-layered decision brief |
 

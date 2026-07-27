@@ -1,13 +1,19 @@
 from __future__ import annotations
 
-import hashlib
 import json
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Any, Literal
+from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 from ruamel.yaml import YAML
+
+from career_os.skill_onboarding import (
+    CONTRIBUTOR_RECOMMENDED_SKILLS,
+    OBSIDIAN_RECOMMENDED_SKILLS,
+    RECOMMENDATION_POLICY,
+    load_recommendation_manifest,
+)
 
 PROJECT_SKILLS = frozenset(
     {
@@ -20,12 +26,22 @@ PROJECT_SKILLS = frozenset(
         "career-communication",
     }
 )
-SEAN_SKILLS = frozenset({"agent-scaffold", "conventional-commit"})
-OBSIDIAN_SKILLS = frozenset(
-    {"obsidian-markdown", "obsidian-bases", "json-canvas", "obsidian-cli"}
-)
-BUNDLED_SKILLS = SEAN_SKILLS | OBSIDIAN_SKILLS
-EXPECTED_SKILLS = PROJECT_SKILLS | BUNDLED_SKILLS
+CONTRIBUTOR_SKILLS = CONTRIBUTOR_RECOMMENDED_SKILLS
+OBSIDIAN_SKILLS = OBSIDIAN_RECOMMENDED_SKILLS
+AUXILIARY_SKILLS = CONTRIBUTOR_SKILLS | OBSIDIAN_SKILLS
+ALLOWED_SKILLS = PROJECT_SKILLS | AUXILIARY_SKILLS
+RECOMMENDATION_GROUPS = {
+    "obsidian": OBSIDIAN_SKILLS,
+    "contributor": CONTRIBUTOR_SKILLS,
+}
+RECOMMENDATION_AUTHORITIES = {
+    group_id: {
+        "audience": policy[0],
+        "source_repository": policy[1],
+        "license": policy[2],
+    }
+    for group_id, policy in RECOMMENDATION_POLICY.items()
+}
 MODE_MATRIX = {
     "career-evidence": {"capture", "debrief", "consolidate"},
     "career-strategy": {"position", "plan", "align"},
@@ -44,33 +60,6 @@ MODE_MATRIX = {
 }
 
 _yaml = YAML(typ="safe")
-
-
-class SkillLock(BaseModel):
-    model_config = ConfigDict(extra="forbid")
-
-    name: str
-    source_repository: str
-    revision: str = Field(pattern=r"^[0-9a-f]{40}$")
-    source_path: str
-    tree_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
-    license: str
-    attribution: str
-
-
-class SkillLockFile(BaseModel):
-    model_config = ConfigDict(extra="forbid")
-
-    schema_version: int = Field(ge=1)
-    skills: list[SkillLock]
-
-
-def skill_lock_json_schema() -> dict[str, Any]:
-    schema = SkillLockFile.model_json_schema()
-    schema["$schema"] = "https://json-schema.org/draft/2020-12/schema"
-    schema["$id"] = "https://career-os.dev/schemas/skills-lock.schema.json"
-    schema["title"] = "Career OS Skills Lock"
-    return schema
 
 
 class SkillSelection(BaseModel):
@@ -133,25 +122,6 @@ class SkillCheck:
         return asdict(self)
 
 
-def canonical_tree_sha256(root: Path) -> str:
-    digest = hashlib.sha256()
-    files = sorted(
-        ((path.relative_to(root).as_posix(), path) for path in root.rglob("*") if path.is_file()),
-        key=lambda item: item[0],
-    )
-    for relative, path in files:
-        digest.update(relative.encode("utf-8"))
-        digest.update(b"\0")
-        digest.update(hashlib.sha256(path.read_bytes()).hexdigest().encode("ascii"))
-        digest.update(b"\n")
-    return digest.hexdigest()
-
-
-def load_skill_locks(project_root: Path) -> SkillLockFile:
-    path = project_root / "skills-lock.json"
-    return SkillLockFile.model_validate_json(path.read_text(encoding="utf-8"))
-
-
 def verify_skills(
     project_root: Path, selection_report: Path | None = None
 ) -> list[SkillCheck]:
@@ -164,7 +134,11 @@ def verify_skills(
     checks = [
         SkillCheck(
             "skills.inventory",
-            "pass" if actual == EXPECTED_SKILLS else "fail",
+            (
+                "pass"
+                if PROJECT_SKILLS.issubset(actual) and actual.issubset(ALLOWED_SKILLS)
+                else "fail"
+            ),
             ".agents/skills",
             _inventory_detail(actual),
         )
@@ -183,40 +157,73 @@ def verify_skills(
             checks.append(SkillCheck("skills.frontmatter", "fail", str(skill_file), str(error)))
 
     try:
-        lock_file = load_skill_locks(project_root)
-    except (OSError, ValueError) as error:
-        checks.append(SkillCheck("skills.lock", "fail", "skills-lock.json", str(error)))
-        return checks
-
-    locks = {item.name: item for item in lock_file.skills}
-    checks.append(
-        SkillCheck(
-            "skills.lock-inventory",
-            "pass" if set(locks) == BUNDLED_SKILLS else "fail",
-            "skills-lock.json",
-            f"expected {len(BUNDLED_SKILLS)} bundled locks; found {len(locks)}",
+        manifest = load_recommendation_manifest(project_root)
+        groups = {
+            group.id: {skill.name for skill in group.skills}
+            for group in manifest.groups
+        }
+        authorities = {
+            group.id: {
+                "audience": group.audience,
+                "source_repository": group.source_repository,
+                "license": group.license,
+            }
+            for group in manifest.groups
+        }
+        sources_are_consistent = all(
+            group.source
+            == (
+                group.source_repository.removeprefix("https://github.com/").rstrip("/")
+                + f"#{group.ref}"
+            )
+            and all(
+                skill.source_path == f"skills/{skill.name}"
+                for skill in group.skills
+            )
+            for group in manifest.groups
         )
-    )
-    if len(locks) != len(lock_file.skills):
-        checks.append(
-            SkillCheck("skills.lock-duplicates", "fail", "skills-lock.json", "duplicate names")
+        valid_groups = (
+            groups == RECOMMENDATION_GROUPS
+            and authorities == RECOMMENDATION_AUTHORITIES
+            and sources_are_consistent
+            and manifest.installer.telemetry_environment
+            == {"DISABLE_TELEMETRY": "1"}
         )
-
-    for name in sorted(BUNDLED_SKILLS & set(locks)):
-        source = skills_root / name
-        actual_hash = canonical_tree_sha256(source) if source.is_dir() else "missing"
-        expected_hash = locks[name].tree_sha256
         checks.append(
             SkillCheck(
-                "skills.tree-hash",
-                "pass" if actual_hash == expected_hash else "fail",
-                str(source),
-                f"{name}: {actual_hash}",
+                "skills.recommendations",
+                "pass" if valid_groups else "fail",
+                "system/skills/recommendations.json",
+                (
+                    "exact Obsidian user and contributor recommendation groups"
+                    if valid_groups
+                    else json.dumps(
+                        {
+                            "expected": {
+                                name: sorted(skills)
+                                for name, skills in RECOMMENDATION_GROUPS.items()
+                            },
+                            "actual": {
+                                name: sorted(skills) for name, skills in groups.items()
+                            },
+                        },
+                        sort_keys=True,
+                    )
+                ),
+            )
+        )
+    except (OSError, ValueError) as error:
+        checks.append(
+            SkillCheck(
+                "skills.recommendations",
+                "fail",
+                "system/skills/recommendations.json",
+                str(error),
             )
         )
 
     projection_root = project_root / ".claude/skills"
-    for name in sorted(EXPECTED_SKILLS):
+    for name in sorted(actual):
         projection = projection_root / name
         source = skills_root / name
         valid = projection.is_symlink() and projection.resolve() == source.resolve()
@@ -373,8 +380,15 @@ def _skill_frontmatter(path: Path) -> dict[str, object]:
 
 
 def _inventory_detail(actual: set[str]) -> str:
-    missing = sorted(EXPECTED_SKILLS - actual)
-    extra = sorted(actual - EXPECTED_SKILLS)
-    if not missing and not extra:
-        return "exactly 7 Career, 2 Sean, and 4 Obsidian Skills"
-    return json.dumps({"missing": missing, "extra": extra}, sort_keys=True)
+    missing = sorted(PROJECT_SKILLS - actual)
+    unknown = sorted(actual - ALLOWED_SKILLS)
+    optional = sorted(actual & AUXILIARY_SKILLS)
+    if not missing and not unknown:
+        return (
+            "7 required Career Skills"
+            + (f"; optional installed: {', '.join(optional)}" if optional else "")
+        )
+    return json.dumps(
+        {"missing_core": missing, "unknown": unknown, "optional": optional},
+        sort_keys=True,
+    )

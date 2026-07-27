@@ -160,11 +160,13 @@ and are resolved by filename before XeLaTeX. See
 
 ## Agent Skills
 
-Career OS ships seven project-owned career workflow Skills, plus locked
-snapshots of selected Skills from
-[sean2077/skills](https://github.com/sean2077/skills),
-[kepano/obsidian-skills](https://github.com/kepano/obsidian-skills). See
-[the Skill catalog](docs/skills.md) for ownership and attribution.
+Career OS ships seven project-owned career workflow Skills. `career-os init`
+and `career-os skills status --json` separately report the optional Obsidian
+Skill group. Only when the report requires a choice does the Agent explain the
+reviewed source and ask for project, global, or skip plus the target Host; the
+CLI never installs or downloads a Skill itself. See
+[the Skill catalog](docs/skills.md) for ownership, onboarding, and reviewer
+boundaries.
 
 ## Status
 
@@ -174,6 +176,7 @@ interfaces explicitly documented by a release are supported.
 
 ## License
 
-Project-owned work is licensed under the [MIT License](LICENSE). Bundled
-dependencies retain their original licenses and attribution; see [NOTICE](NOTICE),
-`skills-lock.json`, and the deterministic [CycloneDX SBOM](system/sbom.cdx.json).
+Project-owned work is licensed under the [MIT License](LICENSE). External
+dependencies retain their original licenses and attribution; see
+[NOTICE](NOTICE), the [supply-chain guide](docs/supply-chain.md), and the
+deterministic [CycloneDX SBOM](system/sbom.cdx.json).

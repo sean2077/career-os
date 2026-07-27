@@ -27,11 +27,17 @@ never sufficient support.
 
 1. Resolve paths and inspect existing records for the same work, source, or
    claim before creating anything.
-2. Separate observed fact, user recollection, inference, and desired wording.
-3. Record who did what, under which constraints, and what evidence supports the
+2. For an independent system project, use its existing project `README.md` as
+   the navigation-only cross-authority entry for Work, Story, Readiness,
+   Communication, and Materials. Link those owners without copying their facts,
+   and do not create empty companion files.
+3. Merge records only when their purpose and lifecycle are the same. Keep
+   Captures, Claims, and independently changing Work or Story records atomic.
+4. Separate observed fact, user recollection, inference, and desired wording.
+5. Record who did what, under which constraints, and what evidence supports the
    result. Leave unsupported magnitude or ownership as an explicit gap.
-4. Preserve raw material when consolidating and connect records with stable IDs.
-5. Keep claim approval explicit. A polished story is not automatically a
+6. Preserve raw material when consolidating and connect records with stable IDs.
+7. Keep claim approval explicit. A polished story is not automatically a
    shareable or public claim.
 
 Write only Career Evidence records. Ask a related Skill to consume the record by

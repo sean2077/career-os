@@ -49,13 +49,28 @@ def _probe_payload(
     packet_status: str = "accepted",
     question: str | None = None,
     outcome: str | None = "passed",
+    question_origin: str = "public-surface",
+    basis_source: str = "resume-claim",
 ) -> dict[str, Any]:
     return {
-        "schema": "resume-interview-probe/1",
+        "schema": "resume-interview-probe/2",
         "packet_status": packet_status,
         "branch": "metric-scope-1",
         "claim": "Latency improved in the measured scenario.",
-        "current_question": question,
+        "current_question": (
+            {
+                "text": question,
+                "origin": question_origin,
+                "visible_basis": [
+                    {
+                        "source": basis_source,
+                        "text": "Latency improved in the measured scenario.",
+                    }
+                ],
+            }
+            if question is not None
+            else None
+        ),
         "target_dimensions": ["fact-boundary", "technical-depth"],
         "follow_up_triggers": ["The measurement boundary is missing."],
         "outcome": outcome,
@@ -181,6 +196,72 @@ def test_probe_valid_active_closed_and_packet_states(
 
 
 @pytest.mark.parametrize(
+    ("origin", "basis_source"),
+    [
+        ("public-surface", "resume-claim"),
+        ("public-surface", "jd"),
+        ("industry-standard", "resume-claim"),
+        ("industry-standard", "jd"),
+        ("candidate-answer", "candidate-answer"),
+    ],
+)
+def test_probe_accepts_causally_available_questions(
+    origin: str,
+    basis_source: str,
+) -> None:
+    payload = _probe_payload(
+        question="What made this question available?",
+        outcome=None,
+        question_origin=origin,
+        basis_source=basis_source,
+    )
+
+    result = validate_reviewer("probe", payload)
+
+    assert result.valid
+    assert result.blocks_readiness
+
+
+@pytest.mark.parametrize(
+    ("origin", "basis_source", "marker"),
+    [
+        (
+            "public-surface",
+            "candidate-answer",
+            "requires a resume-claim or jd basis",
+        ),
+        (
+            "industry-standard",
+            "candidate-answer",
+            "requires a resume-claim or jd basis",
+        ),
+        (
+            "candidate-answer",
+            "resume-claim",
+            "requires a candidate-answer basis",
+        ),
+    ],
+)
+def test_probe_rejects_question_origin_basis_mismatches(
+    origin: str,
+    basis_source: str,
+    marker: str,
+) -> None:
+    payload = _probe_payload(
+        question="Question?",
+        outcome=None,
+        question_origin=origin,
+        basis_source=basis_source,
+    )
+
+    result = validate_reviewer("probe", payload)
+
+    assert not result.valid
+    assert result.blocks_readiness
+    assert any(marker in error for error in result.errors)
+
+
+@pytest.mark.parametrize(
     ("payload", "marker"),
     [
         (
@@ -227,6 +308,33 @@ def test_probe_rejects_missing_unknown_duplicate_and_illegal_values() -> None:
 
     payload = _probe_payload()
     payload["outcome"] = "ready"
+    assert not validate_reviewer("probe", payload).valid
+
+
+def test_probe_question_rejects_v1_hidden_blank_duplicate_and_unknown_values() -> None:
+    payload = _probe_payload(question="Question?", outcome=None)
+    payload["schema"] = "resume-interview-probe/1"
+    assert not validate_reviewer("probe", payload).valid
+
+    payload = _probe_payload(question="Question?", outcome=None)
+    payload["current_question"]["visible_basis"][0]["source"] = "internal-evidence"
+    assert not validate_reviewer("probe", payload).valid
+
+    payload = _probe_payload(question="Question?", outcome=None)
+    payload["current_question"]["visible_basis"][0]["text"] = " "
+    assert not validate_reviewer("probe", payload).valid
+
+    payload = _probe_payload(question="Question?", outcome=None)
+    basis = payload["current_question"]["visible_basis"][0]
+    payload["current_question"]["visible_basis"].append(basis.copy())
+    result = validate_reviewer("probe", payload)
+    assert not result.valid
+    assert any(
+        "visible_basis must not contain duplicates" in item for item in result.errors
+    )
+
+    payload = _probe_payload(question="Question?", outcome=None)
+    payload["current_question"]["origin"] = "internal-detail"
     assert not validate_reviewer("probe", payload).valid
 
 
