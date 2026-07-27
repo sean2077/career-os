@@ -279,6 +279,16 @@
       "reason": "downstream-adaptation"
     },
     {
+      "path": ".github/workflows/ci.yml",
+      "result_sha256": "45e5ab134d088cbdb284f9ae1520f750c3b77dfd96dc0a7edbcff9d841e84b8d",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "result_sha256": "b2f67ec44412d49aaea4c8aed730e1e4e71b87a6a7649507e3d77fd98f5ae043",
+      "reason": "downstream-adaptation"
+    },
+    {
       "path": ".gitignore",
       "result_sha256": "cbf9916263db65505981690c7f31253c447db9f4b43cb19305ed7a2da5e62275",
       "reason": "downstream-adaptation"
@@ -290,7 +300,7 @@
     },
     {
       "path": "CHANGELOG.md",
-      "result_sha256": "59c612ea345f3336a75120656978431aa1d190943111edb186b9bca8a3a83227",
+      "result_sha256": "cb0d333d50bd6009f4bb70d8411911e6304fe0e7b2e9d2b8d8225ab151b6e98f",
       "reason": "release-evidence"
     },
     {
@@ -330,7 +340,7 @@
     },
     {
       "path": "docs/releases/v0.7.0.md",
-      "result_sha256": "613672900ed16701579997032084d8a15bb7d65b863033d15ac2a7b2f190dd30",
+      "result_sha256": "603e765bd6044a12c6a894ee9e35aa71c25ad60ef27056558aab8b22d2bb9f0c",
       "reason": "release-evidence"
     },
     {
@@ -350,7 +360,7 @@
     },
     {
       "path": "docs/tooling.md",
-      "result_sha256": "d079374850f91489fef2af81e579cbf8ef790bbdca517c74545cc72ec3132252",
+      "result_sha256": "4f49e44eb1448a746ca4dde00575ec1b7d4fc4c2e3a2c8576adc387f0039bfc8",
       "reason": "downstream-adaptation"
     },
     {
@@ -371,6 +381,11 @@
     {
       "path": "system/licenses/sean2077-skills-MIT.txt",
       "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/privacy/public-fixture-policy.json",
+      "result_sha256": "cf9fa9f89c6223cf294396c5d4b54ab94434c7c29d30985bce172033a6b0900d",
       "reason": "downstream-adaptation"
     },
     {

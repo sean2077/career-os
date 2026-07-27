@@ -26,6 +26,10 @@ All notable changes to Career OS are documented here.
 - Upgraded the Blind Interviewer contract to `resume-interview-probe/2`.
   Questions now identify their exact visible resume, JD, or prior-answer basis,
   and project-specific probes require a disclosure hook or candidate answer.
+- Kept public CI and release Harness verification hermetic after optionalizing
+  contributor Skills: ephemeral runners install the exact manifest-reviewed
+  contributor group into ignored project scope, verify its tree and visibility,
+  and assert that the checkout remains clean before running the light profile.
 
 ### Removed
 

@@ -137,6 +137,11 @@ runs the core gate on Windows, Ubuntu, and macOS; an Ubuntu job additionally
 fetches verified fonts and compiles/exports both resume fixtures. Every CI and
 release job is guarded to `sean2077/career-os`, so workflows copied into forks
 skip their jobs until the fork owner deliberately replaces that repository guard.
+Core and release jobs install the exact manifest-reviewed contributor Skill
+group into ignored project scope before light-profile Harness verification.
+They verify the installed tree and Host visibility, re-run Skill verification,
+and require the checkout to remain clean; no contributor Skill snapshot is
+tracked in the framework.
 CI accepts `main` pushes and pull requests, not tag pushes. Release maintainers
 wait for the pushed `main` commit's CI to succeed before creating its annotated
 tag, allowing the tag-triggered release validation to restore the trusted TeX
