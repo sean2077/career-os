@@ -28,8 +28,9 @@ All notable changes to Career OS are documented here.
   and project-specific probes require a disclosure hook or candidate answer.
 - Kept public CI and release Harness verification hermetic after optionalizing
   contributor Skills: ephemeral runners install the exact manifest-reviewed
-  contributor group into ignored project scope, verify its tree and visibility,
-  and assert that the checkout remains clean before running the light profile.
+  contributor group into ignored project scope for Codex, project the same
+  sources to Claude Code with the Harness relinker, verify both Hosts, and assert
+  that the checkout remains clean before running the light profile.
 
 ### Removed
 

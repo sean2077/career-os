@@ -280,12 +280,12 @@
     },
     {
       "path": ".github/workflows/ci.yml",
-      "result_sha256": "45e5ab134d088cbdb284f9ae1520f750c3b77dfd96dc0a7edbcff9d841e84b8d",
+      "result_sha256": "e7b2baccff433ee97e74c61feb328b5a484deed8c75d494df854e23b32ad835a",
       "reason": "downstream-adaptation"
     },
     {
       "path": ".github/workflows/release.yml",
-      "result_sha256": "b2f67ec44412d49aaea4c8aed730e1e4e71b87a6a7649507e3d77fd98f5ae043",
+      "result_sha256": "3328ec8f71dd220c700f936b7654c04af49d3bb0e7f40a63a1a6ff37aa0cb2d6",
       "reason": "downstream-adaptation"
     },
     {
@@ -300,7 +300,7 @@
     },
     {
       "path": "CHANGELOG.md",
-      "result_sha256": "cb0d333d50bd6009f4bb70d8411911e6304fe0e7b2e9d2b8d8225ab151b6e98f",
+      "result_sha256": "c2986d12c92e218fa24177cb04be051e64ceb20dc09224f9436d3296cdad8156",
       "reason": "release-evidence"
     },
     {
@@ -340,7 +340,7 @@
     },
     {
       "path": "docs/releases/v0.7.0.md",
-      "result_sha256": "603e765bd6044a12c6a894ee9e35aa71c25ad60ef27056558aab8b22d2bb9f0c",
+      "result_sha256": "58953726eed1066719f720443826ac1e8c16a495baf6d54d96397dc229a3cd72",
       "reason": "release-evidence"
     },
     {
@@ -360,7 +360,7 @@
     },
     {
       "path": "docs/tooling.md",
-      "result_sha256": "4f49e44eb1448a746ca4dde00575ec1b7d4fc4c2e3a2c8576adc387f0039bfc8",
+      "result_sha256": "8a69cdb7ad0040bb9f0aec968daa51b81551c695286e7dc6e526cacc4abc81f4",
       "reason": "downstream-adaptation"
     },
     {
@@ -385,7 +385,7 @@
     },
     {
       "path": "system/privacy/public-fixture-policy.json",
-      "result_sha256": "cf9fa9f89c6223cf294396c5d4b54ab94434c7c29d30985bce172033a6b0900d",
+      "result_sha256": "c5fceee87a8fd434855e1a66d741dd53092952934819424b3b7d352bc93acce1",
       "reason": "downstream-adaptation"
     },
     {

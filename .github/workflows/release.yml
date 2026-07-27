@@ -53,7 +53,7 @@ jobs:
           npx --yes skills@1.5.20 add \
             sean2077/skills#v4.1.2 \
             --skill agent-scaffold conventional-commit \
-            --agent codex claude-code \
+            --agent codex \
             -y
           bash .agents/relink-skills.sh
           uv run career-os skills status --audience contributor --json |
