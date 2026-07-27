@@ -66,7 +66,9 @@ audience, upstream repository, license, reviewed revision and tree hashes, and
 the verified `skills` installer version. It is a reviewed recommendation
 manifest, not an installation lock and not a claim that upstream content will
 remain unchanged. Each reviewed tree digest hashes every sorted POSIX-relative
-path together with the SHA-256 of that file's bytes.
+path together with the SHA-256 of its content. UTF-8 text normalizes CRLF to LF
+so the same reviewed source has one digest across Host checkouts; binary content
+retains its exact bytes.
 
 `career-os init` preserves its existing JSON fields and adds
 `skill_onboarding` for the ordinary `obsidian` audience. The same read-only

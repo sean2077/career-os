@@ -224,9 +224,17 @@ def canonical_tree_sha256(root: Path) -> str:
         key=lambda item: item[0],
     )
     for relative, path in files:
+        content = path.read_bytes()
+        if b"\0" not in content:
+            try:
+                content.decode("utf-8")
+            except UnicodeDecodeError:
+                pass
+            else:
+                content = content.replace(b"\r\n", b"\n")
         digest.update(relative.encode("utf-8"))
         digest.update(b"\0")
-        digest.update(hashlib.sha256(path.read_bytes()).hexdigest().encode("ascii"))
+        digest.update(hashlib.sha256(content).hexdigest().encode("ascii"))
         digest.update(b"\n")
     return digest.hexdigest()
 

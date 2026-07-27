@@ -111,7 +111,7 @@ def _install_group(
     return names
 
 
-def test_canonical_tree_hash_is_path_and_content_sensitive(tmp_path: Path) -> None:
+def test_canonical_tree_hash_is_portable_and_content_sensitive(tmp_path: Path) -> None:
     first = tmp_path / "first"
     first.mkdir()
     first.joinpath("a.txt").write_text("one", encoding="utf-8")
@@ -124,6 +124,18 @@ def test_canonical_tree_hash_is_path_and_content_sensitive(tmp_path: Path) -> No
     second.mkdir()
     second.joinpath("b.txt").write_text("one", encoding="utf-8")
     assert canonical_tree_sha256(second) != baseline
+
+    lf = tmp_path / "lf"
+    crlf = tmp_path / "crlf"
+    lf.mkdir()
+    crlf.mkdir()
+    lf.joinpath("text.md").write_bytes(b"one\ntwo\n")
+    crlf.joinpath("text.md").write_bytes(b"one\r\ntwo\r\n")
+    assert canonical_tree_sha256(lf) == canonical_tree_sha256(crlf)
+
+    lf.joinpath("binary.dat").write_bytes(b"\0one\ntwo\n")
+    crlf.joinpath("binary.dat").write_bytes(b"\0one\r\ntwo\r\n")
+    assert canonical_tree_sha256(lf) != canonical_tree_sha256(crlf)
 
 
 def test_clean_skill_onboarding_is_read_only_and_argument_structured(

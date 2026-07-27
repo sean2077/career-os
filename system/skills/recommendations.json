@@ -22,22 +22,22 @@
         {
           "name": "json-canvas",
           "source_path": "skills/json-canvas",
-          "tree_sha256": "6a45f87684df13fb772c7a026930f86589d912acd6f9663f7ace78bb6eb98274"
+          "tree_sha256": "3662389f3dd8678c1643118b236a7f80496895c7cbbc7238f233833234d2fbde"
         },
         {
           "name": "obsidian-bases",
           "source_path": "skills/obsidian-bases",
-          "tree_sha256": "c418ddf2939cd7e7cf7215827b0425a4a3b515823fa63389d2528b8f10f9d645"
+          "tree_sha256": "600e5628f8d7782050415062e17b67d469c9c033e13c90c055c6c15432b6f443"
         },
         {
           "name": "obsidian-cli",
           "source_path": "skills/obsidian-cli",
-          "tree_sha256": "866f4840cf0ac38cc72fcf6c2af01ad839612a3ca6ec7a971649cc1e35152214"
+          "tree_sha256": "c3797c899322217fd27115deab63a9afa8488fbdaa0a12ee1f3a13fc0094e6bf"
         },
         {
           "name": "obsidian-markdown",
           "source_path": "skills/obsidian-markdown",
-          "tree_sha256": "f5d33fb14e64d5da947b820854c23d394b1055a2e5adaa1f16c982567b4dd166"
+          "tree_sha256": "b6337100e61349378290e102011fa66198a73b98702362c25a1fc6b0097bc353"
         }
       ]
     },
@@ -54,12 +54,12 @@
         {
           "name": "agent-scaffold",
           "source_path": "skills/agent-scaffold",
-          "tree_sha256": "0cd43c4103bfddfc805c1c832b0c3846b762173654760d02589b4d49d22360d3"
+          "tree_sha256": "6f975d0d395846643603553de5603b331794304b05f3aef0485def60dcb765cd"
         },
         {
           "name": "conventional-commit",
           "source_path": "skills/conventional-commit",
-          "tree_sha256": "3aa456387515ee454fccc5729bc2c909d21991a61179e0aeb63c59e9f4cc14dd"
+          "tree_sha256": "23d7e497f22e1513e87dbd247dec4b2367c1168590733fb68253dfa3fb90a901"
         }
       ]
     }

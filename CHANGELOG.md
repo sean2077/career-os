@@ -31,6 +31,8 @@ All notable changes to Career OS are documented here.
   contributor group into ignored project scope for Codex, project the same
   sources to Claude Code with the Harness relinker, verify both Hosts, and assert
   that the checkout remains clean before running the light profile.
+- Made reviewed Skill tree digests portable across Windows CRLF and Unix LF
+  checkouts while retaining exact-byte hashing for binary content.
 
 ### Removed
 
