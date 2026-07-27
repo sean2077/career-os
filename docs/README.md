@@ -14,7 +14,7 @@ manages either root homepage.
 - [Installation requirements](installation.md): core, Obsidian CLI, XeLaTeX, Poppler, fonts, and verified platform boundaries.
 - [Embedded Vaults](embedded-vault.md): standalone, nested repository, and submodule modes.
 - [Private downstream installation](private-downstream.md): the supported split topology, optional fetch-only public upstream, exact-tag updates, and Agent safety rules.
-- [Skills](skills.md): project-owned and bundled Agent Skills.
+- [Skills](skills.md): seven Career Skills, optional auxiliary Skill onboarding, and reviewer boundaries.
 - [Resume system](resume.md): direct XeLaTeX sources and privacy-safe exports.
 - [Legacy repository imports](importing.md): reviewed hash-bound copy/transform plans and rollback.
 
@@ -41,7 +41,7 @@ never overwrite an initialized README.
 
 - [Tooling](tooling.md): development commands, command contracts, and verification depth.
 - [Tool governance](tool-governance.md): authoritative command placement and job contracts.
-- [Supply chain](supply-chain.md): dependency locks, SBOM, licenses, and attribution.
+- [Supply chain](supply-chain.md): dependency locks, the Skill recommendation boundary, SBOM, licenses, and fonts.
 
 ## Release Evidence
 

@@ -1,0 +1,157 @@
+{
+  "$defs": {
+    "InstallerRecommendation": {
+      "additionalProperties": false,
+      "properties": {
+        "package": {
+          "const": "skills",
+          "title": "Package",
+          "type": "string"
+        },
+        "version": {
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "title": "Version",
+          "type": "string"
+        },
+        "telemetry_environment": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Telemetry Environment",
+          "type": "object"
+        }
+      },
+      "required": [
+        "package",
+        "version",
+        "telemetry_environment"
+      ],
+      "title": "InstallerRecommendation",
+      "type": "object"
+    },
+    "RecommendedSkill": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "title": "Name",
+          "type": "string"
+        },
+        "source_path": {
+          "title": "Source Path",
+          "type": "string"
+        },
+        "tree_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Tree Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "source_path",
+        "tree_sha256"
+      ],
+      "title": "RecommendedSkill",
+      "type": "object"
+    },
+    "SkillRecommendationGroup": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "audience": {
+          "enum": [
+            "user",
+            "contributor"
+          ],
+          "title": "Audience",
+          "type": "string"
+        },
+        "source": {
+          "title": "Source",
+          "type": "string"
+        },
+        "source_repository": {
+          "title": "Source Repository",
+          "type": "string"
+        },
+        "ref": {
+          "title": "Ref",
+          "type": "string"
+        },
+        "reviewed_revision": {
+          "pattern": "^[0-9a-f]{40}$",
+          "title": "Reviewed Revision",
+          "type": "string"
+        },
+        "license": {
+          "title": "License",
+          "type": "string"
+        },
+        "attribution": {
+          "title": "Attribution",
+          "type": "string"
+        },
+        "skills": {
+          "items": {
+            "$ref": "#/$defs/RecommendedSkill"
+          },
+          "minItems": 1,
+          "title": "Skills",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "audience",
+        "source",
+        "source_repository",
+        "ref",
+        "reviewed_revision",
+        "license",
+        "attribution",
+        "skills"
+      ],
+      "title": "SkillRecommendationGroup",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "revision": {
+      "minimum": 1,
+      "title": "Revision",
+      "type": "integer"
+    },
+    "installer": {
+      "$ref": "#/$defs/InstallerRecommendation"
+    },
+    "groups": {
+      "items": {
+        "$ref": "#/$defs/SkillRecommendationGroup"
+      },
+      "minItems": 1,
+      "title": "Groups",
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema_version",
+    "revision",
+    "installer",
+    "groups"
+  ],
+  "title": "Career OS Skill Recommendations",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://career-os.dev/schemas/skill-recommendations.schema.json"
+}

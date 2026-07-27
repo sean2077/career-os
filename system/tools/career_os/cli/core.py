@@ -31,6 +31,7 @@ from career_os.config import (
 from career_os.git_safety import inspect_downstream_git_safety
 from career_os.records.models import StrategyPositioning
 from career_os.seed import initialize_data_root
+from career_os.skill_onboarding import build_skill_onboarding_report
 
 
 def init_command(
@@ -117,6 +118,12 @@ def init_command(
         raise typer.BadParameter(
             "installation already exists with different settings; inspect .career-os/install.toml"
         )
+    try:
+        skill_onboarding = build_skill_onboarding_report(root, audience="user")
+    except (OSError, ValueError) as error:
+        raise typer.BadParameter(
+            f"Skill recommendations are invalid: {error}", param_hint="--root"
+        ) from error
     created = initialize_data_root(selected_data, root / "system/seeds")
     state_path = write_install_state(root, state)
     typer.echo(
@@ -129,6 +136,7 @@ def init_command(
                 "vault_mount": selected_mount,
                 "created": [str(item) for item in created],
                 "install_state": str(state_path),
+                "skill_onboarding": skill_onboarding,
             },
             indent=2,
         )

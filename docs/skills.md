@@ -19,7 +19,7 @@ Three project subagents provide independent, read-only review:
 
 | Subagent | Input boundary | Result |
 | --- | --- | --- |
-| `blind-interviewer` | Public Interview Packet only | `resume-interview-probe/1` |
+| `blind-interviewer` | Public Interview Packet only; causally grounded current question | `resume-interview-probe/2` |
 | `evidence-auditor` | Internal Evidence Packet and explicit references | `resume-evidence-audit/1` |
 | `career-strategy-advisor` | Dated stable authority references and attributable external sources | Source-layered decision brief |
 
@@ -37,6 +37,13 @@ unavailable reviewer, invalid result, or leaked packet triggers the owning
 Skill's fallback and cannot grant readiness, claim approval, or strategy
 acceptance.
 
+The Blind Interviewer classifies each current question as `public-surface`,
+`industry-standard`, or `candidate-answer` and returns the exact visible
+resume/JD/answer excerpt that makes it available. Industry-standard questions
+may probe ordinary ownership, mechanism, tradeoff, measurement, failure, or
+recovery for a publicly named domain; they may not introduce private project
+nouns or implementation details.
+
 The opportunity flow deliberately keeps JD screening, company/opportunity
 decision, application tracking, resume tailoring/export, and interview
 preparation/retest as five independently authoritative blocks. Screening an
@@ -44,22 +51,67 @@ identified-employer JD composes `role-market` with `opportunity-decision` to
 resolve or refresh the canonical Company and link it back to the JD; Company
 quality may affect priority or risk but never evidence fit or application state.
 
-Bundled companion Skills `conventional-commit` and `agent-scaffold` come from [sean2077/skills](https://github.com/sean2077/skills). Optional recommendations from that project are `semver-release`, `project-docs-organizer`, and `tooling-conventions`.
+## Optional auxiliary Skills
 
-Bundled Obsidian Skills `obsidian-markdown`, `obsidian-bases`, `json-canvas`,
-and `obsidian-cli` come from
-[kepano/obsidian-skills](https://github.com/kepano/obsidian-skills).
+The tracked framework contains only the seven Career Skills. Six auxiliary
+Skills are recommendations, not redistributed snapshots:
 
-Exact revisions, source paths, licenses, and tree hashes live in `skills-lock.json`. Bundled external Skill content is not modified.
+| Group | Audience | Skills | Reviewed upstream |
+| --- | --- | --- | --- |
+| `obsidian` | ordinary Career OS use | `obsidian-markdown`, `obsidian-bases`, `json-canvas`, `obsidian-cli` | [`kepano/obsidian-skills`](https://github.com/kepano/obsidian-skills), reviewed from `main` |
+| `contributor` | framework maintenance only | `agent-scaffold`, `conventional-commit` | [`sean2077/skills`](https://github.com/sean2077/skills), reviewed from a stable tag |
 
-`career-os skills verify` checks the exact 13-Skill inventory, required
-frontmatter, locked external trees, real Claude projections, and the absence of a
-`.codex/skills` projection. The canonical tree digest hashes each sorted POSIX
-relative path together with the SHA-256 of its file bytes.
+`system/skills/recommendations.json` is the authority for group membership,
+audience, upstream repository, license, reviewed revision and tree hashes, and
+the verified `skills` installer version. It is a reviewed recommendation
+manifest, not an installation lock and not a claim that upstream content will
+remain unchanged. Each reviewed tree digest hashes every sorted POSIX-relative
+path together with the SHA-256 of its content. UTF-8 text normalizes CRLF to LF
+so the same reviewed source has one digest across Host checkouts; binary content
+retains its exact bytes.
 
-Promotion and attribution are confined to this catalog, the root README,
-`NOTICE`, and the lock file. They are never injected into career records,
-resumes, framework views, or Agent output.
+`career-os init` preserves its existing JSON fields and adds
+`skill_onboarding` for the ordinary `obsidian` audience. The same read-only
+contract is available at any time:
+
+```text
+career-os skills status --json
+career-os skills status --audience contributor --json
+```
+
+The report detects each recommended Skill at project and global scope for
+Codex and Claude Code. It reports missing or partial groups, reviewed-content
+drift, source mismatches, stale preferences, and project/global duplicates.
+Duplicates and `main` content drift are `attention`; Career OS never deletes
+either copy. A changed recommendation revision, an invalid installation, or an
+explicit reset makes the group unresolved again.
+
+Only when `requires_user_choice` is true does the Agent explain the source and
+ask for `project`, `global`, or `skip` plus the target Host(s). After a user
+chooses installation, the Agent executes the report's argument arrays with
+telemetry disabled and explicit Skill and Host values. The CLI itself never
+uses the network, prompts, or invokes `npx`. A project installation is followed
+by `bash .agents/relink-skills.sh`, then status verification. The preference is
+recorded only after every Skill is visible to every selected Host:
+
+```text
+career-os skills configure --group obsidian --scope project --agent codex
+career-os skills configure --group obsidian --scope global --agent codex --agent claude-code
+career-os skills configure --group obsidian --scope skip
+career-os skills configure --group obsidian --reset
+```
+
+The ignored `.career-os/skill-onboarding.json` holds the local choice. The six
+known project Skill paths, their Claude projections, and the installer-owned
+root `skills-lock.json` are also ignored, so project scope is deliberately
+checkout-local even though the upstream installer commonly treats it as
+team-shared state.
+
+`career-os skills verify` requires the seven core Skills, their real Claude
+projections, the recommendation manifest, and the isolated selection fixtures.
+Any known auxiliary subset is allowed; a missing auxiliary Skill does not
+affect the core check. Unknown additional Skills, invalid frontmatter, bad
+projections, or a `.codex/skills` projection still fail.
 
 The synthetic selection prompts and hidden oracle are separate files under
 `system/tests/fixtures/`. The prompt packet contains only case IDs and natural

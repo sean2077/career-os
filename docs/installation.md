@@ -1,10 +1,10 @@
 # Installation Requirements
 
-> **v0.6.0 boundary:** install from a clean public checkout. The optional
-> QuickAdd adapter adds guarded local review and Engagement-event scripts but
-> never edits host-owned `.obsidian` choices or hotkeys. The v0.5.0 homepage
-> filenames and v0.4.0 resume-export behavior remain unchanged, and schema-2
-> records still require an explicit schema-2-to-3 migration.
+> **v0.7.0 boundary:** install from a clean public checkout. The tracked core is
+> exactly seven Career Skills; optional Obsidian and contributor groups are
+> reported for explicit local onboarding but never installed by the CLI. Blind
+> Interviewer v2 requires a visible public or candidate-answer basis. The
+> v0.6.0 QuickAdd boundary and schema-2-to-3 migration requirement remain.
 
 Career OS separates core, live Obsidian, and resume readiness. A successful
 core check does not imply that the optional Obsidian CLI or XeLaTeX resume
@@ -37,6 +37,53 @@ uv sync --locked --all-groups
 ```
 
 Neither command installs Git, Obsidian, TeX, Poppler, or the resume fonts.
+
+## Optional Agent Skills
+
+The repository includes seven core Career Skills. It recommends four Obsidian
+authoring Skills for ordinary use and, separately, two contributor Skills for
+framework maintenance. These recommendations are optional local tools, not
+runtime dependencies.
+
+`career-os init` performs no network access and never installs a Skill. Its
+JSON result includes a `skill_onboarding` object. When that object has
+`requires_user_choice: true`, the Agent explains the reviewed upstream and asks
+whether to install the `obsidian` group at project or global scope, or skip it,
+and which of Codex and Claude Code must see it. An ordinary initialization does
+not prompt for the contributor group.
+
+The Agent then composes the manifest-provided arrays in this order:
+
+```text
+base_args + scope_args[project|global]
+          + agent_args[codex|claude-code|codex+claude-code]
+          + confirmation_args
+```
+
+The current contract uses `npx skills add`, explicit `--skill` and `--agent`
+values, and `DISABLE_TELEMETRY=1`. Project scope also requires
+`bash .agents/relink-skills.sh` after installation. Only after a fresh status
+report confirms every Skill for every selected Host does the Agent record the
+choice:
+
+```text
+uv run career-os skills status --json
+uv run career-os skills configure --group obsidian --scope project --agent codex
+```
+
+Use `--scope global`, repeat `--agent` for both Hosts, or choose
+`--scope skip` as appropriate. `career-os skills configure` never installs
+anything; it writes only ignored `.career-os/skill-onboarding.json` and rejects
+incomplete, invisible, or wrong-source installations. Reset a prior decision
+with:
+
+```text
+uv run career-os skills configure --group obsidian --reset
+```
+
+Project/global duplication is reported for review and never removed
+automatically. See the [Skill catalog](skills.md) for the full contract and the
+separate contributor audience.
 
 ## Core and Obsidian readiness
 
@@ -160,7 +207,10 @@ git --version
 uv --version
 uv sync --locked --all-groups
 "C:\\Program Files\\Git\\bin\\bash.exe" .agents/relink-skills.sh
+# If contributor Skills were installed at project scope:
 "C:\\Program Files\\Git\\bin\\bash.exe" .agents/skills/agent-scaffold/agent-scaffold.sh verify --profile light --json
+# If contributor Skills were installed globally, run the same script from:
+# ~/.agents/skills/agent-scaffold/agent-scaffold.sh
 uv run career-os doctor --json
 uv run career-os check
 uv run career-os resume fonts fetch

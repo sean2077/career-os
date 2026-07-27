@@ -55,6 +55,12 @@ engine = "xelatex"
     shutil.copytree(source_seeds, root / "system/seeds")
     source_bases = Path(__file__).resolve().parents[1] / "obsidian/bases"
     shutil.copytree(source_bases, root / "system/obsidian/bases")
+    source_recommendations = (
+        Path(__file__).resolve().parents[1] / "skills/recommendations.json"
+    )
+    recommendations = root / "system/skills/recommendations.json"
+    recommendations.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(source_recommendations, recommendations)
 
 
 def test_project_config_schema_matches_runtime_model_and_round_trips() -> None:
@@ -163,6 +169,11 @@ def test_init_is_idempotent_and_multilingual(tmp_path: Path) -> None:
     assert second.exit_code == 0, second.stdout
     payload = json.loads(second.stdout)
     assert payload["created"] == []
+    assert payload["skill_onboarding"]["schema_version"] == 1
+    assert payload["skill_onboarding"]["recommendation_revision"] == 1
+    assert [group["id"] for group in payload["skill_onboarding"]["groups"]] == [
+        "obsidian"
+    ]
     assert home.read_text(encoding="utf-8") == "# My Career Home\n"
     assert {path.name: path.read_bytes() for path in framework_homes} == (
         framework_homes_before

@@ -1,14 +1,14 @@
 {
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
-  "serialNumber": "urn:uuid:279e1ecd-0323-53d2-bf4a-dd2c2f4791c8",
+  "serialNumber": "urn:uuid:26efa08f-d49e-577d-99a1-283d1ec5daa5",
   "version": 1,
   "metadata": {
     "component": {
       "type": "application",
-      "bom-ref": "career-os@0.6.0",
+      "bom-ref": "career-os@0.7.0",
       "name": "career-os",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "licenses": [
         {
           "license": {
@@ -246,216 +246,6 @@
       "scope": "required"
     },
     {
-      "type": "data",
-      "bom-ref": "skill:agent-scaffold@7a0fe227a59d6a921ae58523dd83971dbf4e0030",
-      "name": "agent-scaffold",
-      "version": "7a0fe227a59d6a921ae58523dd83971dbf4e0030",
-      "hashes": [
-        {
-          "alg": "SHA-256",
-          "content": "938260972a665a308338843c106e88c841388dd479fb969fc0e355cf652b63e4"
-        }
-      ],
-      "licenses": [
-        {
-          "license": {
-            "id": "MIT"
-          }
-        }
-      ],
-      "externalReferences": [
-        {
-          "type": "vcs",
-          "url": "https://github.com/sean2077/skills#7a0fe227a59d6a921ae58523dd83971dbf4e0030"
-        }
-      ],
-      "properties": [
-        {
-          "name": "career-os:source-path",
-          "value": "skills/agent-scaffold"
-        },
-        {
-          "name": "career-os:attribution",
-          "value": "Copyright (c) sean2077 and contributors"
-        }
-      ]
-    },
-    {
-      "type": "data",
-      "bom-ref": "skill:conventional-commit@93667c5a5eec5f68cd1097574e27c29994b6c3f2",
-      "name": "conventional-commit",
-      "version": "93667c5a5eec5f68cd1097574e27c29994b6c3f2",
-      "hashes": [
-        {
-          "alg": "SHA-256",
-          "content": "23d7e497f22e1513e87dbd247dec4b2367c1168590733fb68253dfa3fb90a901"
-        }
-      ],
-      "licenses": [
-        {
-          "license": {
-            "id": "MIT"
-          }
-        }
-      ],
-      "externalReferences": [
-        {
-          "type": "vcs",
-          "url": "https://github.com/sean2077/skills#93667c5a5eec5f68cd1097574e27c29994b6c3f2"
-        }
-      ],
-      "properties": [
-        {
-          "name": "career-os:source-path",
-          "value": "skills/conventional-commit"
-        },
-        {
-          "name": "career-os:attribution",
-          "value": "Copyright (c) sean2077 and contributors"
-        }
-      ]
-    },
-    {
-      "type": "data",
-      "bom-ref": "skill:json-canvas@553ef99aa3306dd23f268e1ba9af752577684f69",
-      "name": "json-canvas",
-      "version": "553ef99aa3306dd23f268e1ba9af752577684f69",
-      "hashes": [
-        {
-          "alg": "SHA-256",
-          "content": "3662389f3dd8678c1643118b236a7f80496895c7cbbc7238f233833234d2fbde"
-        }
-      ],
-      "licenses": [
-        {
-          "license": {
-            "id": "MIT"
-          }
-        }
-      ],
-      "externalReferences": [
-        {
-          "type": "vcs",
-          "url": "https://github.com/kepano/obsidian-skills#553ef99aa3306dd23f268e1ba9af752577684f69"
-        }
-      ],
-      "properties": [
-        {
-          "name": "career-os:source-path",
-          "value": "skills/json-canvas"
-        },
-        {
-          "name": "career-os:attribution",
-          "value": "Copyright (c) 2026 Steph Ango (@kepano)"
-        }
-      ]
-    },
-    {
-      "type": "data",
-      "bom-ref": "skill:obsidian-bases@553ef99aa3306dd23f268e1ba9af752577684f69",
-      "name": "obsidian-bases",
-      "version": "553ef99aa3306dd23f268e1ba9af752577684f69",
-      "hashes": [
-        {
-          "alg": "SHA-256",
-          "content": "075b8e6e325eab6afd3b035150bfb9e1482408c2e9098cca9f1fc1559a3df7cc"
-        }
-      ],
-      "licenses": [
-        {
-          "license": {
-            "id": "MIT"
-          }
-        }
-      ],
-      "externalReferences": [
-        {
-          "type": "vcs",
-          "url": "https://github.com/kepano/obsidian-skills#553ef99aa3306dd23f268e1ba9af752577684f69"
-        }
-      ],
-      "properties": [
-        {
-          "name": "career-os:source-path",
-          "value": "skills/obsidian-bases"
-        },
-        {
-          "name": "career-os:attribution",
-          "value": "Copyright (c) 2026 Steph Ango (@kepano)"
-        }
-      ]
-    },
-    {
-      "type": "data",
-      "bom-ref": "skill:obsidian-cli@553ef99aa3306dd23f268e1ba9af752577684f69",
-      "name": "obsidian-cli",
-      "version": "553ef99aa3306dd23f268e1ba9af752577684f69",
-      "hashes": [
-        {
-          "alg": "SHA-256",
-          "content": "c3797c899322217fd27115deab63a9afa8488fbdaa0a12ee1f3a13fc0094e6bf"
-        }
-      ],
-      "licenses": [
-        {
-          "license": {
-            "id": "MIT"
-          }
-        }
-      ],
-      "externalReferences": [
-        {
-          "type": "vcs",
-          "url": "https://github.com/kepano/obsidian-skills#553ef99aa3306dd23f268e1ba9af752577684f69"
-        }
-      ],
-      "properties": [
-        {
-          "name": "career-os:source-path",
-          "value": "skills/obsidian-cli"
-        },
-        {
-          "name": "career-os:attribution",
-          "value": "Copyright (c) 2026 Steph Ango (@kepano)"
-        }
-      ]
-    },
-    {
-      "type": "data",
-      "bom-ref": "skill:obsidian-markdown@553ef99aa3306dd23f268e1ba9af752577684f69",
-      "name": "obsidian-markdown",
-      "version": "553ef99aa3306dd23f268e1ba9af752577684f69",
-      "hashes": [
-        {
-          "alg": "SHA-256",
-          "content": "db13f2f3153fb7e6d0a7d07f2ec2d7f825796242093fb0b3007898c5e5730820"
-        }
-      ],
-      "licenses": [
-        {
-          "license": {
-            "id": "MIT"
-          }
-        }
-      ],
-      "externalReferences": [
-        {
-          "type": "vcs",
-          "url": "https://github.com/kepano/obsidian-skills#553ef99aa3306dd23f268e1ba9af752577684f69"
-        }
-      ],
-      "properties": [
-        {
-          "name": "career-os:source-path",
-          "value": "skills/obsidian-markdown"
-        },
-        {
-          "name": "career-os:attribution",
-          "value": "Copyright (c) 2026 Steph Ango (@kepano)"
-        }
-      ]
-    },
-    {
       "type": "file",
       "bom-ref": "font:NotoSansCJKsc-Bold.otf@2.004",
       "name": "NotoSansCJKsc-Bold.otf",
@@ -646,7 +436,7 @@
   ],
   "dependencies": [
     {
-      "ref": "career-os@0.6.0",
+      "ref": "career-os@0.7.0",
       "dependsOn": [
         "font:NotoSansCJKsc-Bold.otf@2.004",
         "font:NotoSansCJKsc-Regular.otf@2.004",
@@ -656,13 +446,7 @@
         "pkg:pypi/pymupdf4llm@1.28.0",
         "pkg:pypi/pypdf@6.14.2",
         "pkg:pypi/ruamel-yaml@0.18.17",
-        "pkg:pypi/typer@0.27.0",
-        "skill:agent-scaffold@7a0fe227a59d6a921ae58523dd83971dbf4e0030",
-        "skill:conventional-commit@93667c5a5eec5f68cd1097574e27c29994b6c3f2",
-        "skill:json-canvas@553ef99aa3306dd23f268e1ba9af752577684f69",
-        "skill:obsidian-bases@553ef99aa3306dd23f268e1ba9af752577684f69",
-        "skill:obsidian-cli@553ef99aa3306dd23f268e1ba9af752577684f69",
-        "skill:obsidian-markdown@553ef99aa3306dd23f268e1ba9af752577684f69"
+        "pkg:pypi/typer@0.27.0"
       ]
     },
     {
@@ -791,24 +575,6 @@
       "dependsOn": [
         "pkg:pypi/typing-extensions@4.16.0"
       ]
-    },
-    {
-      "ref": "skill:agent-scaffold@7a0fe227a59d6a921ae58523dd83971dbf4e0030"
-    },
-    {
-      "ref": "skill:conventional-commit@93667c5a5eec5f68cd1097574e27c29994b6c3f2"
-    },
-    {
-      "ref": "skill:json-canvas@553ef99aa3306dd23f268e1ba9af752577684f69"
-    },
-    {
-      "ref": "skill:obsidian-bases@553ef99aa3306dd23f268e1ba9af752577684f69"
-    },
-    {
-      "ref": "skill:obsidian-cli@553ef99aa3306dd23f268e1ba9af752577684f69"
-    },
-    {
-      "ref": "skill:obsidian-markdown@553ef99aa3306dd23f268e1ba9af752577684f69"
     },
     {
       "ref": "font:NotoSansCJKsc-Bold.otf@2.004"

@@ -4,6 +4,43 @@ All notable changes to Career OS are documented here.
 
 ## [Unreleased]
 
+## [v0.7.0] — 2026-07-27
+
+### Added
+
+- Added a reviewed optional-Skill recommendation manifest, read-only
+  `skills status`, verified local `skills configure`, and a versioned
+  `skill_onboarding` object in `init` output. The CLI remains non-interactive
+  and offline; Agents ask for project/global/skip and target Hosts before
+  invoking the external installer.
+
+### Changed
+
+- Made the seven Career Skills the exact tracked core while allowing any known
+  Obsidian or contributor Skill subset as ignored local state. Skill
+  verification now validates the recommendation manifest and still rejects
+  unknown extras or bad Host projections.
+- Consolidated same-purpose project preparation and communication artifacts
+  into stable living records while preserving separate authority and lifecycle
+  boundaries for evidence, readiness, claims, audits, and sessions.
+- Upgraded the Blind Interviewer contract to `resume-interview-probe/2`.
+  Questions now identify their exact visible resume, JD, or prior-answer basis,
+  and project-specific probes require a disclosure hook or candidate answer.
+- Kept public CI and release Harness verification hermetic after optionalizing
+  contributor Skills: ephemeral runners install the exact manifest-reviewed
+  contributor group into ignored project scope for Codex, project the same
+  sources to Claude Code with the Harness relinker, verify both Hosts, and assert
+  that the checkout remains clean before running the light profile.
+- Made reviewed Skill tree digests portable across Windows CRLF and Unix LF
+  checkouts while retaining exact-byte hashing for binary content.
+
+### Removed
+
+- Removed the four bundled Obsidian Skill snapshots, two bundled contributor
+  Skill snapshots, their Claude projections, custom root Skill lock, license
+  copies, notices, and SBOM entries. Their reviewed upstream metadata now lives
+  only in the recommendation manifest.
+
 ## [v0.6.0] — 2026-07-26
 
 ### Added

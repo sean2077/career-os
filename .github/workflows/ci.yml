@@ -44,6 +44,21 @@ jobs:
       - run: uv run career-os skills verify
       - run: uv run career-os check --fast
       - run: uv run career-os check
+      - name: Install reviewed contributor Skills
+        shell: bash
+        env:
+          DISABLE_TELEMETRY: "1"
+        run: |
+          npx --yes skills@1.5.20 add \
+            sean2077/skills#v4.1.2 \
+            --skill agent-scaffold conventional-commit \
+            --agent codex \
+            -y
+          bash .agents/relink-skills.sh
+          uv run career-os skills status --audience contributor --json |
+            uv run python -c 'import json, sys; group = json.load(sys.stdin)["groups"][0]; assert group["status"] == "installed" and all(group["complete"]["project"].values())'
+          uv run career-os skills verify
+          test -z "$(git status --porcelain)"
       - name: Verify the light Agent harness
         shell: bash
         run: bash .agents/skills/agent-scaffold/agent-scaffold.sh verify --profile light --json

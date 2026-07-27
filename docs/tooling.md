@@ -21,6 +21,8 @@ uv run career-os check
 uv run career-os cleanup --json
 # Review the dry-run report before:
 uv run career-os cleanup --apply
+uv run career-os skills status --json
+uv run career-os skills status --audience contributor --json
 uv run career-os skills verify
 uv run career-os skills validate-reviewer <evidence|probe> [PATH|-]
 uv run career-os views build
@@ -73,11 +75,15 @@ Use Git Bash explicitly rather than the Windows `bash.exe` shim:
 
 ```text
 "C:\\Program Files\\Git\\bin\\bash.exe" .agents/relink-skills.sh
+# Project-scoped contributor installation:
 "C:\\Program Files\\Git\\bin\\bash.exe" .agents/skills/agent-scaffold/agent-scaffold.sh verify --profile light --json
+# Global contributor installation: run the same script from:
+# ~/.agents/skills/agent-scaffold/agent-scaffold.sh
 ```
 
-The second command runs the installed `agent-scaffold` verifier with the light
-profile; worktree and trunk-guard governance are intentionally disabled.
+The verifier is available only after the user chooses the contributor
+recommendation group. Run it from the selected project or global scope with the
+light profile; worktree and trunk-guard governance are intentionally disabled.
 
 ## Validation depth
 
@@ -131,6 +137,12 @@ runs the core gate on Windows, Ubuntu, and macOS; an Ubuntu job additionally
 fetches verified fonts and compiles/exports both resume fixtures. Every CI and
 release job is guarded to `sean2077/career-os`, so workflows copied into forks
 skip their jobs until the fork owner deliberately replaces that repository guard.
+Core and release jobs install the exact manifest-reviewed contributor Skill
+group into ignored project scope for Codex, then use the Harness relinker to
+project those authoritative sources to Claude Code before light-profile Harness
+verification. They verify the installed tree and both Hosts' visibility, re-run
+Skill verification, and require the checkout to remain clean; no contributor
+Skill snapshot is tracked in the framework.
 CI accepts `main` pushes and pull requests, not tag pushes. Release maintainers
 wait for the pushed `main` commit's CI to succeed before creating its annotated
 tag, allowing the tag-triggered release validation to restore the trusted TeX
@@ -160,10 +172,19 @@ hosted visibility cannot be proven offline. See the
 One `career-os` executable owns initialization, path discovery, diagnosis,
 checking, conservative ignored-state cleanup, framework-view verification, Vault plan/apply, legacy import
 plan/apply/verify/rollback, in-place schema migration
-plan/apply/verify/rollback, Skill
-verification, reviewer-contract validation, and resume jobs. Operation plans
+plan/apply/verify/rollback, optional-Skill status and local preference
+recording, Skill verification, reviewer-contract validation, and resume jobs. Operation plans
 never select a mutating default for unknown input. Product implementation
 helpers remain private under `system/tools/career_os/`.
+
+`skills status` is read-only and returns the same versioned onboarding contract
+as `init`. `skills configure` writes only ignored
+`.career-os/skill-onboarding.json`; project/global choices fail closed unless
+the complete group has verified installer provenance and is visible to every
+selected Host, while `skip` records directly. Neither command downloads,
+installs, updates, or removes a Skill. The Agent or user owns the explicit
+`npx skills add` step after choosing scope and Host; see the
+[Skill catalog](skills.md).
 
 BOSS acquisition is not a project command. The user searches and browses the
 signed-in site, then supplies a job URL, pasted JD text, or screenshots to Role
@@ -253,7 +274,9 @@ missing or stopped optional Obsidian CLI is `attention`; filesystem checks still
 run. It also reports the same local downstream remote-safety state as `check`,
 including a clean pass when no public update remote is configured.
 
-`skills verify` always validates inventory, projections, locks, and the isolated
-selection prompt/oracle fixtures. A true blind behavioral run additionally
-passes an Agent-produced `--selection-report`; without one, the command reports
-that gate as `attention` rather than claiming it passed.
+`skills verify` always validates the seven core Skills and projections, the
+recommendation manifest, any installed known auxiliary subset, and the
+isolated selection prompt/oracle fixtures. Missing auxiliary Skills are valid;
+unknown extras and bad projections fail. A true blind behavioral run
+additionally passes an Agent-produced `--selection-report`; without one, the
+command reports that gate as `attention` rather than claiming it passed.

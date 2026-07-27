@@ -11,14 +11,16 @@ Career OS is an Agent-native, local-first, embeddable career development operati
 
 ## Working Rules
 
-- Start from the user's natural-language outcome and select or compose the seven Career Skills. Never ask the user to choose a Skill, mode, owner, worker, or validator.
+- Start from the user's natural-language outcome and select or compose the seven Career Skills. Never ask the user to choose a canonical Career Skill, mode, owner, worker, or validator.
+- Treat `skill_onboarding` from `career-os init` or `career-os skills status --json` as the optional auxiliary-Skill contract. On ordinary initialization, consider only the `obsidian` user group; consider the `contributor` group only for repository maintenance. If and only if a group has `requires_user_choice=true`, explain its upstream source, reviewed revision, license, and local-state boundary, then ask the user for `project`, `global`, or `skip` plus the target Agent Host(s). Do not repeat a resolved choice, prompt for another audience, install implicitly, or delete project/global duplicates.
+- After the user chooses installation, execute the manifest-provided `npx skills add` argument array with its telemetry environment, explicit `--skill` and `--agent` values, selected scope, and confirmation arguments. For project scope, then run `bash .agents/relink-skills.sh`. Re-run status and record the choice with `career-os skills configure` only after every recommended Skill is visible to every selected Host; never treat installation as evidence maturity, readiness, or a career outcome.
 - Keep Career Evidence, Career Strategy, Role Market, Opportunity Decision, Career Outlook, Capability Readiness, and Career Communication as distinct canonical authorities. Cross-authority workflows use stable references rather than copied facts.
 - When analyzing a JD with an identified employer, compose Role Market with Opportunity Decision: resolve or refresh the canonical Company, link the JD by Wikilink, and keep Company assessment separate from JD evidence fit and event-backed application state.
 - Career Skills remain workflow and record owners. Project subagents are read-only reviewers; validate their JSON contracts before use, and treat unavailable, invalid, or leaked review as fallback that cannot grant readiness, claim approval, or strategy acceptance.
 - Write record schema 3 and its kind-specific lifecycle. Git-relative validation owns lifecycle transitions; plan, review, and explicitly apply migrations for older user records.
 - `ProjectConfig` is the `career-os.toml` authority. Any field, table, default, or enum change must update its serializer, regenerate `system/schemas/project-config.schema.json`, and update related tests and documentation in the same change; never hand-edit the schema independently.
 - Treat tests as a maintained cost budget, not an automatic by-product. Add one only for a distinct uncovered behavior or high-risk boundary at the narrowest stable seam; prefer extending, consolidating, or replacing existing coverage. Do not add speculative, tautological, implementation-coupled, or pytest-wrapped duplicates of project, host, or release gates; justify materially slow tests under `docs/tooling.md`.
-- Prompt-time authorization is limited to external/account state changes, public or application-grade export, and irrecoverable overwrite/delete.
+- Prompt-time authorization is limited to external/account state changes, optional third-party Skill installation and scope, public or application-grade export, and irrecoverable overwrite/delete.
 - Applications, messages, uploads, account changes, offer decisions, and resignation always require a separate explicit request.
 - Never infer evidence maturity, readiness, application success, or career outcomes from successful tooling or generated artifacts.
 - Resume TeX roots under `career/` are user-owned. Personal font filenames are configured in `career-os.toml` and resolved by name without content pins; generated TeX remains ignored local state, and every font binary must stay under `.career-os/fonts/` and never enter Git.
@@ -59,7 +61,7 @@ Career OS is an Agent-native, local-first, embeddable career development operati
 - Full check: `uv run career-os check`
 - Tests: `uv run pytest`
 - Lint/type check: `uv run ruff check .` and `uv run mypy system/tools/career_os`
-- Harness: use explicit Git Bash on Windows, then run `bash .agents/relink-skills.sh` and the scaffold `verify --profile light` command documented in `docs/tooling.md`.
+- Harness: use explicit Git Bash on Windows, then run `bash .agents/relink-skills.sh` and the installed `agent-scaffold` Skill's `verify --profile light` command documented in `docs/tooling.md`.
 - Privacy: `uv run career-os release privacy --root . --ref HEAD --history --private-root <private-career-home>`
 - Releases: synchronize all version authorities, add one exact `## [vX.Y.Z] — YYYY-MM-DD` changelog section, and validate it with `career-os release notes`. Push `main`, wait for its CI to succeed, then push the annotated tag; CI runs only for `main` and pull requests, while the tag-triggered workflow exclusively owns GitHub Release publication.
 
@@ -88,9 +90,10 @@ The authority-document budget hook remains advisory; projects may override its d
 | `.agents/subagents/<name>/{metadata.json,instructions.md}` | subagent source | ✅ |
 | `.claude/skills/<name>` | symlink → `.agents/skills/<name>` (CC discovery; Codex reads `.agents/` directly) | ✅ |
 | `.claude/agents/*.md`, `.codex/agents/*.toml` | **generated** subagent projections — do NOT hand-edit | ✅ |
-| `.agents/tools/hooks/` | scaffold-managed hook runtime (doc budget + optional trunk guard) | ✅ |
+| `.agents/tools/hooks/` | scaffold-managed hook runtime (doc budget + optional trunk guard) — **managed copies, do NOT hand-edit** | ✅ |
 | `.claude/settings.local.json` | personal overrides | ❌ ignored |
 
+- **Change managed runtime**: everything under `.agents/tools/` is a copy the skill owns. Edit the skill's bundled source and run `agent-scaffold upgrade` to refresh — a hand-edit here is drift, and `agent-scaffold verify` reports it.
 - **Add a skill**: edit `.agents/skills/` → run `bash .agents/relink-skills.sh` → commit source + symlink.
 - **Add a subagent** (needs python): edit `.agents/subagents/` → run `python .agents/tools/generate-subagents.py` → commit source + generated. Wire `--check` into the project's own CI or hook manager when desired.
 - **Third-party skills** follow project-owned placement and installation policy. The relinker manages only names sourced from `.agents/skills/`, preserves unrelated entries, and fails on same-name ownership conflicts.

@@ -43,11 +43,21 @@ not write records, approve claims, grant readiness, accept strategy, or
 authorize an action.
 
 Keep Public Interview Packets isolated from Internal Evidence Packets. Before
-using `resume-evidence-audit/1` or `resume-interview-probe/1`, run
+using `resume-evidence-audit/1` or `resume-interview-probe/2`, run
 `career-os skills validate-reviewer <evidence|probe> [PATH|-]`. An unavailable
 reviewer, invalid output, or leaked packet triggers the owning Skill's
 documented fallback. Fallback work may continue, but it cannot grant readiness,
 claim approval, or strategy acceptance.
+
+Resolve an interview Public Surface by reference from the current Career
+Communication claim/profile and optional JD; do not copy it into a new wording
+authority. Every probe v2 question returns its exact interviewer-visible basis.
+Public-surface and industry-standard questions require a resume/JD basis;
+project-specific nouns and mechanisms require a prior candidate-answer basis.
+Evidence posture, source archaeology, private notes, expected answers, and
+hidden rubrics never enter a Public Interview Packet. Incomplete artifacts may
+change wording and confidence, but do not make user-confirmed real work
+ineligible for practice.
 
 After an authorized write, run `career-os check`. Report changed canonical
 records and any unresolved evidence, authorization, or relation boundary.

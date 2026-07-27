@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "revision": 1,
+  "installer": {
+    "package": "skills",
+    "version": "1.5.20",
+    "telemetry_environment": {
+      "DISABLE_TELEMETRY": "1"
+    }
+  },
+  "groups": [
+    {
+      "id": "obsidian",
+      "audience": "user",
+      "source": "kepano/obsidian-skills#main",
+      "source_repository": "https://github.com/kepano/obsidian-skills",
+      "ref": "main",
+      "reviewed_revision": "a1dc48e68138490d522c04cbf5822214c6eb1202",
+      "license": "MIT",
+      "attribution": "Copyright (c) 2026 Steph Ango (@kepano)",
+      "skills": [
+        {
+          "name": "json-canvas",
+          "source_path": "skills/json-canvas",
+          "tree_sha256": "3662389f3dd8678c1643118b236a7f80496895c7cbbc7238f233833234d2fbde"
+        },
+        {
+          "name": "obsidian-bases",
+          "source_path": "skills/obsidian-bases",
+          "tree_sha256": "600e5628f8d7782050415062e17b67d469c9c033e13c90c055c6c15432b6f443"
+        },
+        {
+          "name": "obsidian-cli",
+          "source_path": "skills/obsidian-cli",
+          "tree_sha256": "c3797c899322217fd27115deab63a9afa8488fbdaa0a12ee1f3a13fc0094e6bf"
+        },
+        {
+          "name": "obsidian-markdown",
+          "source_path": "skills/obsidian-markdown",
+          "tree_sha256": "b6337100e61349378290e102011fa66198a73b98702362c25a1fc6b0097bc353"
+        }
+      ]
+    },
+    {
+      "id": "contributor",
+      "audience": "contributor",
+      "source": "sean2077/skills#v4.1.2",
+      "source_repository": "https://github.com/sean2077/skills",
+      "ref": "v4.1.2",
+      "reviewed_revision": "9b60c61314a17411309a5f094de26726edcf0320",
+      "license": "MIT",
+      "attribution": "Copyright (c) 2026 sean2077",
+      "skills": [
+        {
+          "name": "agent-scaffold",
+          "source_path": "skills/agent-scaffold",
+          "tree_sha256": "6f975d0d395846643603553de5603b331794304b05f3aef0485def60dcb765cd"
+        },
+        {
+          "name": "conventional-commit",
+          "source_path": "skills/conventional-commit",
+          "tree_sha256": "23d7e497f22e1513e87dbd247dec4b2367c1168590733fb68253dfa3fb90a901"
+        }
+      ]
+    }
+  ]
+}

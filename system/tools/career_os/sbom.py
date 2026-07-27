@@ -10,7 +10,6 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from career_os.config import load_project_config
 from career_os.resume.fonts import FontAsset, FontPackage, load_font_manifest
-from career_os.skills import SkillLock, load_skill_locks
 
 
 class LockedDependency(BaseModel):
@@ -40,16 +39,12 @@ def build_sbom(project_root: Path) -> dict[str, Any]:
     root_ref = f"career-os@{config.system_version}"
 
     python_components = [_python_component(packages[name]) for name in sorted(runtime_names)]
-    skill_locks = load_skill_locks(project_root).skills
-    skill_components = [
-        _skill_component(item) for item in sorted(skill_locks, key=lambda item: item.name)
-    ]
     font_manifest = load_font_manifest(project_root)
     font_components = [
         _font_component(package, asset)
         for package, asset in sorted(font_manifest.iter_assets(), key=lambda item: item[1].name)
     ]
-    components = python_components + skill_components + font_components
+    components = python_components + font_components
 
     direct_python = [
         _python_ref(packages[dependency.name])
@@ -57,9 +52,7 @@ def build_sbom(project_root: Path) -> dict[str, Any]:
         if dependency.name in runtime_names
     ]
     root_dependencies = sorted(
-        direct_python
-        + [str(component["bom-ref"]) for component in skill_components]
-        + [str(component["bom-ref"]) for component in font_components]
+        direct_python + [str(component["bom-ref"]) for component in font_components]
     )
     dependencies: list[dict[str, object]] = [{"ref": root_ref, "dependsOn": root_dependencies}]
     for name in sorted(runtime_names):
@@ -73,9 +66,7 @@ def build_sbom(project_root: Path) -> dict[str, Any]:
         if depends_on:
             dependency["dependsOn"] = depends_on
         dependencies.append(dependency)
-    dependencies.extend(
-        {"ref": str(component["bom-ref"])} for component in skill_components + font_components
-    )
+    dependencies.extend({"ref": str(component["bom-ref"])} for component in font_components)
 
     serial = uuid5(NAMESPACE_URL, f"https://career-os.dev/releases/{config.system_version}")
     return {
@@ -109,7 +100,7 @@ def verify_sbom(project_root: Path) -> tuple[bool, str]:
     except (OSError, ValueError, json.JSONDecodeError) as error:
         return False, str(error)
     if actual != expected:
-        return False, "SBOM is stale relative to uv.lock, skills-lock.json, or fonts.json"
+        return False, "SBOM is stale relative to uv.lock or fonts.json"
     return True, f"{len(expected['components'])} locked components"
 
 
@@ -157,25 +148,6 @@ def _python_component(package: LockedPackage) -> dict[str, object]:
         "version": package.version,
         "purl": reference,
         "scope": "required",
-    }
-
-
-def _skill_component(skill: SkillLock) -> dict[str, object]:
-    reference = f"skill:{skill.name}@{skill.revision}"
-    return {
-        "type": "data",
-        "bom-ref": reference,
-        "name": skill.name,
-        "version": skill.revision,
-        "hashes": [{"alg": "SHA-256", "content": skill.tree_sha256}],
-        "licenses": [{"license": {"id": skill.license}}],
-        "externalReferences": [
-            {"type": "vcs", "url": f"{skill.source_repository}#{skill.revision}"}
-        ],
-        "properties": [
-            {"name": "career-os:source-path", "value": skill.source_path},
-            {"name": "career-os:attribution", "value": skill.attribution},
-        ],
     }
 
 

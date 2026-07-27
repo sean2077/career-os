@@ -1,8 +1,8 @@
 # .agents/skills/ — project skill SSOT
 
-Project-authored Skills and project-approved locked third-party snapshots live
-here. Claude Code discovers matching real symlinks under `.claude/skills/`;
-Codex reads `.agents/skills/` directly.
+The seven project-authored Career Skills live here. Claude Code discovers
+matching real symlinks under `.claude/skills/`; Codex reads `.agents/skills/`
+directly.
 
 ## Change a project skill
 
@@ -13,11 +13,15 @@ Codex reads `.agents/skills/` directly.
 Rules:
 
 - Do not hand-edit `.claude/skills/` projections.
-- Locked third-party Skills use this SSOT plus `skills-lock.json`, `NOTICE`,
-  `system/licenses/`, and the deterministic SBOM; do not install a parallel
-  project copy through a Host-native directory.
+- Optional third-party Skills are local installations described by
+  `system/skills/recommendations.json`; their six known source and projection
+  paths plus the installer-owned root `skills-lock.json` are ignored.
+- After a user-authorized project installation, run the relinker to establish
+  or repair Claude Code projections. Never treat installation as Career
+  evidence or readiness.
 - Prefix support-only directories with `_`; the relinker skips them.
-- The relinker preserves unrelated entries, but a same-name project and third-party skill is an ownership conflict.
+- The relinker preserves unrelated entries, but a same-name project and
+  third-party Skill is an ownership conflict.
 
 For full authoring conventions, naming, and third-party policy details, load the
-`agent-scaffold` skill's `references/harness-layout.md` on demand.
+installed `agent-scaffold` Skill's `references/harness-layout.md` on demand.

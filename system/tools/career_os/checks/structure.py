@@ -30,7 +30,7 @@ from career_os.reviewer_contracts import (
     interview_probe_json_schema,
 )
 from career_os.sbom import verify_sbom
-from career_os.skills import skill_lock_json_schema
+from career_os.skill_onboarding import recommendation_manifest_json_schema
 
 
 def _check_public_privacy_policy(paths: ProjectPaths) -> list[CheckIssue]:
@@ -198,7 +198,7 @@ def _check_schemas(paths: ProjectPaths) -> list[CheckIssue]:
         "record-envelope.schema.json": record_json_schema,
         "reviewer-evidence-audit.schema.json": evidence_audit_json_schema,
         "reviewer-interview-probe.schema.json": interview_probe_json_schema,
-        "skills-lock.schema.json": skill_lock_json_schema,
+        "skill-recommendations.schema.json": recommendation_manifest_json_schema,
     }
     actual = {path.name for path in schema_root.glob("*.json")}
     expected = set(runtime_schemas)
@@ -375,12 +375,7 @@ def _check_supply_chain(paths: ProjectPaths) -> list[CheckIssue]:
     notice_path = paths.project_root / "NOTICE"
     try:
         notice = notice_path.read_text(encoding="utf-8")
-        required = {
-            "93667c5a5eec5f68cd1097574e27c29994b6c3f2",
-            "553ef99aa3306dd23f268e1ba9af752577684f69",
-            "system/licenses/sean2077-skills-MIT.txt",
-            "system/licenses/kepano-obsidian-skills-MIT.txt",
-        }
+        required: set[str] = set()
         font_manifest = load_font_manifest(paths.project_root)
         required.update(package.license_path for package in font_manifest.packages)
         required.update(asset.sha256 for _package, asset in font_manifest.iter_assets())

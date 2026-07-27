@@ -1,9 +1,72 @@
 {
+  "$defs": {
+    "ProbeCurrentQuestion": {
+      "additionalProperties": false,
+      "description": "One question and the public cause that makes it available now.",
+      "properties": {
+        "text": {
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "origin": {
+          "enum": [
+            "public-surface",
+            "industry-standard",
+            "candidate-answer"
+          ],
+          "title": "Origin",
+          "type": "string"
+        },
+        "visible_basis": {
+          "items": {
+            "$ref": "#/$defs/ProbeVisibleBasis"
+          },
+          "minItems": 1,
+          "title": "Visible Basis",
+          "type": "array"
+        }
+      },
+      "required": [
+        "text",
+        "origin",
+        "visible_basis"
+      ],
+      "title": "ProbeCurrentQuestion",
+      "type": "object"
+    },
+    "ProbeVisibleBasis": {
+      "additionalProperties": false,
+      "description": "One interviewer-visible atom supporting the current question.",
+      "properties": {
+        "source": {
+          "enum": [
+            "resume-claim",
+            "jd",
+            "candidate-answer"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "text": {
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source",
+        "text"
+      ],
+      "title": "ProbeVisibleBasis",
+      "type": "object"
+    }
+  },
   "additionalProperties": false,
   "description": "One active or closed branch returned by the Blind Interviewer.",
   "properties": {
     "schema": {
-      "const": "resume-interview-probe/1",
+      "const": "resume-interview-probe/2",
       "title": "Schema",
       "type": "string"
     },
@@ -29,14 +92,12 @@
     "current_question": {
       "anyOf": [
         {
-          "minLength": 1,
-          "type": "string"
+          "$ref": "#/$defs/ProbeCurrentQuestion"
         },
         {
           "type": "null"
         }
-      ],
-      "title": "Current Question"
+      ]
     },
     "target_dimensions": {
       "items": {

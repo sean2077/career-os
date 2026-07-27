@@ -3,15 +3,6 @@ Copyright (c) 2026 sean2077
 
 Project-owned code, documentation, schemas, templates, and Skills are licensed under MIT.
 
-Bundled Agent Skills retain their upstream copyright and license terms:
-
-- sean2077/skills — revision 93667c5a5eec5f68cd1097574e27c29994b6c3f2
-  — MIT — system/licenses/sean2077-skills-MIT.txt
-  — https://github.com/sean2077/skills
-- kepano/obsidian-skills — revision 553ef99aa3306dd23f268e1ba9af752577684f69
-  — MIT — system/licenses/kepano-obsidian-skills-MIT.txt
-  — https://github.com/kepano/obsidian-skills
-
 The optional Career OS resume font bundle is licensed under the SIL Open Font License 1.1:
 
 - Source Han Serif SC 2.003 / tag 2.003R
@@ -24,7 +15,6 @@ The optional Career OS resume font bundle is licensed under the SIL Open Font Li
   - https://github.com/notofonts/noto-cjk/releases/tag/Sans2.004
 - License text: system/licenses/SIL-OFL-1.1.txt
 
-Exact imported revisions, paths, and complete-tree hashes are recorded in skills-lock.json.
 Exact runtime Python versions and dependency edges are recorded in uv.lock and
 system/sbom.cdx.json. Those packages retain their upstream license terms.
 

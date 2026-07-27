@@ -24,6 +24,12 @@ state, or readiness.
 | Communication Audit | `communication.audit` | `audits/` |
 | Export receipt | `communication.export` | `exports/` |
 
+For one project, target routing and candidate wording share one stable
+`profiles/project-projections/<project-key>.md` living profile when purpose,
+audience/identity policy, and lifecycle are the same. Split only when those
+boundaries can change independently. Claims, Audits, Resume Roots, and Export
+receipts remain separate records.
+
 ## Lifecycle
 
 ```text

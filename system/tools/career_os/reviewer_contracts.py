@@ -16,7 +16,7 @@ from pydantic import (
 )
 
 EVIDENCE_AUDIT_SCHEMA = "resume-evidence-audit/1"
-INTERVIEW_PROBE_SCHEMA = "resume-interview-probe/1"
+INTERVIEW_PROBE_SCHEMA = "resume-interview-probe/2"
 
 EvidenceStatus = Literal[
     "supported",
@@ -37,6 +37,16 @@ ProbeTargetDimension = Literal[
     "technical-depth",
     "answer-structure",
     "tradeoff-resilience",
+]
+ProbeQuestionOrigin = Literal[
+    "public-surface",
+    "industry-standard",
+    "candidate-answer",
+]
+ProbeVisibleBasisSource = Literal[
+    "resume-claim",
+    "jd",
+    "candidate-answer",
 ]
 ReviewerContract = Literal["evidence", "probe"]
 NonEmptyString = Annotated[str, StringConstraints(min_length=1)]
@@ -153,16 +163,69 @@ class EvidenceAudit(BaseModel):
         return self
 
 
+class ProbeVisibleBasis(BaseModel):
+    """One interviewer-visible atom supporting the current question."""
+
+    model_config = ConfigDict(extra="forbid", strict=True)
+
+    source: ProbeVisibleBasisSource
+    text: NonEmptyString
+
+    @field_validator("text")
+    @classmethod
+    def validate_text(cls, value: str) -> str:
+        return _nonblank(value, "visible_basis text")
+
+
+class ProbeCurrentQuestion(BaseModel):
+    """One question and the public cause that makes it available now."""
+
+    model_config = ConfigDict(extra="forbid", strict=True)
+
+    text: NonEmptyString
+    origin: ProbeQuestionOrigin
+    visible_basis: list[ProbeVisibleBasis] = Field(min_length=1)
+
+    @field_validator("text")
+    @classmethod
+    def validate_text(cls, value: str) -> str:
+        return _nonblank(value, "current_question text")
+
+    @model_validator(mode="after")
+    def validate_visible_basis(self) -> ProbeCurrentQuestion:
+        seen: set[tuple[str, str]] = set()
+        sources: set[str] = set()
+        for item in self.visible_basis:
+            key = (item.source, " ".join(item.text.split()).casefold())
+            if key in seen:
+                raise ValueError("visible_basis must not contain duplicates")
+            seen.add(key)
+            sources.add(item.source)
+
+        public_sources = {"resume-claim", "jd"}
+        if self.origin in {"public-surface", "industry-standard"} and not (
+            sources & public_sources
+        ):
+            raise ValueError(
+                f"{self.origin} question requires a resume-claim or jd basis"
+            )
+        if self.origin == "candidate-answer" and "candidate-answer" not in sources:
+            raise ValueError(
+                "candidate-answer question requires a candidate-answer basis"
+            )
+        return self
+
+
 class InterviewProbe(BaseModel):
     """One active or closed branch returned by the Blind Interviewer."""
 
     model_config = ConfigDict(extra="forbid", strict=True)
 
-    contract_schema: Literal["resume-interview-probe/1"] = Field(alias="schema")
+    contract_schema: Literal["resume-interview-probe/2"] = Field(alias="schema")
     packet_status: ProbePacketStatus
     branch: NonEmptyString
     claim: NonEmptyString
-    current_question: NonEmptyString | None
+    current_question: ProbeCurrentQuestion | None
     target_dimensions: list[ProbeTargetDimension] = Field(min_length=1)
     follow_up_triggers: list[NonEmptyString]
     outcome: ProbeOutcome | None
@@ -171,11 +234,6 @@ class InterviewProbe(BaseModel):
     @classmethod
     def validate_required_text(cls, value: str, info: ValidationInfo) -> str:
         return _nonblank(value, info.field_name or "value")
-
-    @field_validator("current_question")
-    @classmethod
-    def validate_question(cls, value: str | None) -> str | None:
-        return _optional_nonblank(value, "current_question")
 
     @field_validator("follow_up_triggers")
     @classmethod

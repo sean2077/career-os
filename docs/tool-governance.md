@@ -35,6 +35,15 @@ file/stdin input, safe JSON output, and exit codes. No Skill-local script,
 second executable, compatibility shim, or rollback path is warranted because
 the command never mutates state.
 
+Optional Skill onboarding also stays under `career-os skills`. `status` is a
+read-only placement/provenance report. `configure` changes only the ignored
+local preference after validating the complete selected scope and Host set;
+`--reset` is its bounded recovery path. The external `npx skills add` process
+remains Agent- or user-owned after an explicit scope/Host choice, so Career OS
+does not wrap networking, installation, update, or removal in another command.
+This preserves one reporting contract without turning the CLI into a package
+manager.
+
 Ignored-state reclamation is one independent top-level job:
 `career-os cleanup`. Its default is a read-only dry run; `--apply` is the sole
 mutation boundary. The private cleanup module owns the product allowlist, Git

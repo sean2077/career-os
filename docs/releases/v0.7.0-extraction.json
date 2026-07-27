@@ -1,0 +1,517 @@
+{
+  "schema_version": 1,
+  "release": "v0.7.0",
+  "base_extraction_manifest": "docs/releases/v0.1.0-extraction.json",
+  "previous_supplement": "docs/releases/v0.6.0-extraction.json",
+  "history_shape": "home-roundtrip",
+  "home_freeze": "d62426d7ef0ab3e73ef706cef62744deb3b6abca",
+  "public_base": "7881650c234567fdba22da29980ee37c1ed882eb",
+  "self_exclusion": "docs/releases/v0.7.0-extraction.json",
+  "entries": [
+    {
+      "path": ".agents/skills/README.md",
+      "result_sha256": "9e686967a3e910fdb28829ea61b3ceb37e513a40183e35eb4607496869b99a07",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/_shared/career-contract.md",
+      "result_sha256": "61dacd85ea1f3aa583093b862be710cea0b0867d6bd86e59ea8ef9e9cfcc35ac",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/agent-scaffold/SKILL.md",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/agent-scaffold/agent-scaffold.sh",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/agent-scaffold/assets/host/claude.settings.json",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/agent-scaffold/assets/host/codex.hooks.json",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/agent-scaffold/assets/runtime/generate-subagents.py",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/agent-scaffold/assets/runtime/hooks/authority_doc_budget.sh",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/agent-scaffold/assets/runtime/hooks/hook-common.sh",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/agent-scaffold/assets/runtime/hooks/hook-paths.py",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/agent-scaffold/assets/runtime/hooks/trunk_edit_guard.sh",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/agent-scaffold/assets/runtime/relink-skills.sh",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/agent-scaffold/assets/runtime/symlink-manager.py",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/agent-scaffold/assets/runtime/worktree.sh",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/agent-scaffold/assets/scaffold/AGENTS.harness.md",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/agent-scaffold/assets/scaffold/agents-skills.README.md",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/agent-scaffold/assets/scaffold/agents-subagents.README.md",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/agent-scaffold/references/authority-docs.md",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/agent-scaffold/references/diagnostics.md",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/agent-scaffold/references/format-hooks.md",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/agent-scaffold/references/harness-layout.md",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/agent-scaffold/references/host-integration.md",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/agent-scaffold/references/platform-support.md",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/agent-scaffold/references/retrofit.md",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/agent-scaffold/references/subagent-import.md",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/agent-scaffold/references/subagents.md",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/agent-scaffold/scripts/harness-core.py",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/agent-scaffold/scripts/managed-assets.json",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/capability-readiness/SKILL.md",
+      "result_sha256": "275d38a34f9172d169941e1444a51582854a8bbe217524a55eb0f94cdbd23350",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/career-communication/SKILL.md",
+      "result_sha256": "cb6d73c10bcc409bb0d5072ce644f1479ff126cd86ea0ee6dde355c169d345b3",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/career-evidence/SKILL.md",
+      "result_sha256": "e804c813d2de11c82d2a5f958cb762393faff40c20bb292ed1c5a61689311757",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/conventional-commit/SKILL.md",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/conventional-commit/references/message-style.md",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/conventional-commit/references/staging-safety.md",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/json-canvas/SKILL.md",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/json-canvas/references/EXAMPLES.md",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/obsidian-bases/SKILL.md",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/obsidian-bases/references/FUNCTIONS_REFERENCE.md",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/obsidian-cli/SKILL.md",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/obsidian-markdown/SKILL.md",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/obsidian-markdown/references/CALLOUTS.md",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/obsidian-markdown/references/EMBEDS.md",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/skills/obsidian-markdown/references/PROPERTIES.md",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/subagents/README.md",
+      "result_sha256": "78a5d25f1ec69d3f00c7430b541f36f5c46804b7a57c9cfb2198d7a4ed2739d3",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/subagents/blind-interviewer/instructions.md",
+      "result_sha256": "2000b6a1f984e72cb9420fa8b00b7dc81596c704205e5416b3d5361baa6718dd",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".agents/subagents/blind-interviewer/metadata.json",
+      "result_sha256": "85ed2a5b9ef7aa97c8c7e59b24f2c2942cd437a706161e312aade81123b1c45f",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".claude/agents/blind-interviewer.md",
+      "result_sha256": "7333b2fbe0c200c926703227b4f451b9ca58da43e4b6a030a933d8192f5b8e73",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".claude/skills/agent-scaffold",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".claude/skills/conventional-commit",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".claude/skills/json-canvas",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".claude/skills/obsidian-bases",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".claude/skills/obsidian-cli",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".claude/skills/obsidian-markdown",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".codex/agents/blind-interviewer.toml",
+      "result_sha256": "a8e28e9fd6d35c485e764f9bd4a27efb4828604970e0a6e6aee49be85015b42d",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "result_sha256": "e7b2baccff433ee97e74c61feb328b5a484deed8c75d494df854e23b32ad835a",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "result_sha256": "3328ec8f71dd220c700f936b7654c04af49d3bb0e7f40a63a1a6ff37aa0cb2d6",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": ".gitignore",
+      "result_sha256": "cbf9916263db65505981690c7f31253c447db9f4b43cb19305ed7a2da5e62275",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "AGENTS.md",
+      "result_sha256": "78532ca2d04d07a7759fded878cd8128feeb0bf2c84997d4c0709869d310d51c",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "result_sha256": "979d6dc2d8103b832b38335c694522813caa5d12281e22019c661b4e55599d37",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "Career Home.md",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "NOTICE",
+      "result_sha256": "4c28230fcdc2e571b06e667c83205220e5f171ec669b01cf5a82d52647fa4aca",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "README.md",
+      "result_sha256": "5b93c533c5d75141bb7d79cbdb6db3243cd735df0191b2019678bd03c786990d",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "career-os.toml",
+      "result_sha256": "17d57226dd6f117ae2c9fdad50a5b68e2e7bf43bbc230b99638a13ee3f11e72d",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/README.md",
+      "result_sha256": "1fc06c14aac7b63e509afea017cfaa2b2dd7c6dd289c146abf497c3fcc724f67",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "docs/installation.md",
+      "result_sha256": "73d8bd09c9e647f917df38a6a1f9f0ee4af61c487451d1d1be613076fa9be6d0",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/releases/README.md",
+      "result_sha256": "cd5e226134422ae6d4a0920509decfacd51228ad0f126453b0c65410b248a61c",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/releases/v0.7.0.md",
+      "result_sha256": "72d613f4f77fc2b3b0e2db5fc0bb94a3696596853fba989924461ad4a9a8298d",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/skills.md",
+      "result_sha256": "3e62b524b6a2326eb81852ccbc0e80aef2a1583040549bb94b915f2ffebb1dbd",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "docs/supply-chain.md",
+      "result_sha256": "42c79f0258b28b239f293f68d6f88d62427da7c611710d60552c46901cfec704",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "docs/tool-governance.md",
+      "result_sha256": "26f96b8b95af578326e9650feb6bc5685e649635848e8f7d2ca60066a21d19aa",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "docs/tooling.md",
+      "result_sha256": "8a69cdb7ad0040bb9f0aec968daa51b81551c695286e7dc6e526cacc4abc81f4",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "pyproject.toml",
+      "result_sha256": "1120ef7f136f6b191a6a6c48709c237b2334fca7f27427d93675cd978f4d7499",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "skills-lock.json",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/licenses/kepano-obsidian-skills-MIT.txt",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/licenses/sean2077-skills-MIT.txt",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/privacy/public-fixture-policy.json",
+      "result_sha256": "c5fceee87a8fd434855e1a66d741dd53092952934819424b3b7d352bc93acce1",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/sbom.cdx.json",
+      "result_sha256": "0db3f056b110c2ddf7f3788ddac7187eb911cef5028a86d3f6f6b640e4f68bb7",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/schemas/reviewer-interview-probe.schema.json",
+      "result_sha256": "f946f62410a5556bf1687099e1ed3630e00188d6de18387b146204db6446c210",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/schemas/skill-recommendations.schema.json",
+      "result_sha256": "a4b5b01d4b048ffbb14dc7c8cab050575546e0cc7fe6f2d2726c6ffd10874c58",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/schemas/skills-lock.schema.json",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/seeds/authorities/10-career-evidence.md",
+      "result_sha256": "f56c8d5e53cb3f6596636b0c6ffac3bd11112bcb0a2dff247d5d6a5dff283401",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/seeds/authorities/60-capability-readiness.md",
+      "result_sha256": "91c9c74f69797cec1fa2e135ab06bb4738a752e38b23f4b69f6f53fe1c4533c4",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/seeds/authorities/70-career-communication.md",
+      "result_sha256": "5890c5d772cff4b9033a3da15f6f2bfe4f1f1040802e1dbb818e527877a5a15c",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/skills/recommendations.json",
+      "result_sha256": "32e10390726f49fa6c3f725ea1fe0b66138c27ce630c57d4b596b051374ac4f0",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tests/test_cli_core.py",
+      "result_sha256": "4cfe8bb0bd10e54cdd9c03f826450b1607bccb1ecbf3313f4aea586806dde334",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tests/test_cli_smoke.py",
+      "result_sha256": "9c25893a262fbcf55a46f2eae573cc00b656e8cacc5a10a56cd9922242dfcece",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tests/test_extraction_manifest.py",
+      "result_sha256": "a6a270a003205ddb3e1ef0fa00a425733df54e30c708d2a881d6b81738bab0dd",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tests/test_reviewer_contracts.py",
+      "result_sha256": "3711143beadb4bfdaabff54048333e31f83f34770cce277c425a8e2d167e6e83",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tests/test_skills.py",
+      "result_sha256": "a79487e85a2c575bc955f2ca5cb8a88bde6ad66c422f7b2cda29eee12189572d",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tests/test_subagents.py",
+      "result_sha256": "176bf6a6eadf9270f90f928781226223f6c65252949cdf8fb799f02b382b823c",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tests/test_supply_chain.py",
+      "result_sha256": "c05de343b1cbb76d3d84c3a29b25a31440cd33706446cec24139ad270edcc8c1",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tools/career_os/__init__.py",
+      "result_sha256": "f4dbb76800af59fe4d73c2f8487eb332481e443659e6dbefe6984f2baca243dc",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tools/career_os/checks/structure.py",
+      "result_sha256": "021a2114bc27ec8fc485e4e1e800115557b3880e0c716a119866f931edec9e02",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tools/career_os/cli/core.py",
+      "result_sha256": "57da08e5f3dfcd5cb103bba22462a8c437237edd5083d7af14dff4a6bd06cbab",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tools/career_os/cli/skills.py",
+      "result_sha256": "ee4e64325fa14f89c88378151825283efb33a590053b6e15571f619c81693991",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tools/career_os/reviewer_contracts.py",
+      "result_sha256": "7548acc77bd07578a7e2f958b178a651d8232d86ced12b0321a60dea0e8c5e0f",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tools/career_os/sbom.py",
+      "result_sha256": "2cf6ede67a24f4e5fd45ba2408547cad1d1c2c1e50e20399eb33ad8fd5b79265",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tools/career_os/skill_onboarding.py",
+      "result_sha256": "85ff54b579ddfab250f687cc847d9d6317973a8a3e1691f6468113d734141412",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "system/tools/career_os/skills.py",
+      "result_sha256": "4a6a855836365d362dbf04a313f361b6f06506d898d602ec202ceb631c9f45cd",
+      "reason": "downstream-adaptation"
+    },
+    {
+      "path": "uv.lock",
+      "result_sha256": "d5c61d55669fe67ef7648099f71bcce7938547245b9a1f442daf8704efbbe39a",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "职业主页.md",
+      "result_sha256": null,
+      "reason": "downstream-adaptation"
+    }
+  ]
+}
