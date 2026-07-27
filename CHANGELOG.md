@@ -4,6 +4,8 @@ All notable changes to Career OS are documented here.
 
 ## [Unreleased]
 
+## [v0.7.0] — 2026-07-27
+
 ### Added
 
 - Added a reviewed optional-Skill recommendation manifest, read-only

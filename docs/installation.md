@@ -1,10 +1,10 @@
 # Installation Requirements
 
-> **v0.6.0 boundary:** install from a clean public checkout. The optional
-> QuickAdd adapter adds guarded local review and Engagement-event scripts but
-> never edits host-owned `.obsidian` choices or hotkeys. The v0.5.0 homepage
-> filenames and v0.4.0 resume-export behavior remain unchanged, and schema-2
-> records still require an explicit schema-2-to-3 migration.
+> **v0.7.0 boundary:** install from a clean public checkout. The tracked core is
+> exactly seven Career Skills; optional Obsidian and contributor groups are
+> reported for explicit local onboarding but never installed by the CLI. Blind
+> Interviewer v2 requires a visible public or candidate-answer basis. The
+> v0.6.0 QuickAdd boundary and schema-2-to-3 migration requirement remain.
 
 Career OS separates core, live Obsidian, and resume readiness. A successful
 core check does not imply that the optional Obsidian CLI or XeLaTeX resume
