@@ -39,9 +39,7 @@ Audit: draft -> reviewed -> superseded
 Export: planned -> generated -> released | revoked
 ```
 
-Validated resumes require `uses-claim` references to approved Claims. An
-application-ready Resume and application Export require a reviewed target JD.
-Generated exports require explicit authorization and an artifact checksum.
+Validated resumes require `uses_claim` references to approved Claims. An application-ready Resume and application Export require a reviewed `target_jd`. Generated exports require explicit authorization and an artifact checksum.
 
 ## Change Rules
 

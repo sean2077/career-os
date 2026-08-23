@@ -1,30 +1,26 @@
-# Installation Requirements
+# Install and Verify Career OS
 
-> **v0.7.1 boundary:** install from a clean public checkout. The tracked core is
-> exactly seven Career Skills; optional Obsidian and contributor groups are
-> reported for explicit local onboarding but never installed by the CLI. Blind
-> Interviewer v2 requires a visible, interview-worthy public or candidate-answer basis. The
-> v0.6.0 QuickAdd boundary and schema-2-to-3 migration requirement remain.
+Career OS has separate readiness levels for its local record system, live Obsidian integration, and XeLaTeX resume pipeline. A passing core check does not imply that optional Obsidian, TeX, PDF, font, or auxiliary Skill dependencies are ready.
 
-Career OS separates core, live Obsidian, and resume readiness. A successful
-core check does not imply that the optional Obsidian CLI or XeLaTeX resume
-toolchain is ready.
+This page describes current installation requirements. Historical release boundaries and candidate evidence belong in the [release index](releases/README.md).
 
-## Dependency levels
+## Choose the capability you need
 
 | Capability | Required dependencies | Readiness command |
 | --- | --- | --- |
 | Core records, Skills, schemas, plans, and filesystem checks | Git, `uv`, and Python 3.12 or newer | `uv run career-os doctor --json` |
-| Live Obsidian CLI operations | Core plus Obsidian 1.12.7 or newer, CLI enabled, and the application running | `uv run career-os doctor --json` |
-| Resume build and export | Core plus `latexmk`, XeLaTeX, the required TeX packages, and the default or TeX-named local fonts | `uv run career-os resume doctor --json` |
-| Optional high-fidelity PDF inspection | Resume stack plus `pdftoppm`, `pdfinfo`, and `pdftotext` from Poppler | `uv run career-os resume doctor --json` |
+| Live Obsidian CLI operations | Core plus the configured minimum Obsidian version, CLI enabled, and the app running | `uv run career-os doctor --json` |
+| Resume build and export | Core plus `latexmk`, XeLaTeX, required TeX packages, and resolved fonts | `uv run career-os resume doctor --json` |
+| High-fidelity PDF inspection | Resume stack plus Poppler's `pdftoppm`, `pdfinfo`, and `pdftotext` | `uv run career-os resume doctor --json` |
+| Framework development | Core plus the locked development dependency group | `uv run career-os check --fast` |
 
-Install Git from the [official Git downloads](https://git-scm.com/downloads)
-and `uv` from the [official installation guide](https://docs.astral.sh/uv/getting-started/installation/).
-`uv` can provision the required Python version when it is not already
-installed. The project itself requires Python 3.12 or newer.
+The exact Obsidian and QuickAdd minimum versions are declared in [`career-os.toml`](../career-os.toml). Python compatibility and Python dependency ranges are declared in [`pyproject.toml`](../pyproject.toml). Do not repeat those values in a second installation checklist.
 
-For an end-user checkout, install the locked runtime dependencies:
+## Core setup
+
+Install Git from the [official Git downloads](https://git-scm.com/downloads) and `uv` from the [official installation guide](https://docs.astral.sh/uv/getting-started/installation/). `uv` can provision a compatible Python when one is not already installed.
+
+From the repository root, install the locked runtime dependencies:
 
 ```text
 uv sync --locked
@@ -36,105 +32,90 @@ Contributors who run Ruff, mypy, or pytest need the development group:
 uv sync --locked --all-groups
 ```
 
-Neither command installs Git, Obsidian, TeX, Poppler, or the resume fonts.
+Neither command installs Git, Obsidian, TeX, Poppler, resume fonts, or optional Agent Skills.
 
-## Optional Agent Skills
+### Evaluate the public framework
 
-The repository includes seven core Career Skills. It recommends four Obsidian
-authoring Skills for ordinary use and, separately, two contributor Skills for
-framework maintenance. These recommendations are optional local tools, not
-runtime dependencies.
-
-`career-os init` performs no network access and never installs a Skill. Its
-JSON result includes a `skill_onboarding` object. When that object has
-`requires_user_choice: true`, the Agent explains the reviewed upstream and asks
-whether to install the `obsidian` group at project or global scope, or skip it,
-and which of Codex and Claude Code must see it. An ordinary initialization does
-not prompt for the contributor group.
-
-The Agent then composes the manifest-provided arrays in this order:
+The public checkout is data-free. Verify its core mechanisms without creating personal records:
 
 ```text
-base_args + scope_args[project|global]
-          + agent_args[codex|claude-code|codex+claude-code]
-          + confirmation_args
+uv run career-os doctor --json
+uv run career-os check --fast
 ```
 
-The current contract uses `npx skills add`, explicit `--skill` and `--agent`
-values, and `DISABLE_TELEMETRY=1`. Project scope also requires
-`bash .agents/relink-skills.sh` after installation. Only after a fresh status
-report confirms every Skill for every selected Host does the Agent record the
-choice:
+A missing optional tool is reported as `attention`; it does not block filesystem-only workflows.
+
+### Initialize a personal Career Home
+
+Before adding real data, establish the private repository and remote boundary in [Private Downstream Installation](private-downstream.md). Then initialize either standalone mode:
 
 ```text
-uv run career-os skills status --json
-uv run career-os skills configure --group obsidian --scope project --agent codex
-```
-
-Use `--scope global`, repeat `--agent` for both Hosts, or choose
-`--scope skip` as appropriate. `career-os skills configure` never installs
-anything; it writes only ignored `.career-os/skill-onboarding.json` and rejects
-incomplete, invisible, or wrong-source installations. Reset a prior decision
-with:
-
-```text
-uv run career-os skills configure --group obsidian --reset
-```
-
-Project/global duplication is reported for review and never removed
-automatically. See the [Skill catalog](skills.md) for the full contract and the
-separate contributor audience.
-
-## Core and Obsidian readiness
-
-Core commands operate on local files and do not require Obsidian to be open.
-Live CLI operations require the Obsidian 1.12.7+ installer, **Settings →
-General → Command line interface** enabled, PATH registration completed, and
-the desktop application running. Follow the
-[official Obsidian CLI instructions](https://obsidian.md/help/cli).
-
-The recommended sibling-repository layout also requires directory-symlink
-support. On Windows, enable Developer Mode or use a terminal with symbolic-link
-privilege and set `core.symlinks=true` before checkout. Linux and macOS normally
-materialize tracked relative symlinks directly. See
-[Private Downstream Installation](private-downstream.md).
-
-Run the core diagnosis after initialization:
-
-```text
+uv run career-os init --mode standalone --root . --languages en
 uv run career-os doctor --json
 uv run career-os check
 ```
 
-Initialization creates a missing `career/README.md` from the system-owned
-Career Home seed. It does not create, copy, render, or overwrite any Base.
-Project configuration and install state use schema 2; legacy `data_root` or
-`runtime_root` fields are rejected rather than treated as aliases. Reinitialize
-legacy local state, or remove those obsolete fields after reviewing the fixed
-`career/` and `.career-os/runtime/` locations.
-Paired English/Chinese Workbench Bases are tracked system assets under
-`system/obsidian/bases/` and query schema-3 records by `kind`; `career-os check`
-reports inventory, localization-parity, or semantic drift for review.
+or the reviewed embedded flow in [Embedded Vaults](embedded-vault.md). Do not invent a mount, ignore rule, or host configuration outside that plan/apply flow.
 
-Missing optional Obsidian, LaTeX, or PDF commands appear as `attention` in the
-core doctor. They do not block filesystem-only career workflows.
+Initialization creates a missing `career/README.md` from the system-owned seed. It never creates, copies, renders, or overwrites a root homepage or Obsidian Base.
+
+## Existing installations
+
+Current project configuration uses schema 2 and canonical career records use schema 3. Legacy `data_root` and `runtime_root` aliases are rejected rather than silently mapped to the fixed `career/` and `.career-os/runtime/` locations.
+
+For an older split downstream, review the exact release notes and create the required migration or downstream plan before changing files. Schema migrations are hash-bound, reviewable, explicitly applied, and separate from framework updates. See the [data model](data-model.md), [private downstream update flow](private-downstream.md#update-from-an-exact-reviewed-release), and [tooling guide](tooling.md).
+
+## Optional Agent Skills
+
+The tracked Career Skills are part of the repository. Optional Obsidian and contributor Skills are local tools, not runtime dependencies, and the CLI never installs or downloads them.
+
+Inspect the current recommendation and installation state:
+
+```text
+uv run career-os skills status --json
+uv run career-os skills status --audience contributor --json
+```
+
+Only when the report has `requires_user_choice: true` should an Agent explain the reviewed source and ask for project, global, or skip plus the target Host. Installation uses the argument arrays emitted from the reviewed recommendation manifest with telemetry disabled. After the selected Skills are visible to every selected Host, record the local decision, for example:
+
+```text
+uv run career-os skills configure --group obsidian --scope project --agent codex
+```
+
+Use `--scope global`, repeat `--agent` for both supported Hosts, choose `--scope skip`, or reset with `--reset` as appropriate. Configuration records ignored local state only; it does not install, delete, or repair a Skill. The complete source, digest, relinking, duplicate, and verification contract lives in [Career Skills](skills.md).
+
+## Obsidian readiness
+
+Core commands operate on local files and do not require Obsidian to be open. Live CLI operations require all of the following:
+
+1. an Obsidian installation meeting the minimum in `career-os.toml`;
+2. **Settings → General → Command line interface** enabled;
+3. the CLI registered on `PATH`; and
+4. the desktop application running.
+
+Follow the [official Obsidian CLI instructions](https://obsidian.md/help/cli). Run `uv run career-os doctor --json` again after enabling the integration.
+
+The recommended sibling-repository layout also requires directory-symlink support. On Windows, enable Developer Mode or use a terminal with symbolic-link privilege and make sure the host checkout materializes real symlinks. Linux and macOS normally materialize tracked relative symlinks directly. The complete cross-platform mount procedure belongs to [Embedded Vaults](embedded-vault.md#supported-layouts).
+
+After attaching a real Vault, verify both project and host boundaries:
+
+```text
+uv run career-os doctor --json
+uv run career-os check
+uv run career-os check --host
+uv run career-os views build
+```
 
 ## XeLaTeX resume toolchain
 
-Career OS verifies TeX Live on Ubuntu CI and TeX Live 2025 on the Windows
-release workstation. The macOS core runs in CI, but the macOS resume toolchain
-is not yet a release gate. Other TeX distributions may work but are not a
-verified compatibility promise.
+Career OS verifies TeX Live in Ubuntu CI and TeX Live 2025 on the Windows release workstation. The macOS core runs in CI, but the macOS resume toolchain is not yet a release gate. Other TeX distributions may work but are not a verified compatibility promise.
 
-Install TeX Live using the
-[TeX Users Group installation documentation](https://tug.org/texlive/quickinstall.html).
-The resume class requires these commands and packages:
+Install TeX Live using the [TeX Users Group documentation](https://tug.org/texlive/quickinstall.html). The resume class requires these commands and packages:
 
-- commands: `latexmk`, `xelatex`;
-- packages: `fontspec`, `xeCJK`, `geometry`, `xcolor`, `enumitem`, `etoolbox`,
-  `fancyhdr`, `graphicx`, `lastpage`, and `draftwatermark`.
+- commands: `latexmk` and `xelatex`;
+- packages: `fontspec`, `xeCJK`, `geometry`, `xcolor`, `enumitem`, `etoolbox`, `fancyhdr`, `graphicx`, `lastpage`, and `draftwatermark`.
 
-The Ubuntu CI-equivalent packages are:
+Ubuntu's CI-equivalent package set is:
 
 ```text
 sudo apt-get install --no-install-recommends \
@@ -148,81 +129,43 @@ sudo apt-get install --no-install-recommends \
   texlive-xetex
 ```
 
-`pdftoppm`, `pdfinfo`, and `pdftotext` support external visual, metadata, and
-high-fidelity text inspection. Their absence is reported as `attention` rather
-than a universal hard dependency. `resume doctor` executes a minimal isolated
-XeLaTeX compilation through `latexmk` and version probes the remaining reported
-TeX and Poppler commands, so a stale or broken PATH wrapper does not count as
-ready. Export falls back to its in-process PDF
-extractor, but a locally selected font whose PDF lacks a usable Unicode map may
-still require `pdftotext` for the final identity-projection gate.
+Poppler supports external visual, metadata, and high-fidelity text inspection. Its absence is normally `attention`, not a universal hard dependency. Resume doctor performs an isolated XeLaTeX compilation and probes the reported TeX and PDF commands, so a stale or broken `PATH` wrapper does not count as ready.
 
 ## Resume fonts
 
-Font binaries are intentionally absent from Git. The tracked
-`system/resume/fonts.json` manifest pins four role-specific files by URL, byte
-size, and SHA-256: Source Han Serif SC Regular and Bold 2.003 for body text,
-and Noto Sans CJK SC Regular and Bold 2.004 for display text. Together the
-downloads are 83,504,676 bytes. Both packages use the SIL Open Font License
-1.1, so the public system can reproduce the designed typography without a
-private font dependency.
-
-Fetch them once while online:
+Font binaries are intentionally absent from Git. The tracked [`system/resume/fonts.json`](../system/resume/fonts.json) manifest is the authority for downloadable default files, URLs, sizes, hashes, roles, and licenses. Fetch and verify the default bundle once per checkout or machine:
 
 ```text
 uv run career-os resume fonts fetch
+uv run career-os resume fonts verify
 uv run career-os resume doctor --json
 ```
 
-The command downloads only the pinned files from `raw.githubusercontent.com`
-into `.career-os/fonts/career-os-resume-fonts-1/`, verifies each file before
-installation, and refuses to overwrite an unverified existing file. The cache
-is local and ignored by Git, so every new checkout or machine needs its own
-fetch.
+The files are installed under ignored `.career-os/fonts/`. Existing unverified files are not overwritten, and initialization never downloads fonts implicitly. A fresh offline clone can use the core system but cannot build a resume until all unoverridden roles resolve.
 
-`career-os init` never downloads fonts implicitly. A fresh offline clone can
-use the core system, but it cannot build a resume until the verified font files
-are available.
+Owner-provided fonts belong below the ignored directory configured by `[resume.fonts]` in `career-os.toml`; optional role filenames live under `[resume.fonts.roles]`. Do not commit or redistribute those binaries. Missing files fail before XeLaTeX; invalid or incompatible files fail during compilation. There is no per-resume font descriptor or silent substitution layer.
 
-For owner-provided fonts, place the binaries in the directory below ignored
-`.career-os/fonts/` configured by `[resume.fonts]` and declare optional role
-filenames under `[resume.fonts.roles]`. The CLI and project `latexmkrc` use the
-same filename-based resolver, so a same-name replacement takes effect without a
-configuration change. Do not commit or redistribute the files. Missing files
-fail before XeLaTeX, while invalid or incompatible files fail during
-compilation; Career OS has no per-resume descriptor or silent fallback layer.
-The downloaded system-default bundle remains size- and SHA-256-verified.
+The fixed default stack covers the release fixtures, not every writing system. Read [Resume System](resume.md) before building or exporting personal material.
 
-The release fixtures cover English, Simplified Chinese, and one mixed-language
-resume. User data remains Unicode and BCP-47 capable, but the fixed Source Han
-Serif SC and Noto Sans CJK SC stack is not a promise of correct typography for
-every writing system.
+## Final readiness recipes
 
-## Final readiness check
-
-For a checkout that will use every local capability:
+### Core-only installation
 
 ```text
-git --version
-uv --version
-uv sync --locked --all-groups
-"C:\\Program Files\\Git\\bin\\bash.exe" .agents/relink-skills.sh
-# If contributor Skills were installed at project scope:
-"C:\\Program Files\\Git\\bin\\bash.exe" .agents/skills/agent-scaffold/agent-scaffold.sh verify --profile light --json
-# If contributor Skills were installed globally, run the same script from:
-# ~/.agents/skills/agent-scaffold/agent-scaffold.sh
+uv sync --locked
 uv run career-os doctor --json
 uv run career-os check
+```
+
+### Resume-capable installation
+
+```text
 uv run career-os resume fonts fetch
 uv run career-os resume fonts verify
 uv run career-os resume doctor --json
 uv run career-os resume list --json
 ```
 
-Run `resume fonts fetch` only when an unoverridden role needs the downloadable
-default bundle. For a private Home, copy each configured local font into the
-configured directory before `resume fonts verify`. A passing `career-os check`
-validates the tracked config and default font manifest and confirms that font
-binaries did not leak into Git. `career-os resume doctor` proves the selected
-font files and TeX commands are ready; building every handwritten root is the
-definitive visual check on a new machine.
+Run `resume fonts fetch` only when an unoverridden role needs the downloadable default bundle. A passing project check confirms framework and privacy mechanisms, while `resume doctor` proves the selected fonts and commands are ready. Building every handwritten resume root remains the definitive rendering check on a new machine.
+
+Framework maintainers should continue with the full verification sequence in [CONTRIBUTING.md](../CONTRIBUTING.md#verification) and the task-specific gates in [Tooling](tooling.md).

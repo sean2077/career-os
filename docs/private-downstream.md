@@ -1,44 +1,43 @@
 # Private Downstream Installation
 
-This guide describes the supported `split-downstream` topology for a private
-Career Home that consumes the public `standalone-framework` repository.
-It does not describe Home-first `integrated-workbench` development, and
-`career-os downstream` is not the return mechanism for that workflow.
+This page is the authority for the supported `split-downstream` topology: a private Career Home consumes reviewed snapshots from the public, data-free `standalone-framework` repository. It owns the remote-safety and exact update procedures. Vault mounts and host adapters belong to [Embedded Vaults](embedded-vault.md).
 
-Current releases require record schema 3 and do not accept legacy project-root
-aliases. A split installation with schema-2 records must review and explicitly
-apply the schema-2-to-3 migration. An `upstream` remote is optional for local OS
-work. If one is configured, keep it fetch-only; do not treat an upstream sync
-as a prerequisite for local work.
+This is not the Home-first `integrated-workbench` development flow, and `career-os downstream` is not a mechanism for returning private work to the public repository.
 
-In split mode, the recommended real-world installation is a private downstream
-repository. Its optional remote roles are:
+## Safety invariants
+
+Before adding personal data:
+
+1. use a separate private repository or no hosted personal remote;
+2. remove the public push target or retain it only as fetch-only `upstream`;
+3. confirm any personal `origin` is private before its first push;
+4. keep real records, identity, attachments, fonts, active Obsidian state, and generated output out of every public fork and public history; and
+5. use an exact reviewed release or commit for framework updates, never an unreviewed moving branch.
+
+Current installations use project-config schema 2 and record schema 3. Review [Existing installations](installation.md#existing-installations) before updating an older Home.
+
+## Remote model
+
+Both remotes are optional for local work:
 
 | Remote | Purpose | Push policy |
 | --- | --- | --- |
-| `upstream` | Optional source of reviewed Career OS releases | Explicitly disabled when configured |
-| `origin` | Optional user-owned private repository | Allowed only after the owner confirms its visibility |
+| `upstream` | Fetch reviewed public Career OS releases | Must have `remote.upstream.pushurl=DISABLED` |
+| `origin` | User-owned private repository | Allowed only after the owner confirms hosted visibility |
 
-This layout keeps `system/`, the Agent harness, Skills, schemas, and English
-documentation updateable while `career/` remains user-owned multilingual data in
-the same private Git history.
+A private downstream keeps framework assets and user-owned `career/` records in one private Git history. System updates remain reviewable and must never overwrite the user authority.
 
-## Do not use a public fork for private career data
+### Do not use a public fork for private data
 
-GitHub states that every fork of a public repository is public and that a fork's
-visibility cannot be changed. Create a separate private repository for `origin`
-instead of assuming a public Career OS fork can hold private data. See
-[GitHub's fork visibility documentation](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/about-permissions-and-visibility-of-forks).
+GitHub documents that forks of a public repository are public and that their visibility cannot be changed. Create a separate private repository instead of assuming a fork can hold personal data. See [GitHub's fork visibility documentation](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/about-permissions-and-visibility-of-forks).
 
-Career OS can verify local remote names and push URLs without network access. It
-cannot prove that an arbitrary hosted `origin` is private. The owner must confirm
-that visibility before the first push.
+Career OS can inspect local remote names and push URLs without network access. It cannot prove the hosted visibility of an arbitrary `origin`; the owner must confirm that before the first push.
 
-## Bootstrap the downstream
+## Bootstrap the private checkout
 
-Cloning the public framework initially creates a pushable public `origin`.
-Before initializing user data, either retain it as a guarded optional
-`upstream`:
+Cloning the public framework initially creates a pushable public `origin`. Choose one policy before initialization.
+
+### Keep a guarded update remote
 
 ```text
 git clone https://github.com/sean2077/career-os.git career-home
@@ -49,11 +48,9 @@ git remote get-url upstream
 git remote get-url --push upstream
 ```
 
-The final command must print `DISABLED`. Git supports separate fetch and push URLs
-through `git remote set-url --push`; the deliberately invalid push target is a
-local safety guard. See the [Git remote documentation](https://git-scm.com/docs/git-remote).
+The final command must print `DISABLED`. Git supports separate fetch and push URLs through `git remote set-url --push`; the deliberately invalid push target is a local guard. See the [Git remote documentation](https://git-scm.com/docs/git-remote).
 
-Or remove the public remote after cloning:
+### Keep no public remote
 
 ```text
 git clone https://github.com/sean2077/career-os.git career-home
@@ -61,75 +58,25 @@ cd career-home
 git remote remove origin
 ```
 
-Do not leave the public repository configured as a pushable personal `origin`.
+Do not leave the public repository configured as a pushable personal `origin`. A public remote is optional for local Career OS work.
 
-## Mount the downstream into an existing Vault
+## Initialize standalone or embedded mode
 
-Keep the private downstream and Vault as sibling repositories. The Vault owns a
-portable relative directory symlink; Career Home owns every target file:
-
-```text
-<workspace>/
-├─ career-home/
-└─ obsidian-vault/
-   └─ Career/
-      └─ career-home -> ../../career-home
-```
-
-Create the link from the workspace root. On Linux or macOS:
-
-```text
-mkdir -p obsidian-vault/Career
-ln -s ../../career-home obsidian-vault/Career/career-home
-git -C obsidian-vault add -- Career/career-home
-```
-
-On Windows, enable Developer Mode or use a terminal with symbolic-link
-privilege, and ensure the Vault checkout uses real symlinks:
-
-```powershell
-git -C obsidian-vault config core.symlinks true
-New-Item -ItemType Directory -Force -Path obsidian-vault/Career
-New-Item -ItemType SymbolicLink -Path obsidian-vault/Career/career-home -Target ../../career-home
-git -C obsidian-vault add -- Career/career-home
-```
-
-Verify that Git stores a symlink rather than a directory, gitlink, junction, or
-plain target-text file:
-
-```text
-git -C obsidian-vault ls-files --stage -- Career/career-home
-git -C obsidian-vault cat-file -p :Career/career-home
-```
-
-The first command must show mode `120000`; the second must print
-`../../career-home`. The relative target is platform-independent as long as the
-sibling layout and mount depth remain unchanged.
-
-Initialize Career OS only after choosing one of the public-remote policies above
-and creating the mount:
+For a standalone Career Home that is itself the Obsidian Vault root:
 
 ```text
 uv sync --locked
-uv run career-os init --mode embedded --root . --vault-root ../obsidian-vault --vault-mount Career/career-home --languages en,zh-CN
-uv run career-os vault plan --action attach --root . --vault-root ../obsidian-vault
-# Review the emitted plan before applying it.
-uv run career-os vault apply --root . --plan <emitted-plan.json>
-uv run career-os doctor
+uv run career-os init --mode standalone --root . --languages en,zh-CN
+uv run career-os doctor --json
 uv run career-os check
-uv run career-os check --host
 uv run career-os views build
 ```
 
-The mount path is always Vault-relative POSIX text, even on Windows. Career OS
-validates the real link target and the host Git index but does not create,
-ignore, rewrite, or remove the host-owned link. Use `--mode standalone` when the
-downstream root is itself the Vault root.
+For an existing Vault, continue with the complete cross-platform sibling layout and reviewed attach procedure in [Embedded Vaults](embedded-vault.md#independent-sibling-downstream-recommended). That page is the sole authority for mount creation, host Git validation, attach/detach plans, shared views, and QuickAdd.
 
 ## Add the optional private origin
 
-Create a separate private repository using the hosting provider's normal UI or
-API, confirm its visibility, and only then configure it:
+Create a separate private repository through the hosting provider, confirm its visibility, and only then configure it:
 
 ```text
 git remote add origin <private-repository-url>
@@ -137,16 +84,11 @@ git config remote.pushDefault origin
 git push -u origin main
 ```
 
-Repository creation and the first push are external account actions. An Agent
-must obtain an explicit request and visibility confirmation immediately before
-performing either action. When `upstream` is configured, plain
-`git push upstream` remains blocked even for a user who has write access to the
-public project.
+Repository creation and the first push are external account actions. An Agent must obtain an explicit request and visibility confirmation immediately before either action. A configured `upstream` remains non-pushable even when the user has write access to the public project.
 
 ## Update from an exact reviewed release
 
-Do not pull an unreviewed moving branch into private data. Use the deterministic
-downstream workflow with one exact annotated release on an isolated sync branch:
+Do not pull an unreviewed moving branch into private data. Use one exact annotated release on an isolated sync branch:
 
 ```text
 git status --short
@@ -168,48 +110,35 @@ git switch main
 git merge --ff-only sync/vX.Y.Z
 ```
 
-This tree-and-patch workflow does not require common Git ancestry between the
-public source and private Home. It is therefore also the supported cutover path
-for an existing independent Home history. The upstream form requires a
-configured fetch-only `upstream`. Without that remote, use
-`career-os downstream plan --source local --source-root <reviewed-career-os-checkout>`
-with an exact commit or annotated tag from a separate reviewed local checkout.
+`git cat-file -t` must report `tag`. Review that release's notes and system diff before apply. The command rejects protected user/local paths, dirty managed paths, stale HEAD or branch state, and a changed or tampered plan.
 
-`git cat-file -t` must report `tag`. Review that release's notes and system diff
-before apply. The command rejects protected user/local paths, dirty managed
-paths, stale HEAD or branch state, and a changed or tampered plan. Push the
-updated `main` only to a confirmed private `origin` and only when the user
-explicitly requests it.
+This tree-and-patch workflow does not require common Git ancestry between the public framework and private Home, so it is also the cutover path for an independent existing history. Without a configured `upstream`, use a separately reviewed local checkout:
+
+```text
+uv run career-os downstream plan --source local --source-root <reviewed-career-os-checkout> --commit <full-40-character-source-commit>
+```
+
+Use `--tag vX.Y.Z` instead only for an exact annotated tag in that checkout. Push the updated `main` only to a confirmed private `origin` and only on explicit request.
 
 ## Deterministic safety checks
 
-After initialization, both `career-os doctor` and `career-os check` inspect local
-Git configuration:
+After initialization, `doctor` and `check` inspect local Git configuration:
 
-- no public Career OS remote is a valid configuration;
-- when the canonical public repository is configured, it must be named
-  `upstream`;
-- a configured `remote.upstream.pushurl` must be exactly `DISABLED`;
-- `origin` must not point back to the public Career OS repository; and
-- an arbitrary `origin` receives an attention result until the owner confirms
-  its hosted visibility.
+- a downstream with no public Career OS remote is valid;
+- the canonical public repository, when configured, must be named `upstream`;
+- `remote.upstream.pushurl` must be exactly `DISABLED`;
+- `origin` must not point to the public Career OS repository; and
+- an arbitrary `origin` remains `attention` until the owner confirms its hosted visibility.
 
-These checks never contact, create, or mutate a remote. System updates never
-overwrite `career/`; runtime, build, install state, backups, and downloaded fonts
-remain ignored local state.
+These checks never contact, create, or mutate a remote. System updates never overwrite `career/`; runtime state, build output, plans, backups, install state, and downloaded fonts remain ignored local data.
 
 ## Agent operating contract
 
 For a private downstream, Agents must:
 
-1. discover roots with `career-os paths --json` instead of embedding machine paths;
-2. treat `career/` as user authority and the remaining tracked framework surfaces
-   as system authority;
-3. fetch only when the user asks for an update, using either an optional
-   fetch-only `upstream` or a reviewed local source, then select an exact commit
-   or annotated tag;
-4. when `upstream` is configured, refuse any push to it and stop if the push
-   guard is missing;
-5. require explicit authorization and confirmed private visibility before the
-   first `origin` push; and
+1. discover roots with `uv run career-os paths --json` instead of embedding machine paths;
+2. treat `career/` as user authority and tracked framework surfaces as system authority;
+3. fetch only when the user requests an update, then select an exact reviewed commit or annotated tag;
+4. refuse any push to `upstream` and stop when its push guard is missing;
+5. require explicit authorization and confirmed private visibility before the first `origin` push; and
 6. run the deterministic gates before merging a sync branch into `main`.

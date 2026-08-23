@@ -1,19 +1,12 @@
 # Releases
 
+Release notes preserve historical scope and verification evidence. They are not current installation or operating instructions; use the [documentation map](../README.md) for current behavior.
+
 ## Publication contract
 
-Career OS uses exact `v`-prefixed Git tags and a committed changelog. Each
-release synchronizes `career-os.toml`, the Python package version, and the
-runtime version mirror, then adds one canonical
-`## [vX.Y.Z] — YYYY-MM-DD` changelog section. The hidden
-`career-os release notes` contributor command validates and extracts that
-section without a generated-notes fallback.
+Career OS uses exact `v`-prefixed Git tags and a committed changelog. Each release synchronizes `career-os.toml`, the Python package version, and the runtime version mirror, then adds one canonical `## [vX.Y.Z] — YYYY-MM-DD` changelog section. The hidden `career-os release notes` contributor command validates and extracts that section without a generated-notes fallback.
 
-After the release commit is clean and verified, maintainers push `main` before
-its annotated tag. `.github/workflows/release.yml` re-runs the repository and
-resume gates, revalidates the exact notes, and exclusively creates the matching
-GitHub Release. A successful local tag or branch push alone is not a published
-release.
+After the release commit is clean and verified, maintainers push `main` before its annotated tag. `.github/workflows/release.yml` re-runs the repository and resume gates, revalidates the exact notes, and exclusively creates the matching GitHub Release. A successful local tag or branch push alone is not a published release.
 
 ## Release evidence
 

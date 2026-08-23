@@ -20,13 +20,7 @@ and validation.
 
 ## Agent Operating Rules
 
-- For career-data workflows, start from the user's outcome. Select one primary
-  Career Skill and compose another only when the requested result crosses an
-  authority boundary. Never ask the user to choose a Skill, mode, owner,
-  reviewer, or validator. Apply `.agents/skills/_shared/career-contract.md` and
-  use [`docs/workflows.md`](docs/workflows.md) for cross-authority recipes.
-  Framework maintenance follows the Contributor Rules and does not select a
-  Career Skill unless it also operates on user career data.
+- For career-data workflows, start from the user's outcome. Select one primary Career Skill, then compose each additional Skill only when its distinct authority output can materially change the requested result. Load them incrementally and stop when the deliverable is decision-ready. Never ask the user to choose a Skill, mode, owner, reviewer, or validator. Apply `.agents/skills/_shared/career-contract.md` and use [`docs/workflows.md`](docs/workflows.md) for cross-authority recipes. Framework maintenance follows the Contributor Rules and does not select a Career Skill unless it also operates on user career data.
 - Keep Career Evidence, Career Strategy, Role Market, Opportunity Decision,
   Career Outlook, Capability Readiness, and Career Communication distinct.
   Link stable IDs instead of copying facts or silently changing another
@@ -70,8 +64,7 @@ and validation.
   guarded resume fixture/template or public CI/release workflow require
   synthetic-fixture review and the matching hash update in
   `system/privacy/public-fixture-policy.json`.
-- Read [`docs/README.md`](docs/README.md) for navigation and
-  [`docs/tooling.md`](docs/tooling.md) for command and validation depth.
+- Read [`docs/README.md`](docs/README.md) for navigation, [`CONTRIBUTING.md`](CONTRIBUTING.md) for the change workflow, and [`docs/tooling.md`](docs/tooling.md) for command and validation depth.
 
 ## Development Commands
 

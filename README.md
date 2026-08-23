@@ -2,30 +2,27 @@
 
 > An Agent-native, local-first, and embeddable career development operating system for Obsidian.
 
-Career OS keeps career evidence, strategy, market sensing, opportunity decisions, capability readiness, and career communication in one locally owned system. Agents operate the workflows, Obsidian renders the knowledge, and a deterministic CLI validates and maintains the system.
+Career OS keeps career evidence, strategy, market sensing, opportunity choices, capability readiness, and career communication in one locally owned system. Agents orchestrate the work, Obsidian presents user-owned Markdown, and the `career-os` CLI supplies deterministic setup, maintenance, and safety checks.
 
-## Start here
+## Choose a path
 
-- **Work with your career data:** open the root
-  [Career Home](<Career Home.md>) in Obsidian, choose the language at the top,
-  describe the outcome to an Agent, and use the five live Workbenches or the
-  [outcome-first workflow guide](docs/workflows.md). The fixed `career/README.md`,
-  [dashboard](system/obsidian/dashboard.md), and
-  [all-records Base](system/obsidian/records.base) remain lightweight text and
-  inventory fallbacks.
-- **Install or maintain Career OS:** start from the
-  [framework documentation map](docs/README.md), then follow the installation
-  or contributor guidance for the task at hand.
+| Goal | Start here |
+| --- | --- |
+| Use an initialized Career Home | Open [`Career Home.md`](<Career Home.md>) or [`职业主页.md`](职业主页.md), then describe the outcome to an Agent. |
+| Find the smallest workflow | Use the [outcome-first workflow guide](docs/workflows.md). |
+| Evaluate the public, data-free framework | Run the [core smoke test](#evaluate-the-public-framework). |
+| Create a real personal installation | Follow the [private downstream guide](docs/private-downstream.md) before adding personal data. |
+| Attach Career OS to an existing Vault | Complete the private-repository boundary, then follow [Embedded Vaults](docs/embedded-vault.md). |
+| Maintain or contribute to the framework | Read [CONTRIBUTING.md](CONTRIBUTING.md) and the [documentation map](docs/README.md). |
 
-## Design
+## Why Career OS
 
-- **Agent-native:** describe the outcome; the Agent selects and composes Skills.
-- **Local-first:** canonical data is Markdown and open files under user-owned `career/`.
-- **Embeddable:** use Career OS as its own Vault or nest it inside an existing Vault.
-- **System/data separation:** versioned implementation lives in `system/`; user data has one fixed project-relative authority at `career/`.
-- **Multilingual data:** framework text is English while user content supports Unicode and BCP 47 language tags.
-- **Bilingual Workbenches:** the five operational Bases ship as system-owned English and Chinese presentation pairs over identical record queries.
-- **Evidence-led:** mechanism health, evidence maturity, readiness, applications, and outcomes remain separate states.
+- **Agent-native:** ask for an outcome; the Agent selects one primary authority and composes only the additional authorities that can change the result.
+- **Local-first:** canonical career data is Markdown and open files under the user-owned `career/` root.
+- **Embeddable:** use Career OS as the Vault root or mount a private Career Home inside another Obsidian Vault.
+- **Separated ownership:** versioned framework behavior lives under `system/`; local state and generated output never become career facts.
+- **Evidence-led:** mechanism health, evidence maturity, readiness, application state, and external outcomes remain separate claims.
+- **Multilingual:** framework documentation is English; user content supports Unicode and BCP 47 language tags, with English and Chinese Workbench views.
 
 ## Visual overview
 
@@ -41,144 +38,63 @@ Career OS keeps career evidence, strategy, market sensing, opportunity decisions
 
 [Open the full-size PNG](docs/assets/career-guide.png) · [Open the source Canvas](system/obsidian/career-guide.canvas)
 
-These reviewed PNGs are native Obsidian Full canvas exports of the tracked
-Canvas sources. The Canvas files remain canonical; see
-[`docs/assets/README.md`](docs/assets/README.md) for the export contract.
+The Canvas files are canonical. The reviewed PNG exports follow the [visual-asset contract](docs/assets/README.md).
 
-## Recommended installation
+## Evaluate the public framework
 
-### Repository relationship
-
-This public checkout declares
-`development_topology = "standalone-framework"` and contains framework assets,
-synthetic fixtures, and deterministic validation only. Keep real career
-records, identity, attachments, font binaries, active Obsidian state, and
-generated outputs in an initialized private Career Home, never in a public
-GitHub fork.
-
-`v0.1.0` supports clean installations only. It does not define an in-place
-upgrade path from any `v0.1.0-rc.*` checkout.
-
-For an embedded installation, keep the private Career Home beside the existing
-Obsidian Vault and mount it through a host-tracked relative directory symlink.
-`upstream` is the conventional optional remote name for the canonical public
-framework repository,
-[`sean2077/career-os`](https://github.com/sean2077/career-os). When retained in
-the private downstream it must be fetch-only with
-`remote.upstream.pushurl=DISABLED`. A personal `origin` is appropriate only
-after its owner has confirmed the hosted repository is private.
-
-Install the core prerequisites described in the
-[installation requirements](docs/installation.md) before starting. Obsidian and
-the XeLaTeX resume stack have separate readiness gates.
-
-Clone the public framework:
+The public repository contains framework assets, synthetic fixtures, and release evidence only. A data-free local check requires Git, `uv`, and Python 3.12 or newer:
 
 ```text
-git clone https://github.com/sean2077/career-os.git career-home
-cd career-home
-```
-
-Cloning initially creates a pushable public `origin`. Before adding personal
-data, choose one of these local remote policies:
-
-```text
-# Keep the optional public update remote:
-git remote rename origin upstream
-git remote set-url --push upstream DISABLED
-
-# Or keep no public remote:
-git remote remove origin
-```
-
-Then initialize the private Career Home:
-
-```text
+git clone https://github.com/sean2077/career-os.git
+cd career-os
 uv sync --locked
-# Create and stage the relative Vault symlink described in the guide first.
-uv run career-os init --mode embedded --root . --vault-root ../obsidian-vault --vault-mount Career/career-home --languages en
 uv run career-os doctor --json
-uv run career-os check
-uv run career-os views build
+uv run career-os check --fast
 ```
 
-Read the [private downstream guide](docs/private-downstream.md) when operating
-in split-downstream mode. It defines the cross-platform symlink, remote-safety
-guard, and exact-tag update workflow.
+The optional Obsidian and resume stacks have separate readiness gates. See [Install and Verify Career OS](docs/installation.md).
 
-## Quick start
+Do not add real career records, identity, attachments, fonts, active Obsidian state, or generated exports to a public fork. A real Career Home should use the private topology and guarded remote policy in the [private downstream guide](docs/private-downstream.md).
 
-```powershell
+## Initialize a Career Home
+
+After establishing a private repository boundary, a standalone installation can be initialized from the project root:
+
+```text
 uv sync --locked
 uv run career-os init --mode standalone --root . --languages en
 uv run career-os doctor --json
 uv run career-os check
 ```
 
-Resume support is optional and requires the XeLaTeX dependencies documented in
-the [installation requirements](docs/installation.md):
+For an existing Obsidian Vault, do not improvise the repository mount or host configuration. Use the reviewed plan/apply flow in [Embedded Vaults](docs/embedded-vault.md).
 
-```powershell
-uv run career-os resume fonts fetch
-uv run career-os resume doctor --json
-```
+## Ownership at a glance
 
-For installation inside another Obsidian Vault:
+| Path | Owner | Purpose |
+| --- | --- | --- |
+| `career/` | User | Canonical multilingual records and handwritten resume sources |
+| `system/` | Framework | CLI implementation, schemas, seeds, views, resume assets, migrations, and tests |
+| `.agents/` | Framework | Project-owned Skills, reviewers, and dual-host Agent harness source |
+| `.career-os/` | Local machine | Ignored install state, plans, receipts, downloaded fonts, and runtime scratch |
+| `build/` | Local machine | Ignored previews, exports, and other generated output |
+| Root homepages and Bases | Framework | Obsidian projections over canonical records; never the record authority |
 
-```powershell
-uv run career-os init --mode embedded --root . --vault-root C:\path\to\vault --vault-mount Career/career-home --languages en,zh-CN
-uv run career-os vault plan --action attach --vault-root C:\path\to\vault
-# Review the emitted plan, then:
-uv run career-os vault apply --plan .career-os\plans\vault-attach-<id>.json
-```
+## Capability guides
 
-Review [the documentation map](docs/README.md) before applying a generated plan.
-The root [English Career Home](<Career Home.md>) and [中文职业主页](职业主页.md), plus the
-generic public Base, architecture Canvas, workflow-guide Canvas, dashboard, ten
-paired authority Workbench Bases, and two localized Recent Changes Bases under
-`system/obsidian/`, are Git-tracked framework assets. Each homepage embeds its
-localized Recent Changes view plus five authority Bases. `career-os init` never
-creates or overwrites either homepage or any Base. `uv run career-os views
-build` validates and lists all eighteen framework assets without creating
-`career/` or runtime copies.
+- [Outcome-first workflows](docs/workflows.md): minimum-context routing, persistence decisions, cross-authority handoffs, and stopping rules.
+- [Career Skills](docs/skills.md): authority ownership, optional auxiliary Skill onboarding, and read-only reviewer boundaries.
+- [Data model](docs/data-model.md): record envelope, lifecycle, references, visibility, and multilingual content.
+- [Resume system](docs/resume.md): handwritten XeLaTeX sources, identity policy, privacy gates, and exports.
+- [Embedded Vaults](docs/embedded-vault.md): supported layouts, attach/detach, host-owned mounts, shared views, and QuickAdd.
+- [Legacy imports](docs/importing.md): reviewed, hash-bound copy and transform plans with rollback.
 
-QuickAdd is an optional host-owned adapter for local record capture, active
-JD/Company/Engagement review, and explicit Engagement-event recording. Career
-OS generates reviewable choice JSON and ships the scripts, but it never edits
-the Vault's `.obsidian` choices or hotkeys. See the
-[embedded-Vault guide](docs/embedded-vault.md#optional-quickadd-adapter).
+## Documentation, releases, and security
 
-Create a user-owned direct XeLaTeX resume with
-`uv run career-os resume new my-resume`. Internal builds remain under `build/`;
-only `resume export` writes a shareable PDF. Personal roots remain handwritten
-TeX, are discovered recursively by name, and use the one system-owned,
-legacy-calibrated class plus adjacent `identity.tex`. Preview and application
-are fixed output profiles; Git owns source versions and export receipts compute
-hashes automatically. Project-wide personal font filenames live in
-`career-os.toml`, while binaries remain in ignored `.career-os/fonts/` state
-and are resolved by filename before XeLaTeX. See
-[the resume guide](docs/resume.md).
+The [documentation map](docs/README.md) routes installation, operation, architecture, maintenance, and release tasks to one authoritative page. Historical changes and verification evidence live in the [release index](docs/releases/README.md) and [CHANGELOG.md](CHANGELOG.md); current how-to pages describe current behavior rather than repeating release history. Before `v1.0`, only interfaces explicitly documented by a release are supported.
 
-## Agent Skills
-
-Career OS ships seven project-owned career workflow Skills. `career-os init`
-and `career-os skills status --json` separately report the optional Obsidian
-Skill group. Only when the report requires a choice does the Agent explain the
-reviewed source and ask for project, global, or skip plus the target Host; the
-CLI never installs or downloads a Skill itself. See
-[the Skill catalog](docs/skills.md) for ownership, onboarding, and reviewer
-boundaries, and the [workflow guide](docs/workflows.md) for minimum-context
-routing and common career loops.
-
-## Status
-
-The current stable line is `v0.7.1`; see its
-[verification evidence](docs/releases/v0.7.1.md). Before `v1.0`, only the
-interfaces explicitly documented by a release are supported.
+For privacy and vulnerability reporting, read [SECURITY.md](SECURITY.md).
 
 ## License
 
-Project-owned work is licensed under the [MIT License](LICENSE). External
-dependencies retain their original licenses and attribution; see
-[NOTICE](NOTICE), the [supply-chain guide](docs/supply-chain.md), and the
-deterministic [CycloneDX SBOM](system/sbom.cdx.json).
+Project-owned work is licensed under the [MIT License](LICENSE). External components retain their own licenses and attribution; see [NOTICE](NOTICE), the [supply-chain guide](docs/supply-chain.md), and the deterministic [CycloneDX SBOM](system/sbom.cdx.json).
