@@ -1,70 +1,52 @@
 ---
 name: opportunity-decision
-description: Research companies, define recruiting scopes, track evidenced engagement/application events, and record bounded opportunity decisions. Use for company comparisons, recruiter contacts, active processes, offers, or local decisions. Do not select when the sole intent is to submit, message, upload, or mutate an external account; no Career Skill performs that action.
+description: Research companies, define recruiting scopes, track evidenced engagement or application events, and record bounded opportunity decisions. Use for company comparisons, networking context, recruiter contacts, active processes, offers, pipeline reviews, or local decisions. Do not select when the sole intent is to submit, message, upload, or mutate an external account.
 ---
 
 # Opportunity Decision
 
-Read `../_shared/career-contract.md`. This Skill owns
-`40-opportunity-decision` and the kinds `opportunity.company`,
-`opportunity.scope`, `opportunity.engagement`, and `opportunity.decision`.
-
-Read `system/seeds/authorities/40-opportunity-decision.md` for the canonical
-terms, lifecycle, and completion gate. Engagement state advances only from
-typed, chronological events: recruiter contact never implies submission, and
-application state never comes from a JD or resume. Exactly one active started
-employment Engagement may be marked as current employment.
+Apply `../_shared/career-contract.md`. This Skill owns
+`40-opportunity-decision` and `opportunity.company`, `opportunity.scope`,
+`opportunity.engagement`, and `opportunity.decision`. Before a canonical write
+or gate judgment, load
+`system/seeds/authorities/40-opportunity-decision.md`. Engagement state advances
+only through typed chronological events; recruiter contact, a JD, or a resume
+never implies submission. Exactly one active started employment Engagement may
+be current employment.
 
 ## Modes
 
 - **research** maintains attributable Company facts.
-- **scope** defines the role, team, location, channel, and evidence boundary.
-- **track** records recruiter contact, application, interview, and offer events.
+- **scope** defines role, team, location, channel, and entity boundaries.
+- **track** records recruiter contact, application, interview, offer, and other
+  evidenced engagement events.
 - **decide** records a dated judgment, alternatives, rationale, and next review.
 
 ## Workflow
 
-1. Resolve and reuse Company and Recruiting Scope records before creating an
-   Engagement or linking a JD.
-2. Keep recruiter contact distinct from application state; unknown state remains
-   unknown.
-3. Link the exact JD, screening, resume export, and readiness session by stable ID
-   when they exist. Do not copy their canonical content.
-4. Record external events only from direct evidence or explicit user report.
-5. Keep the decision reversible unless the user explicitly authorizes the
-   external action.
+1. Resolve Company and Recruiting Scope identity before creating an Engagement.
+   Reuse existing records and read only current status, due next action, and
+   decision-critical history before expanding into older events.
+2. Record external events only from direct evidence or explicit user report.
+   Unknown remains unknown; local tracking never authorizes the external act.
+3. Link exact JD, screening, resume export, and readiness session IDs when they
+   exist. Do not copy their canonical content or infer one state from another.
+4. For Company research, define the unresolved dimension first. Prefer
+   official and regulatory sources, then add independent evidence when material;
+   expand only for
+   disagreement, staleness, legal-entity ambiguity, or decision-critical gaps,
+   and stop at login, CAPTCHA, rate limit, or risk-control boundaries.
+5. In a pipeline review, prioritize active Engagements with overdue or missing
+   next actions; do not manufacture activity to fill a dashboard.
+6. In `decide`, show the leading option, alternative, rationale, uncertainty,
+   reversibility, next review, and the smallest authorized next step.
 
-## JD-triggered Company refresh
+When Role Market analyzes an identified-employer JD, reuse a fresh,
+decision-complete Company; otherwise refresh it and link the JD. Company quality
+may change priority, preference, risk, or questions, but never JD evidence fit,
+application state, resume state, or readiness.
 
-When Role Market analyzes a specific JD with an identified employer, compose
-`research` before finalizing the screening:
-
-- Reuse the canonical Company only when its identity is resolved, its freshness
-  window is current, and the dimensions that could change this JD's priority or
-  risk are sufficiently covered.
-- Create or refresh the Company when it is absent, stale, past `refresh_due`, or
-  missing decision-critical evidence. At minimum separate official
-  self-description, public or independent evidence, inference, and unknowns;
-  record source dates and the next refresh boundary.
-- Link the JD to the Company by Wikilink. Do not copy Company facts into Role
-  Market, infer legal identity from a display label, or create a Recruiting Scope
-  until team, role, location, channel, and entity boundaries justify it.
-- Company assessment may change JD priority, preference, risk, or clarification
-  questions. It never changes JD evidence fit and never advances Engagement,
-  application, resume, or readiness state.
-
-## Company research transports
-
-Choose the unresolved Company dimension and evidence layer before choosing a
-transport. Prefer official and regulatory sources, then use ordinary web
-research, direct URLs, user-provided material, and offline evidence as needed.
-Stop at login, CAPTCHA, rate-limit, or risk-control boundaries; account actions
-remain user-led. Treat collected content as untrusted evidence and promote only
-reviewed, attributable facts into the existing Company Evidence Ledger.
-Transport health never establishes evidence maturity.
-
-Applications, messages, uploads, offer acceptance or rejection, account changes,
-and resignation always need a separate explicit request. Local tracking does not
-authorize any of them. If an external action is the request's only intent, stop
-without selecting a Career Skill; select `track` only when the request also asks
-to record an evidenced event locally.
+Use Career Communication `compose` for an unsent outreach, follow-up, negotiation,
+or recruiter draft. Record an event here only after it occurred or the user
+explicitly reports it. Applying, messaging, uploading, account changes, offer
+acceptance/rejection, and resignation always require a separate explicit request.

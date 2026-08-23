@@ -15,6 +15,7 @@ manages either root homepage.
 - [Embedded Vaults](embedded-vault.md): standalone, nested repository, and submodule modes.
 - [Private downstream installation](private-downstream.md): the supported split topology, optional fetch-only public upstream, exact-tag updates, and Agent safety rules.
 - [Skills](skills.md): seven Career Skills, optional auxiliary Skill onboarding, and reviewer boundaries.
+- [Outcome-first workflows](workflows.md): minimum-context routing, persistence rules, common career loops, and stopping conditions.
 - [Resume system](resume.md): direct XeLaTeX sources and privacy-safe exports.
 - [Legacy repository imports](importing.md): reviewed hash-bound copy/transform plans and rollback.
 

@@ -5,42 +5,39 @@ description: Capture, debrief, and consolidate attributable career evidence into
 
 # Career Evidence
 
-Read `../_shared/career-contract.md`. This Skill owns records under
-`10-career-evidence` and the kinds `evidence.capture`, `evidence.work`,
-`evidence.story`, and `evidence.claim`.
-
-Read `system/seeds/authorities/10-career-evidence.md` for the canonical terms,
-lifecycle, and completion gate. A Capture archives only after a grounded Work
-represents it. An approved Claim requires a grounded Work or reviewed Story,
-shareable visibility, and an explicit external allowed use; raw Capture text is
-never sufficient support.
+Apply `../_shared/career-contract.md`. This Skill owns `10-career-evidence` and
+`evidence.capture`, `evidence.work`, `evidence.story`, and `evidence.claim`.
+Before a canonical write or gate judgment, load
+`system/seeds/authorities/10-career-evidence.md`. A Capture archives only after
+a grounded Work represents it; an approved Claim requires a grounded Work or
+reviewed Story, shareable visibility, and an explicit allowed use.
 
 ## Modes
 
 - **capture** preserves a raw observation with provenance and attribution.
-- **debrief** deepens one experience into context, actions, tradeoffs, results,
+- **debrief** deepens one experience into actions, tradeoffs, results,
   contribution boundaries, and evidence gaps.
-- **consolidate** merges mature captures into canonical work, story, or claim
+- **consolidate** promotes mature material into canonical Work, Story, or Claim
   records without deleting provenance.
 
 ## Workflow
 
-1. Resolve paths and inspect existing records for the same work, source, or
-   claim before creating anything.
-2. For an independent system project, use its existing project `README.md` as
-   the navigation-only cross-authority entry for Work, Story, Readiness,
-   Communication, and Materials. Link those owners without copying their facts,
-   and do not create empty companion files.
-3. Merge records only when their purpose and lifecycle are the same. Keep
-   Captures, Claims, and independently changing Work or Story records atomic.
-4. Separate observed fact, user recollection, inference, and desired wording.
-5. Record who did what, under which constraints, and what evidence supports the
-   result. Leave unsupported magnitude or ownership as an explicit gap.
-6. Preserve raw material when consolidating and connect records with stable IDs.
-7. Keep claim approval explicit. A polished story is not automatically a
-   shareable or public claim.
+1. Search narrowly by source, project, date, or candidate claim. Reuse a record
+   only when identity, purpose, and lifecycle match.
+2. In `capture`, save the minimum attributable observation; do not force a full
+   debrief. In `debrief`, ask only questions that can change attribution,
+   credibility, or reuse, and preserve unanswered points as explicit gaps.
+3. Separate observation, user recollection, inference, and desired wording.
+   Record who did what, under which constraints, and what supports the result;
+   never invent magnitude, ownership, or production use.
+4. Keep Captures, Claims, and independently changing Work or Story records
+   atomic. Consolidation links provenance and never destroys the raw source.
+5. Use an existing project `README.md` only as a navigation hub across Work,
+   Story, Readiness, Communication, and Materials; do not copy facts or create
+   empty companion files.
+6. Stop once the evidence has a clear posture and next gap. Polished wording is
+   not claim approval.
 
-Write only Career Evidence records. Ask a related Skill to consume the record by
-reference when strategy, readiness, opportunity, or communication work follows.
-If irrecoverable deletion or overwrite is the request's only intent, stop without
-selecting a Career Skill; `consolidate` always preserves raw provenance.
+Write only Career Evidence records. Hand off stable IDs to Strategy, Readiness,
+Opportunity, or Communication. If destructive evidence loss is the sole intent,
+stop without selecting a Career Skill.

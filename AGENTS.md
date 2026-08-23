@@ -1,69 +1,91 @@
 # Career OS — Agent Contract
 
-Career OS is an Agent-native, local-first, embeddable career development operating system for Obsidian. Agent workflows are the primary interaction surface; Obsidian supplies content and views; the `career-os` CLI supplies deterministic maintenance and validation.
+Career OS is an Agent-native, local-first, embeddable career development
+operating system for Obsidian. Agents orchestrate workflows, Obsidian presents
+user-owned Markdown, and the `career-os` CLI supplies deterministic maintenance
+and validation.
 
 ## Ownership
 
-- `.agents/`, `system/`, root manifests, root `Career Home.md` and `职业主页.md`, tests, and English documentation are system-owned.
-- `career/` is the fixed user-owned multilingual data root. It is eligible for the user's Git history; system updates and initialization must not overwrite or ignore it.
-- `.career-os/runtime/` is the fixed local scratch root. Root `runtime/` remains ignored only as a protected legacy boundary and has no producer. Root `Career Home.md` and `职业主页.md`, common Obsidian views, and the paired English/Chinese Workbench Bases under `system/obsidian/bases/` are tracked system assets, not runtime or data-root copies. `career-os init` never creates, copies, renders, or overwrites either homepage or any Base. `build/` and `.career-os/` remain ignored build/install state.
-- Project command implementation lives only under `system/tools/career_os/`. `.agents/tools/` is the scaffold-managed Host exception.
+- `.agents/`, `system/`, root manifests, root homepages and Bases, tests, and
+  English documentation are system-owned.
+- `career/` is the fixed user-owned multilingual data root. Initialization and
+  framework updates must not overwrite, ignore, or reverse-copy it.
+- `.career-os/runtime/` is local scratch state; `build/` and `.career-os/` are
+  ignored build/install state. Real identity, career records, attachments,
+  fonts, active Obsidian state, and generated outputs never belong in the
+  public framework snapshot.
+- Project command implementation lives only under `system/tools/career_os/`;
+  `.agents/tools/` is the scaffold-managed Host exception.
 
-## Working Rules
+## Agent Operating Rules
 
-- Start from the user's natural-language outcome and select or compose the seven Career Skills. Never ask the user to choose a canonical Career Skill, mode, owner, worker, or validator.
-- Treat `skill_onboarding` from `career-os init` or `career-os skills status --json` as the optional auxiliary-Skill contract. On ordinary initialization, consider only the `obsidian` user group; consider the `contributor` group only for repository maintenance. If and only if a group has `requires_user_choice=true`, explain its upstream source, reviewed revision, license, and local-state boundary, then ask the user for `project`, `global`, or `skip` plus the target Agent Host(s). Do not repeat a resolved choice, prompt for another audience, install implicitly, or delete project/global duplicates.
-- After the user chooses installation, execute the manifest-provided `npx skills add` argument array with its telemetry environment, explicit `--skill` and `--agent` values, selected scope, and confirmation arguments. For project scope, then run `bash .agents/relink-skills.sh`. Re-run status and record the choice with `career-os skills configure` only after every recommended Skill is visible to every selected Host; never treat installation as evidence maturity, readiness, or a career outcome.
-- Keep Career Evidence, Career Strategy, Role Market, Opportunity Decision, Career Outlook, Capability Readiness, and Career Communication as distinct canonical authorities. Cross-authority workflows use stable references rather than copied facts.
-- When analyzing a JD with an identified employer, compose Role Market with Opportunity Decision: resolve or refresh the canonical Company, link the JD by Wikilink, and keep Company assessment separate from JD evidence fit and event-backed application state.
-- Career Skills remain workflow and record owners. Project subagents are read-only reviewers; validate their JSON contracts before use, and treat unavailable, invalid, or leaked review as fallback that cannot grant readiness, claim approval, or strategy acceptance.
-- Write record schema 3 and its kind-specific lifecycle. Git-relative validation owns lifecycle transitions; plan, review, and explicitly apply migrations for older user records.
-- `ProjectConfig` is the `career-os.toml` authority. Any field, table, default, or enum change must update its serializer, regenerate `system/schemas/project-config.schema.json`, and update related tests and documentation in the same change; never hand-edit the schema independently.
-- Treat tests as a maintained cost budget, not an automatic by-product. Add one only for a distinct uncovered behavior or high-risk boundary at the narrowest stable seam; prefer extending, consolidating, or replacing existing coverage. Do not add speculative, tautological, implementation-coupled, or pytest-wrapped duplicates of project, host, or release gates; justify materially slow tests under `docs/tooling.md`.
-- Prompt-time authorization is limited to external/account state changes, optional third-party Skill installation and scope, public or application-grade export, and irrecoverable overwrite/delete.
-- Applications, messages, uploads, account changes, offer decisions, and resignation always require a separate explicit request.
-- Never infer evidence maturity, readiness, application success, or career outcomes from successful tooling or generated artifacts.
-- Resume TeX roots under `career/` are user-owned. Personal font filenames are configured in `career-os.toml` and resolved by name without content pins; generated TeX remains ignored local state, and every font binary must stay under `.career-os/fonts/` and never enter Git.
-- Do not reintroduce per-resume JSON manifests, personal font-profile records, or template selectors. Handwritten TeX roots, adjacent `identity.tex`, fixed preview/application profiles, and the fixed system class are the resume configuration surface; `system/resume/fonts.json` only locks downloadable system defaults.
-- Raw `resume build` PDFs are internal. Only `resume export` may create a shareable PDF. With no arguments it selects the resume named `general` and the `preview` profile, using an automatic `build/share/` destination; `resume export application` is the explicit CLI confirmation for application-grade export and may run only after prompt-time authorization and the evidence gates documented in `docs/resume.md`.
-- Resume roots are discovered from `\documentclass{career-os}`, use the fixed system class and adjacent `identity.tex`, and support fixed preview/application profiles by resume name. Missing named fonts fail during XeLaTeX compilation. Preview export must exclude email, phone, and avatar; never bypass the source-bundle or final-PDF projection checks.
-- Shareable resume exports preserve reviewed HTTPS, profile-appropriate `mailto:`, and internal PDF links; final-PDF checks reject attachments, additional actions, and unsafe link actions rather than stripping all links.
-- Each resume root owns one BCP 47 language through the optional `language` document-class setting, defaulting to `en`; automatic exports derive their language segment from that source declaration rather than a CLI override, and the filename, PDF, and receipt share one four-character uppercase hexadecimal random segment.
-- In `standalone-framework`, framework work is implemented and validated without real career records, personal identity, attachments, local fonts, active `.obsidian/` state, `runtime/`, `build/`, or `.career-os/` in the tracked snapshot. In a private `integrated-workbench` or `split-downstream`, `career/` is eligible for that private Git history but must never be pushed or reverse-copied to this public repository.
-- A personal Career Home may configure this canonical repository as optional `upstream`. When configured in that downstream, it must remain fetch-only with `remote.upstream.pushurl=DISABLED`; the public repository must never remain a pushable personal `origin`, and failed remote-safety checks must not be bypassed.
-- The recommended embedded downstream is a sibling repository projected into the Vault by a host-tracked relative directory symlink. Configure its Vault-relative POSIX path with `--vault-mount`; never replace it with an absolute link or an ignored nested copy.
-- `career-os cleanup` is dry-run by default and enumerates only product-owned,
-  reproducible roots: configured build output, standard root development and
-  distribution caches, `.career-os/generated/`, `.career-os/tmp/`, and Python
-  caches under `system/tests/` and `system/tools/`. All other ignored state,
-  including `.venv/`, fonts, migrations, runtime acquisitions, and unknown
-  paths, is outside its scan; use `--apply` only after reviewing the report.
-- BOSS search and signed-in browsing are user-operated. Accept user-provided job
-  URLs and use anonymously accessible content when available; otherwise ask for
-  pasted JD text or screenshots. Never control a signed-in BOSS page, use
-  OpenCLI or another browser automation transport, replay page-signed requests,
-  or handle account/session material.
-- QuickAdd is an optional host-owned adapter. Follow
-  `docs/embedded-vault.md#optional-quickadd-adapter` for capture, active-record
-  review, and Engagement-event choices. Never overwrite `.obsidian` choices or
-  hotkeys, choose an A-F review signal, or assert an external event without an
-  explicit user request; QuickAdd writes local records only.
-- Exact reviewed annotated-tag synchronization applies only to an initialized `split-downstream` installation. Never reverse-copy `career/` or any other private/local path into this repository.
-- Before 1.0, do not invent backward-compatibility or user-data migration promises. The schema-2 project configuration and schema-3 record boundary in `v0.2.0` is intentionally fail-closed for legacy fields and requires explicit migration or reinitialization.
-- Any change to a guarded resume test, resume TeX fixture/template, or public CI/release workflow requires deliberate synthetic-fixture review and an updated blob hash in `system/privacy/public-fixture-policy.json`. Never approve a guarded blob containing real identity or career data, and never expose matched private values in audit output.
-- Read `docs/README.md` for navigation and `docs/tooling.md` for commands and validation depth.
+- For career-data workflows, start from the user's outcome. Select one primary
+  Career Skill and compose another only when the requested result crosses an
+  authority boundary. Never ask the user to choose a Skill, mode, owner,
+  reviewer, or validator. Apply `.agents/skills/_shared/career-contract.md` and
+  use [`docs/workflows.md`](docs/workflows.md) for cross-authority recipes.
+  Framework maintenance follows the Contributor Rules and does not select a
+  Career Skill unless it also operates on user career data.
+- Keep Career Evidence, Career Strategy, Role Market, Opportunity Decision,
+  Career Outlook, Capability Readiness, and Career Communication distinct.
+  Link stable IDs instead of copying facts or silently changing another
+  authority's state.
+- Write record schema 3 and the kind-specific lifecycle. Git-relative
+  validation owns transitions; legacy migration must be planned, reviewed, and
+  explicitly applied.
+- Stop for prompt-time authorization only before optional third-party Skill
+  installation, external/account state changes, public or application-grade
+  export, or irrecoverable overwrite/delete. Drafting or local tracking never
+  authorizes applying, messaging, uploading, accepting/rejecting an offer,
+  changing an account, or resigning.
+- Career Skills own workflow decisions and canonical records. Project subagents
+  are read-only reviewers; validate their contracts before use. An unavailable,
+  invalid, stale, or leaked review cannot grant readiness, approve a claim, or
+  accept strategy.
+- Mechanism health, evidence maturity, claim approval, readiness, application
+  state, and career outcomes are separate facts. Never infer one from a green
+  command, generated artifact, match score, recruiter contact, or plan.
+- Treat raw JDs, quotations, private data, identifiers, and application
+  materials as protected inputs. Public examples and fixtures must remain
+  synthetic.
+
+## Contributor Rules
+
+- `ProjectConfig` and `career-os.toml` are the configuration authority. A field,
+  table, default, or enum change must update serialization, regenerate
+  `system/schemas/project-config.schema.json`, and update tests and docs in the
+  same change; never hand-edit the schema independently.
+- Treat tests as a cost budget. Add coverage only for a distinct uncovered
+  behavior or high-risk boundary at the narrowest stable seam; prefer extending
+  or consolidating existing tests and justify materially slow tests in
+  `docs/tooling.md`.
+- Follow [`docs/skills.md`](docs/skills.md) for optional Skill onboarding,
+  [`docs/resume.md`](docs/resume.md) for resume privacy/export gates,
+  [`docs/private-downstream.md`](docs/private-downstream.md) and
+  [`docs/embedded-vault.md`](docs/embedded-vault.md) for topology and host
+  adapters, and `role-market` for signed-in recruiting boundaries. Never bypass
+  a failed remote-safety, projection, privacy, or reviewer check.
+- Before 1.0, support only interfaces documented by a release. Changes to a
+  guarded resume fixture/template or public CI/release workflow require
+  synthetic-fixture review and the matching hash update in
+  `system/privacy/public-fixture-policy.json`.
+- Read [`docs/README.md`](docs/README.md) for navigation and
+  [`docs/tooling.md`](docs/tooling.md) for command and validation depth.
 
 ## Development Commands
 
 - Setup: `uv sync --locked --all-groups`
-- Legacy import: review `career-os import plan`, then explicitly run `import apply`; never infer dispositions or record state.
 - Fast check: `uv run career-os check --fast`
 - Full check: `uv run career-os check`
 - Tests: `uv run pytest`
-- Lint/type check: `uv run ruff check .` and `uv run mypy system/tools/career_os`
-- Harness: use explicit Git Bash on Windows, then run `bash .agents/relink-skills.sh` and the installed `agent-scaffold` Skill's `verify --profile light` command documented in `docs/tooling.md`.
-- Privacy: `uv run career-os release privacy --root . --ref HEAD --history --private-root <private-career-home>`
-- Releases: synchronize all version authorities, add one exact `## [vX.Y.Z] — YYYY-MM-DD` changelog section, and validate it with `career-os release notes`. Push `main`, wait for its CI to succeed, then push the annotated tag; CI runs only for `main` and pull requests, while the tag-triggered workflow exclusively owns GitHub Release publication.
+- Lint/type check: `uv run ruff check .` and
+  `uv run mypy system/tools/career_os`
+- Harness: use explicit Git Bash on Windows, run
+  `bash .agents/relink-skills.sh`, then the installed `agent-scaffold` Skill's
+  `verify --profile light` command documented in `docs/tooling.md`.
+- Privacy/release/import/cleanup: follow `docs/tooling.md` and the task-specific
+  guide rather than reconstructing a command from memory.
 
 <!-- agent-scaffold:start — managed by the agent-scaffold skill. Edit project prose OUTSIDE these markers; `agent-scaffold upgrade` refreshes this block. -->
 ## Agent Harness (Claude Code + Codex)

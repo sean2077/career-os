@@ -7,8 +7,9 @@ Career OS keeps career evidence, strategy, market sensing, opportunity decisions
 ## Start here
 
 - **Work with your career data:** open the root
-  [Career Home](<Career Home.md>) in Obsidian, choose the language at the top, describe the outcome to an Agent, and use
-  the five live Workbenches. The fixed `career/README.md`,
+  [Career Home](<Career Home.md>) in Obsidian, choose the language at the top,
+  describe the outcome to an Agent, and use the five live Workbenches or the
+  [outcome-first workflow guide](docs/workflows.md). The fixed `career/README.md`,
   [dashboard](system/obsidian/dashboard.md), and
   [all-records Base](system/obsidian/records.base) remain lightweight text and
   inventory fallbacks.
@@ -166,7 +167,8 @@ Skill group. Only when the report requires a choice does the Agent explain the
 reviewed source and ask for project, global, or skip plus the target Host; the
 CLI never installs or downloads a Skill itself. See
 [the Skill catalog](docs/skills.md) for ownership, onboarding, and reviewer
-boundaries.
+boundaries, and the [workflow guide](docs/workflows.md) for minimum-context
+routing and common career loops.
 
 ## Status
 

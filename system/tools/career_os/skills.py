@@ -45,7 +45,7 @@ RECOMMENDATION_AUTHORITIES = {
 MODE_MATRIX = {
     "career-evidence": {"capture", "debrief", "consolidate"},
     "career-strategy": {"position", "plan", "align"},
-    "role-market": {"discover", "ingest", "screen", "compare", "review"},
+    "role-market": {"discover", "channel", "ingest", "screen", "compare", "review"},
     "opportunity-decision": {"research", "scope", "track", "decide"},
     "career-outlook": {"scan", "synthesize", "review"},
     "capability-readiness": {
@@ -56,7 +56,7 @@ MODE_MATRIX = {
         "assess",
         "retest",
     },
-    "career-communication": {"compose", "tailor", "validate", "export"},
+    "career-communication": {"compose", "tailor", "validate", "audit", "export"},
 }
 
 _yaml = YAML(typ="safe")

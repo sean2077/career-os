@@ -1,27 +1,25 @@
-# .agents/skills/ — project skill SSOT
+# Project Skills
 
-The seven project-authored Career Skills live here. Claude Code discovers
-matching real symlinks under `.claude/skills/`; Codex reads `.agents/skills/`
-directly.
+Career OS ships seven project-owned, authority-aligned Career Skills. Their
+frontmatter descriptions are the discovery surface; each body should stay
+small, operational, and progressively disclosed.
 
-## Change a project skill
+Authoring rules:
 
-1. Edit `.agents/skills/<name>/SKILL.md` and any local resources.
-2. Run `bash .agents/relink-skills.sh`.
-3. Commit the source and `.claude/skills/<name>` symlink together.
+- Start from a natural-language outcome and keep one primary owner. Modes are
+  internal variants, not separate Skills or a workflow DSL.
+- Apply `_shared/career-contract.md`; do not repeat its authorization, privacy,
+  persistence, validation, or reviewer rules in every Skill.
+- Keep the authority summary and non-negotiable completion gate in the Skill.
+  Put full schema and lifecycle detail in the authority seed, and load it only
+  before a canonical write or gate judgment.
+- Give the common fast path first. Escalate to broader record reads, web
+  research, another Skill, or a reviewer only when the result can materially
+  change.
+- Define a stopping condition and a bounded handoff. Do not create records,
+  reviewers, exports, or cross-authority work merely for symmetry.
+- Preserve user-owned multilingual Markdown and stable IDs; project code remains
+  under `system/tools/career_os/`.
 
-Rules:
-
-- Do not hand-edit `.claude/skills/` projections.
-- Optional third-party Skills are local installations described by
-  `system/skills/recommendations.json`; their six known source and projection
-  paths plus the installer-owned root `skills-lock.json` are ignored.
-- After a user-authorized project installation, run the relinker to establish
-  or repair Claude Code projections. Never treat installation as Career
-  evidence or readiness.
-- Prefix support-only directories with `_`; the relinker skips them.
-- The relinker preserves unrelated entries, but a same-name project and
-  third-party Skill is an ownership conflict.
-
-For full authoring conventions, naming, and third-party policy details, load the
-installed `agent-scaffold` Skill's `references/harness-layout.md` on demand.
+See `docs/skills.md` for the catalog and reviewer contracts, and
+`docs/workflows.md` for cross-authority recipes.

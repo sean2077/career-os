@@ -5,46 +5,45 @@ description: Discover, ingest, screen, compare, and review role directions and j
 
 # Role Market
 
-Read `../_shared/career-contract.md`. This Skill owns `30-role-market` and the
-kinds `market.channel`, `market.direction`, and `market.jd`.
-
-Read `system/seeds/authorities/30-role-market.md` for the canonical terms,
-lifecycle, and completion gate. Every JD records source fidelity, channel,
-capture time, missing sections, and the SHA-256 of its exact `## JD 原文`
-section. Screening metadata and `## 重新评价` live in that same JD Note; they
-cannot advance application or readiness state.
+Apply `../_shared/career-contract.md`. This Skill owns `30-role-market` and
+`market.channel`, `market.direction`, and `market.jd`. Before a canonical write
+or gate judgment, load `system/seeds/authorities/30-role-market.md`. Every JD
+preserves source fidelity, channel, capture time, missing sections, and the
+SHA-256 of its exact `## JD 原文`; screening and `## 重新评价` remain in that same
+record and never advance application or readiness state.
 
 ## Modes
 
 - **discover** identifies role directions or candidate JDs.
-- **channel** maintains a dated, ranked market-access channel without turning it
-  into Company, application, or outcome authority.
-- **ingest** preserves a specific JD and its source metadata.
+- **channel** maintains a dated, ranked access channel.
+- **ingest** preserves a specific JD and source metadata.
 - **screen** evaluates requirements, signals, gaps, and uncertainty.
-- **compare** contrasts comparable JDs without collapsing them into one source.
-- **review** corrects an existing screening while preserving the prior evidence.
+- **compare** contrasts comparable JDs without collapsing their sources.
+- **review** corrects an existing screening while preserving history.
 
 ## Workflow
 
-1. Distinguish a role direction from a dated JD instance.
-2. Reuse a Channel record when one exists; preserve source URL or channel,
-   retrieval date, quotations, and missing fields.
-3. Keep explicit requirements in `## JD 原文` and interpretation in
-   `## 重新评价`; never create a second Screening Note for the same JD.
-4. Resolve an identified employer against canonical Company records. Compose
-   Opportunity Decision `research`: reuse a fresh, decision-complete Company;
-   otherwise create or refresh it, then link the JD's `company` property. Keep an
-   anonymous or ambiguous employer unresolved instead of guessing from its label.
-5. Link evidence and readiness records by ID; do not infer readiness from a match
-   score or mechanism check.
-6. Keep Company facts and assessment in Opportunity Decision. A linked Company
-   may inform JD priority, preference, and risk, but never JD evidence fit,
-   application state, resume tailoring, or interview readiness.
+1. Distinguish a durable role direction from a dated JD instance. In `discover`,
+   return a small decision-ready shortlist and persist only selected leads or a
+   reusable Channel, not every search result.
+2. Reuse a Channel or JD by identity. Preserve URL/channel, retrieval date,
+   quotations, missing fields, and exact JD text; never create a second
+   screening note for the same JD.
+3. Screen against explicit requirements and linked evidence. Separate fit,
+   preference, risk, and unknowns; a score or mechanism check never proves
+   readiness.
+4. For an identified employer, inspect the canonical Company freshness and
+   decision-critical dimensions first. Compose Opportunity Decision `research`
+   only when the Company is absent, stale, ambiguous, or insufficient, then link
+   it by Wikilink without copying Company facts.
+5. Research until the decision-critical requirements and material uncertainty
+   are covered; stop when additional sources are duplicative. Preserve partial
+   status rather than guessing unavailable sections.
+6. Finish with fit signals, blocking gaps, material risks, clarifying questions,
+   and one next action. Do not tailor a resume, create application state, or
+   grant readiness here.
 
-Signed-in recruiting channels are user-operated. For BOSS Zhipin, the user
-searches and supplies a job URL; use anonymously accessible page content when
-available, otherwise ask for the pasted JD text or screenshots and preserve the
-result as partial until the missing sections are supplied. Do not control a
-signed-in BOSS page or use browser automation, OpenCLI, page-signed relays,
-direct authenticated requests, or session material. Never apply, message, or
-mutate an account through this Skill.
+Signed-in recruiting channels are user-operated. Accept user-provided URLs and
+anonymous content; otherwise use pasted text or screenshots. Never control a
+signed-in page, replay authenticated requests, handle session material, apply,
+message, or mutate an account.

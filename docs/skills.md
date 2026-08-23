@@ -1,16 +1,33 @@
 # Skill Catalog
 
-Career OS exposes seven authority-aligned Career Skills. The Agent selects and composes them from natural-language outcomes; modes are internal workflow variants rather than separate discovery entries.
+Career OS exposes seven authority-aligned Career Skills. The Agent selects and
+composes them from natural-language outcomes; modes are internal workflow
+variants rather than separate discovery entries. Use one primary Skill, add a
+second only for a distinct authority output, and follow
+[`workflows.md`](workflows.md) for cross-authority recipes.
 
 | Career Skill | Canonical authority | Modes |
 | --- | --- | --- |
 | `career-evidence` | Career Evidence | capture, debrief, consolidate |
 | `career-strategy` | Career Strategy | position, plan, align |
-| `role-market` | Role Market | discover, ingest, screen, compare, review |
+| `role-market` | Role Market | discover, channel, ingest, screen, compare, review |
 | `opportunity-decision` | Opportunity Decision | research, scope, track, decide |
 | `career-outlook` | Career Outlook | scan, synthesize, review |
 | `capability-readiness` | Capability Readiness | diagnose, learn, study-paper, practice, assess, retest |
-| `career-communication` | Career Communication | compose, tailor, validate, export |
+| `career-communication` | Career Communication | compose, tailor, validate, audit, export |
+
+## Execution model
+
+- Load the shared contract once, then the selected Skill and the smallest
+  decision-relevant record set. Authority seeds are required before canonical
+  writes or lifecycle/gate judgments, not for every exploratory answer.
+- Keep transient analysis and unsent one-off wording answer-only. Persist only
+  an owned durable outcome; reuse existing records by identity, purpose, and
+  lifecycle.
+- Search narrow metadata and stable references before opening bodies. Compose a
+  second authority only when its result can change the deliverable.
+- Batch canonical writes and run `career-os check` once at the end. Reviewers
+  are escalation tools for material gates, not default workers.
 
 ## Read-only reviewers
 
@@ -47,9 +64,10 @@ nouns or implementation details.
 The opportunity flow deliberately keeps JD screening, company/opportunity
 decision, application tracking, resume tailoring/export, and interview
 preparation/retest as five independently authoritative blocks. Screening an
-identified-employer JD composes `role-market` with `opportunity-decision` to
-resolve or refresh the canonical Company and link it back to the JD; Company
-quality may affect priority or risk but never evidence fit or application state.
+identified-employer JD reuses the canonical Company when it is fresh and
+decision-complete, and composes `opportunity-decision` only when Company
+resolution or refresh is needed. Company quality may affect priority or risk but
+never evidence fit or application state.
 
 ## Optional auxiliary Skills
 
