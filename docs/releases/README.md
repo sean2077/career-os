@@ -17,6 +17,7 @@ release.
 
 ## Release evidence
 
+- [v0.7.1](v0.7.1.md): reduces default Agent context, adds outcome-first workflow routing, and aligns the complete Skill mode matrix with executable blind-selection coverage.
 - [v0.7.0](v0.7.0.md): makes auxiliary Skills optional and provenance-checked, consolidates same-purpose project preparation records, and grounds every Blind Interviewer question in a visible resume, JD, or prior-answer basis.
 - [v0.6.0](v0.6.0.md): adds guarded QuickAdd record workflows and interview views, decomposes and accelerates checks, supports linked-worktree Vault context, and makes signed-in BOSS explicitly user-operated.
 - [v0.5.0](v0.5.0.md): disambiguates the root homepage filenames across Obsidian assets, deterministic tooling, tests, and documentation.

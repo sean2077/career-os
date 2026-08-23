@@ -1,9 +1,9 @@
 # Installation Requirements
 
-> **v0.7.0 boundary:** install from a clean public checkout. The tracked core is
+> **v0.7.1 boundary:** install from a clean public checkout. The tracked core is
 > exactly seven Career Skills; optional Obsidian and contributor groups are
 > reported for explicit local onboarding but never installed by the CLI. Blind
-> Interviewer v2 requires a visible public or candidate-answer basis. The
+> Interviewer v2 requires a visible, interview-worthy public or candidate-answer basis. The
 > v0.6.0 QuickAdd boundary and schema-2-to-3 migration requirement remain.
 
 Career OS separates core, live Obsidian, and resume readiness. A successful

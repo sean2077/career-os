@@ -4,6 +4,30 @@ All notable changes to Career OS are documented here.
 
 ## [Unreleased]
 
+## [v0.7.1] — 2026-08-23
+
+### Changed
+
+- Reduced the default Agent context by keeping high-frequency authority,
+  ownership, authorization, schema, privacy, and validation rules at the root
+  while routing lower-frequency procedures to focused documentation.
+- Added an on-demand outcome-first workflow guide for nine common career loops
+  and rewrote all seven Career Skills around minimum-context fast paths,
+  bounded escalation, stopping rules, and stable cross-authority handoffs.
+- Expanded Career Communication discovery and execution guidance for cover
+  letters, application answers, recruiter or networking messages, unsent
+  negotiation wording, and evidence audits without adding a new authority,
+  record kind, or workflow mode.
+
+### Fixed
+
+- Added the previously undocumented executable coverage for
+  `role-market.channel` and `career-communication.audit` to the mode matrix and
+  blind-selection oracle.
+- Made Company research conditional on a missing, stale, ambiguous, or
+  decision-incomplete canonical Company instead of repeating it for every
+  identified-employer JD.
+
 ## [v0.7.0] — 2026-07-27
 
 ### Added

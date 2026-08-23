@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "release": "v0.7.1",
+  "base_extraction_manifest": "docs/releases/v0.1.0-extraction.json",
+  "previous_supplement": "docs/releases/v0.7.0-extraction.json",
+  "history_shape": "public-native",
+  "public_base": "2f3063e7bdd3583cc17bc12aeef57d5688c90a26",
+  "public_change": "e806707cfc06843e8c3c4f8ed72dad51f20f5395",
+  "self_exclusion": "docs/releases/v0.7.1-extraction.json",
+  "entries": [
+    {
+      "path": ".agents/skills/README.md",
+      "result_sha256": "a31576a2997ce241303e8a11133e8488876965b611eafe38baf7d35c74889211",
+      "reason": "public-native"
+    },
+    {
+      "path": ".agents/skills/_shared/career-contract.md",
+      "result_sha256": "db37d7474fe10d5512c0e092b195956de5ae1e7d49929b2944aae2da04eb1c79",
+      "reason": "public-native"
+    },
+    {
+      "path": ".agents/skills/capability-readiness/SKILL.md",
+      "result_sha256": "2b5e8c41824d70480bbc4aadf50d3cad7fb7c1a41362056e11728fe63aadc887",
+      "reason": "public-native"
+    },
+    {
+      "path": ".agents/skills/career-communication/SKILL.md",
+      "result_sha256": "e0324b445b89ccf6c90ba9d82d8c2f7bee03d785bbd0a02720f9178ed54f8544",
+      "reason": "public-native"
+    },
+    {
+      "path": ".agents/skills/career-evidence/SKILL.md",
+      "result_sha256": "53772250bb0c27e23085f7f642a0a7c6a8921f80d7f1fe32fcfd59f9d4280bcd",
+      "reason": "public-native"
+    },
+    {
+      "path": ".agents/skills/career-outlook/SKILL.md",
+      "result_sha256": "26c685419a541e547a9141e1d53354c7a1d3809acbacb9f9ba12fe78e1701c68",
+      "reason": "public-native"
+    },
+    {
+      "path": ".agents/skills/career-strategy/SKILL.md",
+      "result_sha256": "fa551e57c5c8246f03054c76c8272ca386834b0884eeebd01485c2c9761ea3bf",
+      "reason": "public-native"
+    },
+    {
+      "path": ".agents/skills/opportunity-decision/SKILL.md",
+      "result_sha256": "c043feffcd1bd4510f16bba7d815a9b6e6eb405e075c9abf45d48c4aacd6f970",
+      "reason": "public-native"
+    },
+    {
+      "path": ".agents/skills/role-market/SKILL.md",
+      "result_sha256": "a410a1f8e26c41f6dd50437dd5002ec1c7e47a99e96a3d6d1d006e00a316091c",
+      "reason": "public-native"
+    },
+    {
+      "path": "AGENTS.md",
+      "result_sha256": "d36fd29dc22894d4dee20f4ba94861fa8dbef8a1bedb0f08ffda7c897235a19f",
+      "reason": "public-native"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "result_sha256": "041eedeeebb985af4d9e4fc1c50268cdc8bf47bdbd13f84113d5a15ec02ded43",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "README.md",
+      "result_sha256": "5b87a93ac1a1b289f41aa5f5698ad6ba5c813517d457e1f67563a3c2b6c1784f",
+      "reason": "public-native"
+    },
+    {
+      "path": "career-os.toml",
+      "result_sha256": "b691742230305f2ccc88d5ed2372ef9469c7be5753456a2d420e6634bf0e17b9",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/README.md",
+      "result_sha256": "873a9b0f9709b772a632d981cb293955b16d9717817d4ac261d8fc54e6217f54",
+      "reason": "public-native"
+    },
+    {
+      "path": "docs/installation.md",
+      "result_sha256": "0d27f094fc1d6ec3fb093e12d1f7e1c913ae1a555d45b37c5a86efd19ed1023a",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/releases/README.md",
+      "result_sha256": "87ed4aa6925cfa4f655e5509e5ca623449d544c0f99b4b1748b80c1ad9468011",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/releases/v0.7.1.md",
+      "result_sha256": "77b29170a9812c05b35c0afac9895309670f3f221c8279bfa8d8d00b0096eaa9",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/skills.md",
+      "result_sha256": "fc624d52ee45303995ef8e7018a458e5c339fc1a9548f42556791a98f2f478f8",
+      "reason": "public-native"
+    },
+    {
+      "path": "docs/workflows.md",
+      "result_sha256": "72dc31d880486e2041249483780bfc9f40c88fd66c1a4dfa36f7b89f6182c38b",
+      "reason": "public-native"
+    },
+    {
+      "path": "pyproject.toml",
+      "result_sha256": "4a6f42f3e4e48560592ea965d2277a992a95e44689231a4cc1da8f4ed6f589db",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/sbom.cdx.json",
+      "result_sha256": "1371a3691255af45fb7218e265a6f82a10ed53d7b1c9adb8566efdf50a03a307",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tests/fixtures/skill-selection-oracle.json",
+      "result_sha256": "29b96b5c29173bbf673de3f446fee66fee87193124f2171ab080275c69814b18",
+      "reason": "public-native"
+    },
+    {
+      "path": "system/tests/fixtures/skill-selection-prompts.json",
+      "result_sha256": "86c3801b77781cc42fa9b06dd83f28ddc9bbe89a1c34c1eaa268730a083b3875",
+      "reason": "public-native"
+    },
+    {
+      "path": "system/tests/test_cli_smoke.py",
+      "result_sha256": "3393c53482f7210e931cb57a28beaf287ca4c98182e57accd3709cfa4d203c19",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tests/test_extraction_manifest.py",
+      "result_sha256": "8586c193d33da8248656952dcee3412fcea7b69b3584bb9e102ea8c2c09ab7ee",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tools/career_os/__init__.py",
+      "result_sha256": "060546ac32257656b96002d49d06dba474dd13f8385787834d3ef1a41e0ba494",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tools/career_os/skills.py",
+      "result_sha256": "2bc7badc413299fee5f8a6bde0a6d4b6863235627a4428b595578a12f2b1076b",
+      "reason": "public-native"
+    },
+    {
+      "path": "uv.lock",
+      "result_sha256": "c18a7dd73191d92c93b259ff1b66924987fa8d1141e77521011ddb8c1cdf02ba",
+      "reason": "release-evidence"
+    }
+  ]
+}

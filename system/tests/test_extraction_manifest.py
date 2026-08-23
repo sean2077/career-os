@@ -18,6 +18,7 @@ SUPPLEMENT_PATHS = (
     "docs/releases/v0.5.0-extraction.json",
     "docs/releases/v0.6.0-extraction.json",
     "docs/releases/v0.7.0-extraction.json",
+    "docs/releases/v0.7.1-extraction.json",
 )
 
 
@@ -114,6 +115,17 @@ def test_public_extraction_manifest_is_complete_and_hash_bound() -> None:
         "self_exclusion": SUPPLEMENT_PATHS[6],
         "entries": supplements[6]["entries"],
     }
+    assert supplements[7] == {
+        "schema_version": 1,
+        "release": "v0.7.1",
+        "base_extraction_manifest": MANIFEST_PATH,
+        "previous_supplement": SUPPLEMENT_PATHS[6],
+        "history_shape": "public-native",
+        "public_base": "2f3063e7bdd3583cc17bc12aeef57d5688c90a26",
+        "public_change": "e806707cfc06843e8c3c4f8ed72dad51f20f5395",
+        "self_exclusion": SUPPLEMENT_PATHS[7],
+        "entries": supplements[7]["entries"],
+    }
     assert not [
         entry
         for entry in entries
@@ -150,6 +162,7 @@ def test_public_extraction_manifest_is_complete_and_hash_bound() -> None:
             assert entry["reason"] in {
                 "downstream-adaptation",
                 "mvp-security-hardening",
+                "public-native",
                 "release-evidence",
             }
             result = entry["result_sha256"]
