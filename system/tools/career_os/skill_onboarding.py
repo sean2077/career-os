@@ -132,8 +132,14 @@ class SkillRecommendationManifest(BaseModel):
         refs = {group.id: group.ref for group in self.groups}
         if refs["obsidian"] != "main":
             raise ValueError("the Obsidian recommendation must use main")
-        if re.fullmatch(r"v\d+\.\d+\.\d+", refs["contributor"]) is None:
-            raise ValueError("the contributor recommendation must use a stable SemVer tag")
+        contributor = next(group for group in self.groups if group.id == "contributor")
+        contributor_ref = contributor.ref
+        stable_tag = re.fullmatch(r"v\d+\.\d+\.\d+", contributor_ref) is not None
+        if contributor_ref != "main" and not stable_tag:
+            raise ValueError(
+                "the contributor recommendation must use a stable SemVer tag "
+                "or the reviewed main branch"
+            )
         return self
 
 
@@ -423,7 +429,9 @@ def _group_report(
         content_verified = _all_content_reviewed(
             skill_reports, preference.scope
         )
-        if installed and source_verified and (group.ref == "main" or content_verified):
+        if installed and source_verified and (
+            not _requires_reviewed_content(group) or content_verified
+        ):
             status = "installed"
         elif installed and source_verified:
             status = "drift"
@@ -433,7 +441,10 @@ def _group_report(
     elif (
         any(combined_complete.values())
         and _any_scope_sources_verified(skill_reports)
-        and (group.ref == "main" or _any_scope_content_reviewed(skill_reports))
+        and (
+            not _requires_reviewed_content(group)
+            or _any_scope_content_reviewed(skill_reports)
+        )
     ):
         status = "installed"
         requires_choice = False
@@ -538,12 +549,11 @@ def _require_verified_installation(
         if not _valid_skill_directory(canonical, skill.name):
             failures.append(f"{skill.name}: missing or invalid {scope} Skill")
             continue
-        if (
-            group.ref != "main"
-            and canonical_tree_sha256(canonical) != skill.tree_sha256
-        ):
+        if _requires_reviewed_content(group) and canonical_tree_sha256(
+            canonical
+        ) != skill.tree_sha256:
             failures.append(
-                f"{skill.name}: content differs from the reviewed stable tree"
+                f"{skill.name}: content differs from the reviewed pinned tree"
             )
         for agent in agents:
             if not _visible_to_agent(
@@ -661,6 +671,10 @@ def _all_sources_verified(
         == "verified"
         for skill in skill_reports
     )
+
+
+def _requires_reviewed_content(group: SkillRecommendationGroup) -> bool:
+    return group.id == "contributor" or group.ref != "main"
 
 
 def _any_scope_sources_verified(

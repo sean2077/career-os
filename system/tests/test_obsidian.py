@@ -558,6 +558,51 @@ def test_attach_never_manages_runtime_view_copies(tmp_path: Path) -> None:
     assert target.read_text(encoding="utf-8") == "unmanaged\n"
 
 
+@pytest.mark.skipif(
+    shutil.which("node") is None,
+    reason="Node.js is required to exercise the tracked QuickAdd script",
+)
+def test_quickadd_review_accepts_month_partitioned_jd_paths() -> None:
+    script = REPOSITORY_ROOT / "system/obsidian/quickadd/review-jd.js"
+    javascript = r"""
+const { validateBaseRecord } = require(process.argv[1]);
+const frontmatter = {
+  kind: "market.jd",
+  schema_version: 3,
+  updated_at: "2026-07-28T12:00:00+08:00",
+};
+
+for (const path of [
+  "career-home/career/30-role-market/jds/example.md",
+  "career-home/career/30-role-market/jds/2026-07/example.md",
+]) {
+  validateBaseRecord({ path, extension: "md" }, frontmatter);
+}
+
+for (const path of [
+  "career-home/career/30-role-market/jds/archive/example.md",
+  "career-home/career/30-role-market/jds/2026-07/archive/example.md",
+]) {
+  try {
+    validateBaseRecord({ path, extension: "md" }, frontmatter);
+  } catch (error) {
+    if (error.message.includes("不在规范目录")) {
+      continue;
+    }
+    throw error;
+  }
+  throw new Error(`non-canonical JD path was accepted: ${path}`);
+}
+"""
+    result = subprocess.run(
+        ["node", "-e", javascript, str(script)],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0, result.stderr
+
+
 def test_quickadd_version_and_choice_conflicts_are_fail_closed(tmp_path: Path) -> None:
     paths = _fixture_paths(tmp_path, host_git=False)
     plugin = paths.vault_root / ".obsidian/plugins/quickadd"

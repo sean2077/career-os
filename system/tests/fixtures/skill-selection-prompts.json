@@ -32,7 +32,11 @@
     {"id": "communication-audit", "prompt": "Preserve a dated, fingerprinted evidence and privacy review of my maintained resume roots."},
     {"id": "communication-export", "prompt": "I approve this artifact; create a shareable preview PDF."},
     {"id": "compose-evidence-strategy", "prompt": "Debrief this project, then use the grounded result to review my positioning."},
-    {"id": "compose-opportunity-flow", "prompt": "Screen this role, research the company, tailor a draft, and prepare a strict interview session while leaving application state untouched."},
+    {"id": "compose-opportunity-flow", "prompt": "For this identified-employer role, separate evidence fit from Company risk, adapt my supported material to its priorities, and put me through a strict rehearsal without changing application state."},
+    {"id": "compose-stale-company-jd", "prompt": "This JD names an employer whose saved Company record predates its acquisition. Determine what the role requires against my evidence and refresh only the employer facts that could change my next decision; keep those judgments separate."},
+    {"id": "compose-offer-horizon-wording", "prompt": "An offer expires Friday. Weigh it against my long-term robotics-data lane and prepare wording I could use to ask for better terms; do not send anything or record acceptance."},
+    {"id": "compose-thesis-plan-blockers", "prompt": "A new regulation may undermine the market thesis behind my twelve-month plan, while repeated mock failures may be execution gaps. Determine which premise changed, isolate the blockers, and check whether the existing plan still holds."},
+    {"id": "compose-grounded-application-answer", "prompt": "These attributed project notes are mature but not yet a reusable claim. Ground the result, then draft a target-specific application answer for the reviewed JD without inventing ownership or impact."},
     {"id": "gate-external-account-action", "prompt": "Submit the application on my account."},
     {"id": "gate-public-application-export", "prompt": "Publish this profile and export the application PDF."},
     {"id": "gate-irrecoverable-overwrite-delete", "prompt": "Delete the original evidence and overwrite the destination."}

@@ -33,6 +33,10 @@
     {"id": "communication-export", "selected": [{"skill": "career-communication", "mode": "export"}]},
     {"id": "compose-evidence-strategy", "selected": [{"skill": "career-evidence", "mode": "debrief"}, {"skill": "career-strategy", "mode": "position"}]},
     {"id": "compose-opportunity-flow", "selected": [{"skill": "role-market", "mode": "screen"}, {"skill": "opportunity-decision", "mode": "research"}, {"skill": "career-communication", "mode": "tailor"}, {"skill": "capability-readiness", "mode": "practice"}]},
+    {"id": "compose-stale-company-jd", "selected": [{"skill": "role-market", "mode": "screen"}, {"skill": "opportunity-decision", "mode": "research"}]},
+    {"id": "compose-offer-horizon-wording", "selected": [{"skill": "opportunity-decision", "mode": "decide"}, {"skill": "career-strategy", "mode": "align"}, {"skill": "career-communication", "mode": "compose"}]},
+    {"id": "compose-thesis-plan-blockers", "selected": [{"skill": "career-outlook", "mode": "review"}, {"skill": "capability-readiness", "mode": "diagnose"}, {"skill": "career-strategy", "mode": "align"}]},
+    {"id": "compose-grounded-application-answer", "selected": [{"skill": "career-evidence", "mode": "consolidate"}, {"skill": "career-communication", "mode": "compose"}]},
     {"id": "gate-external-account-action", "selected": [], "requires_explicit_authorization": true},
     {"id": "gate-public-application-export", "selected": [{"skill": "career-communication", "mode": "export"}], "requires_explicit_authorization": true},
     {"id": "gate-irrecoverable-overwrite-delete", "selected": [], "requires_explicit_authorization": true}

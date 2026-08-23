@@ -77,7 +77,7 @@ Skills are recommendations, not redistributed snapshots:
 | Group | Audience | Skills | Reviewed upstream |
 | --- | --- | --- | --- |
 | `obsidian` | ordinary Career OS use | `obsidian-markdown`, `obsidian-bases`, `json-canvas`, `obsidian-cli` | [`kepano/obsidian-skills`](https://github.com/kepano/obsidian-skills), reviewed from `main` |
-| `contributor` | framework maintenance only | `agent-scaffold`, `conventional-commit` | [`sean2077/skills`](https://github.com/sean2077/skills), reviewed from a stable tag |
+| `contributor` | framework maintenance only | `agent-scaffold`, `conventional-commit` | [`sean2077/skills`](https://github.com/sean2077/skills), temporarily installed from `main` and reviewed at exact commit `597dcd6` |
 
 `system/skills/recommendations.json` is the authority for group membership,
 audience, upstream repository, license, reviewed revision and tree hashes, and
@@ -86,7 +86,11 @@ manifest, not an installation lock and not a claim that upstream content will
 remain unchanged. Each reviewed tree digest hashes every sorted POSIX-relative
 path together with the SHA-256 of its content. UTF-8 text normalizes CRLF to LF
 so the same reviewed source has one digest across Host checkouts; binary content
-retains its exact bytes.
+retains its exact bytes. Contributor recommendations use either a stable SemVer
+tag or the explicitly reviewed `main` branch. Unlike ordinary Obsidian `main`
+recommendations, contributor installs must still match the reviewed revision's
+tree digests, so later upstream changes fail closed until this manifest is
+reviewed again.
 
 `career-os init` preserves its existing JSON fields and adds
 `skill_onboarding` for the ordinary `obsidian` audience. The same read-only
@@ -134,9 +138,12 @@ projections, or a `.codex/skills` projection still fail.
 The synthetic selection prompts and hidden oracle are separate files under
 `system/tests/fixtures/`. The prompt packet contains only case IDs and natural
 language; it contains no expected Skill, mode, or gate result. The oracle covers
-every declared mode, adjacent multi-Skill composition, the five independent
-opportunity blocks, and the three prompt-time hard gates without adding a router
-or workflow DSL.
+every declared mode, the five independent opportunity blocks, and the three
+prompt-time hard gates. It also preserves at least six multi-authority cases,
+including three that span three or more Skills and use outcome language instead
+of simply repeating mode names. This directly catches the under-routing failure
+where a complex request receives only its most obvious Skill, without adding a
+router or workflow DSL.
 
 The report's authorization flag means the Agent must stop for a new approval.
 Approval already stated in the current prompt satisfies the preview-export gate;

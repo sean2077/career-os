@@ -195,7 +195,7 @@ def test_clean_skill_onboarding_is_read_only_and_argument_structured(
     assert [group["id"] for group in contributor["groups"]] == ["contributor"]
 
 
-def test_recommendation_manifest_rejects_a_changed_install_source(
+def test_recommendation_manifest_rejects_changed_source_or_unreviewed_contributor_ref(
     tmp_path: Path,
 ) -> None:
     project = tmp_path / "project"
@@ -207,6 +207,18 @@ def test_recommendation_manifest_rejects_a_changed_install_source(
     manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
 
     with pytest.raises(ValueError, match="source does not match"):
+        load_recommendation_manifest(project)
+
+    _copy_recommendations(project)
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    contributor = next(
+        group for group in manifest["groups"] if group["id"] == "contributor"
+    )
+    contributor["source"] = "sean2077/skills#develop"
+    contributor["ref"] = "develop"
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+
+    with pytest.raises(ValueError, match="stable SemVer tag or the reviewed main branch"):
         load_recommendation_manifest(project)
 
 
@@ -298,7 +310,7 @@ def test_configure_rejects_missing_host_projection_and_wrong_source(
     assert not project.joinpath(ONBOARDING_STATE_PATH).exists()
 
 
-def test_stable_contributor_drift_cannot_be_recorded(tmp_path: Path) -> None:
+def test_pinned_contributor_drift_cannot_be_recorded(tmp_path: Path) -> None:
     project = tmp_path / "project"
     home = tmp_path / "home"
     project.mkdir()
@@ -313,7 +325,7 @@ def test_stable_contributor_drift_cannot_be_recorded(tmp_path: Path) -> None:
     )
     assert report["groups"][0]["status"] == "partial"
     assert report["requires_user_choice"] is True
-    with pytest.raises(ValueError, match="reviewed stable tree"):
+    with pytest.raises(ValueError, match="reviewed pinned tree"):
         configure_onboarding(
             project,
             group_id="contributor",
@@ -555,6 +567,24 @@ def test_selection_packet_is_isolated_from_oracle_and_covers_contract() -> None:
             covered[expected["skill"]].add(expected["mode"])
 
     assert covered == MODE_MATRIX
+    multi_authority_cases = [
+        case
+        for case in oracle["cases"]
+        if len({item["skill"] for item in case["selected"]}) > 1
+    ]
+    assert len(multi_authority_cases) >= 6
+    assert (
+        sum(
+            len({item["skill"] for item in case["selected"]}) >= 3
+            for case in multi_authority_cases
+        )
+        >= 3
+    )
+    assert {
+        item["skill"]
+        for case in multi_authority_cases
+        for item in case["selected"]
+    } == PROJECT_SKILLS
     assert [item["name"] for item in oracle["opportunity_blocks"]] == [
         "jd-screening",
         "company-opportunity-decision",
@@ -581,6 +611,24 @@ def test_selection_report_evaluator_is_separate_from_behavioral_run(tmp_path: Pa
     result = evaluate_skill_selection_report(project_root, report)
 
     assert result.status == "pass"
+    single_skill_cases = [
+        (
+            {**case, "selected": case["selected"][:1]}
+            if case["id"] == "compose-offer-horizon-wording"
+            else case
+        )
+        for case in oracle["cases"]
+    ]
+    report.write_text(
+        json.dumps({"schema_version": 1, "cases": single_skill_cases}),
+        encoding="utf-8",
+    )
+    single_skill_result = evaluate_skill_selection_report(project_root, report)
+    assert single_skill_result.status == "fail"
+    assert single_skill_result.detail == (
+        "mismatched cases: compose-offer-horizon-wording"
+    )
+
     default_checks = verify_skills(project_root)
     blind = next(item for item in default_checks if item.id == "skills.blind-selection")
     assert blind.status == "attention"

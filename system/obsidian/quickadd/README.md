@@ -14,8 +14,9 @@ Career OS generates three reviewable QuickAdd `2.12.3` choices:
 
 ## Review active record
 
-For a JD in `screened` state, A-E write `status: reviewed`, `reviewed_at`,
-`updated_at`, `user_review_signal`, the matching `case_target`, and a compatible
+For a JD directly under `jds/` or in the recommended `jds/YYYY-MM/` partition
+and `screened` state, A-E write `status: reviewed`, `reviewed_at`, `updated_at`,
+`user_review_signal`, the matching `case_target`, and a compatible
 `next_action`; F writes `status: skipped` and removes review-only fields. It
 never infers priority, evidence fit, preference, or growth.
 

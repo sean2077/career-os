@@ -44,17 +44,17 @@
     {
       "id": "contributor",
       "audience": "contributor",
-      "source": "sean2077/skills#v4.1.2",
+      "source": "sean2077/skills#main",
       "source_repository": "https://github.com/sean2077/skills",
-      "ref": "v4.1.2",
-      "reviewed_revision": "9b60c61314a17411309a5f094de26726edcf0320",
+      "ref": "main",
+      "reviewed_revision": "597dcd69a7a46a9482bedad8dd5e91b3519922c7",
       "license": "MIT",
       "attribution": "Copyright (c) 2026 sean2077",
       "skills": [
         {
           "name": "agent-scaffold",
           "source_path": "skills/agent-scaffold",
-          "tree_sha256": "6f975d0d395846643603553de5603b331794304b05f3aef0485def60dcb765cd"
+          "tree_sha256": "d6e65c4d767641e3ce6a85aeb9e25a88ab7133d22ef097d7aa7dbf0c3823c9c1"
         },
         {
           "name": "conventional-commit",

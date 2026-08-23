@@ -4,6 +4,26 @@ All notable changes to Career OS are documented here.
 
 ## [Unreleased]
 
+### Changed
+
+- Expanded the blind Skill-selection contract with nuanced multi-authority
+  outcomes that reject collapsing a complex request to one obvious Skill.
+- Refreshed the light Agent Harness and temporarily pointed contributor
+  onboarding plus CI at `sean2077/skills#main`, with fail-closed tree digests
+  reviewed at exact commit `597dcd6`.
+
+### Fixed
+
+- Allowed QuickAdd JD review for the canonical month-partitioned
+  `career/30-role-market/jds/YYYY-MM/` layout while still rejecting deeper or
+  non-canonical paths.
+
+### Security
+
+- Re-reviewed the changed public CI and release workflow blobs as
+  synthetic-only and appended their exact hashes to the guarded fixture
+  policy.
+
 ## [v0.7.1] — 2026-08-23
 
 ### Changed

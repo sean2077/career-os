@@ -50,7 +50,7 @@ jobs:
           DISABLE_TELEMETRY: "1"
         run: |
           npx --yes skills@1.5.20 add \
-            sean2077/skills#v4.1.2 \
+            sean2077/skills#main \
             --skill agent-scaffold conventional-commit \
             --agent codex \
             -y

@@ -312,6 +312,32 @@ def _verify_skill_selection(
                 covered[selection.skill].add(selection.mode)
         if covered != MODE_MATRIX:
             raise ValueError("selection oracle does not cover every declared Skill mode")
+        multi_authority_cases = [
+            case
+            for case in oracle.cases
+            if len({selection.skill for selection in case.selected}) > 1
+        ]
+        if len(multi_authority_cases) < 6:
+            raise ValueError(
+                "selection oracle must preserve at least six multi-authority cases"
+            )
+        wide_multi_authority_case_count = sum(
+            len({selection.skill for selection in case.selected}) >= 3
+            for case in multi_authority_cases
+        )
+        if wide_multi_authority_case_count < 3:
+            raise ValueError(
+                "selection oracle must preserve at least three cases spanning three authorities"
+            )
+        composed_skills = {
+            selection.skill
+            for case in multi_authority_cases
+            for selection in case.selected
+        }
+        if composed_skills != PROJECT_SKILLS:
+            raise ValueError(
+                "multi-authority selection cases must exercise every Career Skill"
+            )
         expected_blocks = [
             "jd-screening",
             "company-opportunity-decision",
@@ -329,7 +355,9 @@ def _verify_skill_selection(
                 "skills.selection-fixtures",
                 "pass",
                 str(prompts_path),
-                "prompt packet is schema-isolated from the hidden oracle",
+                "prompt packet is schema-isolated from the hidden oracle; "
+                f"{len(multi_authority_cases)} multi-authority cases, "
+                f"{wide_multi_authority_case_count} span at least three Skills",
             )
         )
     except (OSError, ValueError) as error:

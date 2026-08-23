@@ -46,7 +46,8 @@ const REVIEW_OPTIONS = [
 const RECORD_TYPES = {
   "market.jd": {
     label: "JD",
-    path: /(^|\/)career\/30-role-market\/jds\/[^/]+\.md$/,
+    path:
+      /(^|\/)career\/30-role-market\/jds\/(?:\d{4}-(?:0[1-9]|1[0-2])\/)?[^/]+\.md$/,
   },
   "opportunity.company": {
     label: "Company",
@@ -445,3 +446,4 @@ module.exports.applyReview = applyReview;
 module.exports.buildReviewPlan = buildReviewPlan;
 module.exports.effectiveReviewState = effectiveReviewState;
 module.exports.reviewRevision = reviewRevision;
+module.exports.validateBaseRecord = validateBaseRecord;
