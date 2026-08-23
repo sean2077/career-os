@@ -1,0 +1,202 @@
+{
+  "schema_version": 1,
+  "release": "v0.8.0",
+  "base_extraction_manifest": "docs/releases/v0.1.0-extraction.json",
+  "previous_supplement": "docs/releases/v0.7.1-extraction.json",
+  "history_shape": "public-native",
+  "public_base": "4add64f15c707e11b7acbff8868f8021d4ad2fcc",
+  "public_change": "4c412d1af4886e2b5bbb3efbac828e54dbdc43d2",
+  "self_exclusion": "docs/releases/v0.8.0-extraction.json",
+  "entries": [
+    {
+      "path": ".agents/relink-skills.sh",
+      "result_sha256": "b7c5c66e14a010c57ac9dd6b5a51623181c50173d7ee35dabc1fe02ab63da161",
+      "reason": "public-native"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "result_sha256": "44b3a42ac6d039e7bc54808641ca8fbcae201b0464003350d4e16581dea87359",
+      "reason": "public-native"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "result_sha256": "dfc9a629340d53b7cb9ad92d6294119a5a14912c81cb62a3f9fdddd7e368fe18",
+      "reason": "public-native"
+    },
+    {
+      "path": "AGENTS.md",
+      "result_sha256": "570e1bd7740c03eab82802a1609084a79cd45c122f3e5dfbac4002dfbb1ad96c",
+      "reason": "public-native"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "result_sha256": "b722ea661785fa5b9bdefa4b2b3d5d1092c7cea24ed67bd252143517f1d767ef",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "README.md",
+      "result_sha256": "46a87e133ffb64ae8a307b9b27ac262caf9b721e76990faf5c38c78209e64dd1",
+      "reason": "public-native"
+    },
+    {
+      "path": "SECURITY.md",
+      "result_sha256": "a4858692e0535a4829be36a2b925fafd2af623dd97616c78e8c9a22b05dac883",
+      "reason": "public-native"
+    },
+    {
+      "path": "career-os.toml",
+      "result_sha256": "c93d67e0ab88125b4bc52e380d7d13f0591e0aa1e344764d8438e75d45bad856",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/README.md",
+      "result_sha256": "20f2ab3663ab890d88cf2b6e2d7920b2057171156838ec44c035fbc48a9f7598",
+      "reason": "public-native"
+    },
+    {
+      "path": "docs/assets/README.md",
+      "result_sha256": "e85c941eb83cd762be1e27e396095a7f00f75a21747f3b3cc7c3367352d5ddaf",
+      "reason": "public-native"
+    },
+    {
+      "path": "docs/embedded-vault.md",
+      "result_sha256": "8f73af80e94a1db25fed771657a3a60219f237e54e2f5c0235114f04e868673e",
+      "reason": "public-native"
+    },
+    {
+      "path": "docs/importing.md",
+      "result_sha256": "89a15f254cf3762734ea47eba1c6edd024ff536a5eda77a9e54d1a1a51a07c69",
+      "reason": "public-native"
+    },
+    {
+      "path": "docs/installation.md",
+      "result_sha256": "d199208e01cbdc35f9c4998ebbafa63ed87e01279fd4497744926bf2d53bc19d",
+      "reason": "public-native"
+    },
+    {
+      "path": "docs/private-downstream.md",
+      "result_sha256": "d410a0afac2980127bb7b3c354771509b58ed35f2806eb38efb5ad6c0bdf9bae",
+      "reason": "public-native"
+    },
+    {
+      "path": "docs/releases/README.md",
+      "result_sha256": "05f37c856d03dfb0c9248e2852512db125acf6d1e29cfae1ca64abd479fc3c05",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/releases/v0.8.0.md",
+      "result_sha256": "c37129052f4576d9c3be2d9d58156e02cc27de9ad4526e5f4224c60b82ce9a75",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "docs/resume.md",
+      "result_sha256": "16f2f5910e3cc9a2f78230c634f84dfd01bf887b01197de20ea92e47911fe29d",
+      "reason": "public-native"
+    },
+    {
+      "path": "docs/skills.md",
+      "result_sha256": "e30699c1d46649013139a0bb932bd18b88f0592855ba0e6b9006409e637f474f",
+      "reason": "public-native"
+    },
+    {
+      "path": "docs/supply-chain.md",
+      "result_sha256": "9e67f1fa29e196ff3951054174a491d94adc1d6ca510cc8bab735fd5d0767421",
+      "reason": "public-native"
+    },
+    {
+      "path": "docs/workflows.md",
+      "result_sha256": "2c170ff8e936fb7fee1885ce1f965fdc151164587229a41218001710cdfb0297",
+      "reason": "public-native"
+    },
+    {
+      "path": "pyproject.toml",
+      "result_sha256": "41106356b7e4bc0f0ddfb9ce8006bf7129679bd48aba234a0f83f21c226477ae",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/obsidian/quickadd/README.md",
+      "result_sha256": "6d27a393b159da8be9c9a665550a986fc17a4e9874a9998e7da42d4910f989c1",
+      "reason": "public-native"
+    },
+    {
+      "path": "system/obsidian/quickadd/review-jd.js",
+      "result_sha256": "de12e7b93cc5effbe3795d6dff4fd80bc30f1430074d2e5a5069312d22296048",
+      "reason": "public-native"
+    },
+    {
+      "path": "system/privacy/public-fixture-policy.json",
+      "result_sha256": "9b52ef51249d1b0934763b033166fadbfcccf995ab34d82e53b4cd24aa87a36a",
+      "reason": "public-native"
+    },
+    {
+      "path": "system/sbom.cdx.json",
+      "result_sha256": "6d760b613e526738d8d61b9057582c13e7b24c712c069c3e1e62be365e6ecd35",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/seeds/authorities/70-career-communication.md",
+      "result_sha256": "3c35c024f718f3a96d54ba6f848ed2f4db41e1cdc6bc1b093cf2664f12293581",
+      "reason": "public-native"
+    },
+    {
+      "path": "system/skills/recommendations.json",
+      "result_sha256": "20426acc5e705d91d6f4ae930e950b70078ec816cafcea627c04ebd4e96c28bb",
+      "reason": "public-native"
+    },
+    {
+      "path": "system/tests/fixtures/skill-selection-oracle.json",
+      "result_sha256": "8cb0a66cbc16abf30aaf84eb84e53ca4198d6250e8fb542564e6ab203dcc74c1",
+      "reason": "public-native"
+    },
+    {
+      "path": "system/tests/fixtures/skill-selection-prompts.json",
+      "result_sha256": "31c38012fb0944ad1e8c04ce5f7f6f2439ab3bf94125065247602f9c7a2994df",
+      "reason": "public-native"
+    },
+    {
+      "path": "system/tests/test_cli_smoke.py",
+      "result_sha256": "8fa158d4eed6d2fc8199f1e7e80eeec98718d7ffb933bb5ed77c4b7e3239e286",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tests/test_extraction_manifest.py",
+      "result_sha256": "c41214f7fe532e82c3770f0284a881270b9d043e8f50f386839d79d7c709098e",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tests/test_installation_docs.py",
+      "result_sha256": "dbe9377443b92af327ae12cc91ed2fa19dd5bfbd6278576440a210cf446baa1c",
+      "reason": "public-native"
+    },
+    {
+      "path": "system/tests/test_obsidian.py",
+      "result_sha256": "eb97cb800374dc38140bf537963b7b36a27206673a7dad726435144ffa287ea2",
+      "reason": "public-native"
+    },
+    {
+      "path": "system/tests/test_skills.py",
+      "result_sha256": "ad899652066a310afd23df92ad48b64c27c91ae26e5161e18d4a41ddc4283061",
+      "reason": "public-native"
+    },
+    {
+      "path": "system/tools/career_os/__init__.py",
+      "result_sha256": "924a9cc968263fbba35563ab94c4250ddcfbf4f8ac4c7aae13eec3990fdd2f1b",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tools/career_os/skill_onboarding.py",
+      "result_sha256": "fcaeb3e799cef416d93dc3b375901c262c620aba92f9d24e9b8d290e9fa95307",
+      "reason": "public-native"
+    },
+    {
+      "path": "system/tools/career_os/skills.py",
+      "result_sha256": "210539486839d0d27f3e970cfea5f5e0f30e4a9f522cd9ce890c39785527d28b",
+      "reason": "public-native"
+    },
+    {
+      "path": "uv.lock",
+      "result_sha256": "34a08a270f37d1f199fd8720ac5ee7861745305d8a8bfb25842668032ef90393",
+      "reason": "release-evidence"
+    }
+  ]
+}

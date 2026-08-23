@@ -4,25 +4,24 @@ All notable changes to Career OS are documented here.
 
 ## [Unreleased]
 
+## [v0.8.0] — 2026-08-24
+
 ### Changed
 
-- Expanded the blind Skill-selection contract with nuanced multi-authority
-  outcomes that reject collapsing a complex request to one obvious Skill.
-- Refreshed the light Agent Harness and temporarily pointed contributor
-  onboarding plus CI at `sean2077/skills#main`, with fail-closed tree digests
-  reviewed at exact commit `597dcd6`.
+- Expanded the blind Skill-selection contract with nuanced multi-authority outcomes that reject collapsing a complex request to one obvious Skill.
+- Refreshed the light Agent Harness and temporarily pointed contributor onboarding plus CI at `sean2077/skills#main`, with fail-closed tree digests reviewed at exact commit `597dcd6`.
+- Consolidated framework documentation around task-first entry points and one authority for each changing fact, separating current operating guidance from retained release evidence.
+- Made `docs/tooling.md` the sole documentation authority for maintainer command sequences while keeping README, CONTRIBUTING, and AGENTS focused on routing and behavioral boundaries.
 
 ### Fixed
 
-- Allowed QuickAdd JD review for the canonical month-partitioned
-  `career/30-role-market/jds/YYYY-MM/` layout while still rejecting deeper or
-  non-canonical paths.
+- Allowed QuickAdd JD review for the canonical month-partitioned `career/30-role-market/jds/YYYY-MM/` layout while still rejecting deeper or non-canonical paths.
+- Restored fail-closed CI by extending the immutable public extraction chain through the complete v0.8.0 snapshot.
+- Replaced documentation tests that depended on natural-language wording with checks for executable commands, routes, version authorities, and relation keys.
 
 ### Security
 
-- Re-reviewed the changed public CI and release workflow blobs as
-  synthetic-only and appended their exact hashes to the guarded fixture
-  policy.
+- Re-reviewed the changed public CI and release workflow blobs as synthetic-only and appended their exact hashes to the guarded fixture policy.
 
 ## [v0.7.1] — 2026-08-23
 

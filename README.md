@@ -10,7 +10,7 @@ Career OS keeps career evidence, strategy, market sensing, opportunity choices, 
 | --- | --- |
 | Use an initialized Career Home | Open [`Career Home.md`](<Career Home.md>) or [`职业主页.md`](职业主页.md), then describe the outcome to an Agent. |
 | Find the smallest workflow | Use the [outcome-first workflow guide](docs/workflows.md). |
-| Evaluate the public, data-free framework | Run the [core smoke test](#evaluate-the-public-framework). |
+| Evaluate the public, data-free framework | Follow the [core-only evaluation](docs/installation.md#evaluate-the-public-framework). |
 | Create a real personal installation | Follow the [private downstream guide](docs/private-downstream.md) before adding personal data. |
 | Attach Career OS to an existing Vault | Complete the private-repository boundary, then follow [Embedded Vaults](docs/embedded-vault.md). |
 | Maintain or contribute to the framework | Read [CONTRIBUTING.md](CONTRIBUTING.md) and the [documentation map](docs/README.md). |
@@ -40,34 +40,11 @@ Career OS keeps career evidence, strategy, market sensing, opportunity choices, 
 
 The Canvas files are canonical. The reviewed PNG exports follow the [visual-asset contract](docs/assets/README.md).
 
-## Evaluate the public framework
+## Evaluate or install
 
-The public repository contains framework assets, synthetic fixtures, and release evidence only. A data-free local check requires Git, `uv`, and Python 3.12 or newer:
+The public repository contains framework assets, synthetic fixtures, and release evidence only. [Install and Verify Career OS](docs/installation.md) owns the current requirements, public-framework smoke sequence, initialization commands, and capability-specific readiness recipes.
 
-```text
-git clone https://github.com/sean2077/career-os.git
-cd career-os
-uv sync --locked
-uv run career-os doctor --json
-uv run career-os check --fast
-```
-
-The optional Obsidian and resume stacks have separate readiness gates. See [Install and Verify Career OS](docs/installation.md).
-
-Do not add real career records, identity, attachments, fonts, active Obsidian state, or generated exports to a public fork. A real Career Home should use the private topology and guarded remote policy in the [private downstream guide](docs/private-downstream.md).
-
-## Initialize a Career Home
-
-After establishing a private repository boundary, a standalone installation can be initialized from the project root:
-
-```text
-uv sync --locked
-uv run career-os init --mode standalone --root . --languages en
-uv run career-os doctor --json
-uv run career-os check
-```
-
-For an existing Obsidian Vault, do not improvise the repository mount or host configuration. Use the reviewed plan/apply flow in [Embedded Vaults](docs/embedded-vault.md).
+Do not add real career records, identity, attachments, fonts, active Obsidian state, or generated exports to a public fork. Establish the private topology and guarded remote policy in [Private Downstream Installation](docs/private-downstream.md) before initializing a real Career Home. For an existing Obsidian Vault, continue with the reviewed plan/apply flow in [Embedded Vaults](docs/embedded-vault.md).
 
 ## Ownership at a glance
 

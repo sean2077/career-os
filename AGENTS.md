@@ -68,17 +68,7 @@ and validation.
 
 ## Development Commands
 
-- Setup: `uv sync --locked --all-groups`
-- Fast check: `uv run career-os check --fast`
-- Full check: `uv run career-os check`
-- Tests: `uv run pytest`
-- Lint/type check: `uv run ruff check .` and
-  `uv run mypy system/tools/career_os`
-- Harness: use explicit Git Bash on Windows, run
-  `bash .agents/relink-skills.sh`, then the installed `agent-scaffold` Skill's
-  `verify --profile light` command documented in `docs/tooling.md`.
-- Privacy/release/import/cleanup: follow `docs/tooling.md` and the task-specific
-  guide rather than reconstructing a command from memory.
+- [`docs/tooling.md`](docs/tooling.md) owns contributor setup, validation depth, Harness verification, privacy, release, import, and cleanup commands. Use the narrowest documented gate that protects the affected boundary, then run every task-specific completion gate; do not copy or reconstruct command sequences in this contract.
 
 <!-- agent-scaffold:start — managed by the agent-scaffold skill. Edit project prose OUTSIDE these markers; `agent-scaffold upgrade` refreshes this block. -->
 ## Agent Harness (Claude Code + Codex)

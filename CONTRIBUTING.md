@@ -11,13 +11,7 @@ Career OS separates user-owned career data from a public, data-free framework. C
 
 ## Development setup
 
-Career OS requires Git, `uv`, and Python 3.12 or newer. Install the locked runtime and development dependencies from the repository root:
-
-```text
-uv sync --locked --all-groups
-```
-
-Optional Obsidian, XeLaTeX, Poppler, fonts, and auxiliary Skills have separate readiness gates. Install only the capability needed for the change; see [Installation](docs/installation.md).
+Use [Tooling](docs/tooling.md#setup-and-checks) for the authoritative contributor setup and command sequence. Optional Obsidian, XeLaTeX, Poppler, fonts, and auxiliary Skills have separate readiness gates; install only the capability needed for the change and use [Installation](docs/installation.md) for machine readiness.
 
 ## Make a focused change
 
@@ -38,17 +32,7 @@ For a documentation-only change, at minimum verify local links, fenced code bloc
 
 ## Verification
 
-Start with the narrowest checks that can expose a mistake, then run the complete project gates required by the affected boundary. The common sequence is:
-
-```text
-uv run career-os check --fast
-uv run pytest <focused-test-path-or-expression>
-uv run ruff check .
-uv run mypy system/tools/career_os
-uv run career-os check
-```
-
-Use `uv run pytest` when the change is broad or no focused target is sufficient. Host, resume, migration, downstream, privacy, package, harness, and release changes require the additional commands documented in [`docs/tooling.md`](docs/tooling.md); do not reconstruct those procedures from memory.
+Start with the narrowest check that can expose a mistake, then follow the authoritative validation depth and task-specific gates in [Tooling](docs/tooling.md#validation-depth). Do not reconstruct or duplicate the command sequence in contributor-facing entry points.
 
 ## Commit and review checklist
 
