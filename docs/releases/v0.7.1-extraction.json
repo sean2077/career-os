@@ -54,13 +54,23 @@
       "reason": "public-native"
     },
     {
+      "path": ".github/workflows/ci.yml",
+      "result_sha256": "304a91423bad951ed8d16b4083d5ccbfe2fc2a64f01faa1f04026dbb102ff567",
+      "reason": "release-evidence"
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "result_sha256": "2f814e0328ca1bd21a273f88f48369cf7447d8476aeb1df7ce32c41fdc63efcd",
+      "reason": "release-evidence"
+    },
+    {
       "path": "AGENTS.md",
       "result_sha256": "d36fd29dc22894d4dee20f4ba94861fa8dbef8a1bedb0f08ffda7c897235a19f",
       "reason": "public-native"
     },
     {
       "path": "CHANGELOG.md",
-      "result_sha256": "041eedeeebb985af4d9e4fc1c50268cdc8bf47bdbd13f84113d5a15ec02ded43",
+      "result_sha256": "dab713120a8073765e66e560098ed47583f890631d6aaa7431a7bb11ca4d5222",
       "reason": "release-evidence"
     },
     {
@@ -90,7 +100,7 @@
     },
     {
       "path": "docs/releases/v0.7.1.md",
-      "result_sha256": "77b29170a9812c05b35c0afac9895309670f3f221c8279bfa8d8d00b0096eaa9",
+      "result_sha256": "d3849c63089d23612eea67d99395be43d6d3314e7af6254ea2176a8aca13479e",
       "reason": "release-evidence"
     },
     {
@@ -106,6 +116,11 @@
     {
       "path": "pyproject.toml",
       "result_sha256": "4a6f42f3e4e48560592ea965d2277a992a95e44689231a4cc1da8f4ed6f589db",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/privacy/public-fixture-policy.json",
+      "result_sha256": "5ee9dfdae627665fe961b276fd35657f5acd0061e5b221c1b2ae0c7b2e2563bb",
       "reason": "release-evidence"
     },
     {
@@ -131,6 +146,11 @@
     {
       "path": "system/tests/test_extraction_manifest.py",
       "result_sha256": "8586c193d33da8248656952dcee3412fcea7b69b3584bb9e102ea8c2c09ab7ee",
+      "reason": "release-evidence"
+    },
+    {
+      "path": "system/tests/test_release.py",
+      "result_sha256": "e7829c06a76afa382bd8e66df77aaac992f833a356bb8c4db064293e421dedc4",
       "reason": "release-evidence"
     },
     {

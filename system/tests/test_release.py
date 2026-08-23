@@ -199,12 +199,14 @@ def test_release_workflow_is_tag_triggered_pinned_and_fail_closed() -> None:
         "ctex",
         "ifmtarg",
         "latexmk",
+        "l3kernel",
         "l3packages",
         "realscripts",
         "tex-gyre",
         "xecjk",
         "xetex",
     } <= texlive_packages
+    assert "l3backend" not in texlive_packages
     assert "poppler-utils" in validate_runs
     assert "texlive-" not in validate_runs
     assert "career-os release notes" in validate_runs
@@ -248,11 +250,13 @@ def test_ci_jobs_are_guarded_to_upstream_repository() -> None:
         "ctex",
         "ifmtarg",
         "latexmk",
+        "l3kernel",
         "l3packages",
         "realscripts",
         "tex-gyre",
         "xecjk",
         "xetex",
     } <= texlive_packages
+    assert "l3backend" not in texlive_packages
     assert "poppler-utils" in resume_runs
     assert "texlive-" not in resume_runs

@@ -27,6 +27,14 @@ All notable changes to Career OS are documented here.
 - Made Company research conditional on a missing, stale, ambiguous, or
   decision-incomplete canonical Company instead of repeating it for every
   identified-employer JD.
+- Removed the obsolete `l3backend` TeX Live package request from public CI and
+  release validation after its files moved into `l3kernel`, restoring the
+  current TeX Live 2026 fixture route.
+
+### Security
+
+- Re-reviewed the two changed public workflow blobs as synthetic-only and
+  appended their exact hashes to the guarded fixture policy.
 
 ## [v0.7.0] — 2026-07-27
 

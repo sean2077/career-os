@@ -5,13 +5,15 @@
       "c07aa35f461e289b1760d93624b33efeb7a1bc753682f360711cdb04c953d6e3",
       "5af8a010d4fc548e1281c9d601a6c69b3587afdb747978947b1482fa78d69447",
       "45e5ab134d088cbdb284f9ae1520f750c3b77dfd96dc0a7edbcff9d841e84b8d",
-      "e7b2baccff433ee97e74c61feb328b5a484deed8c75d494df854e23b32ad835a"
+      "e7b2baccff433ee97e74c61feb328b5a484deed8c75d494df854e23b32ad835a",
+      "304a91423bad951ed8d16b4083d5ccbfe2fc2a64f01faa1f04026dbb102ff567"
     ],
     ".github/workflows/release.yml": [
       "25ce6ee9f10f991c97c0ab7dddc011886f387d79c0b66ecab9a55199edfd5400",
       "78d0cef9eb4195216a3bd17f07ed2a8deace5acd458e61f88a4df5c7a29ccfad",
       "b2f67ec44412d49aaea4c8aed730e1e4e71b87a6a7649507e3d77fd98f5ae043",
-      "3328ec8f71dd220c700f936b7654c04af49d3bb0e7f40a63a1a6ff37aa0cb2d6"
+      "3328ec8f71dd220c700f936b7654c04af49d3bb0e7f40a63a1a6ff37aa0cb2d6",
+      "2f814e0328ca1bd21a273f88f48369cf7447d8476aeb1df7ce32c41fdc63efcd"
     ],
     "system/resume/fixtures/en/identity.tex": [
       "841774be35df9ecc8966afd64e73bdbe30afb9f7249db6ecf7c49abf3ec2f87a"
